@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Book a Discovery Call | Suyash Raj - AI Automation Agency</title>
+    <meta name="description" content="Book a free 30-minute discovery call. Tell us about your business and we'll show you exactly what AI automation can do for you.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/qualify">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css?v=20260216c">
+
+    <style>
+        /* Form Page Specific Styles */
+        .form-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: calc(var(--space-xl) + 2rem) var(--gutter) var(--space-xl);
+        }
+
+        .form-wrapper {
+            width: 100%;
+            max-width: 580px;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: var(--space-lg);
+        }
+
+        .progress-step {
+            flex: 1;
+            height: 4px;
+            background: var(--color-paper-warm);
+            border-radius: 2px;
+            transition: background var(--duration-fast);
+        }
+
+        .progress-step.active {
+            background: var(--color-accent);
+        }
+
+        .progress-step.completed {
+            background: var(--color-ink);
+        }
+
+        /* Step Header */
+        .step-header {
+            margin-bottom: var(--space-md);
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 400;
+            line-height: 1.15;
+            color: var(--color-ink);
+        }
+
+        .step-subtitle {
+            font-size: 1rem;
+            color: var(--color-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* Form Steps */
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.4s var(--ease-out-expo);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Form Fields */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--color-ink);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-label .optional {
+            font-weight: 400;
+            color: var(--color-muted);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            border: 2px solid transparent;
+            border-radius: 0;
+            transition: all var(--duration-fast);
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--color-ink);
+            background: var(--color-paper);
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: var(--color-muted);
+        }
+
+        .form-input.error,
+        .form-select.error {
+            border-color: var(--color-accent);
+        }
+
+        .form-error {
+            font-size: 0.8125rem;
+            color: var(--color-accent);
+            margin-top: 0.375rem;
+            display: none;
+        }
+
+        .form-error.visible {
+            display: block;
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230d0d0d' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 3rem;
+            cursor: pointer;
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Radio/Checkbox Cards */
+        .option-grid {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .option-grid.two-col {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media (max-width: 480px) {
+            .option-grid.two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-card {
+            position: relative;
+        }
+
+        .option-card input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .option-card label {
+            display: block;
+            padding: 1rem 1.25rem;
+            background: var(--color-paper-warm);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all var(--duration-fast);
+            font-size: 0.9375rem;
+        }
+
+        .option-card label:hover {
+            background: var(--color-paper);
+            border-color: var(--color-ink-soft);
+        }
+
+        .option-card input:checked + label {
+            background: var(--color-paper);
+            border-color: var(--color-ink);
+        }
+
+        .option-card input:focus + label {
+            border-color: var(--color-accent);
+        }
+
+        .option-card .option-title {
+            font-weight: 500;
+            color: var(--color-ink);
+        }
+
+        .option-card .option-desc {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Form Row (side by side) */
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Navigation Buttons */
+        .form-nav {
+            display: flex;
+            gap: 1rem;
+            margin-top: var(--space-md);
+        }
+
+        .btn-back {
+            padding: 1rem 1.5rem;
+            font-family: var(--font-body);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: var(--color-ink);
+            background: transparent;
+            border: 2px solid var(--color-ink);
+            cursor: pointer;
+            transition: all var(--duration-fast);
+        }
+
+        .btn-back:hover {
+            background: var(--color-ink);
+            color: var(--color-paper);
+        }
+
+        .btn-next,
+        .btn-submit {
+            flex: 1;
+            padding: 1rem 2rem;
+            font-family: var(--font-body);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: var(--color-paper);
+            background: var(--color-ink);
+            border: 2px solid var(--color-ink);
+            cursor: pointer;
+            transition: all var(--duration-fast);
+        }
+
+        .btn-next:hover,
+        .btn-submit:hover {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+        }
+
+        .btn-next:disabled,
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Success State */
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: var(--space-lg) 0;
+        }
+
+        .form-success.active {
+            display: block;
+            animation: fadeIn 0.5s var(--ease-out-expo);
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto var(--space-md);
+            background: var(--color-accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .success-icon svg {
+            width: 32px;
+            height: 32px;
+            stroke: var(--color-paper);
+        }
+
+        .success-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 400;
+            margin-bottom: 0.75rem;
+        }
+
+        .success-text {
+            color: var(--color-muted);
+            margin-bottom: var(--space-md);
+        }
+
+        .btn-calendar {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--color-paper);
+            background: var(--color-accent);
+            text-decoration: none;
+            transition: all var(--duration-fast);
+        }
+
+        .btn-calendar:hover {
+            background: var(--color-ink);
+        }
+
+        /* Trust Elements */
+        .trust-strip {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: var(--space-lg);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--color-paper-warm);
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .trust-item svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--color-muted);
+        }
+
+        @media (max-width: 480px) {
+            .trust-strip {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+        }
+
+        /* Loading State */
+        .btn-submit.loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .btn-submit.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            border: 2px solid var(--color-paper);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://rajsuyash.com/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Book a Call",
+            "item": "https://rajsuyash.com/qualify.html"
+        }
+    ]
+}
+    </script>
+</head>
+<body class="form-page">
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+            <button class="nav-toggle" aria-label="Menu"><span></span></button>
+        </nav>
+    </header>
+
+    <main class="form-container">
+        <div class="form-wrapper">
+
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <div class="progress-step active" data-step="1"></div>
+                <div class="progress-step" data-step="2"></div>
+                <div class="progress-step" data-step="3"></div>
+                <div class="progress-step" data-step="4"></div>
+            </div>
+
+            <form id="qualifyForm" novalidate>
+
+                <!-- Step 1: You -->
+                <div class="form-step active" data-step="1">
+                    <div class="step-header">
+                        <p class="step-label">Step 1 of 4</p>
+                        <h1 class="step-title">Let's start with you</h1>
+                        <p class="step-subtitle">So we can personalize your call.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" class="form-input" placeholder="John Smith" required>
+                        <p class="form-error">Please enter your name</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">Work Email</label>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="john@company.com" required>
+                        <p class="form-error">Please enter a valid work email</p>
+                    </div>
+
+                    <div class="form-nav">
+                        <button type="button" class="btn-next" onclick="nextStep(1)">Continue →</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Your Business -->
+                <div class="form-step" data-step="2">
+                    <div class="step-header">
+                        <p class="step-label">Step 2 of 4</p>
+                        <h1 class="step-title">About your business</h1>
+                        <p class="step-subtitle">Help us understand your setup.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="website">Company Website</label>
+                        <input type="text" id="website" name="website" class="form-input" placeholder="yourcompany.com" required>
+                        <p class="form-error">Please enter your website URL</p>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="industry">Industry</label>
+                            <select id="industry" name="industry" class="form-select" required>
+                                <option value="">Select...</option>
+                                <option value="real-estate">Real Estate</option>
+                                <option value="ecommerce">E-commerce</option>
+                                <option value="saas">SaaS / Software</option>
+                                <option value="agency">Agency / Consulting</option>
+                                <option value="healthcare">Healthcare</option>
+                                <option value="legal">Legal / Law Firm</option>
+                                <option value="finance">Finance / Accounting</option>
+                                <option value="manufacturing">Manufacturing</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <p class="form-error">Please select your industry</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="companySize">Company Size</label>
+                            <select id="companySize" name="companySize" class="form-select" required>
+                                <option value="">Select...</option>
+                                <option value="1-10">1–10 employees</option>
+                                <option value="11-50">11–50 employees</option>
+                                <option value="51-200">51–200 employees</option>
+                                <option value="201+">201+ employees</option>
+                            </select>
+                            <p class="form-error">Please select company size</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="role">Your Role</label>
+                        <select id="role" name="role" class="form-select" required>
+                            <option value="">Select...</option>
+                            <option value="founder-ceo">Founder / CEO</option>
+                            <option value="operations">Operations / COO</option>
+                            <option value="marketing">Marketing</option>
+                            <option value="sales">Sales</option>
+                            <option value="it">IT / Tech</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <p class="form-error">Please select your role</p>
+                    </div>
+
+                    <div class="form-nav">
+                        <button type="button" class="btn-back" onclick="prevStep(2)">← Back</button>
+                        <button type="button" class="btn-next" onclick="nextStep(2)">Continue →</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Your Pain -->
+                <div class="form-step" data-step="3">
+                    <div class="step-header">
+                        <p class="step-label">Step 3 of 4</p>
+                        <h1 class="step-title">Where does it hurt?</h1>
+                        <p class="step-subtitle">This helps us prepare for your call.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Biggest bottleneck right now?</label>
+                        <div class="option-grid">
+                            <div class="option-card">
+                                <input type="radio" id="bottleneck-leads" name="bottleneck" value="lead-gen" required>
+                                <label for="bottleneck-leads">
+                                    <span class="option-title">Lead Gen & Outreach</span>
+                                    <span class="option-desc">Finding prospects, cold outreach, follow-ups</span>
+                                </label>
+                            </div>
+                            <div class="option-card">
+                                <input type="radio" id="bottleneck-support" name="bottleneck" value="customer-support">
+                                <label for="bottleneck-support">
+                                    <span class="option-title">Customer Support</span>
+                                    <span class="option-desc">Tickets, FAQs, response time</span>
+                                </label>
+                            </div>
+                            <div class="option-card">
+                                <input type="radio" id="bottleneck-data" name="bottleneck" value="data-entry">
+                                <label for="bottleneck-data">
+                                    <span class="option-title">Data Entry & CRM</span>
+                                    <span class="option-desc">Manual data input, syncing systems</span>
+                                </label>
+                            </div>
+                            <div class="option-card">
+                                <input type="radio" id="bottleneck-content" name="bottleneck" value="content-marketing">
+                                <label for="bottleneck-content">
+                                    <span class="option-title">Content & Marketing</span>
+                                    <span class="option-desc">Creating content, scheduling, repurposing</span>
+                                </label>
+                            </div>
+                            <div class="option-card">
+                                <input type="radio" id="bottleneck-ops" name="bottleneck" value="operations">
+                                <label for="bottleneck-ops">
+                                    <span class="option-title">Internal Operations</span>
+                                    <span class="option-desc">Approvals, reporting, team workflows</span>
+                                </label>
+                            </div>
+                        </div>
+                        <p class="form-error">Please select your biggest bottleneck</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="painDescription">Describe one manual task that takes 5+ hours/week</label>
+                        <textarea id="painDescription" name="painDescription" class="form-textarea" placeholder="E.g., Every week I spend hours copying data from our forms into HubSpot, then manually sending follow-up emails..." required></textarea>
+                        <p class="form-error">Please describe your pain point</p>
+                    </div>
+
+                    <div class="form-nav">
+                        <button type="button" class="btn-back" onclick="prevStep(3)">← Back</button>
+                        <button type="button" class="btn-next" onclick="nextStep(3)">Continue →</button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Project Fit -->
+                <div class="form-step" data-step="4">
+                    <div class="step-header">
+                        <p class="step-label">Step 4 of 4</p>
+                        <h1 class="step-title">Final questions</h1>
+                        <p class="step-subtitle">So we know we're a good fit.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Budget range for this project?</label>
+                        <div class="option-grid two-col">
+                            <div class="option-card">
+                                <input type="radio" id="budget-1" name="budget" value="under-2k" required>
+                                <label for="budget-1">Under $2k</label>
+                            </div>
+                            <div class="option-card">
+                                <input type="radio" id="budget-2" name="budget" value="2k-5k">
+                                <label for="budget-2">$2k – $5k</label>
+                            </div>
+                            <div class="option-card">
+                                <input type="radio" id="budget-3" name="budget" value="5k-15k">
+                                <label for="budget-3">$5k – $15k</label>
+                            </div>
+                            <div class="option-card">
+                                <input type="radio" id="budget-4" name="budget" value="15k+">
+                                <label for="budget-4">$15k+</label>
+                            </div>
+                        </div>
+                        <p class="form-error">Please select a budget range</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">When are you looking to start?</label>
+                        <div class="option-grid">
+                            <div class="option-card">
+                                <input type="radio" id="timeline-1" name="timeline" value="immediately" required>
+                                <label for="timeline-1">
+                                    <span class="option-title">Immediately</span>
+                                    <span class="option-desc">Ready to kick off this month</span>
+                                </label>
+                            </div>
+                            <div class="option-card">
+                                <input type="radio" id="timeline-2" name="timeline" value="2-4-weeks">
+                                <label for="timeline-2">
+                                    <span class="option-title">In 2–4 weeks</span>
+                                    <span class="option-desc">Finalizing plans</span>
+                                </label>
+                            </div>
+                            <div class="option-card">
+                                <input type="radio" id="timeline-3" name="timeline" value="researching">
+                                <label for="timeline-3">
+                                    <span class="option-title">Just researching</span>
+                                    <span class="option-desc">Exploring options for later</span>
+                                </label>
+                            </div>
+                        </div>
+                        <p class="form-error">Please select a timeline</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Are you the decision-maker for new tools?</label>
+                        <div class="option-grid two-col">
+                            <div class="option-card">
+                                <input type="radio" id="decision-yes" name="decisionMaker" value="yes" required>
+                                <label for="decision-yes">Yes, I decide</label>
+                            </div>
+                            <div class="option-card">
+                                <input type="radio" id="decision-no" name="decisionMaker" value="no">
+                                <label for="decision-no">I'll involve others</label>
+                            </div>
+                        </div>
+                        <p class="form-error">Please select an option</p>
+                    </div>
+
+                    <div class="form-nav">
+                        <button type="button" class="btn-back" onclick="prevStep(4)">← Back</button>
+                        <button type="submit" class="btn-submit">Book My Call →</button>
+                    </div>
+                </div>
+
+            </form>
+
+            <!-- Success State -->
+            <div class="form-success" id="formSuccess">
+                <div class="success-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 6L9 17l-5-5"/>
+                    </svg>
+                </div>
+                <h2 class="success-title">You're all set!</h2>
+                <p class="success-text">Now pick a time that works for you. We'll send a calendar invite with a Zoom link.</p>
+                <a href="https://tidycal.com/rajsuyash/discovery-call-for-lead-generation" class="btn-calendar" target="_blank">Choose a Time Slot →</a>
+            </div>
+
+            <!-- Trust Strip -->
+            <div class="trust-strip">
+                <span class="trust-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    Your info stays private
+                </span>
+                <span class="trust-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12,6 12,12 16,14"/>
+                    </svg>
+                    30 min, no pressure
+                </span>
+                <span class="trust-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22,4 12,14.01 9,11.01"/>
+                    </svg>
+                    Free, always
+                </span>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Form state
+        let currentStep = 1;
+        const totalSteps = 4;
+        const form = document.getElementById('qualifyForm');
+
+        // Validation rules per step
+        const stepFields = {
+            1: ['fullName', 'email'],
+            2: ['website', 'industry', 'companySize', 'role'],
+            3: ['bottleneck', 'painDescription'],
+            4: ['budget', 'timeline', 'decisionMaker']
+        };
+
+        // Email validation (reject common personal domains for B2B)
+        function isWorkEmail(email) {
+            const personalDomains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'aol.com', 'icloud.com', 'mail.com', 'protonmail.com'];
+            const domain = email.split('@')[1]?.toLowerCase();
+            // For now, allow all — uncomment below to filter
+            // return domain && !personalDomains.includes(domain);
+            return true;
+        }
+
+        // Validate a single field
+        function validateField(fieldName) {
+            const field = document.querySelector(`[name="${fieldName}"]`);
+            if (!field) return true;
+
+            let isValid = true;
+            let errorEl;
+
+            // Handle radio buttons
+            if (field.type === 'radio') {
+                const checked = document.querySelector(`[name="${fieldName}"]:checked`);
+                isValid = !!checked;
+                errorEl = field.closest('.form-group').querySelector('.form-error');
+            } else {
+                isValid = field.value.trim() !== '';
+                
+                // Special validation for email
+                if (fieldName === 'email' && isValid) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    isValid = emailRegex.test(field.value);
+                }
+
+                // Special validation for URL (flexible - accepts with or without https://)
+                if (fieldName === 'website' && isValid) {
+                    let url = field.value.trim();
+                    // Add https:// if no protocol
+                    if (!/^https?:\/\//i.test(url)) {
+                        url = 'https://' + url;
+                        field.value = url; // Update field with full URL
+                    }
+                    // Check if it looks like a valid domain
+                    const domainRegex = /^https?:\/\/[a-zA-Z0-9][-a-zA-Z0-9]*(\.[a-zA-Z0-9][-a-zA-Z0-9]*)+/i;
+                    isValid = domainRegex.test(url);
+                }
+
+                errorEl = field.parentElement.querySelector('.form-error');
+                
+                if (!isValid) {
+                    field.classList.add('error');
+                } else {
+                    field.classList.remove('error');
+                }
+            }
+
+            if (errorEl) {
+                errorEl.classList.toggle('visible', !isValid);
+            }
+
+            return isValid;
+        }
+
+        // Validate entire step
+        function validateStep(step) {
+            const fields = stepFields[step];
+            let allValid = true;
+
+            fields.forEach(fieldName => {
+                if (!validateField(fieldName)) {
+                    allValid = false;
+                }
+            });
+
+            return allValid;
+        }
+
+        // Update progress bar
+        function updateProgress(step) {
+            document.querySelectorAll('.progress-step').forEach((el, index) => {
+                const stepNum = index + 1;
+                el.classList.remove('active', 'completed');
+                
+                if (stepNum < step) {
+                    el.classList.add('completed');
+                } else if (stepNum === step) {
+                    el.classList.add('active');
+                }
+            });
+        }
+
+        // Show step
+        function showStep(step) {
+            document.querySelectorAll('.form-step').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelector(`.form-step[data-step="${step}"]`).classList.add('active');
+            updateProgress(step);
+            currentStep = step;
+
+            // Focus first field in new step
+            setTimeout(() => {
+                const firstInput = document.querySelector(`.form-step[data-step="${step}"] input, .form-step[data-step="${step}"] select`);
+                if (firstInput) firstInput.focus();
+            }, 100);
+        }
+
+        // Next step
+        function nextStep(fromStep) {
+            if (validateStep(fromStep)) {
+                showStep(fromStep + 1);
+            }
+        }
+
+        // Previous step
+        function prevStep(fromStep) {
+            showStep(fromStep - 1);
+        }
+
+        // Form submit
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!validateStep(4)) return;
+
+            const submitBtn = form.querySelector('.btn-submit');
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+
+            // Collect form data
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            data.submittedAt = new Date().toISOString();
+
+            // Calculate priority score
+            const priorityScore = calculatePriority(data);
+            data.priorityScore = priorityScore;
+            
+            try {
+                // Save to Google Sheets
+                await fetch('https://script.google.com/macros/s/AKfycbwxWb0u5Dbm1xyKJemPsYDIljmIkJf22TNfqGgE86GhIknUT_ET1BzLnJsTrsQUwVySzw/exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                console.log('Lead saved to Google Sheets:', data);
+                
+                // Also send email notification for high-priority leads
+                if (priorityScore >= 7) {
+                    const formData = new FormData();
+                    data._subject = `🔥 Hot Lead: ${data.fullName} (Score: ${priorityScore}/10)`;
+                    Object.entries(data).forEach(([key, value]) => {
+                        formData.append(key, value);
+                    });
+                    fetch('https://formsubmit.co/ajax/rajsuyash2406@gmail.com', {
+                        method: 'POST',
+                        body: formData
+                    });
+                }
+            } catch (err) {
+                console.error('Submit error:', err);
+                // Continue anyway - don't block the user
+            }
+            
+            function calculatePriority(d) {
+                let score = 0;
+                if (d.budget === '15k+') score += 4;
+                else if (d.budget === '5k-15k') score += 3;
+                else if (d.budget === '2k-5k') score += 2;
+                
+                if (d.timeline === 'immediately') score += 3;
+                else if (d.timeline === '2-4-weeks') score += 2;
+                
+                if (d.decisionMaker === 'yes') score += 2;
+                if (d.companySize === '51-200' || d.companySize === '201+') score += 1;
+                
+                return score;
+            }
+
+            // Hide form, show success
+            form.style.display = 'none';
+            document.querySelector('.progress-bar').style.display = 'none';
+            document.getElementById('formSuccess').classList.add('active');
+
+            // Auto-redirect to TidyCal after 2 seconds
+            setTimeout(() => {
+                window.open('https://tidycal.com/rajsuyash/discovery-call-for-lead-generation', '_blank');
+            }, 2000);
+        });
+
+        // Clear errors on input
+        document.querySelectorAll('input, select, textarea').forEach(el => {
+            el.addEventListener('input', () => {
+                el.classList.remove('error');
+                const errorEl = el.closest('.form-group')?.querySelector('.form-error');
+                if (errorEl) errorEl.classList.remove('visible');
+            });
+        });
+
+        // Handle radio button error clearing
+        document.querySelectorAll('input[type="radio"]').forEach(el => {
+            el.addEventListener('change', () => {
+                const errorEl = el.closest('.form-group')?.querySelector('.form-error');
+                if (errorEl) errorEl.classList.remove('visible');
+            });
+        });
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>

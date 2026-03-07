@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>AI Automation Blog | Tips, Guides & Insights - Suyash Raj</title>
+    <meta name="description" content="Weekly insights on AI automation, N8N workflows, AI agents, and voice agents for small businesses. Practical guides to save time and scale with AI.">
+    <meta name="keywords" content="AI automation blog, N8N automation tips, AI agents for business, automation guides, AI voice agent insights">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rajsuyash.com/blog/">
+    <meta property="og:title" content="AI Automation Blog | Tips, Guides & Insights">
+    <meta property="og:description" content="Weekly insights on AI automation, N8N workflows, AI agents, and voice agents. Practical guides for SMBs.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj - AI Automation Agency">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI Automation Blog | Tips, Guides & Insights">
+    <meta name="twitter:description" content="Weekly insights on AI automation, N8N workflows, AI agents, and voice agents for SMBs.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Schema: Blog -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": "Suyash AI Automation Blog",
+        "description": "AI automation insights for small and medium businesses",
+        "url": "https://rajsuyash.com/blog/",
+        "publisher": {
+            "@type": "Organization",
+            "name": "Suyash AI Automation",
+            "url": "https://rajsuyash.com"
+        }
+    }
+    </script>
+
+    <!-- Schema: BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"}
+        ]
+    }
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <style>
+        /* Blog Index Specific Styles */
+        .blog-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .blog-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .blog-hero .hero-headline {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 300;
+            line-height: 0.95;
+            margin-bottom: var(--space-md);
+        }
+
+        .blog-hero .hero-headline .accent {
+            color: var(--color-accent);
+            font-style: italic;
+        }
+
+        .blog-hero .hero-description {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Blog Grid */
+        .blog-section {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-2xl);
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .blog-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-lg);
+            display: flex;
+            flex-direction: column;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+            text-decoration: none;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .blog-card-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-sm);
+            flex-wrap: wrap;
+        }
+
+        .blog-card-category {
+            font-family: var(--font-body);
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .blog-card-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .blog-card-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .blog-card-excerpt {
+            font-size: 0.9375rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            margin-bottom: var(--space-md);
+            flex-grow: 1;
+        }
+
+        .blog-card-link {
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--color-accent);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap var(--duration-fast);
+        }
+
+        .blog-card:hover .blog-card-link {
+            gap: 0.75rem;
+        }
+
+        /* Featured Post */
+        .blog-featured {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-lg);
+            background: var(--color-ink);
+            color: var(--color-paper);
+            padding: var(--space-lg);
+        }
+
+        .blog-featured:hover {
+            transform: none;
+        }
+
+        .blog-featured .blog-card-category {
+            background-color: var(--color-paper);
+            color: var(--color-ink);
+        }
+
+        .blog-featured .blog-card-title {
+            font-size: clamp(1.5rem, 3vw, 2.25rem);
+            color: var(--color-paper);
+        }
+
+        .blog-featured .blog-card-excerpt {
+            color: var(--color-paper);
+            opacity: 0.8;
+        }
+
+        .blog-featured .blog-card-date {
+            color: var(--color-paper);
+            opacity: 0.6;
+        }
+
+        .blog-featured .blog-card-link {
+            color: var(--color-accent-soft);
+        }
+
+        .blog-featured-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: clamp(4rem, 10vw, 8rem);
+            font-weight: 300;
+            color: var(--color-accent);
+            opacity: 0.3;
+        }
+
+        @media (max-width: 768px) {
+            .blog-featured {
+                grid-template-columns: 1fr;
+            }
+            .blog-featured-visual {
+                display: none;
+            }
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link" style="color: var(--color-accent);">Blog</a>
+                <a href="/qualify" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Blog Hero -->
+    <section class="blog-hero">
+        <div class="blog-hero-content">
+            <p class="hero-eyebrow reveal" style="--delay: 0">AI Automation Blog</p>
+            <h1 class="hero-headline reveal" style="--delay: 1">
+                <span class="line">Insights on</span>
+                <span class="line accent">AI automation.</span>
+            </h1>
+            <p class="hero-description reveal" style="--delay: 2">
+                Weekly guides, tutorials, and insights on using AI agents, N8N workflows, and voice agents to grow your business.
+            </p>
+        </div>
+    </section>
+
+    <!-- Blog Grid -->
+    <section class="blog-section">
+        <div class="blog-grid">
+
+            <!-- Featured: Statistics Post -->
+            <a href="ai-automation-statistics-2026.html" class="blog-card blog-featured reveal" style="--delay: 0">
+                <div class="blog-card-content">
+                    <div class="blog-card-meta">
+                        <span class="blog-card-category">Statistics & Research</span>
+                        <span class="blog-card-date">February 21, 2026 • 12 min read</span>
+                    </div>
+                    <h2 class="blog-card-title">47 AI Automation Statistics for 2026 (Latest Data & Trends)</h2>
+                    <p class="blog-card-excerpt">We compiled 47 of the most important AI automation statistics for 2026, drawing from McKinsey, Gartner, and industry reports. Build your business case with real data on adoption, ROI, and time savings.</p>
+                    <span class="blog-card-link">Read article →</span>
+                </div>
+                <div class="blog-featured-visual">47</div>
+            </a>
+
+            <!-- NEW: Outdoor Kitchen Appliances AI Automation -->
+            <a href="outdoor-kitchen-appliances-ai-automation.html" class="blog-card reveal" style="--delay: 1">
+                <div class="blog-card-meta">
+                    <span class="blog-card-category">Outdoor Kitchen Appliances</span>
+                    <span class="blog-card-date">March 3, 2026 • 9 min read</span>
+                </div>
+                <h2 class="blog-card-title">AI Automation for Outdoor Kitchen Appliance Retailers: Convert Complex Buyers 24/7</h2>
+                <p class="blog-card-excerpt">Your showroom expert goes home at 6 PM. Your customer researching a $15,000 outdoor kitchen browses at 9 PM. Every unanswered question is a high-ticket sale walking to a competitor.</p>
+                <span class="blog-card-link">Read article →</span>
+            </a>
+
+            <!-- BBQ Equipment AI Automation -->
+            <a href="bbq-equipment-ai-automation.html" class="blog-card reveal" style="--delay: 1">
+                <div class="blog-card-meta">
+                    <span class="blog-card-category">BBQ Equipment</span>
+                    <span class="blog-card-date">March 2, 2026 • 9 min read</span>
+                </div>
+                <h2 class="blog-card-title">AI Automation for BBQ Equipment Retailers: Stop Losing Weekend Buyers</h2>
+                <p class="blog-card-excerpt">Your showroom closes Saturday at 5 PM. Your customers browse grills Sunday at 8 PM. Every unanswered question is a $3,000 sale walking to Amazon.</p>
+                <span class="blog-card-link">Read article →</span>
+            </a>
+
+            <!-- Outdoor Furniture AI Automation -->
+            <a href="outdoor-furniture-ai-automation.html" class="blog-card reveal" style="--delay: 1">
+                <div class="blog-card-meta">
+                    <span class="blog-card-category">Outdoor Furniture</span>
+                    <span class="blog-card-date">February 27, 2026 • 9 min read</span>
+                </div>
+                <h2 class="blog-card-title">AI Automation for Outdoor Furniture Retailers: Capture Every Spring Lead</h2>
+                <p class="blog-card-excerpt">Your showroom closes at 6 PM. Your customers browse at 10 PM. Every unanswered question is a $2,000 sale walking to a competitor.</p>
+                <span class="blog-card-link">Read article →</span>
+            </a>
+
+            <!-- Plumbing AI Automation ROI -->
+            <a href="plumbing-ai-automation.html" class="blog-card reveal" style="--delay: 1">
+                <div class="blog-card-meta">
+                    <span class="blog-card-category">Plumbing</span>
+                    <span class="blog-card-date">February 26, 2026 • 8 min read</span>
+                </div>
+                <h2 class="blog-card-title">How AI Automation Saves Plumbing Businesses £50K+ Per Year</h2>
+                <p class="blog-card-excerpt">Every missed call is a lost job. AI voice agents answer 24/7, book every job, and deliver 10-20x ROI. Here's the exact math.</p>
+                <span class="blog-card-link">Read article →</span>
+            </a>
+
+            <!-- NEW: Maid Services AI Consulting -->
+            <a href="maid-services-ai-consulting.html" class="blog-card reveal" style="--delay: 1">
+                <div class="blog-card-meta">
+                    <span class="blog-card-category">Maid Services</span>
+                    <span class="blog-card-date">February 24, 2026 • 8 min read</span>
+                </div>
+                <h2 class="blog-card-title">AI Consulting for Maid Services: Stop Losing Bookings to Voicemail</h2>
+                <p class="blog-card-excerpt">Maid services lose 50% of new bookings to missed calls and slow responses. AI consulting helps cleaning companies capture every lead 24/7 and cut customer service costs by 90%.</p>
+                <span class="blog-card-link">Read article →</span>
+            </a>
+
+            <!-- Plumbing AI Consulting -->
+            <a href="plumbing-companies-ai-consulting.html" class="blog-card reveal" style="--delay: 1">
+                <div class="blog-card-meta">
+                    <span class="blog-card-category">Plumbing</span>
+                    <span class="blog-card-date">February 22, 2026 • 8 min read</span>
+                </div>
+                <h2 class="blog-card-title">AI Consulting for Plumbing Companies: Stop Losing Emergency Calls</h2>
+                <p class="blog-card-excerpt">Plumbing companies lose 40% of emergency calls after hours. AI consulting for small business helps plumbers capture every lead, dispatch faster, and grow revenue 24/7.</p>
+                <span class="blog-card-link">Read article →</span>
+            </a>
+
+            <!-- NEW: HVAC AI Consulting -->
+            <a href="hvac-companies-ai-consulting.html" class="blog-card reveal" style="--delay: 2">
+                <div class="blog-card-meta">
+                    <span class="blog-card-category">HVAC</span>
+                    <span class="blog-card-date">February 22, 2026 • 9 min read</span>
+                </div>
+                <h2 class="blog-card-title">AI Consulting for HVAC Companies: Never Miss a Summer Emergency Again</h2>
+                <p class="blog-card-excerpt">HVAC companies lose $200K+ in peak season from missed calls. AI consulting helps capture every lead, optimize dispatch, and dominate busy seasons.</p>
+                <span class="blog-card-link">Read article →</span>
+            </a>
+
+            <!-- NEW: Electrical AI Consulting -->
+            <a href="electrical-contractors-ai-consulting.html" class="blog-card reveal" style="--delay: 0">
+                <div class="blog-card-meta">
+                    <span class="blog-card-category">Electrical</span>
+                    <span class="blog-card-date">February 22, 2026 • 8 min read</span>
+                </div>
+                <h2 class="blog-card-title">AI Consulting for Electrical Contractors: Win More Bids, Capture Every Call</h2>
+                <p class="blog-card-excerpt">Electrical contractors lose 35% of leads to slow follow-up. AI consulting helps electricians respond instantly, win more bids, and grow revenue.</p>
+                <span class="blog-card-link">Read article →</span>
+            </a>
+
+            <!-- NEW: Roofing AI Consulting -->
+            <a href="roofing-companies-ai-consulting.html" class="blog-card reveal" style="--delay: 1">
+                <div class="blog-card-meta">
+                    <span class="blog-card-category">Roofing</span>
+                    <span class="blog-card-date">February 22, 2026 • 9 min read</span>
+                </div>
+                <h2 class="blog-card-title">AI Consulting for Roofing Companies: Dominate Storm Season Lead Floods</h2>
+                <p class="blog-card-excerpt">Roofing companies lose 60% of storm leads to slow response. AI consulting helps roofers capture every lead, book more inspections, and maximize storm seasons.</p>
+                <span class="blog-card-link">Read article →</span>
+            </a>
+
+            <!-- NEW: Landscaping AI Consulting -->
+            <a href="landscaping-companies-ai-consulting.html" class="blog-card reveal" style="--delay: 2">
+                <div class="blog-card-meta">
+                    <span class="blog-card-category">Landscaping</span>
+                    <span class="blog-card-date">February 22, 2026 • 8 min read</span>
+                </div>
+                <h2 class="blog-card-title">AI Consulting for Landscaping Companies: Turn Missed Calls Into Recurring Revenue</h2>
+                <p class="blog-card-excerpt">Landscaping companies lose 45% of spring leads to missed calls. AI consulting helps landscapers capture every inquiry and build maintenance contracts.</p>
+                <span class="blog-card-link">Read article →</span>
+            </a>
+
+            <!-- Trends Post -->
+            <a href="ai-automation-trends-2026.html" class="blog-card reveal" style="--delay: 0">
+                <div class="blog-card-meta">
+                    <span class="blog-card-category">Strategy</span>
+                    <span class="blog-card-date">February 20, 2026 • 8 min read</span>
+                </div>
+                <h2 class="blog-card-title">7 AI Automation Trends to Watch in 2026</h2>
+                <p class="blog-card-excerpt">From AI agents going mainstream to open-source winning the automation war, these seven trends will shape how businesses operate this year.</p>
+                <span class="blog-card-link">Read article →</span>
+            </a>
+
+            <!-- N8N Templates Post -->
+            <a href="n8n-workflow-templates-small-business.html" class="blog-card reveal" style="--delay: 2">
+                <div class="blog-card-meta">
+                    <span class="blog-card-category">N8N Automation</span>
+                    <span class="blog-card-date">February 19, 2026 • 10 min read</span>
+                </div>
+                <h2 class="blog-card-title">10 N8N Workflow Templates Every Small Business Needs</h2>
+                <p class="blog-card-excerpt">Ready-to-use N8N workflow ideas for lead capture, invoicing, social media, onboarding, reporting, and more. With difficulty levels and time saved estimates.</p>
+                <span class="blog-card-link">Read article →</span>
+            </a>
+
+            <!-- Healthcare Post -->
+            <a href="healthcare-clinics-ai-phone-automation.html" class="blog-card reveal" style="--delay: 0">
+                <div class="blog-card-meta">
+                    <span class="blog-card-category">Healthcare</span>
+                    <span class="blog-card-date">February 19, 2026 • 6 min read</span>
+                </div>
+                <h2 class="blog-card-title">Healthcare Clinics: Why 67% of Patient Calls Go Unanswered (And How AI Fixes It)</h2>
+                <p class="blog-card-excerpt">Your front desk is underwater. Phones ringing. Patients waiting. And somewhere in that chaos, a new patient just called — and nobody picked up. Here's how AI phone automation solves the problem at 90% less cost than hiring.</p>
+                <span class="blog-card-link">Read article →</span>
+            </a>
+
+            <!-- Real Estate Post -->
+            <a href="real-estate-ai-lead-response.html" class="blog-card reveal" style="--delay: 1">
+                <div class="blog-card-meta">
+                    <span class="blog-card-category">Real Estate</span>
+                    <span class="blog-card-date">February 18, 2026 • 7 min read</span>
+                </div>
+                <h2 class="blog-card-title">Real Estate Lead Response: Why You're Losing 78% of Leads (And How AI Fixes It)</h2>
+                <p class="blog-card-excerpt">The average real estate agent takes 47 hours to respond to a lead. In an industry where minutes matter. Here's how AI voice agents are capturing the deals your team is sleeping through.</p>
+                <span class="blog-card-link">Read article →</span>
+            </a>
+
+            <!-- Law Firms Post -->
+            <a href="law-firm-ai-client-intake.html" class="blog-card reveal" style="--delay: 2">
+                <div class="blog-card-meta">
+                    <span class="blog-card-category">Law Firms</span>
+                    <span class="blog-card-date">February 16, 2026 • 6 min read</span>
+                </div>
+                <h2 class="blog-card-title">Law Firms: Your Intake Process Is Leaking $200K/Year (AI Can Fix It)</h2>
+                <p class="blog-card-excerpt">Every missed call is a lost client. Every slow follow-up is revenue walking to a competitor. How the best AI automation agencies for small businesses are transforming legal client intake.</p>
+                <span class="blog-card-link">Read article →</span>
+            </a>
+
+            <!-- Accounting Post -->
+            <a href="accounting-ai-automation.html" class="blog-card reveal" style="--delay: 0">
+                <div class="blog-card-meta">
+                    <span class="blog-card-category">Accounting</span>
+                    <span class="blog-card-date">February 15, 2026 • 8 min read</span>
+                </div>
+                <h2 class="blog-card-title">Accounting Firms: Stop Doing $15/Hour Work With $150/Hour People</h2>
+                <p class="blog-card-excerpt">Your CPAs are drowning in data entry while clients wait for strategic advice. Here's how AI automation reclaims 15+ hours per week per accountant.</p>
+                <span class="blog-card-link">Read article →</span>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to stop</span>
+                <span class="line">doing busywork?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and I'll show you exactly what automation can do. No obligation, no pressure.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Limited spots available each month.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>AI Automation Agency for SMBs</p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>

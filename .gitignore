@@ -1,0 +1,21 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# Backup files
+*.bak
+
+# WordPress (managed separately)
+wordpress/
+
+# Private/sensitive
+.private/
+.claude/
+
+# Old versions
+FEB/

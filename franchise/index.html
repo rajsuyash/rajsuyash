@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Voice Agents for Franchise Groups | Suyash Raj</title>
+    <meta name="description" content="Deploy AI voice agents across your entire franchise network. One solution, multiple brands, consistent customer experience. Proven to cut support costs 80%.">
+    <link rel="canonical" href="https://rajsuyash.com/franchise/">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --font-display: 'Fraunces', Georgia, serif;
+            --font-body: 'Space Grotesk', -apple-system, sans-serif;
+            --color-ink: #0d0d0d;
+            --color-ink-soft: #2a2a2a;
+            --color-paper: #f7f5f2;
+            --color-paper-warm: #ebe7e0;
+            --color-accent: #ff4d4d;
+            --color-accent-soft: #ff6b6b;
+            --color-muted: #8a8a8a;
+            --color-success: #10b981;
+            --max-width: 1100px;
+            --gutter: clamp(1.5rem, 4vw, 4rem);
+        }
+        
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--font-body);
+            font-size: 1.0625rem;
+            line-height: 1.7;
+            color: var(--color-ink);
+            background-color: var(--color-paper);
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .noise-overlay {
+            position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+        
+        ::selection { background-color: var(--color-accent); color: var(--color-paper); }
+        
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--gutter); }
+        
+        /* Nav */
+        .nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.5rem var(--gutter); max-width: var(--max-width); margin: 0 auto;
+        }
+        .wordmark { font-family: var(--font-display); font-size: 1.5rem; font-weight: 400; text-decoration: none; color: var(--color-ink); }
+        .wordmark-accent { color: var(--color-accent); }
+        .nav-cta {
+            padding: 0.75rem 1.5rem; background: var(--color-ink); color: var(--color-paper);
+            text-decoration: none; font-size: 0.9375rem; font-weight: 500; transition: all 0.2s;
+        }
+        .nav-cta:hover { background: var(--color-ink-soft); }
+        
+        /* Hero */
+        .hero {
+            padding: 6rem 0 4rem; text-align: center;
+        }
+        .hero-tag {
+            display: inline-block; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.15em;
+            text-transform: uppercase; color: var(--color-accent); margin-bottom: 1.5rem;
+            background: rgba(255,77,77,0.1); padding: 0.5rem 1rem;
+        }
+        h1 {
+            font-family: var(--font-display); font-size: clamp(2.5rem, 7vw, 4.5rem);
+            font-weight: 300; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 1.5rem;
+        }
+        h1 em { font-style: italic; }
+        .hero-subtitle {
+            font-size: 1.25rem; color: var(--color-ink-soft); max-width: 700px; margin: 0 auto 2.5rem;
+        }
+        .hero-cta {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 1.125rem 2.5rem; background: var(--color-accent); color: var(--color-paper);
+            text-decoration: none; font-size: 1.0625rem; font-weight: 500; transition: all 0.2s;
+        }
+        .hero-cta:hover { background: var(--color-accent-soft); transform: translateY(-2px); }
+        
+        /* Stats */
+        .stats {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+            background: var(--color-ink); margin: 4rem 0;
+        }
+        @media (max-width: 700px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+        .stat {
+            background: var(--color-paper); padding: 2.5rem 1.5rem; text-align: center;
+        }
+        .stat-value {
+            font-family: var(--font-display); font-size: 3rem; font-weight: 300; line-height: 1;
+            color: var(--color-ink); margin-bottom: 0.5rem;
+        }
+        .stat-label { font-size: 0.8125rem; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+        
+        /* Problem */
+        .section { padding: 5rem 0; }
+        .section-dark { background: var(--color-ink); color: var(--color-paper); }
+        .section-number {
+            font-size: 0.75rem; font-weight: 500; letter-spacing: 0.15em;
+            text-transform: uppercase; color: var(--color-muted); margin-bottom: 0.75rem;
+        }
+        .section-dark .section-number { color: var(--color-accent); }
+        h2 {
+            font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 300; margin-bottom: 2rem; line-height: 1.1;
+        }
+        .section-dark h2 { color: var(--color-paper); }
+        
+        .problems-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem;
+        }
+        @media (max-width: 800px) { .problems-grid { grid-template-columns: 1fr; } }
+        .problem-card {
+            background: var(--color-ink-soft); padding: 2rem;
+        }
+        .problem-card h4 {
+            font-family: var(--font-body); font-size: 1.125rem; font-weight: 600;
+            color: var(--color-paper); margin-bottom: 0.75rem;
+        }
+        .problem-card p { color: rgba(255,255,255,0.7); font-size: 0.9375rem; margin: 0; }
+        
+        /* Solution */
+        .solution-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+        }
+        @media (max-width: 800px) { .solution-grid { grid-template-columns: 1fr; gap: 2rem; } }
+        .solution-list { list-style: none; }
+        .solution-list li {
+            display: flex; gap: 1rem; padding: 1.25rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        .solution-list li:last-child { border-bottom: none; }
+        .check { color: var(--color-success); font-weight: 600; }
+        .solution-visual {
+            background: var(--color-paper-warm); padding: 3rem; text-align: center;
+        }
+        .solution-stat {
+            font-family: var(--font-display); font-size: 5rem; font-weight: 300;
+            color: var(--color-accent); line-height: 1;
+        }
+        .solution-stat-label { font-size: 1.125rem; color: var(--color-ink-soft); margin-top: 1rem; }
+        
+        /* How it works */
+        .steps {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 3rem;
+        }
+        @media (max-width: 800px) { .steps { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 500px) { .steps { grid-template-columns: 1fr; } }
+        .step { text-align: center; }
+        .step-number {
+            width: 50px; height: 50px; background: var(--color-ink); color: var(--color-paper);
+            font-family: var(--font-display); font-size: 1.5rem; display: flex;
+            align-items: center; justify-content: center; margin: 0 auto 1rem;
+        }
+        .step h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .step p { font-size: 0.875rem; color: var(--color-muted); }
+        
+        /* Brands */
+        .brands-text { text-align: center; max-width: 700px; margin: 0 auto 3rem; }
+        .brand-logos {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 3rem; align-items: center;
+            opacity: 0.6;
+        }
+        .brand-logo { font-family: var(--font-display); font-size: 1.5rem; color: var(--color-ink); }
+        
+        /* CTA */
+        .cta-section {
+            background: var(--color-accent); color: var(--color-paper);
+            padding: 5rem var(--gutter); text-align: center;
+        }
+        .cta-section h2 { color: var(--color-paper); font-size: 2.5rem; margin-bottom: 1rem; }
+        .cta-section p { opacity: 0.9; max-width: 600px; margin: 0 auto 2rem; font-size: 1.125rem; }
+        .cta-btn {
+            display: inline-flex; padding: 1.125rem 2.5rem; background: var(--color-paper);
+            color: var(--color-ink); text-decoration: none; font-weight: 600; font-size: 1rem;
+            transition: all 0.2s;
+        }
+        .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .cta-note { font-size: 0.875rem; opacity: 0.8; margin-top: 1.5rem; }
+    </style>
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    
+    <nav class="nav">
+        <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+        <a href="https://tidycal.com/rajsuyash/discovery-call-for-ai-voice-agent" class="nav-cta">Book Demo</a>
+    </nav>
+    
+    <section class="hero">
+        <div class="container">
+            <span class="hero-tag">For Franchise Groups</span>
+            <h1>One AI. <em>All your brands.</em><br>Zero hold times.</h1>
+            <p class="hero-subtitle">Deploy AI voice agents across your entire franchise network. Consistent customer experience, centralized management, 80% lower costs.</p>
+            <a href="https://tidycal.com/rajsuyash/discovery-call-for-ai-voice-agent" class="hero-cta">See How It Works →</a>
+        </div>
+    </section>
+    
+    <div class="container">
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">80%</div>
+                <div class="stat-label">Cost Reduction</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">98%</div>
+                <div class="stat-label">AI Resolution</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">24/7</div>
+                <div class="stat-label">Availability</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">8wk</div>
+                <div class="stat-label">Deployment</div>
+            </div>
+        </div>
+    </div>
+    
+    <section class="section section-dark">
+        <div class="container">
+            <p class="section-number">The Problem</p>
+            <h2>Multi-brand franchises have<br>a customer service problem</h2>
+            
+            <div class="problems-grid">
+                <div class="problem-card">
+                    <h4>Inconsistent Experience</h4>
+                    <p>Each brand handles calls differently. Quality varies wildly across your network.</p>
+                </div>
+                <div class="problem-card">
+                    <h4>Scaling Costs</h4>
+                    <p>Every new location means more support staff. Costs grow faster than revenue.</p>
+                </div>
+                <div class="problem-card">
+                    <h4>Missed Revenue</h4>
+                    <p>After-hours calls go to voicemail. 67% of those callers call your competitor instead.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section">
+        <div class="container">
+            <p class="section-number">The Solution</p>
+            <h2>AI voice agents built for<br>franchise scale</h2>
+            
+            <div class="solution-grid">
+                <div>
+                    <ul class="solution-list">
+                        <li>
+                            <span class="check">✓</span>
+                            <div>
+                                <strong>Multi-brand architecture</strong><br>
+                                <span style="color: var(--color-muted);">One system serves all your brands with brand-specific voices, knowledge, and routing.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <div>
+                                <strong>Centralized dashboard</strong><br>
+                                <span style="color: var(--color-muted);">See performance across all brands and locations. Drill down to any territory.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <div>
+                                <strong>Consistent training</strong><br>
+                                <span style="color: var(--color-muted);">AI learns once, deploys everywhere. No more training variance.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <div>
+                                <strong>Seamless escalation</strong><br>
+                                <span style="color: var(--color-muted);">Complex issues route to the right human at the right location. Every time.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="solution-visual">
+                    <div class="solution-stat">€56K</div>
+                    <div class="solution-stat-label">Annual savings per brand<br>(based on Le Marquier case study)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section" style="background: var(--color-paper-warm);">
+        <div class="container">
+            <p class="section-number">How It Works</p>
+            <h2>From pilot to full deployment<br>in 8 weeks</h2>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4>Discovery</h4>
+                    <p>We analyze call patterns across your brands to identify automation opportunities.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4>Pilot Brand</h4>
+                    <p>Deploy to one brand first. Prove the ROI before expanding.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4>Optimize</h4>
+                    <p>Refine based on real calls. Get to 95%+ resolution before scaling.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h4>Network Rollout</h4>
+                    <p>Deploy across all brands with consistent quality and centralized control.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section">
+        <div class="container">
+            <p class="section-number">Built For</p>
+            <h2 style="text-align: center;">Franchise groups who<br>refuse to compromise</h2>
+            <p class="brands-text">Whether you're running 5 brands or 50, our architecture scales with you. Currently serving premium brands across home services, retail, and hospitality.</p>
+            <div class="brand-logos">
+                <span class="brand-logo">Home Services</span>
+                <span class="brand-logo">•</span>
+                <span class="brand-logo">Restoration</span>
+                <span class="brand-logo">•</span>
+                <span class="brand-logo">Retail</span>
+                <span class="brand-logo">•</span>
+                <span class="brand-logo">Hospitality</span>
+            </div>
+        </div>
+    </section>
+    
+    <section class="cta-section">
+        <h2>Ready to transform your<br>franchise network?</h2>
+        <p>Book a 20-minute demo. We'll show you exactly how AI voice agents could work across your brands—with real numbers.</p>
+        <a href="https://tidycal.com/rajsuyash/discovery-call-for-ai-voice-agent" class="cta-btn">Book Your Demo →</a>
+        <p class="cta-note">No commitment. No pitch deck. Just a conversation about what's possible.</p>
+    </section>
+</body>
+</html>

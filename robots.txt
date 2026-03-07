@@ -1,0 +1,25 @@
+# robots.txt for rajsuyash.com
+User-agent: *
+Allow: /
+
+# Block WordPress installation
+Disallow: /wordpress/
+Disallow: /wp-*.php
+
+# Block old/removed pages
+Disallow: /clawdbot-automation.html
+Disallow: /moltbot-automation.html
+Disallow: /home
+Disallow: /home/
+
+# Block private folders
+Disallow: /.private/
+Disallow: /.claude/
+Disallow: /FEB/
+
+# Sitemap location
+Sitemap: https://rajsuyash.com/sitemap.xml
+
+# Crawl-delay (optional - be polite to crawlers)
+Crawl-delay: 1
+Disallow: /testimonials-2/

@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# Blog post redirects (fix filename mismatches)
+RewriteRule ^accounting-ai-automation\.html$ /blog/accounting-firms-ai-document-automation.html [R=301,L]
+RewriteRule ^law-firm-ai-client-intake\.html$ /blog/law-firms-ai-client-intake.html [R=301,L]
+RewriteRule ^real-estate-ai-lead-response\.html$ /blog/real-estate-ai-automation-case-study.html [R=301,L]
+
+# Disable caching for this directory
+<IfModule mod_headers.c>
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+</IfModule>

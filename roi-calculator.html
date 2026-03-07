@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Voice Agent ROI Calculator | Suyash Raj</title>
+    <meta name="description" content="Calculate how much you could save with AI voice agents. Free ROI calculator for customer service automation.">
+    <link rel="canonical" href="https://rajsuyash.com/roi-calculator.html">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --font-display: 'Fraunces', Georgia, serif;
+            --font-body: 'Space Grotesk', -apple-system, sans-serif;
+            --color-ink: #0d0d0d;
+            --color-ink-soft: #2a2a2a;
+            --color-paper: #f7f5f2;
+            --color-paper-warm: #ebe7e0;
+            --color-accent: #ff4d4d;
+            --color-accent-soft: #ff6b6b;
+            --color-muted: #8a8a8a;
+            --space-unit: clamp(1rem, 2vw, 1.5rem);
+            --max-width: 800px;
+            --gutter: clamp(1.5rem, 4vw, 4rem);
+        }
+        
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            font-size: 1.0625rem;
+            font-weight: 400;
+            line-height: 1.7;
+            color: var(--color-ink);
+            background-color: var(--color-paper);
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            padding: var(--gutter);
+        }
+        
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+        
+        ::selection {
+            background-color: var(--color-accent);
+            color: var(--color-paper);
+        }
+        
+        .calculator-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: calc(var(--space-unit) * 4) 0;
+        }
+        
+        .back-link {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: calc(var(--space-unit) * 2);
+            transition: color 0.2s;
+        }
+        
+        .back-link:hover {
+            color: var(--color-ink);
+        }
+        
+        .section-number {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-muted);
+            margin-bottom: var(--space-unit);
+        }
+        
+        h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            font-weight: 300;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: var(--space-unit);
+        }
+        
+        h1 em {
+            font-style: italic;
+        }
+        
+        .subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            margin-bottom: calc(var(--space-unit) * 3);
+            max-width: 600px;
+        }
+        
+        .calculator-card {
+            background: var(--color-paper-warm);
+            padding: calc(var(--space-unit) * 2);
+            margin-bottom: calc(var(--space-unit) * 2);
+        }
+        
+        .input-group {
+            margin-bottom: calc(var(--space-unit) * 1.5);
+        }
+        
+        label {
+            display: block;
+            font-weight: 500;
+            font-size: 0.9375rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-ink);
+        }
+        
+        .hint {
+            font-weight: 400;
+            color: var(--color-muted);
+            font-size: 0.8125rem;
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            border: 2px solid transparent;
+            background: var(--color-paper);
+            color: var(--color-ink);
+            transition: border-color 0.2s;
+        }
+        
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--color-ink);
+        }
+        
+        input[type="number"]::placeholder {
+            color: var(--color-muted);
+        }
+        
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 1.125rem 2rem;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            color: var(--color-paper);
+            background-color: var(--color-ink);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--color-ink-soft);
+            transform: translateY(-2px);
+        }
+        
+        .results {
+            display: none;
+            margin-top: calc(var(--space-unit) * 3);
+        }
+        
+        .results.show {
+            display: block;
+        }
+        
+        .results-header {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: calc(var(--space-unit) * 1.5);
+        }
+        
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-unit);
+            margin-bottom: calc(var(--space-unit) * 1.5);
+        }
+        
+        @media (max-width: 600px) {
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .result-card {
+            background: var(--color-paper-warm);
+            padding: calc(var(--space-unit) * 1.5);
+            text-align: center;
+        }
+        
+        .result-card.highlight {
+            background: var(--color-ink);
+            color: var(--color-paper);
+        }
+        
+        .result-label {
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-muted);
+            margin-bottom: 0.5rem;
+        }
+        
+        .result-card.highlight .result-label {
+            color: var(--color-paper-warm);
+            opacity: 0.7;
+        }
+        
+        .result-value {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 400;
+            line-height: 1;
+        }
+        
+        .result-card.highlight .result-value {
+            color: var(--color-accent);
+        }
+        
+        .savings-card {
+            background: var(--color-ink);
+            color: var(--color-paper);
+            padding: calc(var(--space-unit) * 2);
+            text-align: center;
+            margin-bottom: calc(var(--space-unit) * 1.5);
+        }
+        
+        .savings-label {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+        
+        .savings-value {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 8vw, 4.5rem);
+            font-weight: 300;
+            color: var(--color-accent);
+            line-height: 1;
+        }
+        
+        .savings-period {
+            font-size: 0.875rem;
+            opacity: 0.7;
+            margin-top: 0.5rem;
+        }
+        
+        .breakdown {
+            background: var(--color-paper-warm);
+            padding: calc(var(--space-unit) * 1.5);
+        }
+        
+        .breakdown h3 {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--color-muted);
+            margin-bottom: var(--space-unit);
+        }
+        
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            font-size: 0.9375rem;
+        }
+        
+        .breakdown-row:last-child {
+            border-bottom: none;
+            padding-top: var(--space-unit);
+            margin-top: 0.5rem;
+            border-top: 2px solid var(--color-ink);
+            font-weight: 600;
+        }
+        
+        .breakdown-row span:last-child {
+            font-weight: 500;
+        }
+        
+        .cta-section {
+            margin-top: calc(var(--space-unit) * 3);
+            text-align: center;
+            padding: calc(var(--space-unit) * 2);
+            border: 2px solid var(--color-ink);
+        }
+        
+        .cta-text {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: var(--space-unit);
+        }
+        
+        .cta-subtext {
+            color: var(--color-muted);
+            font-size: 0.9375rem;
+            margin-bottom: calc(var(--space-unit) * 1.5);
+        }
+        
+        .btn-accent {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 2.5rem;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            border: none;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-accent:hover {
+            background-color: var(--color-accent-soft);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    
+    <div class="calculator-container">
+        <a href="/" class="back-link">← Back to home</a>
+        
+        <p class="section-number">Free Tool</p>
+        <h1>AI Voice Agent <em>ROI Calculator</em></h1>
+        <p class="subtitle">See exactly how much your business could save with 24/7 AI-powered customer support.</p>
+        
+        <div class="calculator-card">
+            <div class="input-group">
+                <label>Monthly Call Volume <span class="hint">— Total inbound calls</span></label>
+                <input type="number" id="callVolume" placeholder="e.g., 500" value="500">
+            </div>
+            
+            <div class="input-group">
+                <label>Average Call Duration <span class="hint">— Minutes per call</span></label>
+                <input type="number" id="callDuration" placeholder="e.g., 4" value="4">
+            </div>
+            
+            <div class="input-group">
+                <label>Current Cost per Call <span class="hint">— € per call handled by staff</span></label>
+                <input type="number" id="costPerCall" placeholder="e.g., 8" value="8" step="0.5">
+            </div>
+            
+            <div class="input-group">
+                <label>Missed Calls per Month <span class="hint">— Calls going to voicemail</span></label>
+                <input type="number" id="missedCalls" placeholder="e.g., 100" value="100">
+            </div>
+            
+            <div class="input-group">
+                <label>Value per Missed Lead <span class="hint">— € lost per missed opportunity</span></label>
+                <input type="number" id="missedValue" placeholder="e.g., 150" value="150">
+            </div>
+            
+            <button class="btn-primary" onclick="calculate()">Calculate My Savings →</button>
+        </div>
+        
+        <div class="results" id="results">
+            <p class="results-header">Your potential savings</p>
+            
+            <div class="savings-card">
+                <p class="savings-label">Monthly Savings</p>
+                <p class="savings-value" id="savings">€0</p>
+                <p class="savings-period">That's <span id="annualSavings">€0</span> per year</p>
+            </div>
+            
+            <div class="result-grid">
+                <div class="result-card">
+                    <p class="result-label">Current Cost</p>
+                    <p class="result-value" id="currentCost">€0</p>
+                </div>
+                <div class="result-card highlight">
+                    <p class="result-label">With AI</p>
+                    <p class="result-value" id="aiCost">€0</p>
+                </div>
+            </div>
+            
+            <div class="breakdown">
+                <h3>Cost Breakdown</h3>
+                <div class="breakdown-row">
+                    <span>Current staff handling cost</span>
+                    <span id="staffCost">€0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>Lost revenue from missed calls</span>
+                    <span id="lostRevenue">€0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>AI Voice Agent cost (est.)</span>
+                    <span id="aiMonthly">€0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>Recovered revenue (24/7 coverage)</span>
+                    <span id="recoveredRevenue">-€0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>Net Annual Savings</span>
+                    <span id="netAnnual">€0</span>
+                </div>
+            </div>
+            
+            <div class="cta-section">
+                <p class="cta-text">Want to see it in action?</p>
+                <p class="cta-subtext">Book a free 15-minute demo. No obligation.</p>
+                <a href="https://tidycal.com/rajsuyash/discovery-call-for-ai-voice-agent" class="btn-accent">Book Demo Call →</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function calculate() {
+            const callVolume = parseFloat(document.getElementById('callVolume').value) || 0;
+            const callDuration = parseFloat(document.getElementById('callDuration').value) || 0;
+            const costPerCall = parseFloat(document.getElementById('costPerCall').value) || 0;
+            const missedCalls = parseFloat(document.getElementById('missedCalls').value) || 0;
+            const missedValue = parseFloat(document.getElementById('missedValue').value) || 0;
+            
+            const staffCost = callVolume * costPerCall;
+            const lostRevenue = missedCalls * missedValue;
+            const currentTotal = staffCost + lostRevenue;
+            
+            const totalMinutes = callVolume * callDuration;
+            const aiBase = 1000;
+            const aiUsage = totalMinutes * 0.40;
+            const aiTotal = aiBase + aiUsage;
+            
+            const recoveredRevenue = missedCalls * missedValue * 0.8;
+            
+            const netAiCost = aiTotal - recoveredRevenue;
+            const monthlySavings = currentTotal - netAiCost;
+            const annualSavings = monthlySavings * 12;
+            
+            document.getElementById('currentCost').textContent = '€' + currentTotal.toLocaleString();
+            document.getElementById('aiCost').textContent = '€' + Math.max(0, netAiCost).toLocaleString();
+            document.getElementById('savings').textContent = '€' + monthlySavings.toLocaleString();
+            document.getElementById('annualSavings').textContent = '€' + annualSavings.toLocaleString();
+            document.getElementById('staffCost').textContent = '€' + staffCost.toLocaleString();
+            document.getElementById('lostRevenue').textContent = '€' + lostRevenue.toLocaleString();
+            document.getElementById('aiMonthly').textContent = '€' + aiTotal.toLocaleString();
+            document.getElementById('recoveredRevenue').textContent = '-€' + recoveredRevenue.toLocaleString();
+            document.getElementById('netAnnual').textContent = '€' + annualSavings.toLocaleString();
+            
+            document.getElementById('results').classList.add('show');
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

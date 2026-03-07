@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>10 N8N Workflow Templates Every Small Business Needs</title>
+    <meta name="description" content="10 ready-to-use N8N workflow templates for small businesses. Automate lead capture, invoicing, social media, onboarding, reporting, and more with these proven N8N automation examples.">
+    <meta name="keywords" content="N8N workflow templates, N8N templates for business, N8N automation examples, N8N workflow ideas, small business automation templates">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/n8n-workflow-templates-small-business.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/n8n-workflow-templates-small-business.html">
+    <meta property="og:title" content="10 N8N Workflow Templates Every Small Business Needs">
+    <meta property="og:description" content="10 ready-to-use N8N workflow templates for small businesses. Automate lead capture, invoicing, social media, onboarding, reporting, and more.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj - AI Automation Agency">
+    <meta property="article:published_time" content="2026-02-15">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="10 N8N Workflow Templates Every Small Business Needs">
+    <meta name="twitter:description" content="10 ready-to-use N8N workflow templates for small businesses. Automate lead capture, invoicing, social media, onboarding, reporting, and more.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "10 N8N Workflow Templates Every Small Business Needs",
+        "description": "10 ready-to-use N8N workflow templates for small businesses. Automate lead capture, invoicing, social media, onboarding, reporting, and more with these proven N8N automation examples.",
+        "image": "https://rajsuyash.com/Photo.png",
+        "author": {
+            "@type": "Person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Suyash Raj - AI Automation Agency",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://rajsuyash.com/Photo.png"
+            }
+        },
+        "datePublished": "2026-02-15",
+        "dateModified": "2026-02-15",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/n8n-workflow-templates-small-business"
+        },
+        "keywords": ["N8N workflow templates", "N8N templates for business", "N8N automation examples", "N8N workflow ideas", "small business automation templates"]
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Are these N8N workflow templates free to use?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "N8N itself is free and open-source when self-hosted. The cloud version starts at $20/month. All 10 workflow templates described here can be built on either version. The only additional costs come from third-party tools you connect, such as CRM subscriptions or email marketing platforms, most of which offer free tiers that work fine for small businesses."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How long does it take to set up an N8N workflow template?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Beginner-level templates like the data backup workflow or appointment reminder system take 30 to 60 minutes to configure. Intermediate templates like the invoice generator or social media cross-poster take 1 to 3 hours. Advanced templates like the lead scoring pipeline may take a full day. Working with an automation agency, all 10 can be live within 1 to 2 weeks."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Do I need coding skills to use N8N workflow templates?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. N8N uses a visual drag-and-drop editor, so most workflows can be built without writing any code. Some advanced templates may use a short JavaScript function node for custom logic like lead scoring, but N8N provides built-in nodes for most common operations. If you can use a spreadsheet, you can build basic N8N workflows."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260216b">
+
+    <style>
+        /* Blog Article Styles */
+        .blog-article h2 {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 400;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            color: var(--color-ink);
+            line-height: 1.25;
+        }
+
+        .blog-article h3 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: var(--color-ink);
+            line-height: 1.3;
+        }
+
+        .blog-article p {
+            line-height: 1.8;
+            margin-bottom: 1.25rem;
+            color: var(--color-ink-soft);
+            font-size: 1rem;
+        }
+
+        .blog-article ul,
+        .blog-article ol {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+            color: var(--color-ink-soft);
+            line-height: 1.8;
+        }
+
+        .blog-article li {
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-article blockquote {
+            border-left: 3px solid var(--color-accent);
+            padding-left: 1.5rem;
+            font-style: italic;
+            margin: 1.5rem 0;
+            color: var(--color-ink-soft);
+        }
+
+        .blog-article a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .blog-article a:hover {
+            text-decoration: none;
+        }
+
+        .blog-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .blog-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .blog-date {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .blog-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 400;
+            line-height: 1.15;
+            color: var(--color-ink);
+            margin-bottom: 1rem;
+        }
+
+        .blog-meta {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .template-card {
+            background: var(--color-paper-warm);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .template-card h3 {
+            margin-top: 0;
+            font-size: 1.3rem;
+        }
+
+        .template-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(13, 13, 13, 0.08);
+        }
+
+        .template-meta-item {
+            font-size: 0.85rem;
+        }
+
+        .template-meta-item strong {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--color-muted);
+            margin-bottom: 0.2rem;
+        }
+
+        .template-meta-item span {
+            color: var(--color-ink);
+        }
+
+        .difficulty-beginner { color: #2d8a4e; }
+        .difficulty-intermediate { color: #b8860b; }
+        .difficulty-advanced { color: #c0392b; }
+
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            margin-bottom: 0;
+            font-size: 1.05rem;
+            color: var(--color-ink);
+        }
+
+        .blog-author-box {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--color-paper-warm);
+            margin-top: 3rem;
+        }
+
+        .blog-author-box img {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .blog-author-name {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .blog-author-role {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .related-posts {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .related-posts h2 {
+            margin-top: 0;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: 1.5rem;
+            text-decoration: none;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-4px);
+            text-decoration: none;
+        }
+
+        .related-card-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 400;
+            color: var(--color-ink);
+            margin-top: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .faq-section dt {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--color-ink);
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-section dd {
+            margin-left: 0;
+            margin-bottom: 1rem;
+            color: var(--color-ink-soft);
+            line-height: 1.8;
+        }
+
+        @media (max-width: 600px) {
+            .blog-author-box {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .template-meta {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://rajsuyash.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://rajsuyash.com/blog/"},{"@type":"ListItem","position":3,"name":"Article","item":"https://rajsuyash.com/blog/n8n-workflow-templates-small-business.html"}]}</script>
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/tools/" class="nav-link">Tools</a>
+                <a href="/qualify" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Blog Article -->
+    <article class="blog-article" style="max-width: 780px; margin: 0 auto; padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-xl);">
+
+        <header class="blog-header">
+            <span class="blog-category">N8N Automation</span>
+            <p class="blog-date">February 15, 2026</p>
+            <h1 class="blog-title">10 N8N Workflow Templates Every Small Business Needs</h1>
+            <div class="blog-meta">
+                <span>By Suyash Raj</span>
+                <span>|</span>
+                <span>12 min read</span>
+            </div>
+        </header>
+
+        <div class="blog-content">
+
+            <!-- Intro -->
+            <p>Small business owners wear too many hats. You are the salesperson, the accountant, the customer service rep, and the marketing team, all at once. Every hour you spend copying data between apps, sending repetitive emails, or manually updating spreadsheets is an hour you are not spending on actual growth.</p>
+
+            <p>N8N fixes that. It is an open-source workflow automation platform that connects your tools and runs tasks on autopilot. No per-task fees. No vendor lock-in. Just drag, drop, and connect.</p>
+
+            <p>Below are 10 N8N workflow templates built for small businesses. Each one solves a real, recurring problem. We have included what the workflow does, which tools it connects, how much time it saves, and how difficult it is to build. If you are new to N8N, start with our <a href="/blog/build-first-n8n-workflow.html">guide to building your first N8N workflow</a> and come back here when you are ready to expand.</p>
+
+            <p>Let's get into it.</p>
+
+            <!-- Template 1 -->
+            <div class="template-card">
+                <h3>Template 1: New Lead to CRM + Slack Notification</h3>
+                <p>When a new lead fills out your contact form or landing page, this workflow captures their details, creates a contact record in your CRM, and pings your sales team in Slack. No more checking form submissions manually or worrying about leads sitting unseen for hours.</p>
+                <p>The workflow triggers on a new form submission, maps the fields to your CRM's contact structure, creates the record, and sends a formatted Slack message with the lead's name, email, company, and source. Your team can respond within minutes instead of the next time someone remembers to check the inbox.</p>
+                <div class="template-meta">
+                    <div class="template-meta-item">
+                        <strong>Tools Connected</strong>
+                        <span>Typeform / Google Forms &rarr; N8N &rarr; HubSpot &rarr; Slack</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Time Saved</strong>
+                        <span>3 to 5 hours per week</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Difficulty</strong>
+                        <span class="difficulty-beginner">Beginner</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Template 2 -->
+            <div class="template-card">
+                <h3>Template 2: Invoice Creation from Form Submission</h3>
+                <p>Stop building invoices by hand. This workflow takes a form submission (from an internal request form, a project completion trigger, or a client order) and generates a professional invoice in your accounting tool. It then emails the invoice directly to the client with a payment link.</p>
+                <p>You set up the form with fields for client name, service description, amount, and due date. N8N passes this data to your invoicing platform, generates the PDF, and sends it out. For businesses that send 20 or more invoices per month, this workflow pays for itself in the first week.</p>
+                <div class="template-meta">
+                    <div class="template-meta-item">
+                        <strong>Tools Connected</strong>
+                        <span>Google Forms &rarr; N8N &rarr; Stripe / QuickBooks &rarr; Gmail</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Time Saved</strong>
+                        <span>4 to 6 hours per week</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Difficulty</strong>
+                        <span class="difficulty-intermediate">Intermediate</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Template 3 -->
+            <div class="template-card">
+                <h3>Template 3: Social Media Cross-Posting</h3>
+                <p>Writing a LinkedIn post, then reformatting it for X (Twitter), then again for Facebook is a time sink that adds up fast. This workflow lets you write once and publish everywhere. You create a post in one place (a Google Sheet, Notion, or Airtable), and N8N adapts the format for each platform and publishes on schedule.</p>
+                <p>The workflow reads your content, trims it to fit character limits for each platform, adds relevant hashtags, and posts through the respective APIs. You can set it to publish immediately or queue posts for specific days and times. Most small businesses post 3 to 5 times per week across platforms, so the time savings compound quickly.</p>
+                <div class="template-meta">
+                    <div class="template-meta-item">
+                        <strong>Tools Connected</strong>
+                        <span>Google Sheets / Notion &rarr; N8N &rarr; LinkedIn + X + Facebook</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Time Saved</strong>
+                        <span>3 to 4 hours per week</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Difficulty</strong>
+                        <span class="difficulty-intermediate">Intermediate</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Template 4 -->
+            <div class="template-card">
+                <h3>Template 4: Customer Onboarding Email Sequence</h3>
+                <p>First impressions matter. When a new customer signs up or makes their first purchase, this workflow sends a timed sequence of onboarding emails: a welcome message on day one, a setup guide on day two, a tips and tricks email on day five, and a check-in on day ten.</p>
+                <p>N8N uses Wait nodes to space out the emails and IF nodes to branch the sequence based on customer actions. If someone completes setup on day two, they skip the reminder and go straight to the tips email. This kind of conditional logic is what separates a thoughtful onboarding experience from a generic email blast. The result: lower churn and higher product adoption.</p>
+                <div class="template-meta">
+                    <div class="template-meta-item">
+                        <strong>Tools Connected</strong>
+                        <span>Stripe / WooCommerce &rarr; N8N &rarr; Mailgun / SendGrid &rarr; Google Sheets</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Time Saved</strong>
+                        <span>5 to 8 hours per week</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Difficulty</strong>
+                        <span class="difficulty-intermediate">Intermediate</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Template 5 -->
+            <div class="template-card">
+                <h3>Template 5: Weekly Report Generator</h3>
+                <p>Every Monday morning, this workflow pulls key metrics from your tools, compiles them into a formatted report, and emails it to your team. No more logging into five different dashboards to figure out what happened last week.</p>
+                <p>The workflow connects to your CRM for sales data, your analytics platform for website traffic, your support tool for ticket counts, and your accounting software for revenue numbers. It formats everything into a clean summary with week-over-week comparisons. You get a single email with the numbers that matter, every week, without lifting a finger.</p>
+                <div class="template-meta">
+                    <div class="template-meta-item">
+                        <strong>Tools Connected</strong>
+                        <span>HubSpot + Google Analytics + Zendesk + QuickBooks &rarr; N8N &rarr; Gmail</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Time Saved</strong>
+                        <span>2 to 3 hours per week</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Difficulty</strong>
+                        <span class="difficulty-intermediate">Intermediate</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Template 6 -->
+            <div class="template-card">
+                <h3>Template 6: Appointment Reminder System</h3>
+                <p>No-shows cost service businesses real money. This workflow sends automated reminders before scheduled appointments: an email confirmation right after booking, an SMS reminder 24 hours before, and a final reminder 1 hour before.</p>
+                <p>N8N watches your calendar for new events, calculates the reminder times, and sends messages through your preferred channels. If someone cancels or reschedules, the workflow detects the change and updates the reminder sequence. For businesses that run on appointments (consultants, clinics, salons, agencies), this template typically cuts no-shows by 40% or more.</p>
+                <div class="template-meta">
+                    <div class="template-meta-item">
+                        <strong>Tools Connected</strong>
+                        <span>Google Calendar / Calendly &rarr; N8N &rarr; Twilio (SMS) + Gmail</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Time Saved</strong>
+                        <span>2 to 4 hours per week</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Difficulty</strong>
+                        <span class="difficulty-beginner">Beginner</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Template 7 -->
+            <div class="template-card">
+                <h3>Template 7: E-commerce Order Tracking Sync</h3>
+                <p>Customers want to know where their order is. This workflow monitors your e-commerce platform for shipping updates and automatically notifies customers at each stage: order confirmed, shipped, out for delivery, and delivered.</p>
+                <p>It pulls tracking data from your shipping provider, matches it to the customer's order, and sends status emails or SMS messages. N8N also logs every update in a Google Sheet or Airtable, giving you a centralized view of all active shipments. If a delivery is delayed beyond a set threshold, the workflow flags it for your team to follow up proactively.</p>
+                <div class="template-meta">
+                    <div class="template-meta-item">
+                        <strong>Tools Connected</strong>
+                        <span>Shopify / WooCommerce &rarr; N8N &rarr; ShipStation / AfterShip &rarr; Gmail + Twilio</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Time Saved</strong>
+                        <span>5 to 7 hours per week</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Difficulty</strong>
+                        <span class="difficulty-intermediate">Intermediate</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Template 8 -->
+            <div class="template-card">
+                <h3>Template 8: Support Ticket Auto-Routing</h3>
+                <p>When a customer submits a support request, this workflow reads the message, categorizes it by topic (billing, technical, general inquiry), assigns a priority level, and routes it to the right team member. No more manually sorting through a shared inbox every morning.</p>
+                <p>The workflow uses keyword matching or an AI classification step to determine the category. Urgent keywords like "down," "broken," or "cancel" trigger high-priority routing with an immediate Slack alert. Everything else gets assigned based on topic and team availability. For growing businesses handling 50 or more support tickets per week, this turns inbox chaos into a structured system.</p>
+                <div class="template-meta">
+                    <div class="template-meta-item">
+                        <strong>Tools Connected</strong>
+                        <span>Email / Typeform &rarr; N8N &rarr; OpenAI (classification) &rarr; Zendesk / Linear &rarr; Slack</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Time Saved</strong>
+                        <span>4 to 6 hours per week</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Difficulty</strong>
+                        <span class="difficulty-advanced">Advanced</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Template 9 -->
+            <div class="template-card">
+                <h3>Template 9: Data Backup to Google Drive</h3>
+                <p>Losing business data is not a hypothetical risk. It happens. This workflow runs on a daily schedule and backs up critical data from your key tools to organized folders in Google Drive. Think of it as an automated safety net for your CRM contacts, order history, financial records, and customer lists.</p>
+                <p>N8N exports data from each connected app as CSV or JSON files, timestamps them, and uploads them to your Drive with a clean folder structure (organized by tool and date). Old backups beyond your retention period get archived automatically. It is simple, it runs in the background, and you will be grateful for it the day something goes wrong.</p>
+                <div class="template-meta">
+                    <div class="template-meta-item">
+                        <strong>Tools Connected</strong>
+                        <span>HubSpot + Airtable + Stripe &rarr; N8N &rarr; Google Drive</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Time Saved</strong>
+                        <span>1 to 2 hours per week</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Difficulty</strong>
+                        <span class="difficulty-beginner">Beginner</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Template 10 -->
+            <div class="template-card">
+                <h3>Template 10: Lead Scoring and Qualification Pipeline</h3>
+                <p>Not every lead is worth your time. This workflow scores incoming leads based on criteria you define (company size, industry, budget range, engagement level) and routes them into tiers: hot leads go straight to your calendar booking link, warm leads enter a nurture sequence, and cold leads get archived for future outreach.</p>
+                <p>N8N pulls data from your form submissions and enriches it using APIs like Clearbit or Apollo. A Function node calculates a score based on weighted criteria. High scorers get a personalized email with a link to book a call. Medium scorers enter a drip campaign. Low scorers land in a cold list for quarterly re-engagement. The workflow runs on every new submission, so qualified leads never wait. For a deeper look at lead generation automation, read our <a href="/blog/how-to-automate-lead-generation-with-n8n.html">guide to automating lead generation with N8N</a>.</p>
+                <div class="template-meta">
+                    <div class="template-meta-item">
+                        <strong>Tools Connected</strong>
+                        <span>Typeform &rarr; N8N &rarr; Clearbit / Apollo &rarr; HubSpot &rarr; Mailgun &rarr; Calendly</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Time Saved</strong>
+                        <span>6 to 10 hours per week</span>
+                    </div>
+                    <div class="template-meta-item">
+                        <strong>Difficulty</strong>
+                        <span class="difficulty-advanced">Advanced</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How to Get These Templates Running -->
+            <h2>How to Get These Templates Running</h2>
+
+            <p>Building these workflows yourself is entirely doable. Here is the process we recommend.</p>
+
+            <p><strong>1. Pick one workflow to start with.</strong> Do not try to build all 10 at once. Choose the template that addresses your biggest time drain right now. For most small businesses, that is either the lead-to-CRM workflow (Template 1) or the appointment reminder system (Template 6).</p>
+
+            <p><strong>2. Set up N8N.</strong> You have two options. Self-hosted is free and gives you full control. N8N Cloud starts at $20/month and handles the infrastructure for you. If you want to get started fast, Cloud is the easier path. If you want maximum flexibility and zero recurring costs, self-host on a $5/month VPS.</p>
+
+            <p><strong>3. Connect your tools.</strong> N8N has native integrations for 400+ apps. For each template above, you will need API keys or OAuth connections from the tools listed. Most services (HubSpot, Google, Slack, Stripe) offer free tiers that work fine for small businesses.</p>
+
+            <p><strong>4. Build and test with small data sets.</strong> Do not go live with 500 contacts on day one. Build the workflow, test it with 5 to 10 records, verify the output, and then scale up. This catches errors before they become expensive mistakes.</p>
+
+            <p><strong>5. Add error handling.</strong> Every production workflow needs an error branch. Add a catch node that sends you a Slack or email notification when something fails. This takes 5 minutes and saves hours of silent failures.</p>
+
+            <p><strong>6. Scale gradually.</strong> Once your first workflow runs smoothly for a week, build the next one. Within a month, you can have 3 to 4 workflows handling the tasks that used to eat your mornings.</p>
+
+            <p>If you want a head start, check out our <a href="/n8n-automation.html">N8N automation services</a>. We build, test, and monitor these workflows for our clients so they can focus on running their business.</p>
+
+            <!-- FAQ -->
+            <h2>Frequently Asked Questions</h2>
+
+            <dl class="faq-section">
+                <dt>Are these N8N workflow templates free to use?</dt>
+                <dd>N8N itself is free and open-source when self-hosted. The cloud version starts at $20/month. All 10 workflow templates described here can be built on either version. The only additional costs come from third-party tools you connect, such as CRM subscriptions or email marketing platforms. Most of these offer free tiers that work fine for small businesses just getting started with automation. Visit our <a href="/faq.html">FAQ page</a> for more pricing details.</dd>
+
+                <dt>How long does it take to set up an N8N workflow template?</dt>
+                <dd>It depends on complexity. Beginner-level templates like the data backup workflow or appointment reminder system take 30 to 60 minutes to configure. Intermediate templates like the invoice generator or social media cross-poster take 1 to 3 hours. Advanced templates like the lead scoring pipeline may take a full day to build and test properly. Working with an automation agency like ours, all 10 can typically be live within 1 to 2 weeks.</dd>
+
+                <dt>Do I need coding skills to use N8N workflow templates?</dt>
+                <dd>No. N8N uses a visual drag-and-drop editor, so most workflows can be built without writing any code. Some advanced templates (like lead scoring) may use a short JavaScript function node for custom logic, but N8N provides built-in nodes for most common operations. If you can use a spreadsheet, you can build basic N8N workflows. Our <a href="/blog/build-first-n8n-workflow.html">beginner's guide to N8N</a> walks you through the basics step by step.</dd>
+            </dl>
+
+            <!-- CTA -->
+            <h2>Want These Workflows Built for Your Business?</h2>
+
+            <p>You now have 10 proven N8N workflow templates to choose from. Each one solves a specific problem that costs small businesses hours every week. You can build them yourself using N8N's free platform, or you can have them built and running within days.</p>
+
+            <p>We specialize in N8N automation for small businesses. We handle the setup, the testing, the error handling, and the ongoing monitoring. Our clients go from manual chaos to automated systems without touching a single node.</p>
+
+            <p><a href="/qualify" class="btn-primary" style="display: inline-block; margin-top: 0.5rem; text-decoration: none;">Book a Free Discovery Call</a></p>
+
+            
+        <!-- Internal Links -->
+        <div class="internal-links" style="background: #f8f9fa; border-left: 4px solid #2563eb; padding: 1.5rem; margin: 2rem 0; border-radius: 0 8px 8px 0;">
+            <p style="font-weight: 600; margin-bottom: 0.75rem; color: #1e293b;">Explore More</p>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="margin-bottom: 0.5rem;"><a href="/case-studies/le-marquier.html">See how Le Marquier cut support costs by 80% with AI voice agents</a></li>
+                <li style="margin-bottom: 0.5rem;"><a href="/roi-calculator.html">Calculate your AI automation ROI</a></li>
+                <li style="margin-bottom: 0.5rem;"><a href="/ai-readiness.html">Take the free AI readiness assessment</a></li>
+                <li style="margin-bottom: 0.5rem;"><a href="/ai-automation-agency.html">Explore our AI automation services</a></li>
+            </ul>
+        </div>
+
+        <!-- Author Byline -->
+            <div class="blog-author-box">
+                <img src="/Photo.png" alt="Suyash Raj" width="64" height="64">
+                <div>
+                    <p class="blog-author-name">Suyash Raj</p>
+                    <p class="blog-author-role">Founder, AI Automation Agency</p>
+                </div>
+            </div>
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/build-first-n8n-workflow.html" class="related-card">
+                <h3 class="related-card-title">Build Your First N8N Workflow</h3>
+                <p class="related-card-excerpt">Practical N8N workflow guides and templates for automating your business.</p>
+            </a>
+            <a href="/blog/n8n-vs-zapier-vs-make.html" class="related-card">
+                <h3 class="related-card-title">N8N vs Zapier vs Make: Complete Comparison</h3>
+                <p class="related-card-excerpt">Practical N8N workflow guides and templates for automating your business.</p>
+            </a>
+            <a href="/blog/how-to-automate-lead-generation-with-n8n.html" class="related-card">
+                <h3 class="related-card-title">How to Automate Lead Generation with N8N</h3>
+                <p class="related-card-excerpt">Practical N8N workflow guides and templates for automating your business.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>AI Automation Agency for SMBs</p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>

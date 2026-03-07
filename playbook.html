@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Automation Playbook | Suyash Raj</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --font-display: 'Fraunces', Georgia, serif;
+            --font-body: 'Space Grotesk', -apple-system, sans-serif;
+            --ink: #0d0d0d;
+            --ink-soft: #2a2a2a;
+            --paper: #f7f5f2;
+            --paper-warm: #ebe7e0;
+            --accent: #ff4d4d;
+            --accent-soft: #ff6b6b;
+            --muted: #8a8a8a;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-body);
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--ink);
+            background: var(--paper);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Header ── */
+        .pb-header {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 4rem 2rem 3rem;
+            text-align: center;
+        }
+
+        .pb-header .badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 0.35rem 1rem;
+            border-radius: 100px;
+            margin-bottom: 1.5rem;
+        }
+
+        .pb-header h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.25rem, 6vw, 3.75rem);
+            font-weight: 300;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            max-width: 700px;
+            margin: 0 auto 1rem;
+        }
+
+        .pb-header p {
+            font-size: 1.0625rem;
+            color: rgba(247,245,242,0.7);
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        /* ── Content ── */
+        .pb-content {
+            max-width: 740px;
+            margin: 0 auto;
+            padding: 3rem 2rem 5rem;
+        }
+
+        .pb-content h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 400;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            margin: 3.5rem 0 1rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(13,13,13,0.1);
+        }
+
+        .pb-content h2:first-child {
+            border-top: none;
+            padding-top: 0;
+            margin-top: 0;
+        }
+
+        .pb-content h3 {
+            font-family: var(--font-display);
+            font-size: 1.375rem;
+            font-weight: 600;
+            margin: 2rem 0 0.5rem;
+        }
+
+        .pb-content p {
+            margin-bottom: 1rem;
+            color: var(--ink-soft);
+        }
+
+        .pb-content ul, .pb-content ol {
+            margin: 0 0 1.5rem 1.25rem;
+            color: var(--ink-soft);
+        }
+
+        .pb-content li { margin-bottom: 0.4rem; }
+
+        .pb-content strong { color: var(--ink); }
+
+        /* ── Workflow Cards ── */
+        .workflow-card {
+            background: var(--paper-warm);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .workflow-card h3 {
+            margin-top: 0;
+            color: var(--ink);
+        }
+
+        .workflow-card .wf-tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            background: var(--ink);
+            color: var(--paper);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            margin-bottom: 0.75rem;
+        }
+
+        .workflow-card .wf-result {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            background: rgba(255,77,77,0.08);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 6px 6px 0;
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        .workflow-card code {
+            display: block;
+            background: var(--ink);
+            color: #a8e6a1;
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            margin: 1rem 0 0;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        /* ── ROI Calculator ── */
+        .roi-section {
+            background: var(--ink);
+            color: var(--paper);
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin: 2rem 0;
+        }
+
+        .roi-section h3 { color: var(--accent); margin-top: 0; }
+
+        .roi-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .roi-table th, .roi-table td {
+            text-align: left;
+            padding: 0.6rem 0.75rem;
+            font-size: 0.9375rem;
+        }
+
+        .roi-table th {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+            border-bottom: 1px solid rgba(247,245,242,0.15);
+        }
+
+        .roi-table td {
+            border-bottom: 1px solid rgba(247,245,242,0.08);
+        }
+
+        .roi-table .highlight { color: var(--accent); font-weight: 600; }
+
+        /* ── Matrix ── */
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .matrix-cell {
+            padding: 1.25rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .matrix-cell h4 {
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.5rem;
+        }
+
+        .matrix-cell p { font-size: 0.875rem; margin: 0; }
+
+        .matrix-cell.do-first { background: rgba(255,77,77,0.1); border: 2px solid var(--accent); }
+        .matrix-cell.do-first h4 { color: var(--accent); }
+        .matrix-cell.schedule { background: rgba(13,13,13,0.06); border: 2px solid rgba(13,13,13,0.15); }
+        .matrix-cell.delegate { background: rgba(13,13,13,0.04); border: 2px solid rgba(13,13,13,0.1); }
+        .matrix-cell.defer { background: rgba(13,13,13,0.02); border: 2px solid rgba(13,13,13,0.06); }
+
+        .matrix-label {
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+        }
+
+        /* ── CTA ── */
+        .pb-cta {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--ink);
+            color: var(--paper);
+        }
+
+        .pb-cta h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 300;
+            margin-bottom: 1rem;
+            border: none;
+            padding: 0;
+            color: var(--paper);
+        }
+
+        .pb-cta p { color: rgba(247,245,242,0.7); max-width: 480px; margin: 0 auto 1.5rem; }
+
+        .pb-cta .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            font-family: var(--font-body);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: var(--paper);
+            background: var(--accent);
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 200ms;
+        }
+
+        .pb-cta .btn:hover { background: var(--accent-soft); }
+
+        @media (max-width: 640px) {
+            .matrix-grid { grid-template-columns: 1fr; }
+            .workflow-card { padding: 1.5rem; }
+            .roi-section { padding: 1.5rem; }
+        }
+    </style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://rajsuyash.com/"},{"@type":"ListItem","position":2,"name":"AI Playbook","item":"https://rajsuyash.com/playbook.html"}]}</script>
+</head>
+<body>
+
+<header class="pb-header">
+    <span class="badge">Free Playbook</span>
+    <h1>The AI Automation Playbook for SMBs</h1>
+    <p>5 ready-to-steal N8N workflows, an ROI calculator, and the prioritization matrix we use with every client.</p>
+</header>
+
+<main class="pb-content">
+
+    <h2>Why This Playbook Exists</h2>
+    <p>Most small businesses know they should automate. The problem isn't motivation — it's knowing <strong>what to automate first</strong> and <strong>how to do it without a six-figure budget</strong>.</p>
+    <p>This playbook gives you the exact frameworks and workflows we've deployed across 50+ SMBs. No theory. No fluff. Just the stuff that works.</p>
+
+    <!-- ════════════════════════════════════════ -->
+    <h2>Part 1: The Prioritization Matrix</h2>
+    <p>Not everything should be automated. Here's how to decide what to tackle first.</p>
+    <p>Score each repetitive task in your business on two axes:</p>
+    <ul>
+        <li><strong>Frequency:</strong> How often does this happen? (Daily = high, Monthly = low)</li>
+        <li><strong>Time per occurrence:</strong> How long does it take each time? (30+ min = high, &lt;5 min = low)</li>
+    </ul>
+
+    <div class="matrix-grid">
+        <div class="matrix-cell do-first">
+            <h4>Automate First</h4>
+            <p>High frequency + High time. These are your biggest wins.</p>
+            <p><strong>Examples:</strong> Lead follow-ups, data entry, report generation</p>
+        </div>
+        <div class="matrix-cell schedule">
+            <h4>Schedule Next</h4>
+            <p>High frequency + Low time. Quick wins that add up.</p>
+            <p><strong>Examples:</strong> Status notifications, calendar reminders, Slack updates</p>
+        </div>
+        <div class="matrix-cell delegate">
+            <h4>Automate When Ready</h4>
+            <p>Low frequency + High time. Worth doing but not urgent.</p>
+            <p><strong>Examples:</strong> Monthly reporting, quarterly audits, onboarding sequences</p>
+        </div>
+        <div class="matrix-cell defer">
+            <h4>Skip For Now</h4>
+            <p>Low frequency + Low time. Not worth the setup cost yet.</p>
+            <p><strong>Examples:</strong> Annual reviews, rare edge-case processes</p>
+        </div>
+    </div>
+    <p class="matrix-label">Frequency &rarr; &nbsp;&nbsp;|&nbsp;&nbsp; &uarr; Time per task</p>
+
+    <h3>How to use this</h3>
+    <ol>
+        <li>List every repetitive task your team does in a week</li>
+        <li>Score each one: frequency (1-5) and time-per-occurrence (1-5)</li>
+        <li>Multiply the scores. Anything above 15? That's your first automation target</li>
+        <li>Start with the highest score. Build one workflow. Measure the impact. Repeat.</li>
+    </ol>
+
+    <!-- ════════════════════════════════════════ -->
+    <h2>Part 2: 5 Plug-and-Play N8N Workflows</h2>
+    <p>These are simplified versions of real workflows we've deployed. Each one can be built in N8N in under 2 hours.</p>
+
+    <!-- Workflow 1 -->
+    <div class="workflow-card">
+        <span class="wf-tag">Workflow #1</span>
+        <h3>Instant Lead Response System</h3>
+        <p>When a lead fills out your form, this workflow instantly sends a personalized email, adds them to your CRM, notifies your sales team on Slack, and logs everything in a spreadsheet.</p>
+        <code>Form Submission (Webhook)
+  &rarr; Validate &amp; Clean Data
+  &rarr; Add to CRM (HubSpot / Airtable)
+  &rarr; Send Personalized Email (Gmail / SMTP)
+  &rarr; Notify Sales on Slack
+  &rarr; Log to Google Sheets</code>
+        <p><strong>Trigger:</strong> Webhook (form submission)<br>
+        <strong>Tools:</strong> N8N, Gmail, Slack, Google Sheets, CRM of choice</p>
+        <div class="wf-result">Result: Response time drops from hours to under 60 seconds. Lead conversion up 40% on average.</div>
+    </div>
+
+    <!-- Workflow 2 -->
+    <div class="workflow-card">
+        <span class="wf-tag">Workflow #2</span>
+        <h3>AI-Powered Content Repurposer</h3>
+        <p>Turn one blog post into 5 social media posts, an email newsletter, and a Twitter thread — automatically. Uses AI to adapt tone and length for each platform.</p>
+        <code>New Blog Post (RSS / Webhook)
+  &rarr; Extract Content
+  &rarr; AI: Generate LinkedIn Post
+  &rarr; AI: Generate Twitter Thread
+  &rarr; AI: Generate Email Summary
+  &rarr; Queue to Buffer / Scheduling Tool
+  &rarr; Draft Email in Mailchimp</code>
+        <p><strong>Trigger:</strong> RSS feed or webhook on publish<br>
+        <strong>Tools:</strong> N8N, OpenAI API, Buffer/Typefully, Mailchimp</p>
+        <div class="wf-result">Result: 4+ hours of content work per post reduced to 10 minutes of review.</div>
+    </div>
+
+    <!-- Workflow 3 -->
+    <div class="workflow-card">
+        <span class="wf-tag">Workflow #3</span>
+        <h3>Client Onboarding Autopilot</h3>
+        <p>When a new client signs, this workflow creates their project folder, sends a welcome email sequence, sets up their Slack channel, and creates onboarding tasks in your PM tool.</p>
+        <code>New Deal Closed (CRM Trigger)
+  &rarr; Create Google Drive Folder (from template)
+  &rarr; Create Slack Channel, Invite Team
+  &rarr; Create Onboarding Tasks in Asana/Notion
+  &rarr; Send Welcome Email (Day 0)
+  &rarr; Schedule Follow-up Emails (Day 3, 7, 14)
+  &rarr; Notify Account Manager</code>
+        <p><strong>Trigger:</strong> CRM deal stage change<br>
+        <strong>Tools:</strong> N8N, Google Drive, Slack, Asana/Notion, Gmail</p>
+        <div class="wf-result">Result: Onboarding time cut from 2 hours to 5 minutes. Zero steps forgotten.</div>
+    </div>
+
+    <!-- Workflow 4 -->
+    <div class="workflow-card">
+        <span class="wf-tag">Workflow #4</span>
+        <h3>Automated Weekly KPI Dashboard</h3>
+        <p>Every Monday at 8am, this workflow pulls data from your tools, generates a summary with AI insights, and sends a formatted report to your team.</p>
+        <code>Cron Trigger (Monday 8am)
+  &rarr; Pull Revenue Data (Stripe API)
+  &rarr; Pull Traffic Data (Google Analytics)
+  &rarr; Pull Lead Data (CRM API)
+  &rarr; Aggregate &amp; Calculate KPIs
+  &rarr; AI: Generate Insights Summary
+  &rarr; Format HTML Email Report
+  &rarr; Send to Team</code>
+        <p><strong>Trigger:</strong> Scheduled (cron)<br>
+        <strong>Tools:</strong> N8N, Stripe, Google Analytics, CRM, OpenAI, Gmail</p>
+        <div class="wf-result">Result: 3 hours of weekly reporting work eliminated. Team gets actionable insights, not raw data.</div>
+    </div>
+
+    <!-- Workflow 5 -->
+    <div class="workflow-card">
+        <span class="wf-tag">Workflow #5</span>
+        <h3>Review &amp; Reputation Monitor</h3>
+        <p>Monitors Google Reviews, G2, and social mentions. Positive reviews get a thank-you reply. Negative reviews trigger an instant alert to your team with AI-suggested responses.</p>
+        <code>Scheduled Check (Every 6 hours)
+  &rarr; Scrape New Reviews (Google, G2)
+  &rarr; Sentiment Analysis (AI)
+  &rarr; IF Positive: Auto-reply with Thank You
+  &rarr; IF Negative: Alert Team on Slack
+     &rarr; AI: Draft Response Options
+     &rarr; Send for Approval
+  &rarr; Log All Reviews to Spreadsheet</code>
+        <p><strong>Trigger:</strong> Scheduled<br>
+        <strong>Tools:</strong> N8N, Google API, OpenAI, Slack, Google Sheets</p>
+        <div class="wf-result">Result: Never miss a review. Response time under 30 minutes. Reputation score improves 20%+.</div>
+    </div>
+
+    <!-- ════════════════════════════════════════ -->
+    <h2>Part 3: The ROI Calculator</h2>
+    <p>Use this framework to calculate the return on any automation investment before you build it.</p>
+
+    <div class="roi-section">
+        <h3>Calculate Your Automation ROI</h3>
+
+        <table class="roi-table">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Formula</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Hours saved / week</td>
+                    <td>Tasks &times; Time per task</td>
+                    <td class="highlight">25 hrs/week</td>
+                </tr>
+                <tr>
+                    <td>Labor cost saved / month</td>
+                    <td>Hours &times; 4.3 &times; Hourly rate</td>
+                    <td class="highlight">$3,225/mo</td>
+                </tr>
+                <tr>
+                    <td>Revenue from faster leads</td>
+                    <td>Extra conversions &times; Deal value</td>
+                    <td class="highlight">$8,000/mo</td>
+                </tr>
+                <tr>
+                    <td>Total monthly value</td>
+                    <td>Cost saved + Revenue gained</td>
+                    <td class="highlight">$11,225/mo</td>
+                </tr>
+                <tr>
+                    <td>Automation cost</td>
+                    <td>Setup + Monthly tools</td>
+                    <td>$2,500 + $50/mo</td>
+                </tr>
+                <tr>
+                    <td><strong>Payback period</strong></td>
+                    <td>Setup cost &divide; Monthly value</td>
+                    <td class="highlight">&lt; 1 month</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p style="margin-top:1.25rem; font-size:0.9rem; color:rgba(247,245,242,0.6);">Plug in your own numbers. Most SMBs see payback within the first month. The compounding effect of time saved makes automation one of the highest-ROI investments you can make.</p>
+    </div>
+
+    <h3>Quick ROI checklist</h3>
+    <ol>
+        <li>List your top 5 time-consuming repetitive tasks</li>
+        <li>Estimate hours per week for each</li>
+        <li>Multiply by your average hourly cost (salary &divide; 2080)</li>
+        <li>Add revenue impact (faster responses, fewer errors, more capacity)</li>
+        <li>Compare against automation setup cost</li>
+        <li>If payback is under 3 months — build it now</li>
+    </ol>
+
+    <!-- ════════════════════════════════════════ -->
+    <h2>What to Do Next</h2>
+    <p>You've got the frameworks, the workflows, and the math. Here's the fastest path to results:</p>
+    <ol>
+        <li><strong>Pick one workflow</strong> from Part 2 that matches your highest-priority task from Part 1</li>
+        <li><strong>Calculate the ROI</strong> using Part 3 — even a rough estimate will justify the time</li>
+        <li><strong>Build it in N8N</strong> — start simple, get it running, then optimize</li>
+        <li><strong>Measure after 2 weeks</strong> — track hours saved and revenue impact</li>
+    </ol>
+    <p>Or, if you want us to handle everything — from strategy to deployment — book a free discovery call and we'll map out a custom automation plan for your business.</p>
+
+</main>
+
+<section class="pb-cta">
+    <h2>Want us to build this for you?</h2>
+    <p>Book a free 30-minute discovery call. We'll identify your biggest automation opportunities and show you exactly what's possible.</p>
+    <a href="/qualify" class="btn">Book Your Free Call</a>
+</section>
+
+</body>
+</html>
