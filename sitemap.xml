@@ -47,9 +47,17 @@
     <!-- Blog Index -->
     <url>
         <loc>https://rajsuyash.com/blog/</loc>
-        <lastmod>2026-03-10</lastmod>
+        <lastmod>2026-03-11</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
+    </url>
+
+    <!-- Blog Posts - AI Automation -->
+    <url>
+        <loc>https://rajsuyash.com/blog/how-to-measure-ai-automation-roi.html</loc>
+        <lastmod>2026-03-11</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
     </url>
 
     <!-- Blog Posts - AI Voice Agents -->
