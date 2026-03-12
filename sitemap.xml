@@ -47,7 +47,7 @@
     <!-- Blog Index -->
     <url>
         <loc>https://rajsuyash.com/blog/</loc>
-        <lastmod>2026-03-11</lastmod>
+        <lastmod>2026-03-12</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
     </url>
@@ -61,6 +61,12 @@
     </url>
 
     <!-- Blog Posts - AI Voice Agents -->
+    <url>
+        <loc>https://rajsuyash.com/blog/ai-voice-agents-ecommerce.html</loc>
+        <lastmod>2026-03-12</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
     <url>
         <loc>https://rajsuyash.com/blog/ai-voice-agent-vs-call-center-cost.html</loc>
         <lastmod>2026-03-10</lastmod>
