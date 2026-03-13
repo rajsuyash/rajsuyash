@@ -47,9 +47,17 @@
     <!-- Blog Index -->
     <url>
         <loc>https://rajsuyash.com/blog/</loc>
-        <lastmod>2026-03-12</lastmod>
+        <lastmod>2026-03-13</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
+    </url>
+
+    <!-- Blog Posts - Franchise -->
+    <url>
+        <loc>https://rajsuyash.com/blog/ai-automation-franchise-groups.html</loc>
+        <lastmod>2026-03-13</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
     </url>
 
     <!-- Blog Posts - AI Automation -->
