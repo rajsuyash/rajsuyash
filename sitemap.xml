@@ -78,6 +78,38 @@
         <priority>0.9</priority>
     </url>
 
+    <!-- Blog Posts - New Content Strategy Posts (March 27, 2026) -->
+    <url>
+        <loc>https://rajsuyash.com/blog/n8n-google-sheets-integration.html</loc>
+        <lastmod>2026-03-27</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://rajsuyash.com/blog/n8n-webhook-tutorial.html</loc>
+        <lastmod>2026-03-27</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://rajsuyash.com/blog/ai-voice-agent-restaurant.html</loc>
+        <lastmod>2026-03-27</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://rajsuyash.com/blog/business-ready-for-ai.html</loc>
+        <lastmod>2026-03-27</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://rajsuyash.com/blog/ai-automation-case-studies.html</loc>
+        <lastmod>2026-03-27</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
     <!-- Blog Posts - AI Voice Agents (New) -->
     <url>
         <loc>https://rajsuyash.com/blog/ai-phone-answering-small-business-guide.html</loc>

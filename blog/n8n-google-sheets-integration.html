@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>How to Connect N8N to Google Sheets: Step-by-Step Tutorial (2026)</title>
+    <meta name="description" content="Step-by-step tutorial: connect N8N to Google Sheets. Read rows, write data, update cells, and build automated workflows. Includes 5 real business examples.">
+    <meta name="keywords" content="n8n google sheets integration, n8n google sheets, connect n8n to google sheets, n8n google sheets node, n8n read google sheets, n8n write google sheets">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/n8n-google-sheets-integration.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/n8n-google-sheets-integration.html">
+    <meta property="og:title" content="How to Connect N8N to Google Sheets: Step-by-Step Tutorial (2026)">
+    <meta property="og:description" content="Step-by-step tutorial: connect N8N to Google Sheets. Read rows, write data, update cells, and build automated workflows. Includes 5 real business examples.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj - AI Automation Agency">
+    <meta property="article:published_time" content="2026-03-27">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="How to Connect N8N to Google Sheets: Step-by-Step Tutorial (2026)">
+    <meta name="twitter:description" content="Step-by-step tutorial: connect N8N to Google Sheets. Read rows, write data, update cells, and build automated workflows.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Structured Data - Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "How to Connect N8N to Google Sheets: Step-by-Step Tutorial (2026)",
+        "description": "Step-by-step tutorial: connect N8N to Google Sheets. Read rows, write data, update cells, and build automated workflows. Includes 5 real business examples.",
+        "image": "https://rajsuyash.com/Photo.png",
+        "author": {
+            "@type": "Person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Suyash Raj - AI Automation Agency",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://rajsuyash.com/Photo.png"
+            }
+        },
+        "datePublished": "2026-03-27",
+        "dateModified": "2026-03-27",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/n8n-google-sheets-integration.html"
+        }
+    }
+    </script>
+
+    <!-- Structured Data - FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Is the N8N Google Sheets integration free?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. The Google Sheets node is included in N8N's free self-hosted version with no limits on how many times you use it. You do not need a paid plan. The only requirement is a Google account with the Sheets API enabled, which is also free for standard usage within Google's API quotas."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I handle Google Sheets API rate limits in N8N?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Google Sheets allows 300 requests per minute per project by default. If your workflow processes large batches, add a Wait node between operations to space out requests. You can also use the Append operation to write multiple rows at once instead of one row per request, which reduces API calls significantly. For very high-volume use cases, consider batching data with the Code node before writing to Sheets."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can N8N trigger a workflow when a Google Sheet is updated?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "N8N does not have a native real-time trigger for Google Sheets changes. Instead, use the Schedule Trigger node to poll your sheet at regular intervals (every 1, 5, or 15 minutes). The workflow checks for new or modified rows and processes only the changes. For true real-time triggers, you can set up a Google Apps Script that sends a webhook to your N8N instance whenever a sheet is edited."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260216b">
+
+    <style>
+        /* Blog Article Styles */
+        .blog-article h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin: 2.5rem 0 1rem;
+            color: var(--color-ink);
+        }
+
+        .blog-article h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.125rem, 2vw, 1.375rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin: 2rem 0 0.75rem;
+            color: var(--color-ink);
+        }
+
+        .blog-article p {
+            font-size: 1.0625rem;
+            line-height: 1.75;
+            color: var(--color-ink-soft, #3a3a3a);
+            margin-bottom: 1.25rem;
+        }
+
+        .blog-article ul, .blog-article ol {
+            margin: 1rem 0 1.5rem 1.25rem;
+            font-size: 1.0625rem;
+            line-height: 1.75;
+            color: var(--color-ink-soft, #3a3a3a);
+        }
+
+        .blog-article li {
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-article blockquote {
+            border-left: 3px solid var(--color-accent);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            background: var(--color-paper-warm);
+            font-style: italic;
+        }
+
+        .blog-article blockquote p {
+            margin-bottom: 0;
+        }
+
+        .blog-article a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .blog-article a:hover {
+            text-decoration: none;
+        }
+
+        .blog-article strong {
+            font-weight: 600;
+            color: var(--color-ink);
+        }
+
+        /* Table Styles */
+        .blog-article table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9375rem;
+        }
+
+        .blog-article th {
+            background: var(--color-ink);
+            color: var(--color-paper);
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .blog-article td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .blog-article tr:hover td {
+            background: var(--color-paper-warm);
+        }
+
+        .blog-article .table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Blog Meta */
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            font-size: 0.875rem;
+            color: var(--color-ink-soft, #3a3a3a);
+        }
+
+        .blog-meta-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+            text-decoration: none;
+        }
+
+        .blog-meta-category:hover {
+            text-decoration: none;
+        }
+
+        /* Author Byline */
+        .author-byline {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem 0;
+            margin-top: 2.5rem;
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-byline img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            font-size: 0.9375rem;
+        }
+
+        .author-info strong {
+            display: block;
+            font-weight: 600;
+        }
+
+        .author-info span {
+            color: var(--color-ink-soft, #3a3a3a);
+            font-size: 0.8125rem;
+        }
+
+        /* Related Posts */
+        .related-posts {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .related-posts h3 {
+            margin-top: 0;
+        }
+
+        .related-posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .related-post-card {
+            background: var(--color-paper-warm);
+            padding: 1.25rem;
+            text-decoration: none;
+            transition: transform 0.2s ease;
+        }
+
+        .related-post-card:hover {
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        .related-post-card h4 {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 400;
+            color: var(--color-ink);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .related-post-card p {
+            font-size: 0.875rem;
+            color: var(--color-ink-soft, #3a3a3a);
+            margin-bottom: 0;
+            line-height: 1.5;
+        }
+
+        /* Blog CTA Box */
+        .blog-cta-box {
+            background: var(--color-ink);
+            color: var(--color-paper);
+            padding: 2rem;
+            margin: 2.5rem 0;
+            text-align: center;
+        }
+
+        .blog-cta-box h3 {
+            color: var(--color-paper);
+            margin-top: 0;
+        }
+
+        .blog-cta-box p {
+            color: rgba(247, 245, 242, 0.8);
+            max-width: 500px;
+            margin: 0 auto 1.25rem;
+        }
+
+        .blog-cta-box .btn-primary {
+            display: inline-block;
+            padding: 0.875rem 2rem;
+            background: var(--color-accent);
+            color: var(--color-paper);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9375rem;
+            transition: opacity 0.2s;
+        }
+
+        .blog-cta-box .btn-primary:hover {
+            opacity: 0.9;
+            text-decoration: none;
+        }
+
+        /* Responsive table */
+        @media (max-width: 600px) {
+            .blog-article table {
+                font-size: 0.8125rem;
+            }
+            .blog-article th, .blog-article td {
+                padding: 0.5rem 0.625rem;
+            }
+        }
+    </style>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://rajsuyash.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://rajsuyash.com/blog/"},{"@type":"ListItem","position":3,"name":"Article","item":"https://rajsuyash.com/blog/n8n-google-sheets-integration.html"}]}</script>
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+            <button class="nav-toggle" aria-label="Menu"><span></span></button>
+        </nav>
+    </header>
+
+    <!-- Blog Article -->
+    <article class="blog-article" style="max-width: 780px; margin: 0 auto; padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-xl);">
+
+        <!-- Meta -->
+        <div class="blog-meta reveal" style="--delay: 0">
+            <span class="blog-meta-category">Tutorial</span>
+            <span>Mar 27, 2026</span>
+            <span>10 min read</span>
+        </div>
+
+        <!-- Title -->
+        <h1 class="reveal" style="--delay: 1; font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3rem); font-weight: 400; line-height: 1.15; margin-bottom: 1.5rem;">
+            How to Connect N8N to Google Sheets: Step-by-Step Tutorial (2026)
+        </h1>
+
+        <p class="reveal" style="--delay: 2; font-size: 1.1875rem; color: var(--color-ink-soft, #3a3a3a); line-height: 1.7;">
+            Google Sheets is the most common starting point for small business automation. It is where your leads live, where your team tracks orders, and where your reports get built every Monday morning. Connecting N8N to Google Sheets lets you read, write, and update that data automatically. This tutorial walks you through the full setup, from credentials to working workflows.
+        </p>
+
+        <!-- Why Google Sheets + N8N -->
+        <h2>Why Google Sheets + N8N Is the Most Popular SMB Integration</h2>
+
+        <p>Almost every small business runs on spreadsheets. Google Sheets is free, collaborative, and familiar. But manually copying data between Sheets and your other tools wastes hours every week.</p>
+
+        <p>The <a href="/n8n-automation.html">N8N Google Sheets integration</a> solves this. You can pull data from Sheets into any workflow, push results back, and keep everything in sync without touching a keyboard. It is the single most-used node in N8N for small business users, and for good reason.</p>
+
+        <p>Unlike Zapier, where every row read or written counts against your task quota, self-hosted N8N lets you process thousands of rows at zero marginal cost. That matters when you are syncing inventory, processing leads, or generating reports from multiple sheets daily.</p>
+
+        <!-- Prerequisites -->
+        <h2>Prerequisites</h2>
+
+        <p>Before you start, make sure you have these three things ready:</p>
+
+        <ol>
+            <li><strong>A running N8N instance.</strong> Self-hosted or N8N Cloud, either works. If you have not set up N8N yet, follow our <a href="/blog/build-first-n8n-workflow.html">guide to building your first N8N workflow</a>.</li>
+            <li><strong>A Google account.</strong> Any Gmail or Google Workspace account will do.</li>
+            <li><strong>Google Sheets API enabled.</strong> Go to the <a href="https://console.cloud.google.com/apis/library/sheets.googleapis.com" target="_blank" rel="noopener">Google Cloud Console</a>, search for "Google Sheets API," and click Enable. This takes about 30 seconds.</li>
+        </ol>
+
+        <p>You will also need to enable the Google Drive API in the same console. N8N uses it to locate and access your spreadsheet files.</p>
+
+        <!-- Step 1: Credentials -->
+        <h2>Step 1: Set Up Google Sheets Credentials in N8N</h2>
+
+        <p>N8N connects to Google Sheets using OAuth2. Here is how to set it up.</p>
+
+        <h3>Create OAuth2 Credentials in Google Cloud</h3>
+
+        <ol>
+            <li>Go to the <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener">Google Cloud Console Credentials page</a>.</li>
+            <li>Click <strong>Create Credentials</strong> and select <strong>OAuth client ID</strong>.</li>
+            <li>Choose <strong>Web application</strong> as the application type.</li>
+            <li>Under <strong>Authorized redirect URIs</strong>, add your N8N OAuth callback URL. For self-hosted instances, this is typically <code>https://your-n8n-domain.com/rest/oauth2-credential/callback</code>. For N8N Cloud, use the callback URL shown in N8N's credential creation screen.</li>
+            <li>Click <strong>Create</strong>. Copy the <strong>Client ID</strong> and <strong>Client Secret</strong>.</li>
+        </ol>
+
+        <h3>Add the Credentials in N8N</h3>
+
+        <ol>
+            <li>In N8N, go to <strong>Credentials</strong> in the left sidebar.</li>
+            <li>Click <strong>Add Credential</strong> and search for <strong>Google Sheets OAuth2 API</strong>.</li>
+            <li>Paste your Client ID and Client Secret.</li>
+            <li>Click <strong>Sign in with Google</strong>. Authorize access to your Google account.</li>
+            <li>The credential status should change to <strong>Connected</strong>. You are done.</li>
+        </ol>
+
+        <p><strong>Tip:</strong> If you are on N8N Cloud, there is an even faster option. Select the built-in "Google Sheets account" credential type, which uses N8N's own OAuth app. One click and you are connected. No Google Cloud Console needed.</p>
+
+        <!-- Step 2: Read Data -->
+        <h2>Step 2: Read Data from Google Sheets</h2>
+
+        <p>The most common operation is reading rows from a sheet. Here is how to set it up.</p>
+
+        <ol>
+            <li>Add a <strong>Google Sheets</strong> node to your workflow.</li>
+            <li>Select your Google Sheets credential.</li>
+            <li>Set <strong>Operation</strong> to <strong>Read Rows</strong>.</li>
+            <li>Under <strong>Document</strong>, select the spreadsheet by name or paste its URL.</li>
+            <li>Choose the specific <strong>Sheet</strong> (tab) you want to read from.</li>
+            <li>Click <strong>Execute Node</strong> to test. N8N pulls in all rows as JSON objects, using your header row as the field names.</li>
+        </ol>
+
+        <h3>Filtering Rows</h3>
+
+        <p>You do not always want every row. Use these options to narrow things down:</p>
+
+        <ul>
+            <li><strong>Range:</strong> Specify a cell range like <code>A2:D100</code> to skip headers or limit the data.</li>
+            <li><strong>Filters:</strong> After reading, add an <strong>IF</strong> node to filter rows based on column values. For example, only process rows where the "Status" column equals "New."</li>
+            <li><strong>Key Row (Header):</strong> Tell N8N which row contains your column headers. This is usually row 1, but some sheets have headers on row 2 or 3.</li>
+        </ul>
+
+        <p>Once the data is in N8N, you can send it anywhere: your CRM, email tool, Slack, a database, or another Google Sheet.</p>
+
+        <!-- Step 3: Write Data -->
+        <h2>Step 3: Write Data to Google Sheets</h2>
+
+        <p>Writing data means appending new rows to the bottom of your sheet. This is how most <a href="/blog/how-to-automate-lead-generation-with-n8n.html">lead generation workflows</a> work: a new lead comes in, and N8N writes it to your tracking sheet.</p>
+
+        <ol>
+            <li>Add a <strong>Google Sheets</strong> node.</li>
+            <li>Set <strong>Operation</strong> to <strong>Append Row</strong>.</li>
+            <li>Select your spreadsheet and sheet tab.</li>
+            <li>Under <strong>Columns</strong>, map the incoming data fields to your sheet columns. If your sheet has columns "Name," "Email," and "Phone," map those fields from the previous node's output.</li>
+            <li>Execute the node. N8N adds a new row at the bottom of your sheet with the mapped values.</li>
+        </ol>
+
+        <h3>Writing Multiple Rows</h3>
+
+        <p>If the previous node outputs multiple items (for example, 50 leads from an API call), N8N writes all 50 rows in a single batch. You do not need a loop. The Google Sheets node handles multiple items natively, which also reduces API calls and helps you stay within rate limits.</p>
+
+        <p><strong>Column mapping tip:</strong> Make sure the column names in N8N exactly match your sheet headers. "First Name" and "first_name" are not the same. If your data uses different field names, add a <strong>Set</strong> node before the Google Sheets node to rename fields.</p>
+
+        <!-- Step 4: Update Existing Rows -->
+        <h2>Step 4: Update Existing Rows</h2>
+
+        <p>Updating is more nuanced than reading or writing. You need to tell N8N which row to update and what values to change.</p>
+
+        <ol>
+            <li>Add a <strong>Google Sheets</strong> node.</li>
+            <li>Set <strong>Operation</strong> to <strong>Update Row</strong>.</li>
+            <li>Select your spreadsheet and sheet tab.</li>
+            <li>Set a <strong>Matching Column</strong>. This is the column N8N uses to find the right row. For example, if each row has a unique "Order ID," set that as the matching column.</li>
+            <li>Map the fields you want to update. Only the fields you map will change. Other columns stay untouched.</li>
+        </ol>
+
+        <p>This is useful for workflows where the status of something changes over time. A lead moves from "New" to "Contacted." An invoice moves from "Pending" to "Paid." An order moves from "Processing" to "Shipped."</p>
+
+        <p>You can combine read and update in the same workflow. Read all rows with status "Pending," process them (send an email, check a payment API, whatever the logic is), then update each row with the new status.</p>
+
+        <!-- 5 Real Business Automations -->
+        <h2>5 Real Business Automations Using N8N + Google Sheets</h2>
+
+        <p>Here are five workflows we have built for clients using the <a href="/blog/n8n-workflow-templates-small-business.html">N8N Google Sheets integration</a>. Each one replaces hours of manual work per week.</p>
+
+        <h3>1. Lead Capture Form to Google Sheets to CRM</h3>
+
+        <p>A web form captures lead information. N8N receives the submission via webhook, writes it to a Google Sheet for the sales team's visibility, then creates a contact in the CRM (HubSpot, Pipedrive, or whatever you use). The sheet becomes a real-time dashboard of incoming leads. The CRM gets the structured data it needs for follow-up sequences.</p>
+
+        <p>Total setup time: about 30 minutes. <a href="/blog/how-to-automate-lead-generation-with-n8n.html">See our full lead generation automation guide</a>.</p>
+
+        <h3>2. Daily Report Generation from Multiple Sheets</h3>
+
+        <p>A retail client had sales data in three separate Google Sheets (one per store location). Every morning, a manager spent 45 minutes merging them into a summary report. We built an N8N workflow that runs at 7 AM daily. It reads from all three sheets, aggregates the numbers in a Code node, and writes the summary to a "Daily Report" sheet. The manager now opens one sheet and the report is already there.</p>
+
+        <h3>3. Invoice Tracking with Automated Status Updates</h3>
+
+        <p>A services company tracked invoices in Google Sheets with columns for client name, amount, due date, and status. N8N checks the sheet every hour. For invoices marked "Sent" that are past due, it sends a reminder email to the client and updates the status to "Reminded." For invoices past 30 days, it flags them as "Overdue" and notifies the finance team on Slack.</p>
+
+        <h3>4. Customer Feedback Collection and Categorization</h3>
+
+        <p>Customer support emails get processed by an AI node in N8N. The workflow extracts the sentiment (positive, neutral, negative) and the topic (billing, product, shipping, other). It writes each piece of feedback to a Google Sheet with the original message, sentiment, topic, and timestamp. The product team filters the sheet to see all negative feedback about a specific topic without reading every email.</p>
+
+        <h3>5. Inventory Monitoring with Low-Stock Alerts</h3>
+
+        <p>An e-commerce client tracked inventory in Google Sheets. N8N reads the sheet every 4 hours and checks each product's stock level against its reorder threshold. When stock drops below the threshold, N8N sends a Slack alert to the operations team and creates a draft purchase order in another sheet. This replaced a manual process that used to cause stockouts 2 to 3 times per month.</p>
+
+        <!-- Common Errors -->
+        <h2>Common Errors and How to Fix Them</h2>
+
+        <p>These are the issues we see most often when setting up the N8N Google Sheets integration.</p>
+
+        <h3>Authentication Errors</h3>
+
+        <ul>
+            <li><strong>"Access denied" or "Insufficient permissions":</strong> Your OAuth2 credential does not have the right scopes. Delete the credential in N8N, recreate it, and make sure you approve all the permissions Google asks for during the sign-in flow.</li>
+            <li><strong>"Token has been expired or revoked":</strong> Google OAuth tokens expire. Go to the credential in N8N and click <strong>Sign in with Google</strong> again to refresh the token.</li>
+            <li><strong>"This app is not verified":</strong> If you created your own OAuth app in Google Cloud Console, it shows a warning screen. Click "Advanced" and then "Go to [your app]" to proceed. For production use, submit your app for Google verification.</li>
+        </ul>
+
+        <h3>Rate Limit Errors</h3>
+
+        <ul>
+            <li><strong>"Rate limit exceeded":</strong> Google Sheets allows 300 read requests and 300 write requests per minute per project. If your workflow processes hundreds of rows in a loop, add a <strong>Wait</strong> node (1 to 2 seconds) between iterations. Better yet, batch your operations so you read or write all rows in a single request.</li>
+            <li><strong>Quota exceeded for the day:</strong> The daily limit is generous (typically millions of reads), but if you hit it, wait 24 hours or create a second Google Cloud project with its own credentials.</li>
+        </ul>
+
+        <h3>Column Mapping Issues</h3>
+
+        <ul>
+            <li><strong>Data lands in the wrong columns:</strong> Check that your column headers in the sheet exactly match the field names in your N8N mapping. Trailing spaces in headers are a common culprit.</li>
+            <li><strong>Empty rows appearing:</strong> This usually happens when the incoming data has empty items. Add an IF node before the Google Sheets node to filter out items where required fields are blank.</li>
+            <li><strong>"Range not found":</strong> The sheet name or range you specified does not exist. Double-check the sheet tab name (it is case-sensitive) and make sure the range is valid.</li>
+        </ul>
+
+        <!-- FAQ -->
+        <h2>Frequently Asked Questions</h2>
+
+        <h3>Is the N8N Google Sheets integration free?</h3>
+        <p>Yes. The Google Sheets node is included in N8N's free self-hosted version with no limits on how many times you use it. You do not need a paid plan. The only requirement is a Google account with the Sheets API enabled, which is also free for standard usage within Google's API quotas.</p>
+
+        <h3>How do I handle Google Sheets API rate limits in N8N?</h3>
+        <p>Google Sheets allows 300 requests per minute per project by default. If your workflow processes large batches, add a Wait node between operations to space out requests. You can also use the Append operation to write multiple rows at once instead of one row per request. This reduces API calls significantly. For very high-volume use cases, consider batching data with the Code node before writing to Sheets.</p>
+
+        <h3>Can N8N trigger a workflow when a Google Sheet is updated?</h3>
+        <p>N8N does not have a native real-time trigger for Google Sheets changes. Instead, use the Schedule Trigger node to poll your sheet at regular intervals (every 1, 5, or 15 minutes). The workflow checks for new or modified rows and processes only the changes. For true real-time triggers, you can set up a Google Apps Script that sends a webhook to your N8N instance whenever a sheet is edited.</p>
+
+        <!-- CTA Box -->
+        <div class="blog-cta-box">
+            <h3>Need help building your Google Sheets automation?</h3>
+            <p>Book a free 30-minute call. We will map out your workflow, set up the integration, and get it running in days, not weeks.</p>
+            <a href="/qualify.html" class="btn-primary">Book Your Free Call</a>
+        </div>
+
+        <!-- Internal Links -->
+        <div class="internal-links" style="background: #f8f9fa; border-left: 4px solid #2563eb; padding: 1.5rem; margin: 2rem 0; border-radius: 0 8px 8px 0;">
+            <p style="font-weight: 600; margin-bottom: 0.75rem; color: #1e293b;">Explore More</p>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="margin-bottom: 0.5rem;"><a href="/case-studies/le-marquier.html">See how Le Marquier cut support costs by 80% with AI voice agents</a></li>
+                <li style="margin-bottom: 0.5rem;"><a href="/roi-calculator.html">Calculate your AI automation ROI</a></li>
+                <li style="margin-bottom: 0.5rem;"><a href="/tools/ai-readiness-assessment.html">Take the free AI readiness assessment</a></li>
+                <li style="margin-bottom: 0.5rem;"><a href="/n8n-automation.html">Explore our N8N automation services</a></li>
+            </ul>
+        </div>
+
+        <!-- Author Byline -->
+        <div class="author-byline">
+            <img src="/Photo.png" alt="Suyash Raj" width="48" height="48">
+            <div class="author-info">
+                <strong>Suyash Raj</strong>
+                <span>Founder, AI Automation Agency. Helping businesses save 20+ hours/week with N8N, AI agents, and voice agents.</span>
+            </div>
+        </div>
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/build-first-n8n-workflow.html" class="related-card">
+                <h3 class="related-card-title">Build Your First N8N Workflow</h3>
+                <p class="related-card-excerpt">Step-by-step guide to creating your first automation workflow in N8N.</p>
+            </a>
+            <a href="/blog/n8n-workflow-templates-small-business.html" class="related-card">
+                <h3 class="related-card-title">N8N Workflow Templates for Small Business</h3>
+                <p class="related-card-excerpt">Ready-to-use N8N workflow templates for common small business automation needs.</p>
+            </a>
+            <a href="/blog/how-to-automate-lead-generation-with-n8n.html" class="related-card">
+                <h3 class="related-card-title">How to Automate Lead Generation with N8N</h3>
+                <p class="related-card-excerpt">Capture, qualify, and route leads automatically using N8N workflows.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>AI Automation Agency for SMBs</p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
