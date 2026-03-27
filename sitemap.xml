@@ -47,9 +47,17 @@
     <!-- Blog Index -->
     <url>
         <loc>https://rajsuyash.com/blog/</loc>
-        <lastmod>2026-03-26</lastmod>
+        <lastmod>2026-03-27</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
+    </url>
+
+    <!-- Blog Posts - AI Voice Agents (New) -->
+    <url>
+        <loc>https://rajsuyash.com/blog/ai-phone-answering-small-business-guide.html</loc>
+        <lastmod>2026-03-27</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
     </url>
 
     <!-- Blog Posts - AI Automation (New) -->
