@@ -20,6 +20,4 @@ Disallow: /FEB/
 # Sitemap location
 Sitemap: https://rajsuyash.com/sitemap.xml
 
-# Crawl-delay (optional - be polite to crawlers)
-Crawl-delay: 1
 Disallow: /testimonials-2/
