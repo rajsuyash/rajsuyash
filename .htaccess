@@ -21,6 +21,7 @@ RewriteRule ^(.*)$ https://rajsuyash.com/$1 [L,R=301]
 RewriteRule ^blog/accounting-ai-automation\.html$ /blog/accounting-firms-ai-document-automation.html [R=301,L]
 RewriteRule ^blog/law-firm-ai-client-intake\.html$ /blog/law-firms-ai-client-intake.html [R=301,L]
 RewriteRule ^blog/real-estate-ai-lead-response\.html$ /blog/real-estate-ai-automation-case-study.html [R=301,L]
+RewriteRule ^blog/ai-voice-agent-vs-call-center\.html$ /blog/ai-voice-agent-vs-call-center-cost.html [R=301,L]
 
 # Section redirects
 RewriteRule ^services/?$ /ai-automation-agency.html [R=301,L]
