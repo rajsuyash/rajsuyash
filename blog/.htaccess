@@ -4,6 +4,7 @@ RewriteEngine On
 RewriteRule ^accounting-ai-automation\.html$ /blog/accounting-firms-ai-document-automation.html [R=301,L]
 RewriteRule ^law-firm-ai-client-intake\.html$ /blog/law-firms-ai-client-intake.html [R=301,L]
 RewriteRule ^real-estate-ai-lead-response\.html$ /blog/real-estate-ai-automation-case-study.html [R=301,L]
+RewriteRule ^ai-voice-agent-vs-call-center\.html$ /blog/ai-voice-agent-vs-call-center-cost.html [R=301,L]
 
 # Disable caching for this directory
 <IfModule mod_headers.c>
