@@ -519,4 +519,34 @@
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
+    <url>
+        <loc>https://rajsuyash.com/blog/n8n-hubspot-integration.html</loc>
+        <lastmod>2026-04-28</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://rajsuyash.com/blog/ai-voice-agent-property-management.html</loc>
+        <lastmod>2026-04-29</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://rajsuyash.com/blog/ai-automation-cookware-brands.html</loc>
+        <lastmod>2026-04-30</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://rajsuyash.com/blog/missed-calls-revenue-specialty-brands.html</loc>
+        <lastmod>2026-05-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://rajsuyash.com/blog/ai-voice-agent-auto-dealerships.html</loc>
+        <lastmod>2026-05-02</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
 </urlset>
