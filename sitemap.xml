@@ -520,6 +520,12 @@
         <priority>0.8</priority>
     </url>
     <url>
+        <loc>https://rajsuyash.com/blog/n8n-email-marketing-automation.html</loc>
+        <lastmod>2026-04-29</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://rajsuyash.com/blog/n8n-openai-claude-integration.html</loc>
         <lastmod>2026-04-27</lastmod>
         <changefreq>monthly</changefreq>
