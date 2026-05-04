@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>N8N + Notion Integration: Automate Your Workspace Without Code (2026) | Suyash Raj</title>
+    <meta name="description" content="Learn how to connect N8N to Notion and automate database entries, page creation, and data sync. Step-by-step tutorial with 6 real business workflows you can deploy today.">
+    <meta name="keywords" content="n8n notion integration, n8n notion tutorial, n8n notion database, automate notion, n8n notion workflow, best AI automation agency for small businesses">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/n8n-notion-integration.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/n8n-notion-integration.html">
+    <meta property="og:title" content="N8N + Notion Integration: Automate Your Workspace Without Code (2026)">
+    <meta property="og:description" content="Connect N8N to Notion in minutes. This tutorial covers API setup, the Notion node, database automation, and 6 real business workflows you can deploy today.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj - AI Automation Agency">
+    <meta property="article:published_time" content="2026-05-04">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="N8N + Notion Integration: Automate Your Workspace Without Code (2026)">
+    <meta name="twitter:description" content="Automate Notion from any trigger using N8N. Full tutorial with API setup, database node, and 6 real workflow examples for small businesses.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260504a">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "N8N + Notion Integration: Automate Your Workspace Without Code (2026)",
+        "description": "Learn how to connect N8N to Notion and automate database entries, page creation, and data sync. Step-by-step tutorial with 6 real business workflows you can deploy today.",
+        "author": {
+            "@type": "Person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Suyash Raj - AI Automation Agency",
+            "url": "https://rajsuyash.com"
+        },
+        "datePublished": "2026-05-04",
+        "dateModified": "2026-05-04",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/n8n-notion-integration.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "How do I connect N8N to Notion?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "You connect N8N to Notion using a Notion Internal Integration Token. Go to notion.so/my-integrations, create a new integration, copy the secret token, and add it as a Notion API credential in N8N. Then share your Notion databases with the integration by clicking 'Share' on each database page and selecting your integration name."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can N8N create Notion pages and database entries automatically?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. N8N's Notion node supports creating pages, updating existing pages, appending blocks to a page, and querying databases. You can trigger these actions from any event: form submissions, CRM updates, webhook calls, scheduled cron jobs, or incoming emails."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What can I automate with N8N and Notion?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Common automations include: logging new CRM leads into a Notion database, creating client onboarding pages from a template when a deal closes, syncing form submissions to a Notion tracker, generating weekly status reports in Notion from project data, and routing support tickets to a Notion board. Any data that moves between tools can be mirrored to Notion automatically."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Do I need a paid Notion plan for N8N automation?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. Notion's Internal Integration API is available on the free plan. You can create integrations, share databases, and automate reads and writes without upgrading. The free plan has API rate limits (3 requests per second), which is more than enough for typical business workflows."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is N8N better than Zapier for Notion automation?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "For most small businesses, N8N offers more flexibility at a lower cost. N8N lets you build multi-step workflows with conditional logic, loops, and API calls without paying per task. Zapier's Notion integration is easier to set up but expensive at scale and limited in what you can customize. If you need advanced logic or run hundreds of automations per month, N8N wins."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "N8N + Notion Integration", "item": "https://rajsuyash.com/blog/n8n-notion-integration.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/qualify" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">N8N Tutorial</span>
+                <span class="article-date">May 4, 2026</span>
+                <span class="article-read-time">10 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">N8N + Notion Integration: Automate Your Workspace Without Code (2026)</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">Connect N8N to Notion in minutes. Build workflows that log leads, create pages, and sync data automatically, so your team always has the information they need without the manual copy-paste.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <p>Notion is where teams keep their knowledge, track projects, and manage operations. But most Notion workspaces are still updated by hand. Someone has to remember to log the new lead. Someone has to create the client onboarding page. Someone has to paste last week's numbers into the report template.</p>
+
+        <p>N8N changes that. With a direct integration between N8N and Notion's API, you can automate any write, update, or read against your Notion databases and pages. This tutorial walks you through the setup from scratch and shows you six practical workflows you can build today.</p>
+
+        <p>If you're new to N8N, start with <a href="/blog/build-first-n8n-workflow.html">how to build your first N8N workflow</a> before continuing here. If you already know the basics, let's get into it.</p>
+
+        <h2>How the N8N Notion Integration Works</h2>
+
+        <p>N8N connects to Notion through Notion's official REST API. You authenticate once with a Notion Internal Integration Token, and from that point N8N can read from and write to any database or page you share with that integration.</p>
+
+        <p>The N8N Notion node supports these operations:</p>
+
+        <ul>
+            <li><strong>Database Page: Create</strong> — add a new row to a Notion database</li>
+            <li><strong>Database Page: Update</strong> — change properties on an existing database row</li>
+            <li><strong>Database Page: Get</strong> — retrieve a specific row by page ID</li>
+            <li><strong>Database: Query</strong> — filter and sort rows from a database</li>
+            <li><strong>Page: Create</strong> — create a standalone Notion page</li>
+            <li><strong>Page: Update</strong> — change a page's properties</li>
+            <li><strong>Block: Append</strong> — add content blocks to an existing page</li>
+            <li><strong>Block: Get Children</strong> — read the blocks inside a page</li>
+            <li><strong>User: Get</strong> and <strong>User: Get Many</strong> — retrieve workspace users</li>
+        </ul>
+
+        <p>For most business automations, you'll use "Database Page: Create" and "Database Page: Update" the most. Creating a new entry when a form is submitted, or updating a status when a deal closes, covers the majority of real-world use cases.</p>
+
+        <h2>Step 1: Create a Notion Integration</h2>
+
+        <p>Before touching N8N, you need to create an integration inside Notion.</p>
+
+        <ol>
+            <li>Go to <strong>notion.so/my-integrations</strong> and click "New integration."</li>
+            <li>Give it a name (e.g., "N8N Automation") and select the workspace it should access.</li>
+            <li>Under "Capabilities," enable "Read content," "Update content," and "Insert content." If you only need to write, you can leave Read off, but it's useful for lookup workflows.</li>
+            <li>Click "Submit" and copy the <strong>Internal Integration Token</strong> that appears. This is your secret key.</li>
+        </ol>
+
+        <div class="definition-block">
+            <p><strong>Important:</strong> The integration token gives access to nothing by default. You must explicitly share each Notion database or page with your integration. Do this by opening the database, clicking the three-dot menu, selecting "Add connections," and choosing your integration name.</p>
+        </div>
+
+        <h2>Step 2: Add the Notion Credential in N8N</h2>
+
+        <ol>
+            <li>In N8N, go to <strong>Credentials</strong> and click "Add credential."</li>
+            <li>Search for "Notion" and select <strong>Notion API</strong>.</li>
+            <li>Paste your Internal Integration Token into the "API Key" field.</li>
+            <li>Click "Save" and then "Test." N8N will confirm the credential is valid.</li>
+        </ol>
+
+        <p>That's the entire setup. No OAuth flow, no redirect URLs, no app review. Notion's internal integration approach is intentionally simple for automation use cases.</p>
+
+        <h2>Step 3: Build Your First Notion Automation</h2>
+
+        <p>Let's walk through a concrete example: logging a new contact form submission into a Notion database.</p>
+
+        <h3>What you'll need</h3>
+        <ul>
+            <li>A Notion database with properties for Name, Email, Message, and Submission Date</li>
+            <li>The database shared with your integration</li>
+            <li>A webhook URL to receive form submissions (or you can use a Typeform, Tally, or similar trigger)</li>
+        </ul>
+
+        <h3>Building the workflow</h3>
+
+        <ol>
+            <li><strong>Add a Webhook trigger node.</strong> Set the HTTP method to POST. N8N gives you a test URL and a production URL. Use the test URL while building.</li>
+            <li><strong>Add a Notion node.</strong> Set the resource to "Database Page" and the operation to "Create." Select your Notion credential.</li>
+            <li><strong>Enter your database ID.</strong> The database ID is the string of characters in the database URL between the workspace name and the question mark. It looks like: <code>1a2b3c4d5e6f7g8h9i0j...</code></li>
+            <li><strong>Map your properties.</strong> For each database column (Name, Email, Message, Date), use the expression editor to pull values from the webhook payload. For example, <code>{{ $json.body.name }}</code> for the Name field.</li>
+            <li><strong>Activate the workflow</strong> and test it by submitting your form. You'll see a new row appear in your Notion database within seconds.</li>
+        </ol>
+
+        <p>For a deeper look at the Webhook node, see our <a href="/blog/n8n-webhook-tutorial.html">N8N webhook tutorial</a>.</p>
+
+        <h2>Six Workflows Worth Building</h2>
+
+        <h3>1. Log New Leads to a Notion CRM</h3>
+
+        <p>If you collect leads through a website form, Typeform, or any tool with a webhook, you can have every new submission land in a Notion database automatically. Set up columns for name, email, phone, source, and status. N8N creates the row the moment the form fires. Your team opens Notion in the morning and finds a fresh list of qualified leads with no manual entry.</p>
+
+        <p>Extend this by adding a Slack node after the Notion node to ping your sales channel every time a new lead arrives. That's two tools updated from one form submission, zero effort after setup.</p>
+
+        <h3>2. Create Client Onboarding Pages When a Deal Closes</h3>
+
+        <p>When a deal closes in your CRM (HubSpot, Pipedrive, or similar), N8N can create a new Notion page based on a template and populate it with the client's name, project scope, and start date. Your team gets a ready-to-use onboarding document without touching Notion at all.</p>
+
+        <p>This is one of the highest-ROI automations for service businesses. We built a version of this for a client and cut their onboarding prep time by over an hour per new client. Across dozens of clients a year, that adds up fast. For more context on what these time savings look like in practice, read our <a href="/case-studies/le-marquier.html">Le Marquier case study</a>, where AI automation delivered an 80% cost reduction in their customer service operation.</p>
+
+        <h3>3. Sync Google Sheets Data to Notion</h3>
+
+        <p>Many teams maintain operational data in Google Sheets but want it visible in Notion for planning purposes. N8N can run on a schedule, read new or updated rows from a Sheet, and write them to a Notion database. No more "can you export that to Notion?" requests.</p>
+
+        <p>See our <a href="/blog/n8n-google-sheets-integration.html">N8N + Google Sheets integration tutorial</a> for the Sheet side of this workflow.</p>
+
+        <h3>4. Generate Weekly Status Reports</h3>
+
+        <p>Set a cron trigger to fire every Monday morning. N8N queries your project management tool, pulls the week's completed tasks, calculates metrics, and appends a formatted block to a Notion report page. Your team opens their weekly standup doc and the data is already there.</p>
+
+        <p>This uses the "Block: Append" operation, which lets you add structured content (headings, bullet lists, tables) to an existing page rather than creating a new one each time.</p>
+
+        <h3>5. Route Support Tickets to a Notion Board</h3>
+
+        <p>If customer support emails come in through a shared inbox, N8N can monitor that inbox, extract the sender, subject, and body, and create a Notion database entry for each ticket. Set properties for priority, status, and assignee. Your support team works directly from Notion without switching to email for intake.</p>
+
+        <p>Combine this with an AI classification step using the <a href="/blog/n8n-openai-claude-integration.html">N8N + OpenAI integration</a> to auto-tag tickets by category before they hit Notion.</p>
+
+        <h3>6. Update Notion When a Payment Is Received</h3>
+
+        <p>When a Stripe payment webhook fires, N8N can find the matching client in your Notion database and update their payment status automatically. No more manually checking Stripe and updating your tracker. The record updates itself.</p>
+
+        <p>This pattern, trigger from one tool, find and update a matching record in another, is one of the most reusable in N8N. Once you understand it, you can apply it to almost any pair of tools your business uses.</p>
+
+        <h2>N8N vs. Zapier for Notion Automation</h2>
+
+        <p>Both tools connect to Notion. Here's where they differ:</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>N8N</th>
+                    <th>Zapier</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Pricing model</td>
+                    <td>Flat monthly fee (or free self-hosted)</td>
+                    <td>Per-task pricing (gets expensive fast)</td>
+                </tr>
+                <tr>
+                    <td>Multi-step workflows</td>
+                    <td>Unlimited steps, loops, branches</td>
+                    <td>Limited on lower plans</td>
+                </tr>
+                <tr>
+                    <td>Custom logic</td>
+                    <td>Full JavaScript/Python code nodes</td>
+                    <td>Limited to Zapier's formatter</td>
+                </tr>
+                <tr>
+                    <td>Notion operations</td>
+                    <td>Create, update, query, append blocks</td>
+                    <td>Create, update, find records</td>
+                </tr>
+                <tr>
+                    <td>Error handling</td>
+                    <td>Built-in retry, error branch, alerts</td>
+                    <td>Basic retry only</td>
+                </tr>
+                <tr>
+                    <td>Self-hosting</td>
+                    <td>Yes (Docker, free forever)</td>
+                    <td>No</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>For teams running more than a few hundred automations per month, N8N's flat pricing saves real money. For someone who wants to set up one simple Zap and never think about it again, Zapier's ease of use has value. Most growing businesses hit Zapier's pricing ceiling within the first year and move to N8N anyway.</p>
+
+        <p>If your team is evaluating where to start with automation, use our <a href="/tools/ai-readiness-assessment.html">free AI readiness assessment</a> to identify which processes are most worth automating first.</p>
+
+        <h2>Common Issues and How to Fix Them</h2>
+
+        <h3>"Could not find database" error</h3>
+        <p>This almost always means the database has not been shared with your Notion integration. Open the database, click the three-dot menu in the top right, select "Add connections," and add your integration. Then rerun the workflow.</p>
+
+        <h3>Property type mismatch</h3>
+        <p>Notion has strict property types: Title, Text, Number, Date, Select, Multi-select, Relation, and others. If you try to write a plain string to a Number field, the API will reject it. Use N8N's Set node to format your data before passing it to the Notion node. Convert numbers with <code>parseInt()</code> or <code>parseFloat()</code>, and format dates as ISO 8601 strings (<code>2026-05-04</code>).</p>
+
+        <h3>Rate limit errors (429)</h3>
+        <p>Notion's API allows 3 requests per second. If your workflow creates many database entries in a loop, add a Wait node set to 350ms between iterations. That keeps you under the limit without slowing your workflow meaningfully.</p>
+
+        <h3>Finding the database ID</h3>
+        <p>Copy the URL of your Notion database. It looks like: <code>https://notion.so/workspace/1a2b3c4d5e6f7a8b9c0d...</code>. The long alphanumeric string after the last slash and before any question mark is the database ID. If the database is inside a page, the ID is the last segment of the URL.</p>
+
+        <h2>What to Build Next</h2>
+
+        <p>Once you're comfortable with the Notion node, the logical next steps are:</p>
+
+        <ul>
+            <li><strong>Airtable as a fallback.</strong> Some teams use Airtable for structured data and Notion for docs. The <a href="/blog/n8n-airtable-integration.html">N8N + Airtable integration</a> works the same way and the two can run in parallel within a single workflow.</li>
+            <li><strong>Add error handling.</strong> Any workflow writing to Notion should have an error branch that notifies you if the Notion API returns an unexpected response. Our <a href="/blog/n8n-error-handling-best-practices.html">N8N error handling guide</a> covers this in detail.</li>
+            <li><strong>Connect your CRM.</strong> The highest-value Notion workflows pull from a CRM like HubSpot and push to Notion, or vice versa. That keeps your sales and ops data in sync across both tools.</li>
+        </ul>
+
+        <p>If you want someone to build these workflows for you rather than maintaining them yourself, our <a href="/n8n-automation.html">N8N automation service</a> handles the full build, testing, and deployment. Use our <a href="/roi-calculator.html">ROI calculator</a> to see what that investment returns over 12 months.</p>
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>How do I connect N8N to Notion?</h3>
+                <p>You connect N8N to Notion using a Notion Internal Integration Token. Go to notion.so/my-integrations, create a new integration, copy the secret token, and add it as a Notion API credential in N8N. Then share your Notion databases with the integration by clicking "Share" on each database page and selecting your integration name.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can N8N create Notion pages and database entries automatically?</h3>
+                <p>Yes. N8N's Notion node supports creating pages, updating existing pages, appending blocks to a page, and querying databases. You can trigger these actions from any event: form submissions, CRM updates, webhook calls, scheduled cron jobs, or incoming emails.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What can I automate with N8N and Notion?</h3>
+                <p>Common automations include: logging new CRM leads into a Notion database, creating client onboarding pages from a template when a deal closes, syncing form submissions to a Notion tracker, generating weekly status reports in Notion from project data, and routing support tickets to a Notion board. Any data that moves between tools can be mirrored to Notion automatically.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Do I need a paid Notion plan for N8N automation?</h3>
+                <p>No. Notion's Internal Integration API is available on the free plan. You can create integrations, share databases, and automate reads and writes without upgrading. The free plan has API rate limits (3 requests per second), which is more than enough for typical business workflows.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is N8N better than Zapier for Notion automation?</h3>
+                <p>For most small businesses, N8N offers more flexibility at a lower cost. N8N lets you build multi-step workflows with conditional logic, loops, and API calls without paying per task. Zapier's Notion integration is easier to set up but expensive at scale and limited in what you can customize. If you need advanced logic or run hundreds of automations per month, N8N wins.</p>
+            </div>
+        </div>
+
+        <!-- CTA in article -->
+        <h2>Ready to Get Started?</h2>
+        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
+        <p><a href="/qualify" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name">Suyash Raj</span>
+                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/n8n-airtable-integration.html" class="related-card">
+                <h3 class="related-card-title">N8N + Airtable Integration Tutorial</h3>
+                <p class="related-card-excerpt">Connect N8N to Airtable and automate database reads, writes, and record updates without code.</p>
+            </a>
+            <a href="/blog/n8n-error-handling-best-practices.html" class="related-card">
+                <h3 class="related-card-title">N8N Error Handling Best Practices</h3>
+                <p class="related-card-excerpt">Build N8N workflows that recover gracefully, alert you on failure, and never lose data silently.</p>
+            </a>
+            <a href="/blog/build-first-n8n-workflow.html" class="related-card">
+                <h3 class="related-card-title">How to Build Your First N8N Workflow</h3>
+                <p class="related-card-excerpt">A beginner-friendly walkthrough of N8N's interface, triggers, and nodes. Start here if you're new to workflow automation.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>AI Automation Agency for SMBs</p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
