@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>N8N + Google Calendar Integration: Automate Scheduling Workflows (2026) | Suyash Raj</title>
+    <meta name="description" content="Learn how to connect N8N to Google Calendar and automate event creation, meeting reminders, CRM syncs, and daily agenda reports. Step-by-step tutorial with 4 real workflow examples.">
+    <meta name="keywords" content="n8n google calendar integration, n8n calendar automation, n8n create calendar event, n8n google calendar workflow, automate scheduling n8n, best AI automation agency for small businesses">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/n8n-google-calendar-integration.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/n8n-google-calendar-integration.html">
+    <meta property="og:title" content="N8N + Google Calendar Integration: Automate Scheduling Workflows (2026)">
+    <meta property="og:description" content="Connect N8N to Google Calendar and automate event creation, reminders, CRM sync, and daily agenda digests. Full tutorial with OAuth setup and 4 ready-to-build workflows.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj - AI Automation Agency">
+    <meta property="article:published_time" content="2026-05-18">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="N8N + Google Calendar Integration: Automate Scheduling Workflows (2026)">
+    <meta name="twitter:description" content="Automate calendar events, meeting reminders, and CRM syncs using N8N and Google Calendar. Full step-by-step guide with 4 real workflow patterns.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260518a">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "N8N + Google Calendar Integration: Automate Scheduling Workflows (2026)",
+        "description": "Learn how to connect N8N to Google Calendar and automate event creation, meeting reminders, CRM syncs, and daily agenda reports. Step-by-step tutorial with 4 real workflow examples.",
+        "author": {
+            "@type": "Person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Suyash Raj - AI Automation Agency",
+            "url": "https://rajsuyash.com"
+        },
+        "datePublished": "2026-05-18",
+        "dateModified": "2026-05-18",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/n8n-google-calendar-integration.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "How do I connect N8N to Google Calendar?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "You connect N8N to Google Calendar using OAuth 2.0. In Google Cloud Console, create a project, enable the Google Calendar API, and generate OAuth 2.0 credentials. In N8N, add a new credential of type 'Google Calendar OAuth2 API', paste your Client ID and Client Secret, and authorize the connection. The whole process takes about 10 minutes and only needs to be done once per workspace."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can N8N create Google Calendar events automatically?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. The N8N Google Calendar node supports creating, updating, deleting, and fetching events. You can trigger event creation from any incoming data: form submissions, CRM updates, webhook payloads, or scheduled workflows. All event fields (title, date, time, description, attendees, location) can be populated dynamically from previous nodes using N8N expressions."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can N8N send meeting reminders from Google Calendar?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, but not using Google Calendar's built-in reminder system directly. Instead, use N8N's Schedule Trigger or the Google Calendar 'Get Events' node to fetch upcoming events, then pass the results through a Filter node to find events starting within a specific time window (e.g., 30 minutes), and route those through an email or SMS node. This gives you fully customizable reminder logic that Google's native reminders cannot match."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is the N8N Google Calendar integration free?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The N8N Google Calendar node is included in all N8N plans, including the free self-hosted community edition. Google Calendar API is free for standard usage, with a quota of 1 million requests per day. For most small business automation workflows, you will never come close to that limit."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can N8N watch for new Google Calendar events and trigger a workflow?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. Use the Google Calendar Trigger node (available in N8N's trigger section) to watch a specific calendar for new or updated events. When an event is created or changed, N8N fires the workflow automatically. This is useful for syncing calendar changes to a CRM, notifying a Slack channel, or triggering follow-up actions the moment a meeting is booked."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "N8N + Google Calendar Integration Tutorial", "item": "https://rajsuyash.com/blog/n8n-google-calendar-integration.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/qualify" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">N8N Automation</span>
+                <span class="article-date">May 18, 2026</span>
+                <span class="article-read-time">10 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">N8N + Google Calendar Integration: Automate Your Scheduling Workflows</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">Connect N8N to Google Calendar and stop managing appointments by hand. This tutorial covers OAuth setup, event creation, meeting reminders, and four workflow patterns you can build today.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <p>Every small business has a scheduling problem. Appointments get booked but calendar events never get created. Discovery calls happen without a follow-up task being logged. Clients receive no reminder and miss their slot. The service provider finds out when nobody shows up.</p>
+
+        <p>Most of this is fixable. Not with more administrative staff, but with a few N8N workflows connected to Google Calendar. In this tutorial, you will learn how to set up the Google Calendar integration in N8N from scratch and build four automation patterns that address the most common scheduling failures SMBs face.</p>
+
+        <div class="definition-block">
+            <p><strong>What this tutorial covers:</strong> Google Calendar API credentials setup, N8N OAuth configuration, creating and fetching events with the Calendar node, and four ready-to-build workflow patterns including form-to-calendar automation, meeting reminders, CRM sync, and daily agenda digests.</p>
+        </div>
+
+        <h2>Why Automate Google Calendar with N8N</h2>
+
+        <p>Manual calendar management is slow and error-prone. When a lead fills out a booking form, someone has to receive the notification, open Calendar, create the event, add the attendee, and send a confirmation. That chain has at least four steps where something can go wrong.</p>
+
+        <p>N8N eliminates the chain. A single workflow can receive the form submission, create the calendar event, invite the client, log the interaction in your CRM, and send a confirmation email, all in under three seconds, with no human in the loop.</p>
+
+        <p>This is the same principle behind the automation infrastructure we built for <a href="/case-studies/le-marquier.html">Le Marquier</a>, which achieved an 80% reduction in manual coordination costs. Scheduling automation was one of several layers in that system. Once you remove human bottlenecks from routine operations, the savings compound.</p>
+
+        <p>If you are not yet sure whether automation is right for your business, start with the <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> to identify your best opportunities. For a concrete return estimate, the <a href="/roi-calculator.html">ROI calculator</a> shows you the time and cost savings in minutes.</p>
+
+        <h2>Prerequisites</h2>
+
+        <p>You need two things before starting:</p>
+        <ul>
+            <li>A running N8N instance (cloud or self-hosted). If you are new to N8N, start with the <a href="/blog/build-first-n8n-workflow.html">build your first N8N workflow</a> guide before continuing here.</li>
+            <li>A Google account with access to the calendar you want to automate, and the ability to create a project in Google Cloud Console.</li>
+        </ul>
+
+        <h2>Step 1: Set Up Google Calendar API Credentials</h2>
+
+        <p>N8N connects to Google Calendar using OAuth 2.0. You create credentials in Google Cloud Console once, then use them for every Calendar workflow going forward.</p>
+
+        <h3>Create a Google Cloud Project</h3>
+        <ol>
+            <li>Go to <strong>console.cloud.google.com</strong> and sign in with your Google account.</li>
+            <li>Click <strong>Select a project</strong> at the top, then <strong>New Project</strong>.</li>
+            <li>Name it something recognizable, like "N8N Automations", and click <strong>Create</strong>.</li>
+        </ol>
+
+        <h3>Enable the Google Calendar API</h3>
+        <ol>
+            <li>In the left sidebar, go to <strong>APIs &amp; Services &gt; Library</strong>.</li>
+            <li>Search for <strong>Google Calendar API</strong> and click it.</li>
+            <li>Click <strong>Enable</strong>. The page will reload with the API now active.</li>
+        </ol>
+
+        <h3>Create OAuth 2.0 Credentials</h3>
+        <ol>
+            <li>Go to <strong>APIs &amp; Services &gt; Credentials</strong> and click <strong>Create Credentials &gt; OAuth client ID</strong>.</li>
+            <li>If prompted, configure the consent screen first. Set the user type to <strong>External</strong>, fill in the required app name and email fields, and save.</li>
+            <li>Back in Create Credentials, select <strong>Web application</strong> as the application type.</li>
+            <li>Under <strong>Authorized redirect URIs</strong>, add your N8N callback URL. For cloud-hosted N8N it is <code>https://your-n8n-domain.com/rest/oauth2-credential/callback</code>. For local N8N use <code>http://localhost:5678/rest/oauth2-credential/callback</code>.</li>
+            <li>Click <strong>Create</strong>. Copy your <strong>Client ID</strong> and <strong>Client Secret</strong>.</li>
+        </ol>
+
+        <h2>Step 2: Add the Credential in N8N</h2>
+
+        <ol>
+            <li>In your N8N instance, go to <strong>Settings &gt; Credentials &gt; New Credential</strong>.</li>
+            <li>Search for <strong>Google Calendar OAuth2 API</strong> and select it.</li>
+            <li>Paste your Client ID and Client Secret from the previous step.</li>
+            <li>Click <strong>Connect my account</strong>. A Google authorization window will open.</li>
+            <li>Choose your Google account, grant the requested permissions, and click <strong>Allow</strong>.</li>
+            <li>N8N will confirm the connection. Name the credential and save it.</li>
+        </ol>
+
+        <p>Your Google Calendar is now connected to N8N. Every Calendar node you add to any workflow can use this same credential.</p>
+
+        <h2>The Google Calendar Node: What It Can Do</h2>
+
+        <p>The N8N Google Calendar node supports five core operations:</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>What It Does</th>
+                    <th>Common Use Case</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Create Event</strong></td>
+                    <td>Adds a new event to any calendar</td>
+                    <td>Auto-create meetings from form submissions</td>
+                </tr>
+                <tr>
+                    <td><strong>Get Event</strong></td>
+                    <td>Fetches a specific event by ID</td>
+                    <td>Look up event details mid-workflow</td>
+                </tr>
+                <tr>
+                    <td><strong>Get Many Events</strong></td>
+                    <td>Lists events within a date range</td>
+                    <td>Daily agenda digest, upcoming meeting reminders</td>
+                </tr>
+                <tr>
+                    <td><strong>Update Event</strong></td>
+                    <td>Modifies an existing event's fields</td>
+                    <td>Reschedule or update event details from CRM changes</td>
+                </tr>
+                <tr>
+                    <td><strong>Delete Event</strong></td>
+                    <td>Removes an event from the calendar</td>
+                    <td>Cancel meetings when a deal is lost</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>There is also a <strong>Google Calendar Trigger</strong> node that watches for new or updated events and fires a workflow when they occur. This is useful for reactive workflows: when someone books a meeting through Calendly or any external booking tool, your N8N workflow can respond immediately.</p>
+
+        <h2>Workflow 1: Auto-Create Calendar Events from Form Submissions</h2>
+
+        <p>This is the most common starting point. A prospect fills out a contact or booking form, and instead of waiting for a staff member to manually create the meeting, N8N does it in real time.</p>
+
+        <h3>Workflow structure</h3>
+        <ol>
+            <li><strong>Trigger:</strong> Webhook node (or Typeform / Google Forms trigger) receives the form submission.</li>
+            <li><strong>Set node:</strong> Map form fields to clean variable names: <code>name</code>, <code>email</code>, <code>preferredDate</code>, <code>preferredTime</code>.</li>
+            <li><strong>Google Calendar node (Create Event):</strong>
+                <ul>
+                    <li>Title: <code>Discovery Call - {{ $json.name }}</code></li>
+                    <li>Start: <code>{{ $json.preferredDate }}T{{ $json.preferredTime }}:00</code></li>
+                    <li>End: 30 minutes after start (use a Code node to calculate if needed)</li>
+                    <li>Attendees: <code>{{ $json.email }}</code></li>
+                    <li>Description: Include any notes from the form</li>
+                </ul>
+            </li>
+            <li><strong>Gmail node:</strong> Send a confirmation email to the prospect with the event details.</li>
+            <li><strong>HubSpot or Pipedrive node:</strong> Log the meeting as an activity on the contact record.</li>
+        </ol>
+
+        <p>The result: from form submit to confirmed calendar event in under five seconds, zero manual steps. If you want to learn more about connecting N8N to HubSpot or Pipedrive, the <a href="/n8n-automation.html">N8N automation services page</a> covers the full CRM integration setup.</p>
+
+        <h2>Workflow 2: Meeting Reminders via Email or SMS</h2>
+
+        <p>Google Calendar's built-in reminders are limited. They only go to calendar participants via notification, and you cannot customize the message, add dynamic context, or route the reminder to a different channel like SMS. N8N gives you full control.</p>
+
+        <h3>Workflow structure</h3>
+        <ol>
+            <li><strong>Schedule Trigger:</strong> Run every hour (or every 15 minutes if you need high precision).</li>
+            <li><strong>Google Calendar node (Get Many Events):</strong> Fetch events from now to 60 minutes from now on your calendar.</li>
+            <li><strong>Filter node:</strong> Keep only events starting between 25 and 35 minutes from now (this prevents double-sending if the workflow runs on the hour and the event is at the top of the hour).</li>
+            <li><strong>IF node:</strong> Check whether the event has an attendee email address. If yes, proceed to send. If no, skip.</li>
+            <li><strong>Gmail or Twilio node:</strong> Send a personalized reminder. "Hi [Name], your call with Suyash starts in 30 minutes. Join here: [link]."</li>
+        </ol>
+
+        <p>This workflow runs silently in the background. You set it up once and every future meeting gets a consistent, professional reminder without any manual work. Pair this with the <a href="/blog/n8n-scheduled-triggers-tutorial.html">N8N scheduled triggers tutorial</a> if you are new to cron-based automation.</p>
+
+        <h2>Workflow 3: Sync Google Calendar with Your CRM</h2>
+
+        <p>Most CRMs have a calendar integration, but it is almost always read-only or requires a paid add-on. N8N gives you bidirectional sync logic that you control.</p>
+
+        <h3>Workflow structure (Calendar to CRM)</h3>
+        <ol>
+            <li><strong>Google Calendar Trigger:</strong> Watch for new events on your calendar.</li>
+            <li><strong>IF node:</strong> Filter by event title keyword (e.g., only process events containing "Discovery Call" or "Client Meeting").</li>
+            <li><strong>CRM node (HubSpot / Pipedrive):</strong>
+                <ul>
+                    <li>Search for the contact by attendee email.</li>
+                    <li>Create a new activity or meeting log on that contact record.</li>
+                    <li>Set a follow-up task for 24 hours after the meeting end time.</li>
+                </ul>
+            </li>
+            <li><strong>Slack node:</strong> Post a message to your team channel: "New discovery call booked with [Client Name] on [Date]." See the <a href="/blog/n8n-slack-integration.html">N8N Slack integration guide</a> for the setup steps.</li>
+        </ol>
+
+        <p>This workflow keeps your CRM current without anyone needing to manually log meetings. Every booked call becomes an automatic activity record with a follow-up task already set.</p>
+
+        <h2>Workflow 4: Daily Agenda Digest</h2>
+
+        <p>This is a simple but high-value workflow: every morning at 7:30 AM, N8N pulls the day's calendar events and sends a formatted digest to your email or Slack channel. No more opening Google Calendar just to see what the day looks like.</p>
+
+        <h3>Workflow structure</h3>
+        <ol>
+            <li><strong>Schedule Trigger:</strong> Every weekday at 7:30 AM.</li>
+            <li><strong>Google Calendar node (Get Many Events):</strong> Fetch all events for today from midnight to 11:59 PM.</li>
+            <li><strong>Code node (JavaScript):</strong> Format the events list into a readable message:
+                <ul>
+                    <li>Sort by start time</li>
+                    <li>Format each event as: "9:00 AM - Discovery Call with Acme Corp (30 min)"</li>
+                    <li>Count total events and total meeting time</li>
+                </ul>
+            </li>
+            <li><strong>Gmail or Slack node:</strong> Send the formatted digest to yourself or your team channel.</li>
+        </ol>
+
+        <p>The digest takes under a minute to build in N8N and runs silently every weekday. It is one of those workflows that seems small but saves real time when you multiply it by 250 working days a year.</p>
+
+        <h2>Manual Scheduling vs. N8N Automation</h2>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Manual Process</th>
+                    <th>With N8N + Google Calendar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Create event from booking form</td>
+                    <td>3 to 5 minutes, error-prone</td>
+                    <td>Instant, automatic, zero errors</td>
+                </tr>
+                <tr>
+                    <td>Send meeting reminder</td>
+                    <td>Manual email, often forgotten</td>
+                    <td>Automated, 30 min before, every time</td>
+                </tr>
+                <tr>
+                    <td>Log meeting in CRM</td>
+                    <td>Done after the call, if remembered</td>
+                    <td>Logged the moment the event is created</td>
+                </tr>
+                <tr>
+                    <td>Daily agenda review</td>
+                    <td>Open Calendar app, context-switch</td>
+                    <td>Digest arrives in inbox at 7:30 AM</td>
+                </tr>
+                <tr>
+                    <td>Cancel and notify attendees</td>
+                    <td>Manual email, calendar delete, CRM update</td>
+                    <td>Single trigger updates all three systems</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Adding Voice Agents to Your Scheduling Stack</h2>
+
+        <p>Calendar automation through N8N handles the back-end coordination, but it does not solve the front-end problem: phone calls that come in when no one is available to book a meeting on the spot.</p>
+
+        <p>An <a href="/ai-voice-agent.html">AI voice agent</a> handles that gap. When a prospect calls outside office hours, the agent collects their name, interest, and preferred meeting time, then passes that data as a webhook payload to an N8N workflow, which creates the Google Calendar event automatically. The caller gets a confirmation while still on the line. No human interaction required until the actual meeting.</p>
+
+        <p>This is the kind of end-to-end system we build for clients. The <a href="/case-studies/le-marquier.html">Le Marquier case study</a> shows what a 98% AI handling rate looks like in practice, including how the scheduling layer integrates with the rest of the automation stack.</p>
+
+        <h2>Common Issues and Fixes</h2>
+
+        <h3>Authorization error when connecting the credential</h3>
+        <p>The most common cause is a mismatched redirect URI. Double-check that the URI you added in Google Cloud Console exactly matches the one N8N is using, including whether it uses <code>http</code> or <code>https</code> and the exact path.</p>
+
+        <h3>Events created in wrong time zone</h3>
+        <p>N8N passes dates in ISO 8601 format. If you are not specifying the time zone in the event creation node, Google Calendar will default to UTC. Always include the time zone field explicitly, for example <code>America/New_York</code> or <code>Europe/Paris</code>, to avoid events landing at the wrong time for attendees in different regions.</p>
+
+        <h3>Trigger node not firing for new events</h3>
+        <p>The Google Calendar Trigger uses polling by default. N8N checks for new events every minute. If you need real-time response, consider using Google Calendar's webhook push notifications instead, which requires setting up a push channel through the API and a publicly accessible N8N webhook endpoint.</p>
+
+        <h3>Get Many Events returns no results</h3>
+        <p>Check your date range parameters. N8N's Google Calendar node expects ISO 8601 date strings for <code>timeMin</code> and <code>timeMax</code>. A common mistake is passing a plain date string like "2026-05-18" without the time component. Use <code>2026-05-18T00:00:00Z</code> for start of day and <code>2026-05-18T23:59:59Z</code> for end of day.</p>
+
+        <h2>What to Build Next</h2>
+
+        <p>Once your Google Calendar integration is working, these are the natural next steps for your automation stack:</p>
+        <ul>
+            <li>Connect Google Sheets to log every calendar event into a reporting spreadsheet. The <a href="/blog/n8n-google-sheets-integration.html">N8N Google Sheets integration tutorial</a> covers the full setup.</li>
+            <li>Add error handling so failed event creations trigger an alert rather than silently dropping data. See the <a href="/blog/n8n-error-handling-best-practices.html">N8N error handling guide</a> for the patterns that work best in production workflows.</li>
+            <li>Use N8N's HTTP Request node to connect with Calendly, Cal.com, or any other booking tool that exposes a webhook, so your calendar automation works regardless of how meetings get scheduled.</li>
+        </ul>
+
+        <p>If you want to see what a fully integrated automation system looks like across scheduling, CRM, voice, and reporting, the <a href="/ai-automation-agency.html">agency page</a> shows how we structure these for clients from first consultation to deployment.</p>
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>How do I connect N8N to Google Calendar?</h3>
+                <p>You connect N8N to Google Calendar using OAuth 2.0. In Google Cloud Console, create a project, enable the Google Calendar API, and generate OAuth 2.0 credentials. In N8N, add a new credential of type "Google Calendar OAuth2 API", paste your Client ID and Client Secret, and authorize the connection. The whole process takes about 10 minutes and only needs to be done once per workspace.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can N8N create Google Calendar events automatically?</h3>
+                <p>Yes. The N8N Google Calendar node supports creating, updating, deleting, and fetching events. You can trigger event creation from any incoming data: form submissions, CRM updates, webhook payloads, or scheduled workflows. All event fields (title, date, time, description, attendees, location) can be populated dynamically from previous nodes using N8N expressions.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can N8N send meeting reminders from Google Calendar?</h3>
+                <p>Yes, but not through Google Calendar's built-in reminder system directly. Use N8N's Schedule Trigger with the Google Calendar "Get Many Events" node to fetch upcoming events, then filter for events starting within your target window and route them through an email or SMS node. This approach gives you fully customizable reminder logic, including custom message text, channel routing, and timing rules.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is the N8N Google Calendar integration free?</h3>
+                <p>The N8N Google Calendar node is included in all N8N plans, including the free self-hosted community edition. Google Calendar API is free for standard usage, with a quota of 1 million requests per day. For most small business automation workflows, you will never approach that limit.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can N8N watch for new Google Calendar events and trigger a workflow?</h3>
+                <p>Yes. Use the Google Calendar Trigger node to watch a specific calendar for new or updated events. When an event is created or changed, N8N fires the workflow automatically. This is useful for syncing calendar changes to a CRM, notifying a Slack channel, or triggering follow-up actions the moment a meeting is booked.</p>
+            </div>
+        </div>
+
+        <!-- CTA in article -->
+        <h2>Ready to Get Started?</h2>
+        <p>Book a free 30-minute discovery call. We'll identify your biggest scheduling bottlenecks and show you exactly what N8N automation can do for your business.</p>
+        <p><a href="/qualify" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name">Suyash Raj</span>
+                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/n8n-slack-integration.html" class="related-card">
+                <h3 class="related-card-title">N8N + Slack Integration: Send Automated Team Notifications Without Code</h3>
+                <p class="related-card-excerpt">Route workflow events to the right Slack channels and users. Full OAuth setup and seven real workflow patterns.</p>
+            </a>
+            <a href="/blog/n8n-scheduled-triggers-tutorial.html" class="related-card">
+                <h3 class="related-card-title">N8N Scheduled Triggers Tutorial: Cron-Based Automation for SMBs</h3>
+                <p class="related-card-excerpt">Run N8N workflows on any schedule without cron expertise. Daily reports, weekly digests, and time-based automations made simple.</p>
+            </a>
+            <a href="/blog/n8n-google-sheets-integration.html" class="related-card">
+                <h3 class="related-card-title">N8N + Google Sheets Integration: Automate Your Data Workflows</h3>
+                <p class="related-card-excerpt">Read, write, and update Google Sheets from any N8N workflow. Practical guide with five business automation examples.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>AI Automation Agency for SMBs</p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
