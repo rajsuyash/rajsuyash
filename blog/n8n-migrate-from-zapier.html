@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>How to Migrate from Zapier to N8N: Complete Step-by-Step Guide (2026) | Suyash Raj</title>
+    <meta name="description" content="Ready to switch from Zapier to N8N? This step-by-step migration guide covers exporting Zaps, rebuilding workflows in N8N, handling credentials, and avoiding common pitfalls.">
+    <meta name="keywords" content="migrate from zapier to n8n, switch from zapier to n8n, zapier to n8n migration, n8n vs zapier migration guide, best AI automation agency for small businesses">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/n8n-migrate-from-zapier.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/n8n-migrate-from-zapier.html">
+    <meta property="og:title" content="How to Migrate from Zapier to N8N: Complete Step-by-Step Guide (2026)">
+    <meta property="og:description" content="Ready to switch from Zapier to N8N? Step-by-step migration guide: export Zaps, rebuild in N8N, handle credentials, avoid pitfalls.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj - AI Automation Agency">
+    <meta property="article:published_time" content="2026-05-20">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="How to Migrate from Zapier to N8N: Complete Step-by-Step Guide (2026)">
+    <meta name="twitter:description" content="Switch from Zapier to N8N without breaking your automations. Step-by-step migration guide for SMBs.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260520a">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "How to Migrate from Zapier to N8N: Complete Step-by-Step Guide (2026)",
+        "description": "Ready to switch from Zapier to N8N? This step-by-step migration guide covers exporting Zaps, rebuilding workflows in N8N, handling credentials, and avoiding common pitfalls.",
+        "author": {
+            "@type": "Person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Suyash Raj - AI Automation Agency",
+            "url": "https://rajsuyash.com"
+        },
+        "datePublished": "2026-05-20",
+        "dateModified": "2026-05-20",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/n8n-migrate-from-zapier.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Can I export my Zaps and import them directly into N8N?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. Zapier does not export workflows in a format that N8N can import. You need to rebuild each workflow manually in N8N. However, because N8N's node system is more flexible than Zapier's step-by-step format, most Zaps translate to N8N workflows in the same number of nodes or fewer."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How long does it take to migrate from Zapier to N8N?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "A simple two-step Zap takes 15 to 30 minutes to rebuild in N8N, including testing. A complex multi-step Zap with filters and conditional logic takes 1 to 3 hours. Most small businesses complete a full migration of 10 to 20 Zaps in a weekend."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Will my automations break during the migration?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Not if you run both systems in parallel. Keep your Zapier account active while you rebuild and test each workflow in N8N. Only turn off a Zap after the equivalent N8N workflow has run successfully in production for at least 48 hours."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Does N8N support all the same apps as Zapier?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "N8N has native nodes for over 400 apps including Gmail, Slack, HubSpot, Airtable, Google Sheets, Stripe, and Shopify. For apps without a native node, you can use the HTTP Request node to connect any service that has a REST API."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How much money will I save by switching from Zapier to N8N?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "It depends on your current Zapier plan and task volume. A business running 50,000 tasks per month on Zapier's Professional plan pays around $299/month. The equivalent on N8N Cloud costs $50 to $100/month. Self-hosting N8N on a $10/month VPS makes the ongoing software cost near zero."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "How to Migrate from Zapier to N8N", "item": "https://rajsuyash.com/blog/n8n-migrate-from-zapier.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/qualify" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">N8N Automation</span>
+                <span class="article-date">May 20, 2026</span>
+                <span class="article-read-time">11 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">How to Migrate from Zapier to N8N: Complete Step-by-Step Guide (2026)</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">Zapier costs keep climbing. N8N gives you the same automation power at a fraction of the price, with no task limits on self-hosted plans. Here is exactly how to make the switch without breaking anything.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <p>If you are paying more than $50 per month for Zapier and still running into task limits, you have probably already looked at N8N. The comparison is not close. N8N is open source, self-hostable, and charges by the number of active workflows rather than by task count. For most small businesses, the math works out to 60 to 80 percent cost savings after migration.</p>
+
+        <p>The catch is that you cannot export Zaps and import them into N8N. You have to rebuild each workflow from scratch. That sounds painful, but it is faster than you think. This guide walks through every step, from auditing your existing Zaps to testing workflows in production.</p>
+
+        <p>If you have not yet decided whether N8N is the right move, read our <a href="/blog/n8n-vs-zapier-vs-make.html">N8N vs Zapier vs Make comparison</a> first. This guide assumes you have already made the decision and want to execute the migration cleanly.</p>
+
+        <h2>Step 1: Audit Your Existing Zaps Before You Touch Anything</h2>
+
+        <p>The biggest migration mistake is jumping straight into rebuilding workflows without knowing what you have. Before you open N8N, spend 30 minutes auditing your Zapier account.</p>
+
+        <p>Go to your Zapier dashboard and export a list of every active and inactive Zap. For each one, document:</p>
+
+        <ul>
+            <li><strong>Trigger app and event</strong> (e.g., "New row in Google Sheets")</li>
+            <li><strong>Action apps and events</strong> (e.g., "Create contact in HubSpot, then send Slack message")</li>
+            <li><strong>Any filters or conditional logic</strong></li>
+            <li><strong>Data transformations</strong> (date formatting, text manipulation, lookups)</li>
+            <li><strong>How often it runs</strong> and whether timing matters</li>
+            <li><strong>Who relies on it</strong> and what breaks if it goes down</li>
+        </ul>
+
+        <p>This audit serves two purposes. First, it reveals which Zaps are actually business-critical versus nice-to-have. Second, it helps you prioritize the migration order. Start with low-stakes workflows so you get familiar with N8N before touching anything critical.</p>
+
+        <p>You will also discover Zaps that should not be migrated at all. Many businesses have 20 to 30 active Zaps but only 8 to 10 that matter. This is a good time to prune.</p>
+
+        <h2>Step 2: Set Up N8N Before You Start Rebuilding</h2>
+
+        <p>You have two options for running N8N: cloud-hosted or self-hosted. For migration purposes, start with N8N Cloud. It is faster to get running and removes infrastructure complexity while you are learning the interface.</p>
+
+        <p>Go to n8n.io and create an account. The Starter plan is free for up to 5 active workflows and 2,500 workflow executions per month. That is enough to test your migration before committing.</p>
+
+        <p>If you plan to self-host, our <a href="/blog/n8n-self-host-docker.html">N8N self-hosting guide with Docker</a> covers the full setup. Self-hosting is the right long-term choice for cost savings, but do not let infrastructure setup delay your migration start.</p>
+
+        <p>Once N8N is running, set up your credentials first. Go to Settings > Credentials and add the API connections you will need. N8N stores credentials securely and reuses them across workflows, so you only need to configure each app once.</p>
+
+        <h2>Step 3: Understand How Zapier Concepts Map to N8N</h2>
+
+        <p>Zapier and N8N use different terminology for the same concepts. Knowing the mapping makes the rebuild process much faster.</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Zapier Concept</th>
+                    <th>N8N Equivalent</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Zap</td>
+                    <td>Workflow</td>
+                    <td>Same concept. N8N calls them workflows.</td>
+                </tr>
+                <tr>
+                    <td>Trigger</td>
+                    <td>Trigger Node</td>
+                    <td>N8N has many trigger types: Webhook, Schedule, App-specific, Manual.</td>
+                </tr>
+                <tr>
+                    <td>Action</td>
+                    <td>Action Node</td>
+                    <td>N8N nodes can be chained, branched, and looped.</td>
+                </tr>
+                <tr>
+                    <td>Filter by Zapier</td>
+                    <td>IF Node</td>
+                    <td>N8N's IF node supports multiple conditions and two output branches.</td>
+                </tr>
+                <tr>
+                    <td>Formatter by Zapier</td>
+                    <td>Set Node / Code Node</td>
+                    <td>Use Set for simple transforms, Code node for complex logic in JavaScript.</td>
+                </tr>
+                <tr>
+                    <td>Paths by Zapier</td>
+                    <td>Switch Node</td>
+                    <td>N8N's Switch node supports up to 4 conditional output branches.</td>
+                </tr>
+                <tr>
+                    <td>Delay by Zapier</td>
+                    <td>Wait Node</td>
+                    <td>Supports fixed delay or wait until a specific date/time.</td>
+                </tr>
+                <tr>
+                    <td>Looping by Zapier</td>
+                    <td>Split In Batches Node</td>
+                    <td>N8N handles arrays natively, so explicit loops are less common.</td>
+                </tr>
+                <tr>
+                    <td>Task count (billing)</td>
+                    <td>Workflow execution (billing)</td>
+                    <td>N8N counts one execution per workflow run, not per step.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>The most important shift in mindset: Zapier charges per task (each action counts as one task). N8N charges per workflow execution regardless of how many nodes run. A 10-step N8N workflow costs the same as a 2-step workflow in terms of billing. This means complex workflows are essentially free to add logic to.</p>
+
+        <h2>Step 4: Rebuild Workflows One at a Time, Starting Simple</h2>
+
+        <p>Pick the simplest Zap from your audit list and rebuild it in N8N first. Simple means two steps: one trigger, one action. A good first candidate is something like "When a new row is added to Google Sheets, send an email."</p>
+
+        <h3>Rebuilding a basic two-step Zap in N8N</h3>
+
+        <ol>
+            <li>Create a new workflow in N8N.</li>
+            <li>Click the plus icon to add your trigger. Search for the app name (e.g., "Google Sheets"). Select the trigger event that matches your Zap.</li>
+            <li>Connect credentials. If you have already added them in Settings, they appear in the dropdown. If not, click "Create New Credential" and follow the OAuth prompt.</li>
+            <li>Configure the trigger parameters exactly as they were in Zapier (which spreadsheet, which sheet tab, which column to watch).</li>
+            <li>Click "Fetch Test Event" to pull in a real data sample from the connected app. N8N uses this sample to show you available fields in subsequent nodes.</li>
+            <li>Add an action node. Click the plus icon after the trigger, search for your action app, and select the operation.</li>
+            <li>Map the fields. N8N shows the available data from previous nodes in a dropdown when you click any field. This works the same as Zapier's data mapping.</li>
+            <li>Run a test execution. Click "Test Workflow" to run the workflow once with your test data and verify the output.</li>
+            <li>Activate the workflow. Toggle the workflow to Active. It will now run automatically.</li>
+        </ol>
+
+        <p>For webhook-triggered Zaps, read our <a href="/blog/n8n-webhook-tutorial.html">N8N webhook tutorial</a> which covers the full setup including response handling and security headers.</p>
+
+        <h3>Rebuilding Zaps with filters (conditional logic)</h3>
+
+        <p>Zapier's "Filter" step becomes an IF node in N8N. Add the IF node after your trigger, set your condition using the field mapping, and connect the "true" branch to your action. The "false" branch can be left disconnected or connected to a different action.</p>
+
+        <p>N8N's IF node supports multiple AND/OR conditions in a single node, which means you can often replace two or three Zapier filter steps with one IF node.</p>
+
+        <h3>Rebuilding Zaps with data formatting</h3>
+
+        <p>Zapier's Formatter step (for things like converting dates, capitalizing text, or doing math) maps to N8N's Set node for simple transformations. The Set node lets you create new fields using expressions like <code>{{ $json.first_name.toUpperCase() }}</code>.</p>
+
+        <p>For complex transformations that Zapier's Formatter cannot handle without multiple steps, use N8N's Code node. It runs JavaScript directly on the workflow data and gives you full control over data shape.</p>
+
+        <h2>Step 5: Handle the Tricky Cases</h2>
+
+        <h3>Zaps with multiple actions</h3>
+
+        <p>Zapier multi-step Zaps (trigger + 3 actions) map directly to N8N workflows with multiple nodes chained in sequence. N8N has no limit on how many nodes you can add. Simply continue the chain by adding nodes after each previous node.</p>
+
+        <h3>Zaps that use Paths (parallel branches)</h3>
+
+        <p>Zapier's Paths feature maps to N8N's Switch node or IF node with both output branches used. In N8N you can also fan out to truly parallel branches by connecting one node's output to multiple downstream nodes. Both branches execute independently.</p>
+
+        <h3>Zaps that loop over items</h3>
+
+        <p>If your Zap uses Looping by Zapier to process multiple items (e.g., iterating over rows), N8N handles this automatically. When a node outputs multiple items, the next node processes each one individually without any explicit loop configuration. For batch processing, use the Split In Batches node to control how many items are processed per execution cycle.</p>
+
+        <h3>Zaps that use Zapier Storage or Digest</h3>
+
+        <p>These Zapier-specific features have no direct N8N equivalent. For Zapier Storage (storing values between runs), use a Google Sheet or Airtable as your persistent store and read/write to it within the workflow. For Digest (collecting items and sending a summary), use N8N's Schedule Trigger with an aggregation pattern: collect items to a Google Sheet throughout the day, then run a daily workflow that reads and summarizes them.</p>
+
+        <h2>Step 6: Run Both Systems in Parallel</h2>
+
+        <p>Do not turn off Zapier the moment you finish rebuilding a workflow in N8N. Run both systems in parallel for at least 48 hours per workflow. Compare the outputs to make sure N8N is producing the same results as Zapier.</p>
+
+        <p>Practical approach: activate the N8N workflow but leave the Zap running. Check the N8N execution log after 24 to 48 hours. Confirm that the correct number of executions ran and that output data looks right. Then turn off the Zap.</p>
+
+        <p>For high-stakes workflows (anything that sends external emails, creates CRM records, or processes payments), run the parallel period for a full week before cutting over.</p>
+
+        <h2>Step 7: Handle Credentials and App Permissions</h2>
+
+        <p>Each app you connect in N8N requires its own OAuth authorization or API key. This is the same as Zapier. The difference is that N8N stores all credentials in one place under Settings > Credentials, and you can reuse the same credential across multiple workflows.</p>
+
+        <p>When reconnecting OAuth apps (Google, Slack, HubSpot), you will need to re-authorize in the new platform. This is standard and expected. It does not affect the existing Zapier connection until you explicitly disconnect it there.</p>
+
+        <p>For webhook-based triggers, your external app (the one sending the webhook) needs to be updated to point to the new N8N webhook URL. Do this as the final cutover step, not during parallel testing, to avoid duplicate processing.</p>
+
+        <h2>What the Migration Actually Costs in Time</h2>
+
+        <p>Based on rebuilding N8N workflows for clients, here is a realistic time estimate for the migration work itself:</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Zap Complexity</th>
+                    <th>Rebuild Time</th>
+                    <th>Parallel Testing</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Simple (2 steps, no logic)</td>
+                    <td>15 to 30 minutes</td>
+                    <td>24 hours</td>
+                </tr>
+                <tr>
+                    <td>Medium (3 to 5 steps, filters)</td>
+                    <td>1 to 2 hours</td>
+                    <td>48 hours</td>
+                </tr>
+                <tr>
+                    <td>Complex (6+ steps, loops, branches)</td>
+                    <td>2 to 4 hours</td>
+                    <td>1 week</td>
+                </tr>
+                <tr>
+                    <td>Full migration (10 to 20 Zaps)</td>
+                    <td>1 to 3 days</td>
+                    <td>1 to 2 weeks total</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>The first few workflows take the longest because you are learning N8N's interface. By your fifth rebuild, you will be moving significantly faster.</p>
+
+        <h2>The Cost Savings: What to Expect</h2>
+
+        <p>The primary reason most businesses migrate is cost. Zapier's pricing is task-based, which means complex workflows consume budget fast. N8N's pricing is execution-based, which rewards complex logic.</p>
+
+        <p>One client we worked with was running 45,000 Zapier tasks per month across 14 Zaps on the Professional plan at $299/month. After migrating all 14 workflows to N8N Cloud's Growth plan, their monthly bill dropped to $50. The migration paid for itself in the first month.</p>
+
+        <p>If you want to see what savings look like for your specific situation, use our <a href="/roi-calculator.html">automation ROI calculator</a> to model the numbers before you start.</p>
+
+        <p>Not sure if your business is ready to take on an N8N migration internally? The <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> can help you identify whether this is a DIY project or one where outside support makes more sense.</p>
+
+        <h2>Common Migration Mistakes to Avoid</h2>
+
+        <p><strong>Migrating critical workflows first.</strong> Always start with low-stakes automations. Save your most important workflows for when you are comfortable with N8N's behavior under real conditions.</p>
+
+        <p><strong>Not testing with real data.</strong> N8N's test mode uses a single sample item. Always run a real activation test with live data before declaring a workflow production-ready.</p>
+
+        <p><strong>Skipping error handling.</strong> Zapier silently retries failed tasks. N8N does not retry by default. Add error workflow connections to critical workflows so failures do not go unnoticed. Our <a href="/blog/n8n-error-handling-best-practices.html">N8N error handling guide</a> covers this in detail.</p>
+
+        <p><strong>Canceling Zapier too early.</strong> Keep your Zapier subscription active through the full parallel testing period. Canceling early means you lose the safety net if an N8N workflow has an edge case you did not catch in testing.</p>
+
+        <p><strong>Rebuilding everything yourself when you do not have to.</strong> If you have 30 or more Zaps or complex multi-branch workflows, the migration effort adds up. Our <a href="/n8n-automation.html">N8N automation service</a> handles migrations end-to-end including testing and documentation.</p>
+
+        <h2>After the Migration: What N8N Unlocks That Zapier Could Not</h2>
+
+        <p>Once you are running on N8N, you gain capabilities that Zapier's task-based model made too expensive to use.</p>
+
+        <p>Complex multi-step workflows become affordable. A workflow that reads a database, runs a JavaScript function, calls an API, branches on the result, and sends two different emails is a single execution. Under Zapier's Professional plan, that same workflow would count as 5 to 6 tasks per run.</p>
+
+        <p>You can integrate AI directly into workflows. N8N has native nodes for OpenAI, Claude, and other LLM providers. Use them to classify incoming data, generate personalized email content, or summarize form submissions before routing them. See our <a href="/blog/n8n-openai-claude-integration.html">N8N and AI integration tutorial</a> for step-by-step examples.</p>
+
+        <p>You can also combine N8N workflows with AI voice agents to build full end-to-end automation pipelines. A voice agent takes a call, extracts structured data, and hands it to N8N which handles downstream processing: CRM updates, confirmation emails, scheduling. That is the kind of automation stack we built for Le Marquier, which <a href="/case-studies/le-marquier.html">reduced their customer service costs by 80% with a 98% AI handling rate</a>.</p>
+
+        <h2>Ready to Get Started?</h2>
+        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
+        <p><a href="/qualify" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>Can I export my Zaps and import them directly into N8N?</h3>
+                <p>No. Zapier does not export workflows in a format that N8N can import. You need to rebuild each workflow manually in N8N. However, because N8N's node system is more flexible than Zapier's step-by-step format, most Zaps translate to N8N workflows in the same number of nodes or fewer.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How long does it take to migrate from Zapier to N8N?</h3>
+                <p>A simple two-step Zap takes 15 to 30 minutes to rebuild in N8N, including testing. A complex multi-step Zap with filters and conditional logic takes 1 to 3 hours. Most small businesses complete a full migration of 10 to 20 Zaps in a weekend.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Will my automations break during the migration?</h3>
+                <p>Not if you run both systems in parallel. Keep your Zapier account active while you rebuild and test each workflow in N8N. Only turn off a Zap after the equivalent N8N workflow has run successfully in production for at least 48 hours.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Does N8N support all the same apps as Zapier?</h3>
+                <p>N8N has native nodes for over 400 apps including Gmail, Slack, HubSpot, Airtable, Google Sheets, Stripe, and Shopify. For apps without a native node, you can use the HTTP Request node to connect any service that has a REST API.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How much money will I save by switching from Zapier to N8N?</h3>
+                <p>It depends on your current Zapier plan and task volume. A business running 50,000 tasks per month on Zapier's Professional plan pays around $299/month. The equivalent on N8N Cloud costs $50 to $100/month. Self-hosting N8N on a $10/month VPS makes the ongoing software cost near zero.</p>
+            </div>
+        </div>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name">Suyash Raj</span>
+                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/n8n-vs-zapier-vs-make.html" class="related-card">
+                <h3 class="related-card-title">N8N vs Zapier vs Make: Which Automation Tool Wins in 2026?</h3>
+                <p class="related-card-excerpt">Side-by-side comparison of pricing, features, and use cases to help you pick the right tool.</p>
+            </a>
+            <a href="/blog/build-first-n8n-workflow.html" class="related-card">
+                <h3 class="related-card-title">How to Build Your First N8N Workflow (Step-by-Step)</h3>
+                <p class="related-card-excerpt">New to N8N? This beginner tutorial walks through your first automation from trigger to action.</p>
+            </a>
+            <a href="/blog/n8n-error-handling-best-practices.html" class="related-card">
+                <h3 class="related-card-title">N8N Error Handling Best Practices</h3>
+                <p class="related-card-excerpt">How to set up error workflows, retry logic, and alerts so failures never go unnoticed.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>AI Automation Agency for SMBs</p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>

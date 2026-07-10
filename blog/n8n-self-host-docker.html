@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>How to Self-Host N8N with Docker: Complete Setup Guide (2026) | Suyash Raj</title>
+    <meta name="description" content="Self-host N8N with Docker in under 30 minutes. This complete guide covers Docker Compose setup, environment variables, persistent storage, HTTPS with Nginx, and production best practices.">
+    <meta name="keywords" content="self host n8n, n8n docker, n8n docker compose, n8n self hosted, n8n vps setup, best AI automation agency for small businesses">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/n8n-self-host-docker.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/n8n-self-host-docker.html">
+    <meta property="og:title" content="How to Self-Host N8N with Docker: Complete Setup Guide (2026)">
+    <meta property="og:description" content="Run N8N on your own server with Docker. Step-by-step guide covering Docker Compose, persistent storage, HTTPS, environment variables, and backup strategies.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj - AI Automation Agency">
+    <meta property="article:published_time" content="2026-04-23">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="How to Self-Host N8N with Docker: Complete Setup Guide (2026)">
+    <meta name="twitter:description" content="Self-host N8N with Docker Compose in 30 minutes. Covers persistent storage, HTTPS, environment variables, and production backup strategies.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260423a">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "How to Self-Host N8N with Docker: Complete Setup Guide (2026)",
+        "description": "Self-host N8N with Docker in under 30 minutes. This complete guide covers Docker Compose setup, environment variables, persistent storage, HTTPS with Nginx, and production best practices.",
+        "author": {
+            "@type": "Person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Suyash Raj - AI Automation Agency",
+            "url": "https://rajsuyash.com"
+        },
+        "datePublished": "2026-04-23",
+        "dateModified": "2026-04-23",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/n8n-self-host-docker.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "How much does it cost to self-host N8N?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Self-hosting N8N on a VPS costs between $5 and $20 per month depending on the provider. A 2 vCPU, 4 GB RAM server from DigitalOcean, Hetzner, or Linode handles most small-business workloads. Compare that to N8N Cloud plans which start at $20/month with execution limits."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is the minimum server spec for N8N?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "N8N runs on 1 vCPU and 1 GB RAM for light workloads, but 2 vCPU and 2 GB RAM is the practical minimum for production. If you run more than 10 concurrent workflows or use AI nodes with large payloads, upgrade to 4 GB RAM. Storage depends on workflow execution history retention, but 20 GB SSD is a safe starting point."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is self-hosted N8N secure?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Self-hosted N8N is secure when configured correctly. Use HTTPS with a valid SSL certificate, set strong authentication (basic auth or N8N's built-in user management), restrict the server firewall to ports 80, 443, and 22, and never expose the N8N port (default 5678) directly to the internet. Keep Docker images updated monthly."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I migrate from N8N Cloud to self-hosted?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. Export your workflows from N8N Cloud using the menu in each workflow (Download as JSON) or the API. Import them into your self-hosted instance via Settings > Import Workflows. Credentials need to be re-entered manually since they are not exported for security reasons."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I update N8N when self-hosting with Docker?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Run: docker compose pull && docker compose up -d. This pulls the latest N8N image and restarts the container with zero downtime in most cases. Always back up your n8n_data volume before upgrading major versions."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "How to Self-Host N8N with Docker", "item": "https://rajsuyash.com/blog/n8n-self-host-docker.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Code blocks */
+        .article-body pre {
+            background: var(--color-paper-warm);
+            border-left: 3px solid var(--color-accent);
+            padding: var(--space-md);
+            overflow-x: auto;
+            margin: var(--space-md) 0;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .article-body code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.875em;
+            background: var(--color-paper-warm);
+            padding: 0.1em 0.3em;
+            border-radius: 2px;
+        }
+
+        .article-body pre code {
+            background: none;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/qualify" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">N8N Automation</span>
+                <span class="article-date">April 23, 2026</span>
+                <span class="article-read-time">12 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">How to Self-Host N8N with Docker: Complete Setup Guide (2026)</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">Run N8N on your own server, keep your data private, and pay a fraction of the cloud price. This step-by-step guide covers Docker Compose, persistent storage, HTTPS, and production hardening.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <p>N8N Cloud is convenient. But for businesses that handle sensitive customer data, run high workflow volumes, or simply want full control over their automation stack, self-hosting is the right call. A $10 VPS running Docker can handle hundreds of workflows per day without hitting any execution caps.</p>
+
+        <p>This guide walks you through the complete setup: from a fresh Linux server to a production-ready N8N instance with HTTPS, persistent storage, and automatic restarts. No experience with Docker required, just a basic comfort with the command line.</p>
+
+        <div class="definition-block">
+            <p><strong>What we cover:</strong> Docker and Docker Compose installation, N8N container setup, environment variable configuration, data persistence with volumes, HTTPS via Nginx reverse proxy, backups, and update procedure. Estimated setup time: 25 to 40 minutes.</p>
+        </div>
+
+        <h2>Why Self-Host N8N?</h2>
+
+        <p>The case for self-hosting is straightforward for most SMBs running serious automation workloads. N8N Cloud charges by execution and has monthly limits. On a self-hosted instance, you run as many executions as your server can handle, with no per-workflow or per-execution fee.</p>
+
+        <p>Three situations where self-hosting clearly wins:</p>
+
+        <ul>
+            <li><strong>Data compliance:</strong> If workflows process personal data (customer records, financial data, HR data), keeping execution logs on your own infrastructure avoids third-party data handling concerns.</li>
+            <li><strong>High volume:</strong> Businesses running 10,000+ executions per month will spend significantly more on cloud plans than on a $10 VPS.</li>
+            <li><strong>Custom nodes:</strong> Self-hosted N8N lets you install community nodes and custom integrations that are not available on N8N Cloud.</li>
+        </ul>
+
+        <p>If you are just getting started with N8N and want to understand the workflow basics first, read our <a href="/blog/build-first-n8n-workflow.html">beginner's guide to building your first N8N workflow</a> before continuing here.</p>
+
+        <h2>What You Need Before You Start</h2>
+
+        <p>You need three things:</p>
+
+        <ol>
+            <li>A Linux VPS (Ubuntu 22.04 LTS recommended). DigitalOcean, Hetzner, Vultr, and Linode all work. 2 vCPU, 4 GB RAM is a solid starting spec.</li>
+            <li>A domain name pointed to your server's IP. You need this for HTTPS. Use an A record: <code>n8n.yourdomain.com → your.server.ip</code>.</li>
+            <li>SSH access to the server with a non-root sudo user.</li>
+        </ol>
+
+        <h2>Self-Hosted vs Cloud: Cost and Feature Comparison</h2>
+
+        <p>Before committing, here is an honest side-by-side comparison:</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Factor</th>
+                    <th>N8N Cloud (Starter)</th>
+                    <th>Self-Hosted (Docker / VPS)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Monthly cost</td>
+                    <td>$20 (2,500 executions/month)</td>
+                    <td>$5 to $20 (unlimited executions)</td>
+                </tr>
+                <tr>
+                    <td>Setup time</td>
+                    <td>2 minutes</td>
+                    <td>25 to 40 minutes</td>
+                </tr>
+                <tr>
+                    <td>Maintenance burden</td>
+                    <td>None (managed)</td>
+                    <td>Low (monthly Docker updates)</td>
+                </tr>
+                <tr>
+                    <td>Execution limits</td>
+                    <td>Yes (varies by plan)</td>
+                    <td>None (server-bound only)</td>
+                </tr>
+                <tr>
+                    <td>Community nodes</td>
+                    <td>Limited</td>
+                    <td>Full access</td>
+                </tr>
+                <tr>
+                    <td>Data residency control</td>
+                    <td>No</td>
+                    <td>Yes (your server, your region)</td>
+                </tr>
+                <tr>
+                    <td>Custom SSL / domain</td>
+                    <td>Subdomain only</td>
+                    <td>Any domain</td>
+                </tr>
+                <tr>
+                    <td>Backups</td>
+                    <td>Managed by N8N</td>
+                    <td>Your responsibility (easy to automate)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Step 1: Install Docker and Docker Compose</h2>
+
+        <p>SSH into your server and run the following commands. This installs Docker Engine and the Compose plugin from Docker's official repository:</p>
+
+        <pre><code>sudo apt update && sudo apt upgrade -y
+
+# Install dependencies
+sudo apt install -y ca-certificates curl gnupg
+
+# Add Docker's official GPG key
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
+  sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+# Add Docker repository
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+  https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Install Docker Engine + Compose plugin
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Add your user to the docker group (so you don't need sudo for every command)
+sudo usermod -aG docker $USER
+newgrp docker</code></pre>
+
+        <p>Verify both are working:</p>
+
+        <pre><code>docker --version
+docker compose version</code></pre>
+
+        <h2>Step 2: Create the N8N Directory and Docker Compose File</h2>
+
+        <p>Create a dedicated directory for your N8N setup:</p>
+
+        <pre><code>mkdir -p ~/n8n && cd ~/n8n</code></pre>
+
+        <p>Create the Docker Compose file. This is the core configuration that defines how N8N runs:</p>
+
+        <pre><code>nano docker-compose.yml</code></pre>
+
+        <p>Paste in the following. We'll explain each key section below:</p>
+
+        <pre><code>version: "3.8"
+
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=${N8N_HOST}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - NODE_ENV=production
+      - WEBHOOK_URL=https://${N8N_HOST}/
+      - GENERIC_TIMEZONE=Europe/Paris
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD}
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  n8n_data:</code></pre>
+
+        <p>Key settings to understand:</p>
+
+        <ul>
+            <li><strong>restart: unless-stopped</strong> ensures N8N restarts automatically if the container crashes or the server reboots.</li>
+            <li><strong>n8n_data volume</strong> persists all workflows, credentials, and execution history between container restarts and upgrades.</li>
+            <li><strong>N8N_ENCRYPTION_KEY</strong> encrypts stored credentials. Generate a strong random key and never change it after setup.</li>
+            <li><strong>N8N_BASIC_AUTH</strong> adds password protection to the N8N UI. Required before you set up HTTPS.</li>
+        </ul>
+
+        <h2>Step 3: Configure Environment Variables</h2>
+
+        <p>Create a <code>.env</code> file in the same directory. This keeps sensitive values out of your Compose file:</p>
+
+        <pre><code>nano .env</code></pre>
+
+        <p>Fill in your values:</p>
+
+        <pre><code># Your N8N domain
+N8N_HOST=n8n.yourdomain.com
+
+# Basic auth credentials for the N8N UI
+N8N_BASIC_AUTH_USER=admin
+N8N_BASIC_AUTH_PASSWORD=a-very-strong-password-here
+
+# Generate with: openssl rand -hex 32
+N8N_ENCRYPTION_KEY=your-64-character-random-hex-key</code></pre>
+
+        <p>Generate your encryption key with this one-liner:</p>
+
+        <pre><code>openssl rand -hex 32</code></pre>
+
+        <p>Copy the output and paste it as the value for <code>N8N_ENCRYPTION_KEY</code>. Store this key somewhere safe. If you lose it, you lose access to all encrypted credentials stored in N8N.</p>
+
+        <h2>Step 4: Set Up Nginx as a Reverse Proxy with HTTPS</h2>
+
+        <p>Exposing N8N directly on port 5678 over HTTP is not acceptable for production. You need Nginx to handle HTTPS and proxy traffic to the N8N container.</p>
+
+        <p>Install Nginx and Certbot:</p>
+
+        <pre><code>sudo apt install -y nginx certbot python3-certbot-nginx</code></pre>
+
+        <p>Create an Nginx configuration file for N8N:</p>
+
+        <pre><code>sudo nano /etc/nginx/sites-available/n8n</code></pre>
+
+        <p>Paste the following (replace <code>n8n.yourdomain.com</code> with your actual domain):</p>
+
+        <pre><code>server {
+    listen 80;
+    server_name n8n.yourdomain.com;
+
+    location / {
+        proxy_pass http://localhost:5678;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+        chunked_transfer_encoding on;
+        proxy_buffering off;
+        proxy_read_timeout 3600s;
+        proxy_send_timeout 3600s;
+    }
+}</code></pre>
+
+        <p>Enable the site and obtain an SSL certificate:</p>
+
+        <pre><code>sudo ln -s /etc/nginx/sites-available/n8n /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+
+# Issue the SSL certificate (follow prompts)
+sudo certbot --nginx -d n8n.yourdomain.com</code></pre>
+
+        <p>Certbot will automatically modify your Nginx config to enable HTTPS and set up certificate auto-renewal. Your N8N instance is now accessible at <code>https://n8n.yourdomain.com</code>.</p>
+
+        <h2>Step 5: Start N8N</h2>
+
+        <p>With Nginx configured, start the N8N container:</p>
+
+        <pre><code>cd ~/n8n
+docker compose up -d</code></pre>
+
+        <p>Check that the container is running:</p>
+
+        <pre><code>docker compose ps
+docker compose logs -f n8n</code></pre>
+
+        <p>You should see N8N starting up in the logs. Open <code>https://n8n.yourdomain.com</code> in your browser, enter the basic auth credentials you set, and you will land on the N8N workflow editor.</p>
+
+        <h2>Step 6: Configure Timezone and Email (Optional but Recommended)</h2>
+
+        <p>Set the correct timezone so that scheduled triggers fire at the right times. In the <code>.env</code> file, update:</p>
+
+        <pre><code>GENERIC_TIMEZONE=America/New_York</code></pre>
+
+        <p>For a full list of timezone strings, see the IANA tz database. This is especially important if you use the Schedule trigger node, which we cover in our <a href="/blog/n8n-scheduled-triggers-tutorial.html">N8N scheduled triggers tutorial</a>.</p>
+
+        <p>If you want N8N to send email alerts on workflow errors, add SMTP settings to <code>.env</code>:</p>
+
+        <pre><code>N8N_EMAIL_MODE=smtp
+N8N_SMTP_HOST=smtp.yourmailprovider.com
+N8N_SMTP_PORT=587
+N8N_SMTP_USER=your@email.com
+N8N_SMTP_PASS=your-smtp-password
+N8N_SMTP_SENDER=n8n@yourdomain.com</code></pre>
+
+        <p>Restart N8N to apply changes:</p>
+
+        <pre><code>docker compose down && docker compose up -d</code></pre>
+
+        <h2>Step 7: Set Up Backups</h2>
+
+        <p>All N8N data (workflows, credentials, execution history) lives in the <code>n8n_data</code> Docker volume. Backing it up is a 30-second cron job.</p>
+
+        <p>Create a backup script:</p>
+
+        <pre><code>nano ~/n8n/backup.sh</code></pre>
+
+        <pre><code>#!/bin/bash
+DATE=$(date +%Y-%m-%d)
+BACKUP_DIR=~/n8n-backups
+mkdir -p $BACKUP_DIR
+
+# Stop N8N (prevents partial writes)
+docker compose -f ~/n8n/docker-compose.yml stop n8n
+
+# Archive the volume data
+docker run --rm \
+  -v n8n_n8n_data:/data \
+  -v $BACKUP_DIR:/backup \
+  alpine tar czf /backup/n8n-backup-$DATE.tar.gz -C /data .
+
+# Restart N8N
+docker compose -f ~/n8n/docker-compose.yml start n8n
+
+# Remove backups older than 30 days
+find $BACKUP_DIR -name "*.tar.gz" -mtime +30 -delete
+
+echo "Backup complete: n8n-backup-$DATE.tar.gz"</code></pre>
+
+        <pre><code>chmod +x ~/n8n/backup.sh</code></pre>
+
+        <p>Schedule it daily at 2 AM with cron:</p>
+
+        <pre><code>crontab -e
+# Add this line:
+0 2 * * * /home/youruser/n8n/backup.sh >> /home/youruser/n8n/backup.log 2>&1</code></pre>
+
+        <p>For critical automations, also copy backups off-server to S3 or a remote location. Backups on the same server as the application are not disaster-recovery backups.</p>
+
+        <h2>Step 8: Update N8N</h2>
+
+        <p>Keeping N8N updated is important for security and new features. The update process with Docker Compose is two commands:</p>
+
+        <pre><code>cd ~/n8n
+docker compose pull
+docker compose up -d</code></pre>
+
+        <p>Docker will pull the latest <code>n8n:latest</code> image and restart the container. Your workflows and credentials remain intact because they are stored in the persistent volume, not inside the container.</p>
+
+        <p>Before updating major versions (e.g., N8N 1.x to 2.x), always run a manual backup first and check the N8N release notes for breaking changes.</p>
+
+        <h2>Common Self-Hosting Issues and Fixes</h2>
+
+        <h3>Webhooks not receiving requests</h3>
+        <p>Check that <code>WEBHOOK_URL</code> in your <code>.env</code> matches your public domain exactly, including the trailing slash. Also verify your server firewall allows inbound traffic on ports 80 and 443.</p>
+
+        <h3>Credentials not saving after restart</h3>
+        <p>This almost always means the <code>n8n_data</code> volume is not mounted correctly, or the <code>N8N_ENCRYPTION_KEY</code> changed between restarts. The key must remain identical for the container lifetime.</p>
+
+        <h3>N8N UI slow or unresponsive</h3>
+        <p>The container needs more RAM. Upgrade to a 4 GB RAM server if you see memory pressure. You can also limit execution history retention in N8N settings to reduce database size. For advanced error handling patterns in workflows themselves, see our <a href="/blog/n8n-error-handling-best-practices.html">N8N error handling guide</a>.</p>
+
+        <h3>SSL certificate not renewing</h3>
+        <p>Certbot sets up a systemd timer for auto-renewal. Check its status with <code>sudo systemctl status certbot.timer</code>. Test renewal manually with <code>sudo certbot renew --dry-run</code>.</p>
+
+        <h2>Connecting Your Self-Hosted N8N to Business Systems</h2>
+
+        <p>Once N8N is running, the setup process for nodes is identical to N8N Cloud. Your workflows can connect to any API, database, or service. Common starting points for SMBs:</p>
+
+        <ul>
+            <li>Connect to Google Sheets for data logging (see our <a href="/blog/n8n-google-sheets-integration.html">N8N + Google Sheets guide</a>)</li>
+            <li>Pull data via HTTP requests to connect any API without a dedicated node</li>
+            <li>Trigger workflows from webhooks when form submissions, payments, or CRM events fire</li>
+        </ul>
+
+        <p>One of our clients, a premium outdoor kitchen brand, runs their entire customer inquiry routing and follow-up system on a self-hosted N8N instance. The setup reduced their manual data entry overhead by 80% compared to their previous process. The full story is in our <a href="/case-studies/le-marquier.html">Le Marquier case study</a>.</p>
+
+        <p>If you want to understand the financial case for N8N automation before investing more time in setup, our <a href="/roi-calculator.html">free ROI calculator</a> gives you a concrete number in two minutes.</p>
+
+        <h2>When to Use N8N Cloud Instead</h2>
+
+        <p>Self-hosting is not always the right choice. Use N8N Cloud if:</p>
+
+        <ul>
+            <li>You are evaluating N8N for the first time and do not want infrastructure overhead</li>
+            <li>Your team has no one comfortable managing a Linux server</li>
+            <li>You run fewer than 2,500 executions per month (cloud pricing is competitive at this volume)</li>
+        </ul>
+
+        <p>If you are not sure whether your business is ready to build out a full N8N automation stack, our <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> helps you identify where automation will have the most immediate impact before committing engineering time.</p>
+
+        <p>For businesses that want the benefits of N8N without handling any of the infrastructure, our <a href="/n8n-automation.html">N8N automation service</a> covers setup, workflow development, and ongoing support.</p>
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>How much does it cost to self-host N8N?</h3>
+                <p>Self-hosting N8N on a VPS costs between $5 and $20 per month depending on the provider. A 2 vCPU, 4 GB RAM server from DigitalOcean, Hetzner, or Linode handles most small-business workloads. Compare that to N8N Cloud plans which start at $20/month with execution limits.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What is the minimum server spec for N8N?</h3>
+                <p>N8N runs on 1 vCPU and 1 GB RAM for light workloads, but 2 vCPU and 2 GB RAM is the practical minimum for production. If you run more than 10 concurrent workflows or use AI nodes with large payloads, upgrade to 4 GB RAM. Storage depends on workflow execution history retention, but 20 GB SSD is a safe starting point.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is self-hosted N8N secure?</h3>
+                <p>Self-hosted N8N is secure when configured correctly. Use HTTPS with a valid SSL certificate, set strong authentication (basic auth or N8N's built-in user management), restrict the server firewall to ports 80, 443, and 22, and never expose the N8N port (default 5678) directly to the internet. Keep Docker images updated monthly.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I migrate from N8N Cloud to self-hosted?</h3>
+                <p>Yes. Export your workflows from N8N Cloud using the menu in each workflow (Download as JSON) or the API. Import them into your self-hosted instance via Settings > Import Workflows. Credentials need to be re-entered manually since they are not exported for security reasons.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I update N8N when self-hosting with Docker?</h3>
+                <p>Run: <code>docker compose pull && docker compose up -d</code>. This pulls the latest N8N image and restarts the container with zero downtime in most cases. Always back up your n8n_data volume before upgrading major versions.</p>
+            </div>
+        </div>
+
+        <!-- CTA in article -->
+        <h2>Ready to Get Started?</h2>
+        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
+        <p><a href="/qualify" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name">Suyash Raj</span>
+                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/n8n-error-handling-best-practices.html" class="related-card">
+                <h3 class="related-card-title">N8N Error Handling Best Practices</h3>
+                <p class="related-card-excerpt">Make your N8N workflows resilient with retry logic, error branches, and alerting patterns that keep production automations running.</p>
+            </a>
+            <a href="/blog/n8n-scheduled-triggers-tutorial.html" class="related-card">
+                <h3 class="related-card-title">N8N Scheduled Triggers Tutorial</h3>
+                <p class="related-card-excerpt">Run N8N workflows on a cron schedule. Covers daily, weekly, and custom interval triggers with practical business examples.</p>
+            </a>
+            <a href="/blog/build-first-n8n-workflow.html" class="related-card">
+                <h3 class="related-card-title">Build Your First N8N Workflow</h3>
+                <p class="related-card-excerpt">The beginner's guide to N8N. Learn nodes, triggers, and connections by building a real workflow from scratch in 20 minutes.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>AI Automation Agency for SMBs</p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>

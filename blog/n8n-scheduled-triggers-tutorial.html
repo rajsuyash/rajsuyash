@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>N8N Scheduled Triggers Tutorial: Automate Workflows on a Cron Schedule (2026) | Suyash Raj</title>
+    <meta name="description" content="Learn how to use the N8N Schedule Trigger node to run workflows automatically on any schedule. Covers cron expressions, interval triggers, timezone handling, and 6 real business automation examples.">
+    <meta name="keywords" content="n8n scheduled triggers, n8n cron automation, n8n schedule workflow, n8n cron expression, n8n interval trigger, best AI automation agency for small businesses">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/n8n-scheduled-triggers-tutorial.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/n8n-scheduled-triggers-tutorial.html">
+    <meta property="og:title" content="N8N Scheduled Triggers Tutorial: Automate Workflows on a Cron Schedule (2026)">
+    <meta property="og:description" content="The N8N Schedule Trigger runs your workflows automatically at any time you choose. Learn cron expressions, interval triggers, timezone settings, and 6 real business use cases.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj - AI Automation Agency">
+    <meta property="article:published_time" content="2026-04-20">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="N8N Scheduled Triggers Tutorial: Automate Workflows on a Cron Schedule (2026)">
+    <meta name="twitter:description" content="Run N8N workflows automatically on any schedule. Step-by-step guide covering cron expressions, interval triggers, and real business automation examples.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260420a">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "N8N Scheduled Triggers Tutorial: Automate Workflows on a Cron Schedule (2026)",
+        "description": "Learn how to use the N8N Schedule Trigger node to run workflows automatically on any schedule. Covers cron expressions, interval triggers, timezone handling, and 6 real business automation examples.",
+        "author": {
+            "@type": "Person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Suyash Raj - AI Automation Agency",
+            "url": "https://rajsuyash.com"
+        },
+        "datePublished": "2026-04-20",
+        "dateModified": "2026-04-20",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/n8n-scheduled-triggers-tutorial.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What is the N8N Schedule Trigger node?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The N8N Schedule Trigger node starts a workflow automatically at a time you configure. You can set it to run every X minutes or hours (interval mode), at a specific time every day, on certain days of the week, or using a custom cron expression for precise scheduling. It replaces the need for external cron jobs or task schedulers when your N8N instance is running."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I write a cron expression in N8N?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "N8N uses standard 5-field cron syntax: minute hour day-of-month month day-of-week. For example, '0 9 * * 1-5' runs at 9:00 AM Monday through Friday. '0 */4 * * *' runs every 4 hours. '30 8 1 * *' runs at 8:30 AM on the first day of every month. You can validate expressions at crontab.guru before pasting them into N8N."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Will N8N scheduled workflows run if my computer is off?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Only if your N8N instance is running on a server or cloud host that stays online. Scheduled triggers require the N8N process to be active. If you run N8N on your laptop and close it, scheduled workflows will not fire. For reliable scheduling, host N8N on a VPS, a cloud platform like Railway or Render, or use N8N Cloud. Self-hosted N8N on a server that runs 24/7 is the most cost-effective option for businesses."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I test a scheduled N8N workflow without waiting for the next run?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Click 'Test workflow' in the N8N editor. This executes the entire workflow immediately using a simulated trigger event, so you can verify your logic without waiting for the scheduled time. The test run produces real output from all downstream nodes. Once testing is complete, activate the workflow using the toggle in the top-right corner to enable live scheduling."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What timezone does N8N use for scheduled triggers?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "By default, N8N uses the timezone of the server where it is running. You can override this in the Schedule Trigger node by setting the Timezone field to any IANA timezone string, such as 'Europe/Paris' or 'America/New_York'. Always verify your server timezone with the Date/Time node if scheduled triggers appear to be firing at unexpected times."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "N8N Scheduled Triggers Tutorial", "item": "https://rajsuyash.com/blog/n8n-scheduled-triggers-tutorial.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/qualify" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">N8N Automation</span>
+                <span class="article-date">April 20, 2026</span>
+                <span class="article-read-time">10 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">N8N Scheduled Triggers Tutorial: Automate Workflows on a Cron Schedule (2026)</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">The N8N Schedule Trigger runs your workflows automatically at any time you choose. This tutorial covers cron expressions, interval scheduling, timezone settings, and six real business automations you can build today.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <p>Most N8N workflows are reactive. A webhook fires, a form is submitted, a record changes, and N8N responds. But a significant category of business automation is time-based: pull a report every morning, send a reminder every Friday, sync data every hour, clean up old records every Sunday night.</p>
+
+        <p>That is where the N8N Schedule Trigger comes in. It is the simplest trigger node in N8N and one of the most powerful when you understand what it can do. This tutorial covers everything you need to know to build reliable scheduled automations, from basic daily runs to precise cron expressions for complex timing logic.</p>
+
+        <p>If you are new to N8N, start with <a href="/blog/build-first-n8n-workflow.html">How to Build Your First N8N Workflow</a> and come back here when you are ready to put your automations on autopilot.</p>
+
+        <h2>What the N8N Schedule Trigger Does</h2>
+
+        <p>The Schedule Trigger node sits at the start of any N8N workflow and fires based on time rather than an external event. When the workflow is active, N8N watches the clock and executes the workflow at exactly the intervals you define.</p>
+
+        <div class="definition-block">
+            <p><strong>Schedule Trigger:</strong> An N8N trigger node that starts a workflow automatically at configured time intervals. It replaces manual runs, external cron jobs, and task schedulers for any automation that needs to happen on a recurring basis.</p>
+        </div>
+
+        <p>You add it the same way you add any trigger: create a new workflow, click the trigger placeholder, and search for "Schedule Trigger." From there you have three scheduling modes to choose from.</p>
+
+        <h2>The Three Scheduling Modes</h2>
+
+        <h3>1. Interval Mode</h3>
+
+        <p>Interval mode is the simplest option. You pick a unit of time (minutes, hours, days, weeks, months) and a count. N8N runs the workflow every X units from the time you activate it.</p>
+
+        <p>Examples:</p>
+        <ul>
+            <li>Every 15 minutes: unit = minutes, value = 15</li>
+            <li>Every 2 hours: unit = hours, value = 2</li>
+            <li>Every 3 days: unit = days, value = 3</li>
+        </ul>
+
+        <p>Interval mode is good for data sync jobs, API polling, and any task where you want consistent spacing between runs but do not care exactly what time of day the run starts.</p>
+
+        <h3>2. Trigger at a Specific Time</h3>
+
+        <p>This mode lets you set a fixed time of day and the days of the week to run. You choose hour and minute from dropdowns, then check which days of the week should trigger the workflow.</p>
+
+        <p>Examples:</p>
+        <ul>
+            <li>Every weekday at 8:00 AM: time = 08:00, days = Mon-Fri</li>
+            <li>Every Monday at 9:30 AM: time = 09:30, days = Monday only</li>
+            <li>Every day at midnight: time = 00:00, all days selected</li>
+        </ul>
+
+        <p>This mode covers the majority of business scheduling needs. Daily reports, weekly digests, end-of-day summaries, that sort of thing.</p>
+
+        <h3>3. Custom Cron Expression</h3>
+
+        <p>For anything more complex, you use a cron expression. N8N accepts standard 5-field cron syntax:</p>
+
+        <div class="definition-block">
+            <p><code>minute  hour  day-of-month  month  day-of-week</code></p>
+        </div>
+
+        <p>Each field accepts a number, a wildcard (*), a range (1-5), a list (1,3,5), or a step (*/4). Here are the most useful patterns:</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Cron Expression</th>
+                    <th>When It Runs</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>0 9 * * 1-5</code></td>
+                    <td>9:00 AM every weekday (Mon-Fri)</td>
+                </tr>
+                <tr>
+                    <td><code>0 */4 * * *</code></td>
+                    <td>Every 4 hours (midnight, 4 AM, 8 AM, noon...)</td>
+                </tr>
+                <tr>
+                    <td><code>30 8 1 * *</code></td>
+                    <td>8:30 AM on the 1st of every month</td>
+                </tr>
+                <tr>
+                    <td><code>0 18 * * 5</code></td>
+                    <td>6:00 PM every Friday</td>
+                </tr>
+                <tr>
+                    <td><code>*/15 * * * *</code></td>
+                    <td>Every 15 minutes</td>
+                </tr>
+                <tr>
+                    <td><code>0 0 * * 0</code></td>
+                    <td>Midnight every Sunday</td>
+                </tr>
+                <tr>
+                    <td><code>0 9,13,17 * * 1-5</code></td>
+                    <td>9 AM, 1 PM, and 5 PM on weekdays</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>Use <a href="https://crontab.guru" target="_blank" rel="noopener">crontab.guru</a> to verify any expression before pasting it into N8N. It shows you exactly when the next several runs will fire, which saves time debugging.</p>
+
+        <h2>Timezone Configuration</h2>
+
+        <p>By default, N8N uses the timezone of the server where it runs. If your server is in UTC but your business operates in Paris, your "9:00 AM" workflow actually fires at 11:00 AM local time (or 10:00 AM depending on daylight saving).</p>
+
+        <p>Fix this by setting the Timezone field in the Schedule Trigger node. Enter any IANA timezone string:</p>
+        <ul>
+            <li><code>Europe/Paris</code></li>
+            <li><code>America/New_York</code></li>
+            <li><code>Asia/Singapore</code></li>
+            <li><code>Australia/Sydney</code></li>
+        </ul>
+
+        <p>N8N will convert your schedule to UTC internally but display and trigger relative to the timezone you set. If you ever suspect timezone drift, add a DateTime node immediately after the trigger and log its output to confirm the actual execution time.</p>
+
+        <h2>How to Test Scheduled Workflows</h2>
+
+        <p>You do not need to wait for the next scheduled run to test your workflow. Click <strong>Test workflow</strong> in the editor and N8N executes the entire workflow immediately, using a simulated trigger event with a timestamp representing the current moment.</p>
+
+        <p>All downstream nodes run with real data. You will see actual API responses, database writes, and Slack messages (or whatever your workflow does). This is how you verify logic before going live.</p>
+
+        <p>Once testing passes, activate the workflow with the toggle in the top-right. Deactivated workflows ignore their schedule entirely, so always confirm the toggle is on.</p>
+
+        <h2>Hosting Requirements for Reliable Scheduling</h2>
+
+        <p>Scheduled triggers only fire when the N8N process is running. This is the most common source of confusion for new users.</p>
+
+        <p>If you run N8N on your laptop, close the laptop, and open it again the next day, any scheduled runs that would have fired overnight simply did not happen. N8N does not backfill missed executions.</p>
+
+        <p>For business-critical scheduled automations, host N8N on infrastructure that stays online:</p>
+
+        <ul>
+            <li><strong>N8N Cloud:</strong> The managed option. No server maintenance, always on, and scheduling works out of the box.</li>
+            <li><strong>VPS (DigitalOcean, Hetzner, Linode):</strong> Self-host N8N with Docker on a server that never sleeps. A 2GB Hetzner CX22 instance running Docker is enough for most small business workloads and costs roughly €4/month.</li>
+            <li><strong>Railway or Render:</strong> Managed container hosting with persistent processes. Good middle ground if you want managed infrastructure without N8N Cloud pricing.</li>
+        </ul>
+
+        <p>For a complete walkthrough of hosting options, see our guide on <a href="/n8n-automation.html">N8N automation services</a> or the upcoming self-hosting tutorial.</p>
+
+        <h2>Six Real Business Automations to Build with Schedule Trigger</h2>
+
+        <p>Here is where the theory becomes practical. These are the scheduled N8N workflows we build most often for clients.</p>
+
+        <h3>1. Daily Sales Report to Slack</h3>
+
+        <p><strong>Schedule:</strong> Every weekday at 8:00 AM (<code>0 8 * * 1-5</code>)</p>
+
+        <p><strong>Workflow:</strong> Schedule Trigger → HTTP Request (pull yesterday's orders from Shopify or WooCommerce API) → Code node (calculate revenue, order count, average order value) → Slack node (post formatted summary to #sales channel)</p>
+
+        <p>The operations team sees yesterday's numbers before the morning standup. No one needs to log into the e-commerce dashboard. Takes about 20 minutes to build. We pair this with a <a href="/blog/n8n-http-request-node-tutorial.html">custom HTTP Request node</a> to pull data from APIs that do not have native N8N integrations.</p>
+
+        <h3>2. Weekly Lead Follow-Up Reminder</h3>
+
+        <p><strong>Schedule:</strong> Every Monday at 9:00 AM (<code>0 9 * * 1</code>)</p>
+
+        <p><strong>Workflow:</strong> Schedule Trigger → HubSpot node (get contacts with status "contacted" and last activity older than 7 days) → IF node (filter contacts with no response) → Gmail node (send personalized follow-up email) → HubSpot node (update contact last activity date)</p>
+
+        <p>Every prospect who has gone quiet for a week gets a polite nudge automatically. The sales rep only sees replies, not the task of remembering who to follow up with.</p>
+
+        <h3>3. Inventory Alert for Low Stock</h3>
+
+        <p><strong>Schedule:</strong> Every day at 7:00 AM (<code>0 7 * * *</code>)</p>
+
+        <p><strong>Workflow:</strong> Schedule Trigger → Shopify node (get all product variants) → IF node (filter variants where inventory quantity is below threshold) → Slack node (post list of low-stock SKUs with current quantities) → Google Sheets node (append to inventory log)</p>
+
+        <p>The purchasing team wakes up to a Slack message with exactly what needs to be reordered. No spreadsheet refreshing, no manual stock checks. We built this pattern for a BBQ equipment brand and it cut their stockout incidents by roughly 60% in the first quarter.</p>
+
+        <h3>4. Automated Invoice Chasing</h3>
+
+        <p><strong>Schedule:</strong> Every weekday at 10:00 AM (<code>0 10 * * 1-5</code>)</p>
+
+        <p><strong>Workflow:</strong> Schedule Trigger → Xero or QuickBooks node (get invoices with status "overdue") → IF node (filter invoices past due by more than 7 days) → Gmail node (send overdue notice to client) → Xero node (add note to invoice record)</p>
+
+        <p>Chasing invoices is one of the least enjoyable tasks in running a small business. This workflow handles it without anyone on the team having to remember who owes what. For context on the ROI of automating financial admin tasks, see our <a href="/case-studies/le-marquier.html">Le Marquier case study</a>, where we cut administrative overhead by 80% across their operations.</p>
+
+        <h3>5. Hourly Data Sync Between Systems</h3>
+
+        <p><strong>Schedule:</strong> Every hour (<code>0 * * * *</code>)</p>
+
+        <p><strong>Workflow:</strong> Schedule Trigger → Source API HTTP Request (fetch new/updated records since last run) → IF node (filter only records with changes) → Destination node (Airtable, Google Sheets, or CRM) → write updated records</p>
+
+        <p>When you have two systems that do not natively sync, hourly polling keeps them within one hour of each other. This is how we connect tools that do not have native integrations. For deeper coverage of connecting external APIs, read our <a href="/blog/n8n-airtable-integration.html">N8N Airtable Integration tutorial</a>.</p>
+
+        <h3>6. Sunday Night Database Cleanup</h3>
+
+        <p><strong>Schedule:</strong> Every Sunday at 11:00 PM (<code>0 23 * * 0</code>)</p>
+
+        <p><strong>Workflow:</strong> Schedule Trigger → Database node (query records older than 90 days with status "archived") → IF node (confirm records qualify for deletion) → Database node (delete matched records) → Slack node (post confirmation with record count removed)</p>
+
+        <p>Data hygiene rarely gets done manually because it is never urgent. A weekly cleanup workflow keeps your databases lean without anyone having to schedule the task.</p>
+
+        <h2>Common Mistakes with Scheduled Triggers</h2>
+
+        <p>These are the errors that cause scheduled workflows to behave unpredictably:</p>
+
+        <ul>
+            <li><strong>Leaving the workflow deactivated.</strong> The schedule only fires when the workflow is active. Check the toggle is green before assuming it will run.</li>
+            <li><strong>Not setting the timezone.</strong> If your server runs UTC and your business is in a different zone, every scheduled time will be offset. Always set the Timezone field explicitly.</li>
+            <li><strong>Running N8N on a machine that sleeps.</strong> Laptops, desktop computers, and development environments that shut down will miss scheduled runs. Use a server or cloud host for production workflows.</li>
+            <li><strong>No error notification.</strong> Scheduled workflows run unattended. If they fail, nobody knows. Always add an Error Trigger workflow (a separate workflow using the Error Trigger node) that sends a Slack or email alert when any workflow encounters an error. This is covered in detail in our <a href="/blog/n8n-error-handling-best-practices.html">N8N error handling guide</a>.</li>
+            <li><strong>Not logging run history.</strong> N8N stores execution history, but it rolls off. For critical scheduled jobs, write a summary to Google Sheets or Airtable at the end of each run so you have a durable record.</li>
+        </ul>
+
+        <h2>Combining Schedule Trigger with Other Nodes</h2>
+
+        <p>The Schedule Trigger is rarely the interesting part of the workflow. Its value is in what it kicks off. A few patterns worth knowing:</p>
+
+        <p><strong>Schedule + Wait node:</strong> You can add a Wait node inside a scheduled workflow to pause execution for a fixed duration or until a specific time. This is useful for sending a notification, pausing for an hour, then sending a follow-up.</p>
+
+        <p><strong>Schedule + SplitInBatches:</strong> When a scheduled job pulls hundreds or thousands of records, use the SplitInBatches node to process them in chunks. This prevents memory issues and rate limit errors on downstream APIs.</p>
+
+        <p><strong>Multiple schedules for one workflow:</strong> You cannot add two Schedule Triggers to a single workflow. If you need a workflow to run on multiple unrelated schedules (every weekday at 8 AM and also every Saturday at noon), create two separate workflows that share logic via a sub-workflow call.</p>
+
+        <p>If you are not sure where scheduled automation fits in your overall business picture, our <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> helps you map out which tasks are strong candidates for automation and what the time savings would realistically look like.</p>
+
+        <h2>What Scheduled Automation Actually Changes for Small Businesses</h2>
+
+        <p>The practical effect of scheduled N8N workflows is that recurring tasks stop requiring human attention. Reports get sent. Follow-ups go out. Databases stay clean. Alerts fire. All of it happens whether your team is in the office or not.</p>
+
+        <p>This compounds over time. A workflow that saves 30 minutes of manual work per day saves roughly 130 hours per year. For a team of three running five such workflows, that is 650 hours per year recovered from repetitive tasks and redirected to work that requires judgment.</p>
+
+        <p>To understand the financial return on that time, use our <a href="/roi-calculator.html">ROI calculator</a>, which translates hours saved into dollar figures based on your team's cost.</p>
+
+        <p>If you want to see what this looks like in production, the <a href="/case-studies/le-marquier.html">Le Marquier case study</a> documents how a specialty consumer brand achieved 98% AI handling rate on their customer interactions, with N8N automation handling the back-office coordination that made the whole system work.</p>
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>What is the N8N Schedule Trigger node?</h3>
+                <p>The N8N Schedule Trigger node starts a workflow automatically at a time you configure. You can set it to run every X minutes or hours (interval mode), at a specific time every day, on certain days of the week, or using a custom cron expression for precise scheduling. It replaces the need for external cron jobs or task schedulers when your N8N instance is running.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I write a cron expression in N8N?</h3>
+                <p>N8N uses standard 5-field cron syntax: minute hour day-of-month month day-of-week. For example, <code>0 9 * * 1-5</code> runs at 9:00 AM Monday through Friday. <code>0 */4 * * *</code> runs every 4 hours. <code>30 8 1 * *</code> runs at 8:30 AM on the first day of every month. Validate expressions at crontab.guru before pasting them into N8N.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Will N8N scheduled workflows run if my computer is off?</h3>
+                <p>Only if your N8N instance is running on a server or cloud host that stays online. Scheduled triggers require the N8N process to be active. If you run N8N on your laptop and close it, scheduled workflows will not fire. For reliable scheduling, host N8N on a VPS, a cloud platform like Railway or Render, or use N8N Cloud.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I test a scheduled N8N workflow without waiting for the next run?</h3>
+                <p>Click Test workflow in the N8N editor. This executes the entire workflow immediately using a simulated trigger event, so you can verify your logic without waiting for the scheduled time. The test run produces real output from all downstream nodes. Once testing is complete, activate the workflow using the toggle in the top-right corner to enable live scheduling.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What timezone does N8N use for scheduled triggers?</h3>
+                <p>By default, N8N uses the timezone of the server where it is running. You can override this in the Schedule Trigger node by setting the Timezone field to any IANA timezone string, such as Europe/Paris or America/New_York. Always verify your server timezone with the Date/Time node if scheduled triggers appear to be firing at unexpected times.</p>
+            </div>
+        </div>
+
+        <!-- CTA in article -->
+        <h2>Ready to Get Started?</h2>
+        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
+        <p><a href="/qualify" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name">Suyash Raj</span>
+                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/n8n-error-handling-best-practices.html" class="related-card">
+                <h3 class="related-card-title">N8N Error Handling Best Practices: Build Bulletproof Workflows (2026)</h3>
+                <p class="related-card-excerpt">Stop losing data when N8N workflows break. Learn error triggers, retry logic, Continue on Error, and how to get alerted the moment something fails.</p>
+            </a>
+            <a href="/blog/n8n-webhook-tutorial.html" class="related-card">
+                <h3 class="related-card-title">N8N Webhook Tutorial: Trigger Workflows from Any App (2026)</h3>
+                <p class="related-card-excerpt">Learn how to use N8N webhooks to trigger workflows instantly from any external app or service. Covers authentication, payload handling, and real examples.</p>
+            </a>
+            <a href="/blog/n8n-http-request-node-tutorial.html" class="related-card">
+                <h3 class="related-card-title">N8N HTTP Request Node Tutorial: Connect Any API Without Code (2026)</h3>
+                <p class="related-card-excerpt">The HTTP Request node is N8N's universal connector. GET, POST, authentication, pagination, and 5 real business workflows you can build today.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>AI Automation Agency for SMBs</p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>

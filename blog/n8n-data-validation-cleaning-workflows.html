@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>N8N Data Validation and Cleaning Workflows: Stop Bad Data Before It Breaks Your Automation | Suyash Raj</title>
+    <meta name="description" content="Learn how to build N8N workflows that validate and clean data automatically. Catch malformed emails, missing fields, and duplicate records before they reach your CRM, spreadsheet, or downstream tools.">
+    <meta name="keywords" content="n8n data validation, n8n data cleaning, n8n workflow data quality, n8n validate data, n8n data transformation, workflow automation data, n8n code node, best AI automation agency for small businesses">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/n8n-data-validation-cleaning-workflows.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/n8n-data-validation-cleaning-workflows.html">
+    <meta property="og:title" content="N8N Data Validation and Cleaning Workflows: Stop Bad Data Before It Breaks Your Automation">
+    <meta property="og:description" content="Build N8N workflows that catch malformed emails, missing fields, and duplicate records before they reach your CRM or spreadsheets. Step-by-step with real node configs.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj - AI Automation Agency">
+    <meta property="article:published_time" content="2026-06-09T00:00:00Z">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="N8N Data Validation and Cleaning Workflows: Stop Bad Data Before It Breaks Your Automation">
+    <meta name="twitter:description" content="Catch malformed emails, missing required fields, and duplicates before they reach your CRM. Build N8N data validation workflows that keep your pipeline clean.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260216b">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "N8N Data Validation and Cleaning Workflows: Stop Bad Data Before It Breaks Your Automation",
+        "description": "Learn how to build N8N workflows that validate and clean data automatically. Catch malformed emails, missing fields, and duplicate records before they reach your CRM, spreadsheet, or downstream tools.",
+        "author": {
+            "@type": "Person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Suyash Raj - AI Automation Agency",
+            "url": "https://rajsuyash.com"
+        },
+        "datePublished": "2026-06-09T00:00:00Z",
+        "dateModified": "2026-06-09T00:00:00Z",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/n8n-data-validation-cleaning-workflows.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Can N8N validate data before passing it to other apps?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. N8N's IF node, Switch node, and Code node let you check every field in an incoming record before it moves to the next step. You can validate email format with a regex, check that required fields are non-empty, normalize phone numbers, and route invalid records to a quarantine sheet or rejection notification—all within the same workflow."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is the best N8N node for data cleaning?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The Code node (JavaScript) gives you the most flexibility for complex cleaning logic: trimming whitespace, normalizing casing, reformatting dates, and stripping special characters. For simpler transformations—like renaming fields or setting default values—the Set node is faster to configure and easier to maintain. Most data cleaning workflows use a combination of both."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I handle duplicate records in N8N?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The most reliable approach is to query your destination system (CRM, Google Sheets, database) before writing a new record. In N8N, add a search/lookup node after receiving incoming data. If a matching record is found, route to an update branch; if not, route to a create branch. For high-volume deduplication, maintain a separate tracking sheet with previously seen record IDs and use the IF node to compare before writing."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I quarantine invalid records in N8N without stopping the workflow?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Use the IF node to split records into valid and invalid paths. The valid path continues to your destination system. The invalid path writes to a separate 'Errors' or 'Quarantine' Google Sheet and optionally sends a Slack notification with the record details. The workflow continues processing valid records even when invalid ones are detected, so a few bad rows do not stop the entire batch."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "N8N Data Validation and Cleaning Workflows", "item": "https://rajsuyash.com/blog/n8n-data-validation-cleaning-workflows.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+        .article-hero-content { max-width: 800px; margin: 0 auto; }
+        .article-meta {
+            display: flex; align-items: center; justify-content: center;
+            gap: var(--space-sm); margin-bottom: var(--space-md); flex-wrap: wrap;
+        }
+        .article-category {
+            font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.1em;
+            text-transform: uppercase; color: var(--color-paper);
+            background-color: var(--color-accent); padding: 0.25rem 0.625rem;
+        }
+        .article-date, .article-read-time { font-size: 0.8125rem; color: var(--color-muted); }
+        .article-title {
+            font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400; line-height: 1.1; margin-bottom: var(--space-sm); color: var(--color-ink);
+        }
+        .article-subtitle {
+            font-size: 1.125rem; color: var(--color-ink-soft); line-height: 1.6;
+            max-width: 600px; margin: 0 auto;
+        }
+        .article-body {
+            max-width: 720px; margin: 0 auto; padding: 0 var(--gutter) var(--space-xl);
+        }
+        .article-body h2 {
+            font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400; line-height: 1.2; margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm); color: var(--color-ink);
+        }
+        .article-body h3 {
+            font-family: var(--font-display); font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400; line-height: 1.3; margin-top: var(--space-md);
+            margin-bottom: var(--space-xs); color: var(--color-ink);
+        }
+        .article-body p {
+            font-size: 1.0625rem; line-height: 1.8; color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+        .article-body ul, .article-body ol { margin-bottom: var(--space-sm); padding-left: 1.5rem; }
+        .article-body li {
+            font-size: 1.0625rem; line-height: 1.8; color: var(--color-ink-soft); margin-bottom: 0.5rem;
+        }
+        .article-body a {
+            color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+        .article-body a:hover { color: var(--color-accent-soft); }
+        .article-body strong { color: var(--color-ink); font-weight: 600; }
+        .definition-block {
+            background: var(--color-paper-warm); padding: var(--space-md);
+            margin: var(--space-md) 0; border-left: 3px solid var(--color-accent);
+        }
+        .definition-block p { font-size: 1.0625rem; line-height: 1.8; color: var(--color-ink); margin-bottom: 0; }
+        .comparison-table {
+            width: 100%; border-collapse: collapse; margin: var(--space-md) 0; font-size: 0.9375rem;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 0.75rem 1rem; text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+        .comparison-table th {
+            font-weight: 600; color: var(--color-ink); background: var(--color-paper-warm);
+            font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .comparison-table td { color: var(--color-ink-soft); line-height: 1.5; }
+        .comparison-table tbody tr:hover { background: var(--color-paper-warm); }
+        .article-faq { margin-top: var(--space-lg); }
+        .faq-item { border-bottom: 1px solid rgba(13, 13, 13, 0.1); padding: var(--space-sm) 0; }
+        .faq-item h3 { margin-top: 0 !important; color: var(--color-ink); }
+        .faq-item p { color: var(--color-ink-soft); }
+        .article-author {
+            display: flex; align-items: center; gap: var(--space-sm);
+            padding: var(--space-md) 0; margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+        .author-avatar { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; }
+        .author-info { display: flex; flex-direction: column; }
+        .author-name { font-weight: 600; font-size: 1rem; color: var(--color-ink); }
+        .author-bio { font-size: 0.875rem; color: var(--color-muted); }
+        .related-posts { max-width: 720px; margin: 0 auto; padding: 0 var(--gutter) var(--space-lg); }
+        .related-posts h2 {
+            font-family: var(--font-display); font-size: 1.5rem; font-weight: 400; margin-bottom: var(--space-md);
+        }
+        .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-sm); }
+        .related-card {
+            background: var(--color-paper-warm); padding: var(--space-sm) var(--space-md);
+            display: block; transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+        .related-card:hover { transform: translateY(-2px); }
+        .related-card-title {
+            font-family: var(--font-display); font-size: 1.1rem; font-weight: 400;
+            line-height: 1.3; color: var(--color-ink); margin-bottom: 0.25rem;
+        }
+        .related-card-excerpt { font-size: 0.875rem; color: var(--color-muted); line-height: 1.5; }
+        @media (max-width: 600px) {
+            .comparison-table { font-size: 0.8125rem; }
+            .comparison-table th, .comparison-table td { padding: 0.5rem 0.625rem; }
+            .related-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/qualify" class="btn-outline">Let's Talk</a>
+            </div>
+            <button class="nav-toggle" aria-label="Menu"><span></span></button>
+        </nav>
+    </header>
+
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">N8N Automation</span>
+                <span class="article-date">June 9, 2026</span>
+                <span class="article-read-time">9 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">N8N Data Validation and Cleaning Workflows: Stop Bad Data Before It Breaks Your Automation</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">Garbage in, garbage out. Here is how to build N8N workflows that catch malformed emails, missing fields, and duplicate records before they corrupt your CRM, spreadsheets, or downstream tools.</p>
+        </div>
+    </section>
+
+    <article class="article-body">
+
+        <p>Every automation pipeline is only as reliable as the data flowing through it. A lead form submission with a blank phone number. A webhook payload where the email field contains "N/A". A Shopify order import with a product SKU that does not match anything in your inventory. These records will not break your N8N workflow outright—they will silently reach your CRM, your spreadsheet, or your billing system and corrupt the data you are actually trying to protect.</p>
+
+        <p>Data validation and cleaning is the unglamorous layer that separates workflows that work in demos from workflows you can trust in production. The good news: N8N has everything you need to build this layer without writing a separate data pipeline or paying for a dedicated ETL tool. You add validation and cleaning nodes between your trigger and your destination, and bad records never reach the systems that matter.</p>
+
+        <p>This guide covers the most common validation patterns, the right nodes to use for each, and how to handle invalid records gracefully—without stopping the entire workflow when one bad row shows up.</p>
+
+        <h2>Why Data Quality Breaks Automation More Than Anything Else</h2>
+
+        <p>When an automation fails loudly—a node throws an error, a workflow stops mid-execution—you know exactly where to look. The harder problem is when an automation succeeds but produces wrong output. A contact gets added to the CRM with no email. An invoice is generated for $0.00 because a numeric field came in as an empty string. A lead scoring workflow marks every contact as high-priority because a required segment field defaulted to null, which your IF node treated as a match.</p>
+
+        <p>These silent failures are expensive. They require manual audits to catch. They erode trust in the automation, so people stop relying on it and go back to doing things manually. And they are almost always preventable with a validation layer at the point of entry.</p>
+
+        <p>The pattern is straightforward: <strong>validate and clean data as soon as it enters N8N, before any other logic runs</strong>. Front-load the quality checks. Everything downstream gets clean, predictable data to work with.</p>
+
+        <h2>The Four Core Validation Checks</h2>
+
+        <p>Most data quality issues fall into four categories. Your validation layer should handle all four.</p>
+
+        <h3>1. Required Field Presence</h3>
+        <p>The most basic check: is a required field present and non-empty? Use an IF node to check that fields like <code>email</code>, <code>name</code>, or <code>order_id</code> are not null, undefined, or an empty string. In N8N expressions, that looks like:</p>
+
+        <div class="definition-block">
+            <p><code>{{ $json.email !== undefined && $json.email !== null && $json.email.trim() !== '' }}</code></p>
+        </div>
+
+        <p>Run all required-field checks in a single IF node with AND logic before the record goes anywhere. If any required field is missing, route to the error branch rather than the success branch.</p>
+
+        <h3>2. Format Validation</h3>
+        <p>A field can be present but still wrong. Common format issues include email addresses missing the @ symbol, phone numbers with letters, dates in the wrong format, and numeric fields containing currency symbols like "$" that prevent arithmetic operations.</p>
+
+        <p>Use a Code node (JavaScript) for regex-based format checks. For email validation:</p>
+
+        <div class="definition-block">
+            <p><code>const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;<br>const isValid = emailRegex.test($input.item.json.email);</code></p>
+        </div>
+
+        <p>For phone numbers, a simple check for 7-15 digits (after stripping non-numeric characters) catches most junk values without being so strict that valid international formats fail.</p>
+
+        <h3>3. Data Normalization</h3>
+        <p>Even valid data often needs cleaning before it is consistent enough to use downstream. This includes trimming whitespace from text fields (a trailing space in an email prevents a CRM dedup check from matching correctly), standardizing casing (all-caps names from one source mixing with title case from another), reformatting dates to ISO 8601, and converting currency strings to numbers.</p>
+
+        <p>A Code node is the right tool here. Run all normalization in one block so the output is a single clean object, not a chain of partial transformations:</p>
+
+        <div class="definition-block">
+            <p><code>return [{<br>&nbsp;&nbsp;json: {<br>&nbsp;&nbsp;&nbsp;&nbsp;email: $input.item.json.email.trim().toLowerCase(),<br>&nbsp;&nbsp;&nbsp;&nbsp;name: $input.item.json.name.trim(),<br>&nbsp;&nbsp;&nbsp;&nbsp;phone: $input.item.json.phone.replace(/\D/g, ''),<br>&nbsp;&nbsp;&nbsp;&nbsp;amount: parseFloat($input.item.json.amount.replace(/[^0-9.]/g, ''))<br>&nbsp;&nbsp;}<br>}];</code></p>
+        </div>
+
+        <h3>4. Duplicate Detection</h3>
+        <p>Duplicates are the validation check most workflows skip, and one of the most damaging to skip. A contact submitted twice gets two records in the CRM. An order processed twice triggers two invoices. The fix is a lookup step before the write step: query your destination system for the record's unique identifier, and branch on whether it already exists.</p>
+
+        <p>In N8N, place a search node (HubSpot contact search, Google Sheets VLOOKUP via Sheets node, or an HTTP Request to your database API) after validation and before the create operation. If a match is found, route to an "Update" branch. If no match, route to "Create". The <a href="/blog/n8n-lead-scoring-nurturing-workflows.html">N8N lead scoring workflow guide</a> shows a similar lookup pattern for scoring contacts based on existing CRM data.</p>
+
+        <h2>Workflow Architecture: Validate, Clean, Route</h2>
+
+        <p>Here is the standard architecture for a validation-first N8N workflow:</p>
+
+        <ol>
+            <li><strong>Trigger node</strong> (Webhook, Form, Schedule, or app node) receives the incoming record.</li>
+            <li><strong>Code node: Normalize</strong> — trim whitespace, fix casing, reformat dates, strip currency symbols.</li>
+            <li><strong>IF node: Required fields</strong> — check all required fields are present and non-empty. Invalid records branch to the error handler.</li>
+            <li><strong>Code node: Format validation</strong> — run regex checks on email, phone, and any structured fields. Invalid records branch to the error handler.</li>
+            <li><strong>Lookup node: Deduplication</strong> — query destination for the record's unique key. Branch to Update or Create accordingly.</li>
+            <li><strong>Destination node</strong> — write the clean, validated record to your CRM, spreadsheet, or database.</li>
+            <li><strong>Error handler branch</strong> — write invalid records to a quarantine sheet and send a notification.</li>
+        </ol>
+
+        <p>The key architectural decision is keeping the error handler as a parallel branch, not a stop condition. When a batch of 50 leads comes in and 3 have invalid emails, the other 47 should still be processed. Only the 3 invalid records get quarantined. The <a href="/blog/n8n-webhook-tutorial.html">N8N webhook tutorial</a> covers how to structure branches from a single trigger for exactly this kind of parallel routing.</p>
+
+        <h2>Building the Error Handler</h2>
+
+        <p>The error handler is where validation gets operationally useful. An invalid record that silently disappears is just as bad as one that corrupts your CRM. Your error handler should do two things: preserve the record so someone can fix it, and notify the right person that it needs attention.</p>
+
+        <h3>Quarantine Sheet</h3>
+        <p>Write every invalid record to a dedicated Google Sheet (or Airtable, Notion, or wherever your team reviews data). Include:</p>
+        <ul>
+            <li>The original record data</li>
+            <li>Which validation check failed</li>
+            <li>A timestamp</li>
+            <li>A "Status" column defaulting to "Needs Review"</li>
+        </ul>
+
+        <p>This sheet becomes your data quality dashboard. If the same field keeps failing validation, you know the upstream source (a form, an integration, an API) is producing bad data and needs fixing at the root.</p>
+
+        <h3>Notification</h3>
+        <p>For workflows processing small volumes, a Slack notification or email is sufficient. For high-volume workflows, batch the errors and send a daily summary instead of a message per invalid record. N8N's <a href="/blog/n8n-google-sheets-integration.html">Google Sheets integration</a> makes it straightforward to build a daily summary that counts errors by type and source.</p>
+
+        <h2>N8N Nodes for Data Validation: Quick Reference</h2>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Validation Task</th>
+                    <th>Best Node(s)</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Required field check</td>
+                    <td>IF node</td>
+                    <td>Check for null, undefined, and empty string in one condition</td>
+                </tr>
+                <tr>
+                    <td>Email format validation</td>
+                    <td>Code node (regex)</td>
+                    <td>Use a standard email regex; avoid overly strict patterns that reject valid addresses</td>
+                </tr>
+                <tr>
+                    <td>Phone number normalization</td>
+                    <td>Code node</td>
+                    <td>Strip all non-digits, then check length (7-15 chars)</td>
+                </tr>
+                <tr>
+                    <td>Date format standardization</td>
+                    <td>Code node</td>
+                    <td>Parse with <code>new Date()</code> and output <code>.toISOString()</code></td>
+                </tr>
+                <tr>
+                    <td>String trimming and casing</td>
+                    <td>Code node or Set node</td>
+                    <td>Set node works for simple cases; Code node for multiple fields at once</td>
+                </tr>
+                <tr>
+                    <td>Numeric field cleaning</td>
+                    <td>Code node</td>
+                    <td>Strip currency symbols, commas; use <code>parseFloat()</code></td>
+                </tr>
+                <tr>
+                    <td>Duplicate detection</td>
+                    <td>App search node + IF node</td>
+                    <td>Query destination before writing; branch on match/no-match result</td>
+                </tr>
+                <tr>
+                    <td>Routing valid vs. invalid</td>
+                    <td>IF node or Switch node</td>
+                    <td>IF for binary pass/fail; Switch for multiple error types</td>
+                </tr>
+                <tr>
+                    <td>Error record logging</td>
+                    <td>Google Sheets node</td>
+                    <td>Append invalid records to a quarantine sheet with failure reason</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Practical Example: Lead Form Validation Workflow</h2>
+
+        <p>Suppose you have a lead form on your website. Submissions fire a webhook to N8N, which is supposed to create a contact in HubSpot and add the lead to a Google Sheets tracking log. Here is how to build the validation layer.</p>
+
+        <h3>Step 1: Receive the Webhook</h3>
+        <p>Your <a href="/blog/build-first-n8n-workflow.html">Webhook trigger node</a> receives the form payload. The raw data looks something like: <code>{ name: "  john doe  ", email: "johndoe@", phone: "555-abc-1234", company: "Acme" }</code>. That email is invalid. The phone has letters. The name has extra whitespace.</p>
+
+        <h3>Step 2: Normalize (Code Node)</h3>
+        <p>Before any validation checks, clean up the raw input:</p>
+        <ul>
+            <li>Trim whitespace from all string fields</li>
+            <li>Convert email to lowercase</li>
+            <li>Strip non-numeric characters from phone</li>
+            <li>Capitalize name properly</li>
+        </ul>
+
+        <h3>Step 3: Validate Required Fields (IF Node)</h3>
+        <p>Check that name, email, and company are all non-empty after normalization. A form submission with only a phone number is not a usable lead. If any required field is missing, branch to the quarantine path.</p>
+
+        <h3>Step 4: Validate Email Format (Code Node)</h3>
+        <p>Run the email regex check. "johndoe@" fails—there is no domain. Branch this record to the quarantine path.</p>
+
+        <h3>Step 5: Deduplication (HubSpot Search Node)</h3>
+        <p>Search HubSpot for an existing contact with this email address. If found, update the existing record (refresh the phone number, update the company name). If not found, create a new contact.</p>
+
+        <h3>Step 6: Quarantine Branch</h3>
+        <p>All records that failed steps 3 or 4 get appended to a "Lead Errors" Google Sheet with a column indicating which check failed ("missing_email", "invalid_email_format", "missing_name"). A Slack message goes to your operations channel: "3 leads from today need review — see Lead Errors sheet."</p>
+
+        <p>This workflow pattern is what we build for clients who are scaling their lead intake past what a human can reasonably review. The Le Marquier case study is a concrete example of what happens when you combine this kind of data integrity layer with AI-driven handling — their system achieved a <a href="/case-studies/le-marquier.html">98% AI handling rate</a> partly because the data flowing into the system was clean enough for the AI to act on confidently. Sloppy input data is what forces AI systems to escalate to humans for clarification.</p>
+
+        <h2>Advanced Patterns</h2>
+
+        <h3>Schema Enforcement for Webhook Payloads</h3>
+        <p>When you receive data from third-party webhooks — Shopify orders, Stripe events, Typeform submissions — the schema can change without warning when the vendor updates their API. Add a Code node at the start of any webhook-triggered workflow that checks the incoming payload against an expected schema. If required keys are missing or a field type changes (e.g. <code>order_total</code> comes in as a string instead of a number), surface the error immediately rather than letting it propagate through 15 nodes before failing on the destination write.</p>
+
+        <h3>Batch Validation for Scheduled Imports</h3>
+        <p>When an N8N workflow imports data on a schedule — reading from a Google Sheet, a CSV export, or an API response — use the Split in Batches node to validate records one at a time rather than all at once. This prevents a single bad record from causing an unhandled error that stops the entire batch. Each record is validated independently; valid ones are written, invalid ones are quarantined, and the workflow moves to the next record regardless.</p>
+
+        <h3>Validation Rules as a Configuration Sheet</h3>
+        <p>For workflows where validation rules change frequently — required fields added, new format restrictions — store the rules in a Google Sheet rather than hardcoding them in a Code node. The workflow reads the rules sheet at the start of each run and builds its validation logic dynamically. Changing a validation rule means updating a spreadsheet row, not editing workflow code. This is especially useful for teams where non-technical staff own the data quality requirements.</p>
+
+        <h3>AI-Assisted Cleaning for Unstructured Input</h3>
+        <p>Some data does not fit a rigid format check. A free-text "company name" field might come in as "Acme Corp", "ACME CORP", "Acme Corporation", or "acme corp." — all referring to the same company but none matching in a CRM search. Connect an OpenAI or Claude node to standardize ambiguous text fields against a canonical list. This pattern works well for company names, job titles, and address fields where format variation is high but the underlying data is consistent.</p>
+
+        <p>If you want to understand which workflows in your business would benefit most from a validation layer — and where data quality issues are costing you the most time — the <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> is a good starting point. It surfaces the processes where bad data is most likely causing downstream problems.</p>
+
+        <h2>What This Saves You in Practice</h2>
+
+        <p>A validation-first N8N workflow pays for its setup time quickly. The most common payoffs:</p>
+
+        <ul>
+            <li><strong>CRM hygiene:</strong> No more duplicate contacts, blank email fields, or contacts with phone numbers containing "555-FORM-ERROR". Your sales team works from clean data.</li>
+            <li><strong>Fewer manual audits:</strong> Instead of spending Friday morning reviewing the week's imports for anomalies, you review a short quarantine sheet that already categorizes the issues.</li>
+            <li><strong>Faster debugging:</strong> When something downstream breaks, you know the data was clean when it left N8N. The problem is in the destination system, not the input data.</li>
+            <li><strong>Higher automation confidence:</strong> When the team sees that the workflow handles bad data gracefully rather than failing silently, trust in the automation goes up and adoption of new workflows gets easier.</li>
+        </ul>
+
+        <p>The <a href="/roi-calculator.html">ROI calculator</a> lets you put numbers to the time you currently spend on manual data review and correction. For most businesses processing more than a few hundred records per week, even a modest improvement in data quality at the point of entry produces meaningful time savings across every team that touches that data.</p>
+
+        <p>If you are building N8N workflows and want a proven validation architecture for your specific data sources, the <a href="/n8n-automation.html">N8N automation services page</a> covers how we design and build production-ready pipelines for SMB clients.</p>
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>Can N8N validate data before passing it to other apps?</h3>
+                <p>Yes. N8N's IF node, Switch node, and Code node let you check every field in an incoming record before it moves to the next step. You can validate email format with a regex, check that required fields are non-empty, normalize phone numbers, and route invalid records to a quarantine sheet or rejection notification — all within the same workflow.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What is the best N8N node for data cleaning?</h3>
+                <p>The Code node (JavaScript) gives you the most flexibility for complex cleaning logic: trimming whitespace, normalizing casing, reformatting dates, and stripping special characters. For simpler transformations — like renaming fields or setting default values — the Set node is faster to configure and easier to maintain. Most data cleaning workflows use a combination of both.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I handle duplicate records in N8N?</h3>
+                <p>The most reliable approach is to query your destination system (CRM, Google Sheets, database) before writing a new record. In N8N, add a search or lookup node after receiving incoming data. If a matching record is found, route to an update branch; if not, route to a create branch. For high-volume deduplication, maintain a separate tracking sheet with previously seen record IDs and use the IF node to compare before writing.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I quarantine invalid records in N8N without stopping the workflow?</h3>
+                <p>Use the IF node to split records into valid and invalid paths. The valid path continues to your destination system. The invalid path writes to a separate "Errors" or "Quarantine" Google Sheet and optionally sends a Slack notification with the record details. The workflow continues processing valid records even when invalid ones are detected, so a few bad rows do not stop the entire batch.</p>
+            </div>
+        </div>
+
+        <!-- CTA in article -->
+        <h2>Ready to Get Started?</h2>
+        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
+        <p><a href="/qualify" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name">Suyash Raj</span>
+                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/n8n-lead-scoring-nurturing-workflows.html" class="related-card">
+                <h3 class="related-card-title">N8N Lead Scoring and Nurturing Workflows</h3>
+                <p class="related-card-excerpt">Build automated lead scoring in N8N that grades contacts based on behavior and demographics, then triggers the right nurture sequence for each score tier.</p>
+            </a>
+            <a href="/blog/n8n-webhook-tutorial.html" class="related-card">
+                <h3 class="related-card-title">N8N Webhook Tutorial: Receive and Process Real-Time Data</h3>
+                <p class="related-card-excerpt">Learn how to configure N8N webhooks to receive data from any app in real time, and build the response logic that makes them useful.</p>
+            </a>
+            <a href="/blog/build-first-n8n-workflow.html" class="related-card">
+                <h3 class="related-card-title">How to Build Your First N8N Workflow</h3>
+                <p class="related-card-excerpt">A complete beginner's guide to N8N. Set up your first workflow from scratch, understand nodes and connections, and run your first automation in under an hour.</p>
+            </a>
+        </div>
+    </section>
+
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>AI Automation Agency for SMBs</p>
+            </div>
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
