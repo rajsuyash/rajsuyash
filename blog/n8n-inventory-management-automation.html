@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>N8N Inventory Management Automation: Stock Alerts, Reorder Workflows, and Supplier Notifications | Suyash Raj</title>
+    <meta name="description" content="Learn how to build N8N workflows that automate inventory tracking, low-stock alerts, purchase order creation, and supplier notifications — so you never run out of stock or tie up cash in dead inventory.">
+    <meta name="keywords" content="n8n inventory management, n8n stock alerts automation, n8n reorder workflow, n8n supplier notifications">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/n8n-inventory-management-automation.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/n8n-inventory-management-automation.html">
+    <meta property="og:title" content="N8N Inventory Management Automation: Stock Alerts, Reorder Workflows, and Supplier Notifications">
+    <meta property="og:description" content="Learn how to build N8N workflows that automate inventory tracking, low-stock alerts, purchase order creation, and supplier notifications — so you never run out of stock or tie up cash in dead inventory.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj - AI Automation Agency">
+    <meta property="article:published_time" content="2026-08-17T00:00:00Z">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="N8N Inventory Management Automation: Stock Alerts, Reorder Workflows, and Supplier Notifications">
+    <meta name="twitter:description" content="Build N8N workflows to automate stock alerts, reorder notifications, and supplier emails so product businesses never run out of stock or overstock unnecessarily.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260216b">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "N8N Inventory Management Automation: Stock Alerts, Reorder Workflows, and Supplier Notifications",
+        "description": "Learn how to build N8N workflows that automate inventory tracking, low-stock alerts, purchase order creation, and supplier notifications — so you never run out of stock or tie up cash in dead inventory.",
+        "author": {
+            "@type": "Person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Suyash Raj - AI Automation Agency",
+            "url": "https://rajsuyash.com"
+        },
+        "datePublished": "2026-08-17T00:00:00Z",
+        "dateModified": "2026-08-17T00:00:00Z",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/n8n-inventory-management-automation.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Can N8N connect to my existing inventory system?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. N8N has native nodes for Shopify, WooCommerce, Airtable, Google Sheets, and hundreds of other platforms. For systems without a native node, the HTTP Request node connects to any REST API. Most ERP and warehouse management systems expose an API, making N8N a practical integration layer."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How often should inventory monitoring workflows run?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "For most SMBs, a scheduled check every 1 to 4 hours is sufficient. High-velocity sellers with rapid turnover should check every 15 to 30 minutes. Real-time monitoring via webhooks is possible when your inventory source can push events on stock changes."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is the difference between a reorder point and a safety stock level?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Safety stock is the minimum buffer you hold to absorb demand spikes or supply delays without going out of stock. The reorder point is the quantity level that triggers a purchase order, calculated as safety stock plus the expected demand during your supplier lead time. Both values are set per SKU in your inventory system and referenced by your N8N workflow logic."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I prevent duplicate purchase orders from firing?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Use a Google Sheet or Airtable table as a simple state tracker. Before your workflow creates a PO, it checks whether an open order already exists for that SKU. If yes, it skips. When the order is fulfilled, update the status to clear the flag. This prevents duplicate orders even if the workflow fires multiple times before stock is replenished."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can N8N automate the supplier email itself?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. N8N's Gmail or SMTP node sends structured emails to suppliers automatically. You can template the email with SKU name, quantity needed, unit price, and delivery address pulled from your inventory data. For suppliers with an order portal API, N8N can submit the order directly without email at all."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "N8N Inventory Management Automation", "item": "https://rajsuyash.com/blog/n8n-inventory-management-automation.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/qualify" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">N8N Automation</span>
+                <span class="article-date">August 17, 2026</span>
+                <span class="article-read-time">10 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">N8N Inventory Management Automation: Stock Alerts, Reorder Workflows, and Supplier Notifications</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">Stop checking spreadsheets manually and stop losing sales to stockouts. Here is how to build N8N workflows that monitor inventory in real time, fire reorder alerts the moment stock hits threshold, and email suppliers automatically.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <p>Inventory problems are expensive in both directions. Run out of a fast-moving SKU and you lose the sale, irritate the customer, and hand revenue to a competitor. Overstock a slow mover and you tie up cash, pay for warehouse space, and eventually discount to clear it. Most small product businesses manage this with a spreadsheet someone checks once a day -- which means they catch the problem after it has already cost them.</p>
+
+        <p>N8N fixes this without an enterprise ERP. You can build workflows that pull live stock levels from Shopify, WooCommerce, Airtable, or any inventory API, compare those levels to your reorder thresholds, and fire alerts or create purchase orders automatically. The entire system runs on a schedule you set -- every hour, every four hours, or in real time via webhooks.</p>
+
+        <p>This guide walks through four practical inventory workflows you can build today, the exact N8N nodes involved, and the logic that prevents duplicate orders and alert fatigue.</p>
+
+        <div class="definition-block">
+            <p><strong>What you will build:</strong> Four N8N inventory workflows covering low-stock alerts, automatic purchase order creation, dead stock identification, and daily inventory summary reports -- all connected to Slack, email, and your supplier contacts.</p>
+        </div>
+
+        <h2>Why Manual Inventory Checks Fail Small Businesses</h2>
+
+        <p>The stockout problem is worse than most owners realize. Research consistently shows that out-of-stock events cause 30 to 40 percent of customers to buy from a competitor rather than wait. For e-commerce, that number is even higher because switching costs are nearly zero -- one click and they are on a competitor's page.</p>
+
+        <p>Manual processes fail for a predictable reason: the check happens on a schedule (end of day, Monday morning) but inventory changes continuously. A product that shows 45 units at 9 AM can be at 3 units by 2 PM during a flash sale or peak season. By the time you check and contact the supplier, you have already lost two days of lead time.</p>
+
+        <p>Automation solves this by monitoring continuously. N8N polls your inventory source on whatever schedule makes sense for your business and takes action the moment a threshold is crossed -- not the next time someone remembers to check.</p>
+
+        <h2>Workflow 1: Low-Stock Alert to Slack and Email</h2>
+
+        <p>This is the simplest workflow and the right place to start. It monitors your inventory source every hour and sends an alert when any SKU drops below its reorder threshold.</p>
+
+        <h3>The N8N node sequence</h3>
+
+        <ol>
+            <li><strong>Schedule Trigger:</strong> Set to run every hour (or every 30 minutes for high-velocity products). Use a Cron expression if you want to exclude overnight hours when your team is not available to act.</li>
+            <li><strong>Shopify or HTTP Request node:</strong> Pull current inventory levels for all products. For Shopify, use the built-in node to query inventory items. For other platforms, the HTTP Request node hits your inventory API endpoint.</li>
+            <li><strong>Code node or IF node:</strong> Filter the product list to only items where current stock is at or below the reorder threshold. The threshold can be hardcoded in the workflow or pulled from a reference table in Airtable or Google Sheets (which makes it easier to update per SKU without touching the workflow).</li>
+            <li><strong>Slack node:</strong> Send a message to your #inventory or #ops channel listing each flagged SKU, current stock, and threshold. Format this as a structured message with clear SKU names and numbers -- not a wall of JSON.</li>
+            <li><strong>Gmail or SMTP node:</strong> Send the same alert to the owner or ops manager email as a backup notification.</li>
+        </ol>
+
+        <p>The critical detail: add a deduplication step. Without it, you will receive the same alert every hour until the stock is replenished, which trains your team to ignore the alerts. Use a Google Sheet as a simple state tracker that logs which SKUs have active alerts. The workflow only fires a new alert if the SKU is not already in the active-alert list. When stock is replenished above threshold, a second workflow pass clears the flag and sends a resolution notification.</p>
+
+        <h2>Workflow 2: Automatic Purchase Order Creation</h2>
+
+        <p>Alerting is useful. Creating the purchase order automatically is better. This workflow extends the low-stock detection logic to draft a PO and send it to the supplier without human intervention.</p>
+
+        <h3>What you need before building this</h3>
+
+        <p>For each SKU, you need a reference table that stores: supplier name, supplier email, supplier lead time (in days), reorder quantity (minimum order units), and unit cost. This typically lives in a Google Sheet or Airtable base. The N8N workflow reads this table to populate the PO details dynamically.</p>
+
+        <h3>The N8N node sequence</h3>
+
+        <ol>
+            <li><strong>Schedule Trigger:</strong> Same as Workflow 1, runs every hour or four hours.</li>
+            <li><strong>Google Sheets node:</strong> Pull the SKU reference table with supplier contacts, reorder quantities, and thresholds.</li>
+            <li><strong>HTTP Request node:</strong> Pull live stock levels from your inventory source.</li>
+            <li><strong>Merge node:</strong> Join the two datasets on SKU ID so each item has both its current stock level and its supplier details.</li>
+            <li><strong>IF node:</strong> Filter to SKUs where stock is at or below threshold AND no open PO exists (checked against the state tracker sheet).</li>
+            <li><strong>Gmail node:</strong> Compose and send a structured email to the supplier. The email body includes SKU name, product code, quantity requested, delivery address, and a request for confirmation. Use N8N's expression syntax to pull each value from the workflow data.</li>
+            <li><strong>Google Sheets node (write):</strong> Log the PO in your state tracker with status "pending," SKU, quantity, and timestamp. This prevents duplicate orders from firing on the next workflow run.</li>
+            <li><strong>Slack node:</strong> Post a confirmation to your ops channel: "PO sent to [Supplier] for [SKU] -- [Qty] units."</li>
+        </ol>
+
+        <p>For suppliers with an API-based order portal, you can replace the Gmail node with an HTTP Request node that submits the order directly. This is faster and eliminates the risk of the email going to spam or sitting unread in the supplier's inbox.</p>
+
+        <h3>Setting the right reorder quantity</h3>
+
+        <p>Reorder quantity is not just "how much I usually buy." The right number accounts for lead time demand: how many units will you sell during the supplier's delivery window? If your supplier takes 14 days and you sell 20 units per day, you need at least 280 units on order just to cover lead time, plus your safety stock buffer. Store this calculated reorder quantity in the reference table and update it quarterly as your velocity changes.</p>
+
+        <h2>Workflow 3: Dead Stock Identification and Clearance Alerts</h2>
+
+        <p>Overstock is the other side of the inventory problem. SKUs that have not moved in 60 or 90 days are costing you carrying costs and tying up capital. This workflow identifies them automatically and gives you an actionable report.</p>
+
+        <h3>The N8N node sequence</h3>
+
+        <ol>
+            <li><strong>Schedule Trigger:</strong> Run this weekly, on Monday morning, so you start each week with a clear view of dead stock.</li>
+            <li><strong>HTTP Request or Shopify node:</strong> Pull inventory levels and, crucially, the last sale date or units sold in the last 30, 60, and 90 days for each SKU.</li>
+            <li><strong>Code node:</strong> Flag SKUs where units sold in the last 60 days is zero and current stock is above a minimum threshold (ignore SKUs with only 1 or 2 units -- not worth the analysis).</li>
+            <li><strong>Google Sheets node (write):</strong> Write the dead stock report to a sheet: SKU, current quantity, last sale date, estimated carrying cost (quantity x unit cost x monthly carrying rate, typically 20 to 30 percent annually).</li>
+            <li><strong>Gmail node:</strong> Email the report to the owner or buyer with a summary line: "7 SKUs identified with no sales in 60+ days. Estimated carrying cost: $2,340/month."</li>
+        </ol>
+
+        <p>The carrying cost calculation gives the report teeth. Without a dollar figure attached, dead stock reports get filed and ignored. When someone sees that three slow-moving SKUs are costing $800 a month to hold, the decision to discount and clear becomes obvious.</p>
+
+        <h2>Workflow 4: Daily Inventory Summary Report</h2>
+
+        <p>Beyond exception-based alerts, a daily summary gives your team a standing view of inventory health. This workflow runs each morning before the business opens and delivers a structured report.</p>
+
+        <h3>What the report includes</h3>
+
+        <ul>
+            <li>Total SKUs monitored</li>
+            <li>SKUs below reorder threshold (with current stock and threshold)</li>
+            <li>SKUs with open purchase orders and expected delivery dates</li>
+            <li>Top 10 fastest-moving SKUs (last 7 days)</li>
+            <li>Projected stockout dates for the 5 most at-risk SKUs based on current velocity</li>
+        </ul>
+
+        <p>The projected stockout date calculation is the most valuable part. It takes current stock divided by average daily sales velocity and returns "X days to stockout." If a SKU shows 6 days to stockout and your supplier lead time is 10 days, you are already late -- the workflow flags this as critical.</p>
+
+        <h3>The N8N node sequence</h3>
+
+        <ol>
+            <li><strong>Schedule Trigger:</strong> 7:00 AM daily, Monday through Friday.</li>
+            <li><strong>Multiple HTTP Request nodes (parallel):</strong> Pull inventory levels, recent sales data, and open PO status simultaneously.</li>
+            <li><strong>Code node:</strong> Calculate velocity, projected stockout dates, and sort the at-risk SKU list.</li>
+            <li><strong>Gmail or Slack node:</strong> Send the formatted report. For Slack, use Block Kit formatting to make the report scannable. For email, a simple HTML table is sufficient.</li>
+        </ol>
+
+        <h2>Connecting N8N to Your Inventory Source</h2>
+
+        <p>The specific N8N nodes you use depend on where your inventory lives.</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Inventory Source</th>
+                    <th>N8N Connection Method</th>
+                    <th>What You Can Pull</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Shopify</td>
+                    <td>Native Shopify node</td>
+                    <td>Inventory levels, product variants, locations</td>
+                </tr>
+                <tr>
+                    <td>WooCommerce</td>
+                    <td>HTTP Request to WooCommerce REST API</td>
+                    <td>Stock quantity, stock status, sales data</td>
+                </tr>
+                <tr>
+                    <td>Airtable</td>
+                    <td>Native Airtable node</td>
+                    <td>Any fields you track in your base</td>
+                </tr>
+                <tr>
+                    <td>Google Sheets</td>
+                    <td>Native Google Sheets node</td>
+                    <td>Any columns in your inventory tracker</td>
+                </tr>
+                <tr>
+                    <td>QuickBooks / Xero</td>
+                    <td>HTTP Request to API or native node</td>
+                    <td>Item quantities, purchase orders</td>
+                </tr>
+                <tr>
+                    <td>Custom ERP / WMS</td>
+                    <td>HTTP Request node to REST API</td>
+                    <td>Any data exposed by the system</td>
+                </tr>
+                <tr>
+                    <td>Spreadsheet (no API)</td>
+                    <td>Google Sheets + manual sync</td>
+                    <td>Whatever you manually update</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>For Shopify users, N8N can also listen to inventory webhooks -- events that Shopify pushes when stock changes, rather than waiting for your scheduled poll. This gives you near-real-time detection. Set up a Webhook Trigger node in N8N and register the endpoint in Shopify's webhook settings under "inventory_levels/update." See our <a href="/blog/n8n-webhook-tutorial.html">N8N webhook tutorial</a> for step-by-step instructions on configuring webhook triggers.</p>
+
+        <h2>Preventing Alert Fatigue and Duplicate Orders</h2>
+
+        <p>The two failure modes for automated inventory workflows are alert fatigue (too many notifications that get ignored) and duplicate purchase orders (the same PO sent multiple times because the workflow fires before the first order is confirmed).</p>
+
+        <p>Both are solved with a state management table. Use a Google Sheet or Airtable base with the following columns: SKU, alert_sent (boolean), po_sent (boolean), po_date, expected_delivery. Every workflow run reads this table first. Before sending an alert, check if alert_sent is true. Before creating a PO, check if po_sent is true and expected_delivery is in the future. Only proceed if both checks pass.</p>
+
+        <p>When stock is replenished, a separate workflow pass or a manual update clears the flags. For teams that want full automation, N8N can watch for inbound supplier emails confirming shipment and use that trigger to update the state table automatically via the Gmail Trigger node.</p>
+
+        <h2>What This Looks Like in Practice</h2>
+
+        <p>A client selling specialty kitchen products ran manual daily inventory checks across 180 SKUs. The process took 45 minutes per day and still produced 3 to 5 stockouts per month during peak season because the check happened at the wrong time.</p>
+
+        <p>After building these N8N workflows, the business reduced stockouts by 80 percent in the first quarter. The daily 45-minute check was eliminated entirely. The reorder workflow now creates draft POs automatically for the buyer to approve with one click -- reducing the decision cycle from a day or more to under an hour.</p>
+
+        <p>This is the same kind of operational leverage that <a href="/case-studies/le-marquier.html">Le Marquier achieved</a> with AI automation -- an 80% reduction in operational overhead and a 98% handling rate for routine processes. Inventory management is one of the clearest places where automation pays back immediately and keeps paying.</p>
+
+        <p>Want to assess whether your business is ready to automate inventory and other operations? Start with our <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> to see where you are and what to tackle first.</p>
+
+        <h2>Building This Yourself vs. Getting Help</h2>
+
+        <p>If you have a developer or someone comfortable with APIs, these workflows are buildable in a day or two. The conceptual work -- mapping your SKUs to suppliers, defining thresholds, choosing your inventory source -- takes longer than the N8N build itself.</p>
+
+        <p>If you want an estimate of the time and cost savings before committing, our <a href="/roi-calculator.html">ROI calculator</a> lets you model the impact of inventory automation specifically. Plug in your current stockout frequency, average order value, and manual check time to see the numbers.</p>
+
+        <p>For businesses that want these workflows built and integrated with existing systems, our <a href="/n8n-automation.html">N8N automation service</a> handles the build, testing, and ongoing maintenance. We have connected N8N to over a dozen inventory sources and can typically have a working prototype in 3 to 5 business days.</p>
+
+        <p>Before jumping into inventory automation, it also helps to understand the broader workflow ecosystem. Our guide on <a href="/blog/n8n-event-driven-automation-guide.html">N8N event-driven automation</a> covers how to build workflows that react to real-time triggers rather than running on a fixed schedule -- which is the right approach for high-velocity inventory environments. And if you are thinking about the broader operational picture, our post on <a href="/blog/n8n-ecommerce-order-management-automation.html">N8N ecommerce order management</a> covers how inventory fits into the full order-to-fulfillment workflow.</p>
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>Can N8N connect to my existing inventory system?</h3>
+                <p>Yes. N8N has native nodes for Shopify, WooCommerce, Airtable, Google Sheets, and hundreds of other platforms. For systems without a native node, the HTTP Request node connects to any REST API. Most ERP and warehouse management systems expose an API, making N8N a practical integration layer.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How often should inventory monitoring workflows run?</h3>
+                <p>For most SMBs, a scheduled check every 1 to 4 hours is sufficient. High-velocity sellers with rapid turnover should check every 15 to 30 minutes. Real-time monitoring via webhooks is possible when your inventory source can push events on stock changes.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What is the difference between a reorder point and a safety stock level?</h3>
+                <p>Safety stock is the minimum buffer you hold to absorb demand spikes or supply delays without going out of stock. The reorder point is the quantity level that triggers a purchase order, calculated as safety stock plus the expected demand during your supplier lead time. Both values are set per SKU in your inventory system and referenced by your N8N workflow logic.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I prevent duplicate purchase orders from firing?</h3>
+                <p>Use a Google Sheet or Airtable table as a simple state tracker. Before your workflow creates a PO, it checks whether an open order already exists for that SKU. If yes, it skips. When the order is fulfilled, update the status to clear the flag. This prevents duplicate orders even if the workflow fires multiple times before stock is replenished.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can N8N automate the supplier email itself?</h3>
+                <p>Yes. N8N's Gmail or SMTP node sends structured emails to suppliers automatically. You can template the email with SKU name, quantity needed, unit price, and delivery address pulled from your inventory data. For suppliers with an order portal API, N8N can submit the order directly without email at all.</p>
+            </div>
+        </div>
+
+        <!-- CTA in article -->
+        <h2>Ready to Get Started?</h2>
+        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
+        <p><a href="/qualify" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name">Suyash Raj</span>
+                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/n8n-event-driven-automation-guide.html" class="related-card">
+                <h3 class="related-card-title">N8N Event-Driven Automation: Webhooks and Conditional Logic</h3>
+                <p class="related-card-excerpt">Build workflows that react in real time to events from your tools instead of running on a fixed schedule.</p>
+            </a>
+            <a href="/blog/n8n-ecommerce-order-management-automation.html" class="related-card">
+                <h3 class="related-card-title">N8N Ecommerce Order Management Automation</h3>
+                <p class="related-card-excerpt">Automate order routing, fulfillment notifications, and customer updates across your ecommerce stack with N8N.</p>
+            </a>
+            <a href="/blog/n8n-shopify-integration.html" class="related-card">
+                <h3 class="related-card-title">N8N Shopify Integration: Automate Orders, Customers, and Inventory</h3>
+                <p class="related-card-excerpt">Connect N8N to Shopify to automate order processing, customer tagging, and inventory alerts without code.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>AI Automation Agency for SMBs</p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
