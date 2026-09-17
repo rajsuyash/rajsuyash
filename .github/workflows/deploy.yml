@@ -17,6 +17,6 @@ jobs:
           username: u649993053
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           port: 65002
-          source: ".,.htaccess,!.git,!.github,!.gitignore,!*.bak"
+          source: ".,.htaccess,blog/.htaccess,!.git,!.github,!.gitignore,!*.bak"
           target: domains/rajsuyash.com/public_html/
           overwrite: true
