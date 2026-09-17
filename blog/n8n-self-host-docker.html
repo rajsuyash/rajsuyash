@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Primary SEO Meta Tags -->
-    <title>How to Self-Host N8N with Docker: Complete Setup Guide (2026) | Suyash Raj</title>
-    <meta name="description" content="Self-host N8N with Docker in under 30 minutes. This complete guide covers Docker Compose setup, environment variables, persistent storage, HTTPS with Nginx, and production best practices.">
+    <title>Self-Host n8n with Docker: Complete Setup Guide</title>
+    <meta name="description" content="Run n8n on your own server with Docker Compose. Install, env vars, HTTPS with Nginx, backups and updates, verified against n8n's current docs.">
     <meta name="keywords" content="self host n8n, n8n docker, n8n docker compose, n8n self hosted, n8n vps setup, best AI automation agency for small businesses">
     <meta name="author" content="Suyash Raj">
     <meta name="robots" content="index, follow">
@@ -15,17 +15,18 @@
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://rajsuyash.com/blog/n8n-self-host-docker.html">
-    <meta property="og:title" content="How to Self-Host N8N with Docker: Complete Setup Guide (2026)">
-    <meta property="og:description" content="Run N8N on your own server with Docker. Step-by-step guide covering Docker Compose, persistent storage, HTTPS, environment variables, and backup strategies.">
+    <meta property="og:title" content="Self-Host n8n with Docker: Complete Setup Guide">
+    <meta property="og:description" content="Run n8n on your own server with Docker Compose. Install, env vars, HTTPS with Nginx, backups and the update procedure.">
     <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
     <meta property="og:site_name" content="Suyash Raj - AI Automation Agency">
     <meta property="article:published_time" content="2026-04-23">
+    <meta property="article:modified_time" content="2026-09-17">
     <meta property="article:author" content="Suyash Raj">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="How to Self-Host N8N with Docker: Complete Setup Guide (2026)">
-    <meta name="twitter:description" content="Self-host N8N with Docker Compose in 30 minutes. Covers persistent storage, HTTPS, environment variables, and production backup strategies.">
+    <meta name="twitter:title" content="Self-Host n8n with Docker: Complete Setup Guide">
+    <meta name="twitter:description" content="Run n8n on your own server with Docker Compose. Install, env vars, HTTPS with Nginx, backups and the update procedure.">
     <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
     <meta name="twitter:creator" content="@suyash_raj">
 
@@ -41,8 +42,8 @@
     {
         "@context": "https://schema.org",
         "@type": "Article",
-        "headline": "How to Self-Host N8N with Docker: Complete Setup Guide (2026)",
-        "description": "Self-host N8N with Docker in under 30 minutes. This complete guide covers Docker Compose setup, environment variables, persistent storage, HTTPS with Nginx, and production best practices.",
+        "headline": "Self-Host n8n with Docker: Complete Setup Guide",
+        "description": "Run n8n on your own server with Docker Compose. Install, env vars, HTTPS with Nginx, backups and updates, verified against n8n's current docs.",
         "author": {
             "@type": "Person",
             "name": "Suyash Raj",
@@ -54,7 +55,7 @@
             "url": "https://rajsuyash.com"
         },
         "datePublished": "2026-04-23",
-        "dateModified": "2026-04-23",
+        "dateModified": "2026-09-17",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https://rajsuyash.com/blog/n8n-self-host-docker.html"
@@ -74,7 +75,7 @@
                 "name": "How much does it cost to self-host N8N?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Self-hosting N8N on a VPS costs between $5 and $20 per month depending on the provider. A 2 vCPU, 4 GB RAM server from DigitalOcean, Hetzner, or Linode handles most small-business workloads. Compare that to N8N Cloud plans which start at $20/month with execution limits."
+                    "text": "Self-hosting n8n on a VPS costs between $5 and $20 per month depending on the provider. A 2 vCPU, 4 GB RAM server from DigitalOcean, Hetzner or Linode meets n8n's documented minimum. Compare that to n8n Cloud, which starts at EUR 20 per month for 2,500 executions and EUR 50 for 10,000."
                 }
             },
             {
@@ -82,7 +83,7 @@
                 "name": "What is the minimum server spec for N8N?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "N8N runs on 1 vCPU and 1 GB RAM for light workloads, but 2 vCPU and 2 GB RAM is the practical minimum for production. If you run more than 10 concurrent workflows or use AI nodes with large payloads, upgrade to 4 GB RAM. Storage depends on workflow execution history retention, but 20 GB SSD is a safe starting point."
+                    "text": "n8n's own Docker Compose guide asks for at least 2 vCPUs and 4 GB of RAM. Smaller boxes will boot n8n, but n8n does not publish a supported figure below that, so treat 2 vCPU / 4 GB as the floor for anything you depend on. Storage tracks execution-history retention; 20 GB SSD is a safe start."
                 }
             },
             {
@@ -90,7 +91,7 @@
                 "name": "Is self-hosted N8N secure?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Self-hosted N8N is secure when configured correctly. Use HTTPS with a valid SSL certificate, set strong authentication (basic auth or N8N's built-in user management), restrict the server firewall to ports 80, 443, and 22, and never expose the N8N port (default 5678) directly to the internet. Keep Docker images updated monthly."
+                    "text": "Self-hosted n8n is secure when configured correctly. Use HTTPS with a valid certificate, create the owner account through n8n's built-in user management (basic auth was removed in n8n 1.0 and is no longer an option), restrict the firewall to ports 22, 80 and 443, and bind the n8n port to localhost so only the reverse proxy reaches it. Update the pinned image regularly."
                 }
             },
             {
@@ -106,7 +107,7 @@
                 "name": "How do I update N8N when self-hosting with Docker?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Run: docker compose pull && docker compose up -d. This pulls the latest N8N image and restarts the container with zero downtime in most cases. Always back up your n8n_data volume before upgrading major versions."
+                    "text": "Bump N8N_VERSION in your .env, then run docker compose pull && docker compose up -d. The container is recreated, with a few seconds of downtime. Back up the n8n_data volume before crossing a major version."
                 }
             }
         ]
@@ -471,64 +472,67 @@
             <div class="article-meta reveal" style="--delay: 0">
                 <span class="article-category">N8N Automation</span>
                 <span class="article-date">April 23, 2026</span>
+                <span class="article-date">Updated Sep 17, 2026</span>
                 <span class="article-read-time">12 min read</span>
             </div>
-            <h1 class="article-title reveal" style="--delay: 1">How to Self-Host N8N with Docker: Complete Setup Guide (2026)</h1>
-            <p class="article-subtitle reveal" style="--delay: 2">Run N8N on your own server, keep your data private, and pay a fraction of the cloud price. This step-by-step guide covers Docker Compose, persistent storage, HTTPS, and production hardening.</p>
+            <h1 class="article-title reveal" style="--delay: 1">How to Self-Host n8n with Docker: Complete Setup Guide</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">Run n8n on your own server, keep your data private, and pay a server bill instead of a per-execution one. Docker Compose, persistent storage, HTTPS and production hardening.</p>
         </div>
     </section>
 
     <!-- Article Body -->
     <article class="article-body">
 
-        <p>N8N Cloud is convenient. But for businesses that handle sensitive customer data, run high workflow volumes, or simply want full control over their automation stack, self-hosting is the right call. A $10 VPS running Docker can handle hundreds of workflows per day without hitting any execution caps.</p>
+        <p>Self-hosting n8n means running the open-source Community Edition in a Docker container on your own Linux server: no execution limits, no per-workflow fee, and you maintain it. A working setup is four pieces. A Docker Compose file defining the n8n container. A named volume so workflows and credentials survive restarts. An <code>N8N_ENCRYPTION_KEY</code> that must never change. Nginx in front terminating HTTPS. Budget 25 to 40 minutes on a fresh Ubuntu server. n8n also publishes a one-line installer if you would rather not write the files yourself.</p>
 
-        <p>This guide walks you through the complete setup: from a fresh Linux server to a production-ready N8N instance with HTTPS, persistent storage, and automatic restarts. No experience with Docker required, just a basic comfort with the command line.</p>
+        <div class="definition-block"><p><strong>Updated September 2026:</strong> re-verified against n8n's current self-hosting docs. The important correction: <code>N8N_BASIC_AUTH_ACTIVE</code> and its companions no longer exist, because n8n 1.0 replaced basic auth with built-in user management. The old Compose file in this guide would have started an instance with no login at all. The file also drops the obsolete <code>version:</code> key, pins an image tag instead of tracking <code>:latest</code>, and binds the port to localhost.</p></div>
+
+        <p>No Docker experience required, just basic comfort with a command line.</p>
 
         <div class="definition-block">
-            <p><strong>What we cover:</strong> Docker and Docker Compose installation, N8N container setup, environment variable configuration, data persistence with volumes, HTTPS via Nginx reverse proxy, backups, and update procedure. Estimated setup time: 25 to 40 minutes.</p>
+            <p><strong>What we cover:</strong> Docker install, the Compose file, environment variables, volumes, HTTPS via Nginx, backups, updates.</p>
         </div>
 
         <h2>Why Self-Host N8N?</h2>
 
-        <p>The case for self-hosting is straightforward for most SMBs running serious automation workloads. N8N Cloud charges by execution and has monthly limits. On a self-hosted instance, you run as many executions as your server can handle, with no per-workflow or per-execution fee.</p>
+        <p>n8n Cloud charges by execution and caps you monthly. Self-hosted, you run as many executions as the server can handle, with no per-execution fee.</p>
 
-        <p>Three situations where self-hosting clearly wins:</p>
+        <p>Three situations where self-hosting wins:</p>
 
         <ul>
-            <li><strong>Data compliance:</strong> If workflows process personal data (customer records, financial data, HR data), keeping execution logs on your own infrastructure avoids third-party data handling concerns.</li>
-            <li><strong>High volume:</strong> Businesses running 10,000+ executions per month will spend significantly more on cloud plans than on a $10 VPS.</li>
-            <li><strong>Custom nodes:</strong> Self-hosted N8N lets you install community nodes and custom integrations that are not available on N8N Cloud.</li>
+            <li><strong>Data compliance:</strong> workflows handling personal, financial or HR data keep their execution logs on your infrastructure.</li>
+            <li><strong>High volume:</strong> 10,000 executions a month is &euro;50 on n8n Cloud Pro and a $10 VPS self-hosted.</li>
+            <li><strong>Custom nodes:</strong> community nodes and custom integrations install freely on a self-hosted instance.</li>
         </ul>
 
-        <p>If you are just getting started with N8N and want to understand the workflow basics first, read our <a href="/blog/build-first-n8n-workflow.html">beginner's guide to building your first N8N workflow</a> before continuing here.</p>
+        <p>New to n8n? Start with <a href="/blog/build-first-n8n-workflow.html">building your first n8n workflow</a>.</p>
 
         <h2>What You Need Before You Start</h2>
 
         <p>You need three things:</p>
 
         <ol>
-            <li>A Linux VPS (Ubuntu 22.04 LTS recommended). DigitalOcean, Hetzner, Vultr, and Linode all work. 2 vCPU, 4 GB RAM is a solid starting spec.</li>
+            <li>A Linux VPS (Ubuntu 24.04 LTS recommended). DigitalOcean, Hetzner, Vultr and Linode all work. n8n's own Docker Compose guide asks for at least 2 vCPUs and 4 GB of RAM, so treat that as the floor rather than an upgrade path.</li>
             <li>A domain name pointed to your server's IP. You need this for HTTPS. Use an A record: <code>n8n.yourdomain.com → your.server.ip</code>.</li>
             <li>SSH access to the server with a non-root sudo user.</li>
         </ol>
 
         <h2>Self-Hosted vs Cloud: Cost and Feature Comparison</h2>
 
-        <p>Before committing, here is an honest side-by-side comparison:</p>
+        <p>An honest side-by-side:</p>
 
         <table class="comparison-table">
             <thead>
                 <tr>
                     <th>Factor</th>
-                    <th>N8N Cloud (Starter)</th>
+                    <th>n8n Cloud (Starter)</th>
                     <th>Self-Hosted (Docker / VPS)</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>Monthly cost</td>
-                    <td>$20 (2,500 executions/month)</td>
+                    <td>&euro;20 (2,500 executions/month)</td>
                     <td>$5 to $20 (unlimited executions)</td>
                 </tr>
                 <tr>
@@ -571,7 +575,7 @@
 
         <h2>Step 1: Install Docker and Docker Compose</h2>
 
-        <p>SSH into your server and run the following commands. This installs Docker Engine and the Compose plugin from Docker's official repository:</p>
+        <p>SSH in and install Docker Engine plus the Compose plugin from Docker's official repository:</p>
 
         <pre><code>sudo apt update && sudo apt upgrade -y
 
@@ -606,25 +610,24 @@ docker compose version</code></pre>
 
         <h2>Step 2: Create the N8N Directory and Docker Compose File</h2>
 
-        <p>Create a dedicated directory for your N8N setup:</p>
+        <p>Create a directory for the setup:</p>
 
         <pre><code>mkdir -p ~/n8n && cd ~/n8n</code></pre>
 
-        <p>Create the Docker Compose file. This is the core configuration that defines how N8N runs:</p>
+        <p>Create the Compose file, which defines how n8n runs:</p>
 
         <pre><code>nano docker-compose.yml</code></pre>
 
         <p>Paste in the following. We'll explain each key section below:</p>
 
-        <pre><code>version: "3.8"
-
-services:
+        <pre><code>services:
   n8n:
-    image: n8nio/n8n:latest
+    # Pin a version. Check https://github.com/n8n-io/n8n/releases
+    image: n8nio/n8n:${N8N_VERSION}
     container_name: n8n
     restart: unless-stopped
     ports:
-      - "5678:5678"
+      - "127.0.0.1:5678:5678"
     environment:
       - N8N_HOST=${N8N_HOST}
       - N8N_PORT=5678
@@ -632,9 +635,6 @@ services:
       - NODE_ENV=production
       - WEBHOOK_URL=https://${N8N_HOST}/
       - GENERIC_TIMEZONE=Europe/Paris
-      - N8N_BASIC_AUTH_ACTIVE=true
-      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER}
-      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD}
       - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
     volumes:
       - n8n_data:/home/node/.n8n
@@ -648,23 +648,25 @@ volumes:
             <li><strong>restart: unless-stopped</strong> ensures N8N restarts automatically if the container crashes or the server reboots.</li>
             <li><strong>n8n_data volume</strong> persists all workflows, credentials, and execution history between container restarts and upgrades.</li>
             <li><strong>N8N_ENCRYPTION_KEY</strong> encrypts stored credentials. Generate a strong random key and never change it after setup.</li>
-            <li><strong>N8N_BASIC_AUTH</strong> adds password protection to the N8N UI. Required before you set up HTTPS.</li>
+            <li><strong>No basic-auth variables.</strong> <code>N8N_BASIC_AUTH_ACTIVE</code>, <code>N8N_BASIC_AUTH_USER</code> and <code>N8N_BASIC_AUTH_PASSWORD</code> were removed when n8n 1.0 replaced basic auth with built-in user management. They appear in a lot of older tutorials and they do nothing now. You create an owner account with an email and password the first time you open the UI, and that is your login.</li>
+            <li><strong>Port bound to localhost.</strong> <code>127.0.0.1:5678:5678</code> means only the reverse proxy on the same box can reach n8n. Publishing <code>5678</code> on all interfaces exposes the editor to the internet directly.</li>
+            <li><strong>Pinned image tag.</strong> n8n recommends pinning a release rather than tracking <code>:latest</code>, so an unattended <code>docker compose pull</code> cannot move you across a breaking change.</li>
         </ul>
 
         <h2>Step 3: Configure Environment Variables</h2>
 
-        <p>Create a <code>.env</code> file in the same directory. This keeps sensitive values out of your Compose file:</p>
+        <p>Create a <code>.env</code> in the same directory, keeping secrets out of the Compose file:</p>
 
         <pre><code>nano .env</code></pre>
 
         <p>Fill in your values:</p>
 
-        <pre><code># Your N8N domain
+        <pre><code># Your n8n domain
 N8N_HOST=n8n.yourdomain.com
 
-# Basic auth credentials for the N8N UI
-N8N_BASIC_AUTH_USER=admin
-N8N_BASIC_AUTH_PASSWORD=a-very-strong-password-here
+# Pin the release you want. Latest stable:
+# https://github.com/n8n-io/n8n/releases
+N8N_VERSION=1.x.x
 
 # Generate with: openssl rand -hex 32
 N8N_ENCRYPTION_KEY=your-64-character-random-hex-key</code></pre>
@@ -673,11 +675,13 @@ N8N_ENCRYPTION_KEY=your-64-character-random-hex-key</code></pre>
 
         <pre><code>openssl rand -hex 32</code></pre>
 
-        <p>Copy the output and paste it as the value for <code>N8N_ENCRYPTION_KEY</code>. Store this key somewhere safe. If you lose it, you lose access to all encrypted credentials stored in N8N.</p>
+        <p>Copy the output into <code>N8N_ENCRYPTION_KEY</code> and store it somewhere safe. Lose it and every credential in the instance becomes unreadable.</p>
+
+        <p>There is no password in this file. n8n dropped basic auth in version 1.0: the first time you open the editor it asks you to create an owner account, and user management takes it from there. Until you have created that account and put HTTPS in front of the instance, keep the port bound to localhost as shown above.</p>
 
         <h2>Step 4: Set Up Nginx as a Reverse Proxy with HTTPS</h2>
 
-        <p>Exposing N8N directly on port 5678 over HTTP is not acceptable for production. You need Nginx to handle HTTPS and proxy traffic to the N8N container.</p>
+        <p>Port 5678 over plain HTTP is not acceptable in production. Nginx terminates HTTPS and proxies to the container.</p>
 
         <p>Install Nginx and Certbot:</p>
 
@@ -719,7 +723,7 @@ sudo systemctl reload nginx
 # Issue the SSL certificate (follow prompts)
 sudo certbot --nginx -d n8n.yourdomain.com</code></pre>
 
-        <p>Certbot will automatically modify your Nginx config to enable HTTPS and set up certificate auto-renewal. Your N8N instance is now accessible at <code>https://n8n.yourdomain.com</code>.</p>
+        <p>Certbot rewrites the Nginx config for HTTPS and sets up auto-renewal. n8n is now at <code>https://n8n.yourdomain.com</code>.</p>
 
         <h2>Step 5: Start N8N</h2>
 
@@ -733,15 +737,15 @@ docker compose up -d</code></pre>
         <pre><code>docker compose ps
 docker compose logs -f n8n</code></pre>
 
-        <p>You should see N8N starting up in the logs. Open <code>https://n8n.yourdomain.com</code> in your browser, enter the basic auth credentials you set, and you will land on the N8N workflow editor.</p>
+        <p>Open <code>https://n8n.yourdomain.com</code>. On a fresh instance n8n asks you to create the owner account (email and password); after that you land on the workflow editor.</p>
 
         <h2>Step 6: Configure Timezone and Email (Optional but Recommended)</h2>
 
-        <p>Set the correct timezone so that scheduled triggers fire at the right times. In the <code>.env</code> file, update:</p>
+        <p>Set the timezone so scheduled triggers fire correctly. In <code>.env</code>:</p>
 
         <pre><code>GENERIC_TIMEZONE=America/New_York</code></pre>
 
-        <p>For a full list of timezone strings, see the IANA tz database. This is especially important if you use the Schedule trigger node, which we cover in our <a href="/blog/n8n-scheduled-triggers-tutorial.html">N8N scheduled triggers tutorial</a>.</p>
+        <p>Use IANA tz database strings. This matters most for the Schedule trigger, covered in our <a href="/blog/n8n-scheduled-triggers-tutorial.html">n8n scheduled triggers tutorial</a>.</p>
 
         <p>If you want N8N to send email alerts on workflow errors, add SMTP settings to <code>.env</code>:</p>
 
@@ -758,7 +762,7 @@ N8N_SMTP_SENDER=n8n@yourdomain.com</code></pre>
 
         <h2>Step 7: Set Up Backups</h2>
 
-        <p>All N8N data (workflows, credentials, execution history) lives in the <code>n8n_data</code> Docker volume. Backing it up is a 30-second cron job.</p>
+        <p>Everything (workflows, credentials, execution history) lives in the <code>n8n_data</code> volume. Backing it up is a cron job.</p>
 
         <p>Create a backup script:</p>
 
@@ -794,19 +798,19 @@ echo "Backup complete: n8n-backup-$DATE.tar.gz"</code></pre>
 # Add this line:
 0 2 * * * /home/youruser/n8n/backup.sh >> /home/youruser/n8n/backup.log 2>&1</code></pre>
 
-        <p>For critical automations, also copy backups off-server to S3 or a remote location. Backups on the same server as the application are not disaster-recovery backups.</p>
+        <p>Copy backups off-server to S3 or similar. A backup on the same box as the application is not a disaster-recovery backup.</p>
 
         <h2>Step 8: Update N8N</h2>
 
-        <p>Keeping N8N updated is important for security and new features. The update process with Docker Compose is two commands:</p>
+        <p>Updating is two commands:</p>
 
         <pre><code>cd ~/n8n
 docker compose pull
 docker compose up -d</code></pre>
 
-        <p>Docker will pull the latest <code>n8n:latest</code> image and restart the container. Your workflows and credentials remain intact because they are stored in the persistent volume, not inside the container.</p>
+        <p>Docker pulls the tag named in your <code>.env</code> and recreates the container. Workflows and credentials survive because they live in the named volume, not in the container. Expect a few seconds of downtime; a single-container setup has no rolling update.</p>
 
-        <p>Before updating major versions (e.g., N8N 1.x to 2.x), always run a manual backup first and check the N8N release notes for breaking changes.</p>
+        <p>Because the tag is pinned, updating means editing <code>N8N_VERSION</code> in <code>.env</code> and then pulling. Back up first and read the release notes before crossing a major version.</p>
 
         <h2>Common Self-Hosting Issues and Fixes</h2>
 
@@ -824,7 +828,7 @@ docker compose up -d</code></pre>
 
         <h2>Connecting Your Self-Hosted N8N to Business Systems</h2>
 
-        <p>Once N8N is running, the setup process for nodes is identical to N8N Cloud. Your workflows can connect to any API, database, or service. Common starting points for SMBs:</p>
+        <p>Node setup is identical to n8n Cloud. Common starting points:</p>
 
         <ul>
             <li>Connect to Google Sheets for data logging (see our <a href="/blog/n8n-google-sheets-integration.html">N8N + Google Sheets guide</a>)</li>
@@ -832,9 +836,9 @@ docker compose up -d</code></pre>
             <li>Trigger workflows from webhooks when form submissions, payments, or CRM events fire</li>
         </ul>
 
-        <p>One of our clients, a premium outdoor kitchen brand, runs their entire customer inquiry routing and follow-up system on a self-hosted N8N instance. The setup reduced their manual data entry overhead by 80% compared to their previous process. The full story is in our <a href="/case-studies/le-marquier.html">Le Marquier case study</a>.</p>
+        <p>Le Marquier, a premium outdoor kitchen brand, runs its customer inquiry routing and follow-up on a self-hosted n8n instance. The <a href="/case-studies/le-marquier.html">full case study</a> has the numbers.</p>
 
-        <p>If you want to understand the financial case for N8N automation before investing more time in setup, our <a href="/roi-calculator.html">free ROI calculator</a> gives you a concrete number in two minutes.</p>
+        <p>Our <a href="/roi-calculator.html">ROI calculator</a> puts a number on the financial case in two minutes.</p>
 
         <h2>When to Use N8N Cloud Instead</h2>
 
@@ -843,12 +847,12 @@ docker compose up -d</code></pre>
         <ul>
             <li>You are evaluating N8N for the first time and do not want infrastructure overhead</li>
             <li>Your team has no one comfortable managing a Linux server</li>
-            <li>You run fewer than 2,500 executions per month (cloud pricing is competitive at this volume)</li>
+            <li>You run fewer than 2,500 executions per month, where the &euro;20 Starter plan is competitive with a VPS once you price in your own time</li>
         </ul>
 
-        <p>If you are not sure whether your business is ready to build out a full N8N automation stack, our <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> helps you identify where automation will have the most immediate impact before committing engineering time.</p>
+        <p>Not sure where to start? The <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> points at the highest-impact process.</p>
 
-        <p>For businesses that want the benefits of N8N without handling any of the infrastructure, our <a href="/n8n-automation.html">N8N automation service</a> covers setup, workflow development, and ongoing support.</p>
+        <p>Want n8n without the infrastructure? Our <a href="/n8n-automation.html">n8n automation service</a> covers setup, workflow development and support.</p>
 
         <!-- FAQ Section -->
         <div class="article-faq">
@@ -856,17 +860,17 @@ docker compose up -d</code></pre>
 
             <div class="faq-item">
                 <h3>How much does it cost to self-host N8N?</h3>
-                <p>Self-hosting N8N on a VPS costs between $5 and $20 per month depending on the provider. A 2 vCPU, 4 GB RAM server from DigitalOcean, Hetzner, or Linode handles most small-business workloads. Compare that to N8N Cloud plans which start at $20/month with execution limits.</p>
+                <p>Self-hosting n8n on a VPS costs between $5 and $20 per month depending on the provider. A 2 vCPU, 4 GB RAM server from DigitalOcean, Hetzner or Linode meets n8n's documented minimum. Compare that to n8n Cloud, which starts at &euro;20 per month for 2,500 executions and &euro;50 for 10,000.</p>
             </div>
 
             <div class="faq-item">
                 <h3>What is the minimum server spec for N8N?</h3>
-                <p>N8N runs on 1 vCPU and 1 GB RAM for light workloads, but 2 vCPU and 2 GB RAM is the practical minimum for production. If you run more than 10 concurrent workflows or use AI nodes with large payloads, upgrade to 4 GB RAM. Storage depends on workflow execution history retention, but 20 GB SSD is a safe starting point.</p>
+                <p>n8n's own Docker Compose guide asks for at least 2 vCPUs and 4 GB of RAM. Smaller boxes will boot n8n, but n8n does not publish a supported figure below that, so treat 2 vCPU / 4 GB as the floor for anything you depend on. Storage tracks execution-history retention; 20 GB SSD is a safe start.</p>
             </div>
 
             <div class="faq-item">
                 <h3>Is self-hosted N8N secure?</h3>
-                <p>Self-hosted N8N is secure when configured correctly. Use HTTPS with a valid SSL certificate, set strong authentication (basic auth or N8N's built-in user management), restrict the server firewall to ports 80, 443, and 22, and never expose the N8N port (default 5678) directly to the internet. Keep Docker images updated monthly.</p>
+                <p>Self-hosted n8n is secure when configured correctly. Use HTTPS with a valid certificate, create the owner account through n8n's built-in user management (basic auth was removed in n8n 1.0 and is no longer an option), restrict the firewall to ports 22, 80 and 443, and bind the n8n port to localhost so only the reverse proxy reaches it. Update the pinned image regularly.</p>
             </div>
 
             <div class="faq-item">
@@ -876,7 +880,7 @@ docker compose up -d</code></pre>
 
             <div class="faq-item">
                 <h3>How do I update N8N when self-hosting with Docker?</h3>
-                <p>Run: <code>docker compose pull && docker compose up -d</code>. This pulls the latest N8N image and restarts the container with zero downtime in most cases. Always back up your n8n_data volume before upgrading major versions.</p>
+                <p>Bump <code>N8N_VERSION</code> in your <code>.env</code>, then run <code>docker compose pull &amp;&amp; docker compose up -d</code>. The container is recreated, with a few seconds of downtime. Back up the n8n_data volume before crossing a major version.</p>
             </div>
         </div>
 
