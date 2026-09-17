@@ -6,6 +6,16 @@ RewriteRule ^law-firm-ai-client-intake\.html$ /blog/law-firms-ai-client-intake.h
 RewriteRule ^real-estate-ai-lead-response\.html$ /blog/real-estate-ai-automation-case-study.html [R=301,L]
 RewriteRule ^ai-voice-agent-vs-call-center\.html$ /blog/ai-voice-agent-vs-call-center-cost.html [R=301,L]
 
+# Consolidated cannibalising posts (2026-09-17). This per-directory file has its
+# own RewriteEngine, so rules in the root .htaccess never apply under /blog/;
+# blog redirects must live here, with paths relative to /blog/.
+RewriteRule ^ai-voice-agent-outbound-calls\.html$ /blog/ai-voice-agent-platform-comparison-2026.html [R=301,L]
+RewriteRule ^ai-automation-roadmap-where-to-start\.html$ /blog/ai-automation-strategy-smb-playbook.html [R=301,L]
+RewriteRule ^ai-automation-case-studies\.html$ /blog/real-estate-ai-automation-case-study.html [R=301,L]
+RewriteRule ^n8n-pipedrive-integration\.html$ /blog/n8n-sales-pipeline-automation.html [R=301,L]
+RewriteRule ^ai-voice-agent-law-firms\.html$ /blog/law-firms-ai-client-intake.html [R=301,L]
+RewriteRule ^ai-voice-agents-peak-season-customer-service\.html$ /blog/consumer-brand-call-center-scaling-peak-season.html [R=301,L]
+
 # Disable caching for this directory
 <IfModule mod_headers.c>
     Header set Cache-Control "no-cache, no-store, must-revalidate"
