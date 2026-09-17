@@ -24,6 +24,7 @@ RewriteRule ^blog/real-estate-ai-lead-response\.html$ /blog/real-estate-ai-autom
 RewriteRule ^blog/ai-voice-agent-vs-call-center\.html$ /blog/ai-voice-agent-vs-call-center-cost.html [R=301,L]
 
 # Consolidated cannibalising posts (2026-09-17)
+RewriteRule ^blog/ai-automation-roadmap-where-to-start\.html$ /blog/ai-automation-strategy-smb-playbook.html [R=301,L]
 RewriteRule ^blog/ai-automation-case-studies\.html$ /blog/real-estate-ai-automation-case-study.html [R=301,L]
 RewriteRule ^blog/n8n-pipedrive-integration\.html$ /blog/n8n-sales-pipeline-automation.html [R=301,L]
 RewriteRule ^blog/ai-voice-agent-law-firms\.html$ /blog/law-firms-ai-client-intake.html [R=301,L]
