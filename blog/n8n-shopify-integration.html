@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Primary SEO Meta Tags -->
-    <title>N8N Shopify Integration: Automate Order Management & Customer Data for Consumer Brands | Suyash Raj</title>
-    <meta name="description" content="Learn how to connect N8N with Shopify to automate order processing, inventory alerts, customer segmentation, and revenue reporting. A practical guide for specialty consumer brands scaling past $10M.">
+    <title>n8n Shopify Integration: Automate Orders and Inventory</title>
+    <meta name="description" content="Connect Shopify to n8n: what the Shopify node and trigger really support, 7 workflows worth building, and what needs the HTTP Request node.">
     <meta name="keywords" content="n8n shopify integration, n8n shopify automation, n8n ecommerce automation, shopify workflow automation, n8n shopify tutorial, best AI automation agency for small businesses">
     <meta name="author" content="Suyash Raj">
     <meta name="robots" content="index, follow">
@@ -15,17 +15,18 @@
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://rajsuyash.com/blog/n8n-shopify-integration.html">
-    <meta property="og:title" content="N8N Shopify Integration: Automate Order Management & Customer Data for Consumer Brands">
-    <meta property="og:description" content="Connect N8N with Shopify to automate order processing, inventory alerts, customer segmentation, and revenue reporting — without expensive middleware.">
+    <meta property="og:title" content="n8n Shopify Integration: Automate Orders and Inventory">
+    <meta property="og:description" content="Connect Shopify to n8n: what the Shopify node and trigger really support, 7 workflows worth building, and what needs the HTTP Request node.">
     <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
     <meta property="og:site_name" content="Suyash Raj - AI Automation Agency">
     <meta property="article:published_time" content="2026-04-30T08:00:00Z">
+    <meta property="article:modified_time" content="2026-09-17">
     <meta property="article:author" content="Suyash Raj">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="N8N Shopify Integration: Automate Order Management & Customer Data for Consumer Brands">
-    <meta name="twitter:description" content="Connect N8N with Shopify to automate order processing, inventory alerts, customer segmentation, and revenue reporting.">
+    <meta name="twitter:title" content="n8n Shopify Integration: Automate Orders and Inventory">
+    <meta name="twitter:description" content="Connect Shopify to n8n: what the Shopify node and trigger really support, 7 workflows worth building, and what needs the HTTP Request node.">
     <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
     <meta name="twitter:creator" content="@suyash_raj">
 
@@ -41,8 +42,8 @@
     {
         "@context": "https://schema.org",
         "@type": "Article",
-        "headline": "N8N Shopify Integration: Automate Order Management & Customer Data for Consumer Brands",
-        "description": "Learn how to connect N8N with Shopify to automate order processing, inventory alerts, customer segmentation, and revenue reporting. A practical guide for specialty consumer brands scaling past $10M.",
+        "headline": "n8n Shopify Integration: Automate Orders and Inventory",
+        "description": "Connect Shopify to n8n: what the Shopify node and trigger really support, 7 workflows worth building, and what needs the HTTP Request node.",
         "author": {
             "@type": "Person",
             "name": "Suyash Raj",
@@ -54,7 +55,7 @@
             "url": "https://rajsuyash.com"
         },
         "datePublished": "2026-04-30T08:00:00Z",
-        "dateModified": "2026-04-30T08:00:00Z",
+        "dateModified": "2026-09-17",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https://rajsuyash.com/blog/n8n-shopify-integration.html"
@@ -74,7 +75,7 @@
                 "name": "Does N8N have a native Shopify integration?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Yes. N8N includes a native Shopify node that supports triggers (new orders, order updates, new customers, fulfillment events) and actions (create/update orders, retrieve product data, manage customers). You can connect Shopify using OAuth or a private app API key — no custom code required for most use cases."
+                    "text": "Yes. n8n ships a Shopify node and a Shopify Trigger node. The action node covers two resources, Order and Product, with create, get, get-all, update and delete on each. It has no Customer resource, so customer reads and writes go through the HTTP Request node against the Shopify Admin API using the same credential. The trigger registers a Shopify webhook and covers orders, customers, products, carts, checkouts, fulfillments, refunds, collections and locations. Authenticate with an access token from a custom app (recommended) or OAuth2 for public apps; API key auth is deprecated."
                 }
             },
             {
@@ -82,7 +83,7 @@
                 "name": "What can I automate between N8N and Shopify?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "With N8N and Shopify you can automate: order confirmation and fulfillment notifications, low-inventory alerts to your team, customer tagging based on purchase behavior, syncing order data to Google Sheets or Airtable, creating HubSpot or CRM contacts from new customers, generating daily revenue reports, and triggering email or SMS sequences in response to order events."
+                    "text": "With n8n and Shopify you can automate: order confirmation and fulfillment routing, syncing order data to Google Sheets or Airtable, creating HubSpot or CRM contacts from new customers, generating daily revenue reports, and triggering email or SMS sequences from order events. Customer tagging and inventory checks are possible too, but they run through the HTTP Request node rather than the Shopify node, because the node has no Customer or Inventory resource."
                 }
             },
             {
@@ -90,7 +91,7 @@
                 "name": "Is N8N better than Zapier for Shopify automation?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "For high-volume Shopify stores doing $10M+, N8N is significantly more cost-effective than Zapier. Zapier charges per task — at 10,000 orders/month your Zapier bill can exceed $500/month. N8N self-hosted runs for the cost of a VPS (~$20/month). N8N also supports multi-step branching logic, data transformation, and error handling that Zapier can't match without Pro plans."
+                    "text": "It depends on step count, not order count. Zapier bills per task, where a task is one action step, so a five-step Zap on 2,000 orders is 10,000 tasks. Zapier's Professional plan at the 10,000-task tier is $129 per month billed annually, or $193.50 billed monthly. Self-hosted n8n bills nothing per execution; you pay for the VPS, roughly $20 per month. n8n also handles multi-step branching, data transformation and error handling that Zapier does not match at lower tiers."
                 }
             }
         ]
@@ -430,36 +431,41 @@
             <div class="article-meta reveal" style="--delay: 0">
                 <span class="article-category">N8N Automation</span>
                 <span class="article-date">April 30, 2026</span>
+                <span class="article-date">Updated Sep 17, 2026</span>
                 <span class="article-read-time">12 min read</span>
             </div>
-            <h1 class="article-title reveal" style="--delay: 1">N8N Shopify Integration: Automate Order Management &amp; Customer Data for Consumer Brands</h1>
-            <p class="article-subtitle reveal" style="--delay: 2">How specialty consumer brands use N8N to eliminate manual order work, catch inventory problems before they cost sales, and turn Shopify data into action — without enterprise middleware budgets.</p>
+            <h1 class="article-title reveal" style="--delay: 1">n8n Shopify Integration: Automate Orders, Inventory and Customer Data</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">What the n8n Shopify node actually does, what it does not, and the seven workflows worth building first.</p>
         </div>
     </section>
 
     <!-- Article Body -->
     <article class="article-body">
 
-        <p>When your Shopify store is doing a few hundred orders a month, manual processes are annoying but survivable. At a few thousand orders per month — the scale most specialty consumer brands hit around $10M in revenue — they become a full-time job that nobody budgeted for.</p>
+        <p>n8n connects to Shopify through two built-in nodes. The <strong>Shopify Trigger</strong> registers a real Shopify webhook and fires on topics including orders created, paid, updated, cancelled and fulfilled, plus customers, products, carts, checkouts, refunds, collections and locations. The <strong>Shopify</strong> action node then reads and writes, but only across two resources: Order and Product, each with create, get, get all, update and delete. There is no Customer resource and no Inventory resource on the action node, so customer tagging and stock checks go through the HTTP Request node against the Shopify Admin API, reusing the same credential. Knowing that boundary up front saves an afternoon.</p>
 
-        <p>Your team is copy-pasting order data into spreadsheets. Someone is manually checking inventory levels every morning. Customer service is logging into Shopify to answer "where's my order" questions that could be answered automatically. Finance is waiting until the end of the week for revenue numbers that Shopify already knows in real time.</p>
+        <div class="definition-block"><p><strong>Updated September 2026:</strong> re-verified against n8n's node source and Shopify's API docs. Two corrections matter: the Shopify Trigger has no inventory-level topic (so the low-stock workflow below is scheduled, not event-driven), and the rate limits quoted here were REST-era numbers. Shopify now documents the Admin API in GraphQL points per second.</p></div>
 
-        <p>This is exactly the problem N8N solves. N8N is an open-source workflow automation tool that connects Shopify to the rest of your business stack — your CRM, your warehouse management system, your email platform, your Slack channel, your Google Sheets — and triggers actions the moment things happen in your store.</p>
+        <p>The rest of this guide is the practical part. At a few hundred orders a month manual process is survivable. At a few thousand it is a full-time job nobody budgeted for.</p>
 
-        <p>This guide covers how the N8N Shopify integration works, what to automate first (and why), and how consumer brands at the $10M–$200M scale are using it to reclaim operational capacity.</p>
+        <p>Order data gets copy-pasted into spreadsheets, someone checks inventory by hand every morning, and finance waits until Friday for numbers Shopify already knows in real time.</p>
+
+        <p>This is what n8n solves. It is an open-source workflow automation tool that connects Shopify to the rest of your stack (CRM, warehouse system, email platform, Slack, Google Sheets) and acts the moment something happens in your store.</p>
+
+
 
         <div class="definition-block">
-            <p><strong>What is N8N?</strong> N8N (pronounced "n-eight-n") is an open-source workflow automation platform. It connects APIs and services with visual, drag-and-drop logic — similar to Zapier but self-hostable, far more powerful for complex logic, and significantly cheaper at scale. See our <a href="/blog/n8n-vs-zapier-vs-make.html">N8N vs Zapier vs Make comparison</a> for a full breakdown.</p>
+            <p><strong>What is n8n?</strong> An open-source workflow automation platform that connects APIs and services with visual, drag-and-drop logic. Similar to Zapier, but self-hostable and cheaper at volume. See our <a href="/blog/n8n-vs-zapier-vs-make.html">n8n vs Zapier vs Make comparison</a> for the pricing detail.</p>
         </div>
 
         <h2>How the N8N Shopify Integration Works</h2>
 
-        <p>N8N includes a native Shopify node — no third-party connector or custom code required. You authenticate using either a Shopify private app API key or OAuth, and you're connected.</p>
+        <p>n8n includes native Shopify nodes, so there is no third-party connector to buy. Authentication is an access token from a Shopify custom app (what n8n recommends for a single store) or OAuth2 for public apps. Shopify no longer issues API keys with passwords, so the old API key method is deprecated.</p>
 
         <p>The Shopify node supports two modes:</p>
 
         <h3>Trigger Mode (Webhooks)</h3>
-        <p>N8N listens for events in your Shopify store and fires a workflow the moment they happen. Supported triggers include:</p>
+        <p>The Shopify Trigger node registers a webhook with your store, so workflows fire the moment something happens. The topic list includes:</p>
         <ul>
             <li>New order created</li>
             <li>Order updated (status change, fulfillment update)</li>
@@ -468,72 +474,74 @@
             <li>New customer created</li>
             <li>Customer updated</li>
             <li>Fulfillment created or updated</li>
-            <li>Inventory level updated</li>
-            <li>New product or product variant added</li>
+            <li>Product created, updated or deleted</li>
+            <li>Cart or checkout created or updated (the basis for abandoned checkout work)</li>
+            <li>Refund created</li>
         </ul>
 
         <h3>Action Mode (API Calls)</h3>
-        <p>Your N8N workflows can also call Shopify's API to read or write data on demand — retrieve order details, update order tags, create draft orders, look up customer purchase history, or fetch product inventory counts.</p>
+        <p>The Shopify action node covers two resources. <strong>Order:</strong> create, get, get all, update, delete. <strong>Product:</strong> create, get, get all, update, delete. Anything outside those two, customers and inventory levels included, needs the <a href="/blog/n8n-http-request-node-tutorial.html">HTTP Request node</a> pointed at the Shopify Admin API. You can select your Shopify credential inside that node, so it is extra configuration rather than extra authentication.</p>
 
-        <p>Most powerful N8N Shopify workflows combine both modes: a trigger fires when something happens, then action nodes pull additional context, apply logic, and update other systems.</p>
+        <p>Most useful workflows combine both: a trigger fires, action nodes pull context, logic runs, other systems get updated.</p>
 
         <h2>The 7 Shopify Automations Consumer Brands Should Build First</h2>
 
-        <p>Based on working with specialty consumer brands across outdoor gear, premium food, cookware, and home goods, these are the workflows with the fastest time-to-value.</p>
+        <p>Ordered by time to value:</p>
 
         <h3>1. Order Confirmation + Fulfillment Status Routing</h3>
 
         <p>The workflow: when a new order is placed → check order value and customer tags → route to the appropriate fulfillment logic → update your 3PL or warehouse system → notify the customer via your preferred channel.</p>
 
-        <p>Why it matters: brands doing $10M+ often have multiple fulfillment paths — standard warehouse, drop-ship suppliers, made-to-order items. N8N can route each order based on SKU, geography, or customer tier without anyone touching it manually.</p>
+        <p>Why it matters: brands doing $10M+ often have several fulfillment paths (standard warehouse, drop-ship suppliers, made-to-order items). n8n routes each order by SKU, geography or customer tier without anyone touching it.</p>
 
-        <p>What you connect: Shopify → conditional logic → your WMS or 3PL API (ShipBob, ShipStation, Flexport) → customer notification (email, SMS, or your CX platform).</p>
+        <p>What you connect: Shopify, conditional logic, your WMS or 3PL API (ShipBob, ShipStation, Flexport), then a customer notification by email, SMS or your CX platform.</p>
 
         <h3>2. Low Inventory Alerts to the Right People</h3>
 
-        <p>The workflow: when inventory level drops below a threshold → check which products are affected → send an alert with reorder context to your buying team via Slack or email → optionally create a draft purchase order in your ERP.</p>
+        <p>The workflow: a Schedule Trigger runs every morning, an HTTP Request node reads inventory levels from the Shopify Admin API, an IF node compares each against its threshold, and anything below it alerts the buying team in Slack or email and optionally drafts a purchase order in your ERP.</p>
+        <p>This one is scheduled rather than event-driven on purpose. The n8n Shopify Trigger has no inventory-level topic, so there is nothing to subscribe to. A daily or hourly poll is the working pattern.</p>
 
-        <p>This is one of the highest-ROI automations for consumer brands. A single stockout on a hero SKU during peak season can cost more than your entire automation infrastructure for the year. N8N catches the problem before it becomes a crisis.</p>
+        <p>A single stockout on a hero SKU during peak season can cost more than a year of automation infrastructure.</p>
 
-        <p>You can set different thresholds per SKU category — a 30-day buffer for slow movers, a 7-day buffer for fast movers — using N8N's <a href="/blog/n8n-http-request-node-tutorial.html">HTTP Request node</a> to pull velocity data from your analytics platform.</p>
+        <p>Set different thresholds per SKU category, for example a 30-day buffer for slow movers and a 7-day buffer for fast movers, pulling velocity data from your analytics platform through the same HTTP Request node.</p>
 
         <h3>3. Customer Tagging for Segmentation</h3>
 
-        <p>The workflow: after each order → calculate lifetime value and order frequency → apply Shopify customer tags (VIP, Repeat, Single-Purchase, Lapsed) → sync those tags to your email marketing platform.</p>
+        <p>The workflow: an orders/create trigger fires, a Code node calculates lifetime value and order frequency, an HTTP Request node writes Shopify customer tags (VIP, Repeat, Single-Purchase, Lapsed), and those tags sync to your email platform. The tag write is an HTTP Request node, not the Shopify node, which has no Customer resource.</p>
 
-        <p>Why this matters: most Shopify stores are sitting on customer segmentation data they never use. N8N can maintain a real-time tagging system that keeps your email lists accurate without anyone running manual exports.</p>
+        <p>Most stores sit on segmentation data they never use. This keeps the tags current without anyone running exports.</p>
 
-        <p>If you're using Klaviyo, Mailchimp, or any email platform with an API, N8N can push these tags directly. Your email sequences then fire based on the right customer tier automatically.</p>
+
 
         <h3>4. Daily Revenue Report to Slack or Email</h3>
 
         <p>The workflow: every morning at 7am → pull yesterday's Shopify orders via API → calculate total revenue, order count, average order value, top SKUs → format a clean summary → post to your #revenue Slack channel.</p>
 
-        <p>This replaces the morning ritual of logging into Shopify, navigating to Analytics, setting date ranges, and screenshotting for the standup. Everyone gets the same data at the same time.</p>
+        <p>That replaces the morning ritual of logging in, setting date ranges and screenshotting for standup.</p>
 
-        <p>You can build this with N8N's <a href="/blog/n8n-scheduled-triggers-tutorial.html">cron-based scheduler</a> plus the Shopify node and Slack node — no code required. See our guide on <a href="/blog/n8n-slack-integration.html">N8N Slack integration</a> for the exact setup.</p>
+        <p>Build it with n8n's <a href="/blog/n8n-scheduled-triggers-tutorial.html">cron-based scheduler</a> plus the Shopify and Slack nodes, no code required. Our <a href="/blog/n8n-slack-integration.html">n8n Slack integration</a> guide has the exact setup.</p>
 
         <h3>5. New Customer → CRM Contact Creation</h3>
 
-        <p>The workflow: new Shopify customer created → check if they already exist in your CRM → if not, create a new contact with order context, tags, and acquisition source → assign to the right owner based on channel or order value.</p>
+        <p>The workflow: a customers/create trigger fires, a lookup checks whether they already exist in your CRM, and if not you create a contact with order context, tags and acquisition source, assigned to an owner by channel or order value.</p>
 
-        <p>For brands with a sales or account management motion (common at the $50M+ tier when wholesale or B2B channels open up), this keeps your CRM current without manual entry. We've built this for HubSpot; the same pattern works with Salesforce, Pipedrive, or any CRM with an API. See our <a href="/blog/n8n-hubspot-integration.html">N8N HubSpot integration guide</a> for the implementation details.</p>
+        <p>For brands with a sales or account management motion this keeps the CRM current without manual entry. We have built it for HubSpot; the pattern works with any CRM that has an API. See the <a href="/blog/n8n-hubspot-integration.html">n8n HubSpot integration guide</a>.</p>
 
         <h3>6. Subscription and Reorder Reminders</h3>
 
         <p>The workflow: 30 days after a fulfilled order for a consumable product → check if the customer has reordered → if not, trigger a reorder reminder via your email platform → track whether the reminder converted.</p>
 
-        <p>Consumer brands selling consumables (coffee, supplements, cleaning products, food) leave significant revenue on the table without a reorder sequence. N8N makes this fully automatic based on actual purchase data rather than guessed timing.</p>
+        <p>Brands selling consumables leave revenue on the table without a reorder sequence, and this one runs on actual purchase dates rather than guessed timing.</p>
 
         <h3>7. Abandoned Checkout Enrichment</h3>
 
-        <p>The workflow: Shopify abandoned checkout webhook → extract customer email and cart data → enrich with any existing customer history → pass to your email platform with full context for a personalized recovery sequence.</p>
+        <p>The workflow: a checkouts/create or checkouts/update trigger fires, you extract the email and cart contents, enrich with existing customer history, and pass the lot to your email platform for a personalised recovery sequence. Shopify has no dedicated "abandoned checkout" webhook topic; the checkout topics plus your own timing logic are what you build on.</p>
 
-        <p>Shopify has built-in abandoned cart emails, but they're generic. N8N lets you pass cart contents, customer tier, and purchase history to your email tool so the recovery message references what they actually left behind — and acknowledges if they're a repeat customer.</p>
+        <p>Shopify's built-in abandoned cart emails are generic. n8n lets you pass cart contents, customer tier and purchase history to your email tool, so the recovery message references what they actually left behind and acknowledges a repeat customer.</p>
 
         <h2>N8N vs Zapier vs Make for Shopify Automation</h2>
 
-        <p>All three tools can connect to Shopify. The differences become significant at volume.</p>
+        <p>All three connect to Shopify. The differences show at volume.</p>
 
         <table class="comparison-table">
             <thead>
@@ -546,10 +554,10 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><strong>Cost at 10k orders/mo</strong></td>
-                    <td>~$20/mo (VPS)</td>
-                    <td>$500–$800/mo</td>
-                    <td>$100–$200/mo</td>
+                    <td><strong>Billing unit</strong></td>
+                    <td>Workflow execution (self-hosted: nothing per run)</td>
+                    <td>Task, one per action step</td>
+                    <td>Credit, one per module step</td>
                 </tr>
                 <tr>
                     <td><strong>Multi-step branching logic</strong></td>
@@ -570,10 +578,16 @@
                     <td>Good</td>
                 </tr>
                 <tr>
-                    <td><strong>Shopify webhooks</strong></td>
-                    <td>Real-time</td>
-                    <td>Polling (15-min delay)</td>
-                    <td>Real-time (paid plans)</td>
+                    <td><strong>Published price at 10,000 billable steps</strong></td>
+                    <td>Server cost only, or &euro;50/mo on n8n Cloud Pro</td>
+                    <td>$129/mo annual, $193.50 monthly (Professional)</td>
+                    <td>Credit-based, from the $9/mo Make Plan upward</td>
+                </tr>
+                <tr>
+                    <td><strong>Shopify change detection</strong></td>
+                    <td>Shopify Trigger registers a real webhook</td>
+                    <td>Depends on the trigger you pick</td>
+                    <td>Depends on the trigger you pick</td>
                 </tr>
                 <tr>
                     <td><strong>Self-hosting option</strong></td>
@@ -590,64 +604,65 @@
             </tbody>
         </table>
 
-        <p>For consumer brands with data privacy considerations around customer PII — particularly brands in the EU or with Shopify Plus — N8N's self-hosted option means order data never transits a third-party automation server. That's increasingly important as privacy regulations tighten.</p>
+        <p>For brands with customer PII concerns, particularly in the EU, self-hosted n8n means order data never transits a third-party automation server.</p>
 
         <h2>Setting Up the N8N Shopify Connection</h2>
 
-        <p>Here's the exact setup process.</p>
 
-        <h3>Step 1: Create a Shopify Private App</h3>
+
+        <h3>Step 1: Create a Shopify Custom App</h3>
         <ol>
             <li>In your Shopify admin, go to <strong>Settings → Apps and sales channels → Develop apps</strong></li>
             <li>Click <strong>Create an app</strong> and name it (e.g., "N8N Integration")</li>
             <li>Under <strong>Configuration → Admin API access scopes</strong>, enable the permissions you need:
                 <ul>
-                    <li><code>read_orders</code>, <code>write_orders</code> — for order automation</li>
-                    <li><code>read_customers</code>, <code>write_customers</code> — for customer tagging</li>
-                    <li><code>read_inventory</code> — for inventory alerts</li>
-                    <li><code>read_products</code> — for product lookups</li>
+                    <li><code>read_orders</code>, <code>write_orders</code> for order automation</li>
+                    <li><code>read_customers</code>, <code>write_customers</code> for customer tagging (used by the HTTP Request node)</li>
+                    <li><code>read_inventory</code> for inventory alerts</li>
+                    <li><code>read_products</code> for product lookups</li>
                 </ul>
             </li>
             <li>Click <strong>Save</strong>, then <strong>Install app</strong></li>
-            <li>Copy your <strong>Admin API access token</strong> — you'll need this in N8N</li>
+            <li>Copy the <strong>Admin API access token</strong> and the <strong>API secret key</strong>. n8n needs both: the token as <strong>Access Token</strong> and the secret as <strong>APP Secret Key</strong>.</li>
         </ol>
 
         <h3>Step 2: Connect Shopify in N8N</h3>
         <ol>
             <li>In N8N, go to <strong>Credentials → New → Shopify</strong></li>
             <li>Enter your Shopify store URL (e.g., <code>yourstore.myshopify.com</code>)</li>
-            <li>Paste your Admin API access token</li>
-            <li>Click <strong>Test credential</strong> — if it returns your store name, you're connected</li>
+            <li>Paste the Admin API access token and the API secret key</li>
+            <li>Click <strong>Test credential</strong>. If it returns your store name, you are connected</li>
         </ol>
 
         <h3>Step 3: Build Your First Trigger Workflow</h3>
         <ol>
             <li>Create a new workflow in N8N</li>
             <li>Add a <strong>Shopify Trigger</strong> node as the starting node</li>
-            <li>Select the event — for example, <strong>Order Created</strong></li>
+            <li>Select the topic, for example <strong>orders/create</strong></li>
             <li>Set your N8N instance URL as the webhook endpoint (N8N registers this with Shopify automatically)</li>
-            <li>Add your next node — Slack, HubSpot, Google Sheets, email — whatever you're routing to</li>
+            <li>Add the next node: Slack, HubSpot, Google Sheets, email, whatever you are routing to</li>
             <li>Use N8N's expression editor to map Shopify fields (order ID, customer name, total price, line items) to the destination</li>
         </ol>
 
-        <p>If you're new to N8N, our <a href="/blog/build-first-n8n-workflow.html">guide to building your first N8N workflow</a> covers the canvas, expressions, and testing in detail. Our <a href="/blog/n8n-webhook-tutorial.html">N8N webhook tutorial</a> explains how webhook triggers work under the hood.</p>
+        <p>New to n8n? Our <a href="/blog/build-first-n8n-workflow.html">first workflow guide</a> covers the canvas, expressions and testing, and the <a href="/blog/n8n-webhook-tutorial.html">webhook tutorial</a> explains triggers under the hood.</p>
 
         <h2>Common Pitfalls (and How to Avoid Them)</h2>
 
-        <h3>Shopify Webhook Rate Limits</h3>
-        <p>Shopify imposes rate limits on its Admin API — 40 requests per app per second for standard plans, 80 for Shopify Plus. During flash sales or promotional events, a burst of simultaneous orders can trigger rate-limit errors. Build error handling into your N8N workflows with exponential backoff retry logic. Our <a href="/blog/n8n-error-handling-best-practices.html">N8N error handling guide</a> covers the exact pattern.</p>
+        <h3>Shopify Admin API Rate Limits</h3>
+        <p>Shopify meters the GraphQL Admin API by calculated query cost, in points per second: 100 on standard plans, 200 on Advanced, 1,000 on Shopify Plus and 2,000 on Commerce Components. It is a leaky bucket, so short bursts are absorbed and sustained load is not. During a flash sale a burst of simultaneous orders will hit the ceiling. Build exponential backoff into the workflow; our <a href="/blog/n8n-error-handling-best-practices.html">n8n error handling guide</a> has the pattern.</p>
+        <p>Note that a cost is per query, not per request, so an expensive query can consume a large share of your per-second budget on its own. Request only the fields you need.</p>
 
         <h3>Webhook Deduplication</h3>
-        <p>Shopify occasionally sends duplicate webhook events, especially during high traffic. Add a deduplication check in your workflow using N8N's IF node — store processed order IDs in a database or Airtable and skip reprocessing if the ID already exists.</p>
+        <p>Shopify occasionally sends duplicate webhook events, especially under load. Add a deduplication check with an IF node: store processed order IDs in a database or <a href="/blog/n8n-airtable-integration.html">Airtable</a> and skip anything already seen.</p>
 
         <h3>Test in Staging First</h3>
-        <p>Use a Shopify development store to test workflows before pointing them at your live store. N8N's testing mode lets you use real webhook payloads from test orders without affecting production data.</p>
+        <p>Use a Shopify development store first. n8n's test mode replays real webhook payloads from test orders without touching production.</p>
 
         <h2>What $10M+ Consumer Brands Actually Build</h2>
 
-        <p>The brands that get the most from N8N Shopify automation don't just automate one workflow — they build a connected operations layer.</p>
+        <p>The brands that get the most from this do not automate one workflow. They build a connected operations layer.</p>
 
-        <p>A typical architecture for a specialty consumer brand doing $20M–$100M in Shopify revenue looks like this:</p>
+        <p>A typical architecture:</p>
 
         <ul>
             <li><strong>Orders layer:</strong> All new orders → route to 3PL → update ERP → notify customer → tag customer in CRM</li>
@@ -657,13 +672,13 @@
             <li><strong>Exception layer:</strong> Cancelled orders → refund initiation → inventory restoration → customer service ticket creation</li>
         </ul>
 
-        <p>Built correctly, this system means your operations team isn't logging into Shopify for routine tasks — they're only touching exceptions. That's the difference between an ops team of 8 running $20M and an ops team of 3 running the same revenue.</p>
+        <p>Built correctly, the operations team stops logging into Shopify for routine work and only touches exceptions.</p>
 
-        <p>One of our clients — a specialty outdoor brand — reduced their order processing team from 5 people to 2 after building this architecture on N8N. The three people who moved off order processing shifted to customer experience work that actually grew revenue. That kind of redeployment, not just cost reduction, is what we saw with <a href="/case-studies/le-marquier.html">Le Marquier, where we achieved an 80% cost reduction in handling rate</a> — the same principle applied at a different scale.</p>
+        <p>The win is usually redeployment rather than headcount cuts: people who were processing orders move onto customer experience work that grows revenue. Our <a href="/case-studies/le-marquier.html">Le Marquier case study</a> covers what that looked like for one consumer brand.</p>
 
         <h2>When to Build It Yourself vs. Hire Help</h2>
 
-        <p>The N8N Shopify integration is well within reach for a technical founder or a developer with a few hours. The first three workflows on this list — order routing, inventory alerts, daily revenue report — can be built in a weekend.</p>
+        <p>This is well within reach for a technical founder or a developer with a few hours. The first three workflows (order routing, inventory alerts, daily revenue report) are a weekend job.</p>
 
         <p>Where it gets more complex:</p>
         <ul>
@@ -674,9 +689,9 @@
             <li>Maintaining workflows as your stack evolves</li>
         </ul>
 
-        <p>If you're at the $30M+ mark and your operations depend on these workflows running reliably, it's worth having someone build and maintain them properly. Our <a href="/n8n-automation.html">N8N automation service</a> covers the full build-and-maintain cycle for consumer brands. Use our <a href="/roi-calculator.html">ROI calculator</a> to estimate what the automation is worth relative to what you're currently spending on manual operations.</p>
+        <p>Once operations depend on these running reliably, it is worth having someone build and maintain them properly. Our <a href="/n8n-automation.html">n8n automation service</a> covers that cycle, and the <a href="/roi-calculator.html">ROI calculator</a> estimates what it is worth against your current manual spend.</p>
 
-        <p>Not sure if you're ready? Our <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> takes 5 minutes and tells you exactly where automation will have the most impact for your business.</p>
+        <p>Not sure where to start? The <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> takes five minutes.</p>
 
         <!-- FAQ Section -->
         <div class="article-faq">
@@ -684,17 +699,17 @@
 
             <div class="faq-item">
                 <h3>Does N8N have a native Shopify integration?</h3>
-                <p>Yes. N8N includes a native Shopify node that supports triggers (new orders, order updates, new customers, fulfillment events) and actions (create/update orders, retrieve product data, manage customers). You can connect Shopify using OAuth or a private app API key — no custom code required for most use cases.</p>
+                <p>Yes, two of them. The <strong>Shopify Trigger</strong> registers a Shopify webhook and covers orders, customers, products, carts, checkouts, fulfillments, refunds, collections and locations. The <strong>Shopify</strong> action node covers two resources, Order and Product, each with create, get, get all, update and delete. It has no Customer or Inventory resource, so those go through the HTTP Request node with the same credential. Authenticate with an access token from a custom app, or OAuth2 for a public app. API key auth is deprecated.</p>
             </div>
 
             <div class="faq-item">
                 <h3>What can I automate between N8N and Shopify?</h3>
-                <p>With N8N and Shopify you can automate: order confirmation and fulfillment notifications, low-inventory alerts to your team, customer tagging based on purchase behavior, syncing order data to Google Sheets or Airtable, creating HubSpot or CRM contacts from new customers, generating daily revenue reports, and triggering email or SMS sequences in response to order events.</p>
+                <p>Order confirmation and fulfillment routing, syncing order data to Google Sheets or Airtable, creating CRM contacts from new customers, daily revenue reports, and email or SMS sequences triggered by order events. Customer tagging and low-inventory alerts work too, but run through the HTTP Request node rather than the Shopify node, and inventory alerts have to be scheduled because there is no inventory trigger topic.</p>
             </div>
 
             <div class="faq-item">
                 <h3>Is N8N better than Zapier for Shopify automation?</h3>
-                <p>For high-volume Shopify stores doing $10M+, N8N is significantly more cost-effective than Zapier. Zapier charges per task — at 10,000 orders/month your Zapier bill can exceed $500/month. N8N self-hosted runs for the cost of a VPS (~$20/month). N8N also supports multi-step branching logic, data transformation, and error handling that Zapier can't match without Pro plans.</p>
+                <p>It depends on step count, not order count. Zapier bills per task, where a task is one action step, so a five-step Zap on 2,000 orders is 10,000 tasks. Zapier Professional at the 10,000-task tier is $129/month billed annually and $193.50 billed monthly. Self-hosted n8n bills nothing per execution; you pay for the VPS, roughly $20/month. n8n also handles multi-step branching, data transformation and error handling that Zapier does not match at lower tiers.</p>
             </div>
         </div>
 
@@ -724,7 +739,7 @@
             </a>
             <a href="/blog/n8n-airtable-integration.html" class="related-card">
                 <h3 class="related-card-title">N8N Airtable Integration Tutorial</h3>
-                <p class="related-card-excerpt">Use N8N to sync data to Airtable automatically — build a real-time operations dashboard without manual data entry.</p>
+                <p class="related-card-excerpt">Sync data to Airtable automatically and build a live operations dashboard without manual data entry.</p>
             </a>
             <a href="/blog/n8n-error-handling-best-practices.html" class="related-card">
                 <h3 class="related-card-title">N8N Error Handling Best Practices</h3>
