@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Primary SEO Meta Tags -->
-    <title>N8N Schedule Trigger: Cron and Interval Setup Guide</title>
-    <meta name="description" content="The 3 scheduling modes, cron syntax, timezone settings, and how to test a scheduled workflow. Plus 6 business automations to build with it.">
+    <title>n8n Schedule Trigger: Cron, Interval and Timezone Setup</title>
+    <meta name="description" content="The official n8n Schedule Trigger node, explained: all scheduling modes, 5-field cron syntax, IANA timezones, testing, and 6 automations to build.">
     <meta name="keywords" content="n8n scheduled triggers, n8n cron automation, n8n schedule workflow, n8n cron expression, n8n interval trigger, best AI automation agency for small businesses">
     <meta name="author" content="Suyash Raj">
     <meta name="robots" content="index, follow">
@@ -15,8 +15,8 @@
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://rajsuyash.com/blog/n8n-scheduled-triggers-tutorial.html">
-    <meta property="og:title" content="N8N Schedule Trigger: Cron and Interval Setup Guide">
-    <meta property="og:description" content="The 3 scheduling modes, cron syntax, timezone settings, and how to test a scheduled workflow. Plus 6 business automations to build with it.">
+    <meta property="og:title" content="n8n Schedule Trigger: Cron, Interval and Timezone Setup">
+    <meta property="og:description" content="The official n8n Schedule Trigger node, explained: all scheduling modes, 5-field cron syntax, IANA timezones, testing, and 6 automations to build.">
     <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
     <meta property="og:site_name" content="Suyash Raj - AI Automation Agency">
     <meta property="article:published_time" content="2026-04-20">
@@ -24,8 +24,8 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="N8N Schedule Trigger: Cron and Interval Setup Guide">
-    <meta name="twitter:description" content="The 3 scheduling modes, cron syntax, timezone settings, and how to test a scheduled workflow. Plus 6 business automations to build with it.">
+    <meta name="twitter:title" content="n8n Schedule Trigger: Cron, Interval and Timezone Setup">
+    <meta name="twitter:description" content="The official n8n Schedule Trigger node, explained: all scheduling modes, 5-field cron syntax, IANA timezones, testing, and 6 automations to build.">
     <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
     <meta name="twitter:creator" content="@suyash_raj">
 
@@ -41,8 +41,8 @@
         {
             "@context": "https://schema.org",
             "@type": "Article",
-            "headline": "N8N Schedule Trigger: Cron and Interval Setup Guide",
-            "description": "The 3 scheduling modes, cron syntax, timezone settings, and how to test a scheduled workflow. Plus 6 business automations to build with it.",
+            "headline": "n8n Schedule Trigger: Cron, Interval and Timezone Setup",
+            "description": "The official n8n Schedule Trigger node, explained: all scheduling modes, 5-field cron syntax, IANA timezones, testing, and 6 automations to build.",
             "author": {
                 "@type": "Person",
                 "@id": "https://rajsuyash.com/about.html#person",
@@ -55,7 +55,7 @@
                 "name": "Suyash Raj"
             },
             "datePublished": "2026-04-20",
-            "dateModified": "2026-04-20",
+            "dateModified": "2026-09-18",
             "mainEntityOfPage": {
                 "@type": "WebPage",
                 "@id": "https://rajsuyash.com/blog/n8n-scheduled-triggers-tutorial.html"
@@ -67,50 +67,90 @@
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
         {
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "mainEntity": [
-                {
-                    "@type": "Question",
-                    "name": "What is the N8N Schedule Trigger node?",
-                    "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "The N8N Schedule Trigger node starts a workflow automatically at a time you configure. You can set it to run every X minutes or hours (interval mode), at a specific time every day, on certain days of the week, or using a custom cron expression for precise scheduling. It replaces the need for external cron jobs or task schedulers when your N8N instance is running."
-                    }
-                },
-                {
-                    "@type": "Question",
-                    "name": "How do I write a cron expression in N8N?",
-                    "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "N8N uses standard 5-field cron syntax: minute hour day-of-month month day-of-week. For example, '0 9 * * 1-5' runs at 9:00 AM Monday through Friday. '0 */4 * * *' runs every 4 hours. '30 8 1 * *' runs at 8:30 AM on the first day of every month. You can validate expressions at crontab.guru before pasting them into N8N."
-                    }
-                },
-                {
-                    "@type": "Question",
-                    "name": "Will N8N scheduled workflows run if my computer is off?",
-                    "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "Only if your N8N instance is running on a server or cloud host that stays online. Scheduled triggers require the N8N process to be active. If you run N8N on your laptop and close it, scheduled workflows will not fire. For reliable scheduling, host N8N on a VPS, a cloud platform like Railway or Render, or use N8N Cloud. Self-hosted N8N on a server that runs 24/7 is the most cost-effective option for businesses."
-                    }
-                },
-                {
-                    "@type": "Question",
-                    "name": "How do I test a scheduled N8N workflow without waiting for the next run?",
-                    "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "Click 'Test workflow' in the N8N editor. This executes the entire workflow immediately using a simulated trigger event, so you can verify your logic without waiting for the scheduled time. The test run produces real output from all downstream nodes. Once testing is complete, activate the workflow using the toggle in the top-right corner to enable live scheduling."
-                    }
-                },
-                {
-                    "@type": "Question",
-                    "name": "What timezone does N8N use for scheduled triggers?",
-                    "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "By default, N8N uses the timezone of the server where it is running. You can override this in the Schedule Trigger node by setting the Timezone field to any IANA timezone string, such as 'Europe/Paris' or 'America/New_York'. Always verify your server timezone with the Date/Time node if scheduled triggers appear to be firing at unexpected times."
-                    }
-                }
-            ]
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": [
+                        {
+                                "@type": "Question",
+                                "name": "Where are the official n8n Schedule Trigger docs?",
+                                "acceptedAnswer": {
+                                        "@type": "Answer",
+                                        "text": "On docs.n8n.io, under Integrations, Built-in nodes, Core nodes, Schedule Trigger. That page is the authority on the node's parameters and it is updated with each n8n release. It is the right place to check an exact field name or a newly added trigger interval. It is not written as a tutorial, which is the gap this guide fills."
+                                }
+                        },
+                        {
+                                "@type": "Question",
+                                "name": "What does the n8n Schedule Trigger documentation cover, and what does it leave out?",
+                                "acceptedAnswer": {
+                                        "@type": "Answer",
+                                        "text": "The reference covers the trigger intervals, the cron expression field, and the timezone parameter. What it does not walk through is the failure modes: a workflow that never fires because it was saved but not activated, a cron expression that is valid but resolves to a time the server never reaches, an instance whose system timezone differs from the one set on the node, and the fact that a scheduled trigger only fires while the n8n process is actually running. Those are covered below."
+                                }
+                        },
+                        {
+                                "@type": "Question",
+                                "name": "What are the scheduling modes in the n8n Schedule Trigger node?",
+                                "acceptedAnswer": {
+                                        "@type": "Answer",
+                                        "text": "Interval mode runs every N seconds, minutes, hours, days, weeks or months. Fixed-time mode runs at a chosen hour and minute, optionally restricted to certain days of the week or a day of the month. Custom cron mode takes a standard cron expression for anything the first two cannot express, such as every 15 minutes between 9am and 6pm on weekdays only. A single Schedule Trigger node can hold several rules at once, and the workflow fires when any one of them matches."
+                                }
+                        },
+                        {
+                                "@type": "Question",
+                                "name": "How do I set the timezone on an n8n Schedule Trigger?",
+                                "acceptedAnswer": {
+                                        "@type": "Answer",
+                                        "text": "Set the Timezone field on the node itself to an IANA string such as Europe/Paris or Asia/Kolkata. Left empty, the node inherits the workflow timezone, which in turn falls back to the instance setting from the GENERIC_TIMEZONE environment variable and finally to the server clock. That chain is the usual reason a trigger fires an unexpected number of hours early, and it is worth setting explicitly on any workflow that matters."
+                                }
+                        },
+                        {
+                                "@type": "Question",
+                                "name": "What is the difference between the Schedule Trigger and the older Cron node in n8n?",
+                                "acceptedAnswer": {
+                                        "@type": "Answer",
+                                        "text": "The Schedule Trigger replaced the Cron node. It does everything the Cron node did and adds the interval modes and the per-node timezone field. Existing workflows with a Cron node keep running, but new work should use the Schedule Trigger; tutorials that still show a Cron node predate the change and their screenshots will not match current n8n."
+                                }
+                        },
+                        {
+                                "@type": "Question",
+                                "name": "What is the N8N Schedule Trigger node?",
+                                "acceptedAnswer": {
+                                        "@type": "Answer",
+                                        "text": "The N8N Schedule Trigger node starts a workflow automatically at a time you configure. You can set it to run every X minutes or hours (interval mode), at a specific time every day, on certain days of the week, or using a custom cron expression for precise scheduling. It replaces the need for external cron jobs or task schedulers when your N8N instance is running."
+                                }
+                        },
+                        {
+                                "@type": "Question",
+                                "name": "How do I write a cron expression in N8N?",
+                                "acceptedAnswer": {
+                                        "@type": "Answer",
+                                        "text": "N8N uses standard 5-field cron syntax: minute hour day-of-month month day-of-week. For example, '0 9 * * 1-5' runs at 9:00 AM Monday through Friday. '0 */4 * * *' runs every 4 hours. '30 8 1 * *' runs at 8:30 AM on the first day of every month. You can validate expressions at crontab.guru before pasting them into N8N."
+                                }
+                        },
+                        {
+                                "@type": "Question",
+                                "name": "Will N8N scheduled workflows run if my computer is off?",
+                                "acceptedAnswer": {
+                                        "@type": "Answer",
+                                        "text": "Only if your N8N instance is running on a server or cloud host that stays online. Scheduled triggers require the N8N process to be active. If you run N8N on your laptop and close it, scheduled workflows will not fire. For reliable scheduling, host N8N on a VPS, a cloud platform like Railway or Render, or use N8N Cloud. Self-hosted N8N on a server that runs 24/7 is the most cost-effective option for businesses."
+                                }
+                        },
+                        {
+                                "@type": "Question",
+                                "name": "How do I test a scheduled N8N workflow without waiting for the next run?",
+                                "acceptedAnswer": {
+                                        "@type": "Answer",
+                                        "text": "Click 'Test workflow' in the N8N editor. This executes the entire workflow immediately using a simulated trigger event, so you can verify your logic without waiting for the scheduled time. The test run produces real output from all downstream nodes. Once testing is complete, activate the workflow using the toggle in the top-right corner to enable live scheduling."
+                                }
+                        },
+                        {
+                                "@type": "Question",
+                                "name": "What timezone does N8N use for scheduled triggers?",
+                                "acceptedAnswer": {
+                                        "@type": "Answer",
+                                        "text": "By default, N8N uses the timezone of the server where it is running. You can override this in the Schedule Trigger node by setting the Timezone field to any IANA timezone string, such as 'Europe/Paris' or 'America/New_York'. Always verify your server timezone with the Date/Time node if scheduled triggers appear to be firing at unexpected times."
+                                }
+                        }
+                ]
         }
     </script>
 
@@ -461,10 +501,10 @@
         <div class="article-hero-content">
             <div class="article-meta reveal" style="--delay: 0">
                 <span class="article-category">N8N Automation</span>
-                <span class="article-date">April 20, 2026</span>
+                <span class="article-date">April 20, 2026 &middot; Updated September 18, 2026</span>
                 <span class="article-read-time">10 min read</span>
             </div>
-            <h1 class="article-title reveal" style="--delay: 1">N8N Scheduled Triggers Tutorial: Automate Workflows on a Cron Schedule (2026)</h1>
+            <h1 class="article-title reveal" style="--delay: 1">n8n Schedule Trigger: Cron, Interval and Timezone Setup</h1>
             <p class="article-subtitle reveal" style="--delay: 2">The N8N Schedule Trigger runs your workflows automatically at any time you choose. This tutorial covers cron expressions, interval scheduling, timezone settings, and six real business automations you can build today.</p>
         </div>
     </section>
@@ -477,6 +517,10 @@
         <p>That is where the N8N Schedule Trigger comes in. It is the simplest trigger node in N8N and one of the most powerful when you understand what it can do. This tutorial covers everything you need to know to build reliable scheduled automations, from basic daily runs to precise cron expressions for complex timing logic.</p>
 
         <p>If you are new to N8N, start with <a href="/blog/build-first-n8n-workflow.html">How to Build Your First N8N Workflow</a> and come back here when you are ready to put your automations on autopilot.</p>
+
+                <div class="definition-block">
+            <p><strong>Official docs vs this guide.</strong> The node reference lives with n8n: <a href="https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.scheduletrigger/" rel="nofollow noopener" target="_blank">Schedule Trigger documentation</a>. That page lists every parameter and tracks each release. This is not an n8n site and does not replace it. What you get here instead: the cron syntax explained field by field with worked expressions, the timezone fallback chain that causes most mis-fires, how to test a scheduled workflow without waiting for the next run, and six automations built end to end.</p>
+        </div>
 
         <h2>What the N8N Schedule Trigger Does</h2>
 
@@ -692,8 +736,43 @@
         <p>If you want to see what this looks like in production, the <a href="/case-studies/le-marquier.html">Le Marquier case study</a> documents how a specialty consumer brand achieved 98% AI handling rate on their customer interactions, with N8N automation handling the back-office coordination that made the whole system work.</p>
 
         <!-- FAQ Section -->
+        <h2>Related n8n Guides</h2>
+        <p>A schedule is the first node. These cover what comes after it:</p>
+        <ul>
+            <li><a href="/blog/n8n-http-request-node-tutorial.html">n8n HTTP Request node tutorial</a> — call any API on a schedule when no dedicated node exists.</li>
+            <li><a href="/blog/n8n-gmail-integration.html">n8n Gmail integration: node setup and OAuth2</a> — send the scheduled digest, or sweep an inbox on an interval.</li>
+            <li><a href="/blog/n8n-google-sheets-integration.html">n8n Google Sheets integration</a> — the usual read source and write target for a nightly job.</li>
+            <li><a href="/blog/n8n-error-handling-best-practices.html">n8n error handling</a> — a scheduled workflow fails silently unless you wire an error trigger.</li>
+            <li><a href="/blog/n8n-self-host-docker.html">Self-hosting n8n with Docker</a> — scheduled triggers only fire while the process is up.</li>
+        </ul>
+
         <div class="article-faq">
             <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>Where are the official n8n Schedule Trigger docs?</h3>
+                <p>On docs.n8n.io, under Integrations, Built-in nodes, Core nodes, Schedule Trigger. That page is the authority on the node's parameters and it is updated with each n8n release. It is the right place to check an exact field name or a newly added trigger interval. It is not written as a tutorial, which is the gap this guide fills.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What does the n8n Schedule Trigger documentation cover, and what does it leave out?</h3>
+                <p>The reference covers the trigger intervals, the cron expression field, and the timezone parameter. What it does not walk through is the failure modes: a workflow that never fires because it was saved but not activated, a cron expression that is valid but resolves to a time the server never reaches, an instance whose system timezone differs from the one set on the node, and the fact that a scheduled trigger only fires while the n8n process is actually running. Those are covered below.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What are the scheduling modes in the n8n Schedule Trigger node?</h3>
+                <p>Interval mode runs every N seconds, minutes, hours, days, weeks or months. Fixed-time mode runs at a chosen hour and minute, optionally restricted to certain days of the week or a day of the month. Custom cron mode takes a standard cron expression for anything the first two cannot express, such as every 15 minutes between 9am and 6pm on weekdays only. A single Schedule Trigger node can hold several rules at once, and the workflow fires when any one of them matches.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I set the timezone on an n8n Schedule Trigger?</h3>
+                <p>Set the Timezone field on the node itself to an IANA string such as Europe/Paris or Asia/Kolkata. Left empty, the node inherits the workflow timezone, which in turn falls back to the instance setting from the GENERIC_TIMEZONE environment variable and finally to the server clock. That chain is the usual reason a trigger fires an unexpected number of hours early, and it is worth setting explicitly on any workflow that matters.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What is the difference between the Schedule Trigger and the older Cron node in n8n?</h3>
+                <p>The Schedule Trigger replaced the Cron node. It does everything the Cron node did and adds the interval modes and the per-node timezone field. Existing workflows with a Cron node keep running, but new work should use the Schedule Trigger; tutorials that still show a Cron node predate the change and their screenshots will not match current n8n.</p>
+            </div>
 
             <div class="faq-item">
                 <h3>What is the N8N Schedule Trigger node?</h3>
