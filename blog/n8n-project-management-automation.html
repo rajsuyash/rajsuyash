@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "N8N Project Management Automation: Sync Trello, Asana & ClickUp Automatically",
-        "description": "Use N8N to automate project management across Trello, Asana, and ClickUp. Auto-create tasks from emails, sync status updates, and eliminate the copy-paste work slowing your team down.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-07-27T00:00:00Z",
-        "dateModified": "2026-07-27T00:00:00Z",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-project-management-automation.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "N8N Project Management Automation: Sync Trello, Asana & ClickUp Automatically",
+            "description": "Use N8N to automate project management across Trello, Asana, and ClickUp. Auto-create tasks from emails, sync status updates, and eliminate the copy-paste work slowing your team down.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-07-27T00:00:00Z",
+            "dateModified": "2026-07-27T00:00:00Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-project-management-automation.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Can N8N connect Trello, Asana, and ClickUp together?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N has native nodes for Trello, Asana, and ClickUp. You can build workflows that watch one tool for changes and push those changes into another automatically. For example, when a card moves to 'Done' in Trello, N8N can mark the linked Asana task complete and notify a Slack channel in the same workflow run."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Can N8N connect Trello, Asana, and ClickUp together?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N has native nodes for Trello, Asana, and ClickUp. You can build workflows that watch one tool for changes and push those changes into another automatically. For example, when a card moves to 'Done' in Trello, N8N can mark the linked Asana task complete and notify a Slack channel in the same workflow run."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I auto-create tasks in Trello or Asana from emails?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "In N8N, connect a Gmail or IMAP trigger to watch for emails matching a label or subject pattern. Pass the email body through a Text node or an OpenAI node to extract the key details, then use the Trello or Asana node to create a new card or task with those extracted fields as the title, description, and due date. The whole workflow takes about 20 minutes to configure."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is N8N better than Zapier for project management automation?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "For simple one-step triggers N8N and Zapier are comparable. But for multi-step project management workflows that branch on conditions (e.g., route tasks differently based on priority or project type), N8N is significantly more capable and far cheaper at scale. N8N's self-hosted option also removes the per-task pricing that makes Zapier expensive once volume grows."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What N8N nodes do I need for project management automation?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The core nodes are: Trello, Asana, ClickUp (for the project tools), Gmail or IMAP (to capture email-based requests), Webhook (for form submissions or CRM triggers), IF or Switch (for conditional routing), Slack or Microsoft Teams (for notifications), and HTTP Request (for any tool without a native node). Most project management workflows only use 5-7 nodes total."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How much time does N8N project management automation actually save?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "It depends on task volume, but teams that manually create, assign, and update tasks across multiple tools typically spend 3-5 hours per week on administrative coordination. Automating these handoffs with N8N eliminates most of that. One of our clients reduced project coordination overhead by over 70% after automating their intake and status-sync workflows."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "How do I auto-create tasks in Trello or Asana from emails?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "In N8N, connect a Gmail or IMAP trigger to watch for emails matching a label or subject pattern. Pass the email body through a Text node or an OpenAI node to extract the key details, then use the Trello or Asana node to create a new card or task with those extracted fields as the title, description, and due date. The whole workflow takes about 20 minutes to configure."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Is N8N better than Zapier for project management automation?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "For simple one-step triggers N8N and Zapier are comparable. But for multi-step project management workflows that branch on conditions (e.g., route tasks differently based on priority or project type), N8N is significantly more capable and far cheaper at scale. N8N's self-hosted option also removes the per-task pricing that makes Zapier expensive once volume grows."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What N8N nodes do I need for project management automation?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The core nodes are: Trello, Asana, ClickUp (for the project tools), Gmail or IMAP (to capture email-based requests), Webhook (for form submissions or CRM triggers), IF or Switch (for conditional routing), Slack or Microsoft Teams (for notifications), and HTTP Request (for any tool without a native node). Most project management workflows only use 5-7 nodes total."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How much time does N8N project management automation actually save?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "It depends on task volume, but teams that manually create, assign, and update tasks across multiple tools typically spend 3-5 hours per week on administrative coordination. Automating these handoffs with N8N eliminates most of that. One of our clients reduced project coordination overhead by over 70% after automating their intake and status-sync workflows."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N Project Management Automation", "item": "https://rajsuyash.com/blog/n8n-project-management-automation.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N Project Management Automation",
+                    "item": "https://rajsuyash.com/blog/n8n-project-management-automation.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -745,8 +760,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

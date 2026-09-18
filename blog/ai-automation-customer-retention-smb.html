@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "AI Automation for Customer Retention: How SMBs Reduce Churn and Grow Recurring Revenue",
-        "description": "AI automation for customer retention helps SMBs reduce churn, recover at-risk accounts, and grow recurring revenue without adding headcount.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-08-21",
-        "dateModified": "2026-08-21",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/ai-automation-customer-retention-smb.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "AI Automation for Customer Retention: How SMBs Reduce Churn and Grow Recurring Revenue",
+            "description": "AI automation for customer retention helps SMBs reduce churn, recover at-risk accounts, and grow recurring revenue without adding headcount.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-08-21",
+            "dateModified": "2026-08-21",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/ai-automation-customer-retention-smb.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "How does AI automation help with customer retention?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "AI automation monitors customer behavior signals (login frequency, purchase gaps, support tickets, engagement drops) and triggers personalized outreach at exactly the right moment. Instead of a one-person customer success team trying to keep track of hundreds of accounts manually, automation runs continuously in the background and flags at-risk customers before they cancel or disengage."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "How does AI automation help with customer retention?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "AI automation monitors customer behavior signals (login frequency, purchase gaps, support tickets, engagement drops) and triggers personalized outreach at exactly the right moment. Instead of a one-person customer success team trying to keep track of hundreds of accounts manually, automation runs continuously in the background and flags at-risk customers before they cancel or disengage."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What is the ROI of customer retention automation for a small business?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The ROI depends on your average customer lifetime value and current churn rate, but the math is compelling. Reducing monthly churn from 5% to 3% on a 200-customer base at $200 per month each adds $96,000 in annual retained revenue. The automation that produces this result typically costs $500 to $2,000 per month to build and run. Use the ROI calculator at rajsuyash.com/roi-calculator.html to model your specific numbers."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can I set up customer retention automation without a large technical team?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. Tools like N8N let you build retention workflows without writing code. Most SMBs need three to five workflows: a check-in sequence for new customers, an engagement monitoring trigger, a win-back campaign for lapsed buyers, a subscription renewal reminder, and a post-cancellation recovery attempt. Each can be built in a day with the right automation partner."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What customer data do I need to run retention automation?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "At minimum you need: last purchase or login date, total spend to date, support ticket history, and email engagement (opens, clicks). Most CRMs and e-commerce platforms track this already. The automation layer connects to these data sources and uses the signals to score churn risk and trigger the right response. You do not need a dedicated data warehouse to start."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How long does it take to see results from retention automation?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Most businesses see measurable results within 60 to 90 days of deploying their first retention workflow. The fastest gains usually come from win-back campaigns targeting customers who went quiet in the last 30 to 90 days. These are people who already know you, so conversion rates are much higher than new acquisition. Check-in automation for new customers shows up in retention numbers within the first customer cohort cycle, typically 30 to 60 days."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "What is the ROI of customer retention automation for a small business?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The ROI depends on your average customer lifetime value and current churn rate, but the math is compelling. Reducing monthly churn from 5% to 3% on a 200-customer base at $200 per month each adds $96,000 in annual retained revenue. The automation that produces this result typically costs $500 to $2,000 per month to build and run. Use the ROI calculator at rajsuyash.com/roi-calculator.html to model your specific numbers."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can I set up customer retention automation without a large technical team?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. Tools like N8N let you build retention workflows without writing code. Most SMBs need three to five workflows: a check-in sequence for new customers, an engagement monitoring trigger, a win-back campaign for lapsed buyers, a subscription renewal reminder, and a post-cancellation recovery attempt. Each can be built in a day with the right automation partner."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What customer data do I need to run retention automation?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "At minimum you need: last purchase or login date, total spend to date, support ticket history, and email engagement (opens, clicks). Most CRMs and e-commerce platforms track this already. The automation layer connects to these data sources and uses the signals to score churn risk and trigger the right response. You do not need a dedicated data warehouse to start."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How long does it take to see results from retention automation?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Most businesses see measurable results within 60 to 90 days of deploying their first retention workflow. The fastest gains usually come from win-back campaigns targeting customers who went quiet in the last 30 to 90 days. These are people who already know you, so conversion rates are much higher than new acquisition. Check-in automation for new customers shows up in retention numbers within the first customer cohort cycle, typically 30 to 60 days."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "AI Automation for Customer Retention", "item": "https://rajsuyash.com/blog/ai-automation-customer-retention-smb.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "AI Automation for Customer Retention",
+                    "item": "https://rajsuyash.com/blog/ai-automation-customer-retention-smb.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -626,7 +641,7 @@
 
         <p>If you want to know exactly which workflow to build first and what your expected return looks like before you invest, start with a discovery call. We will map your current churn pattern, identify the highest-value retention automation target for your specific business, and show you a realistic implementation path.</p>
 
-        <p>Our <a href="/ai-automation-agency.html">AI automation agency</a> has built retention systems for SMBs across e-commerce, professional services, SaaS, and consumer brands. The playbook is repeatable. The results are measurable.</p>
+        <p>Our <a href="/consulting.html">AI automation agency</a> has built retention systems for SMBs across e-commerce, professional services, SaaS, and consumer brands. The playbook is repeatable. The results are measurable.</p>
 
         <p><a href="/qualify" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
 
@@ -664,8 +679,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

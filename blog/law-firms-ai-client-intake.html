@@ -32,99 +32,102 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "AI Intake for Law Firms: Automate Client Intake",
-        "description": "How law firms automate client intake with AI: 24/7 call answering, conflict checks, document collection, and the ethics limits on each step.",
-        "image": "https://rajsuyash.com/Photo.png",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "logo": {
-                "@type": "ImageObject",
-                "url": "https://rajsuyash.com/Photo.png"
-            }
-        },
-        "datePublished": "2026-02-16",
-        "dateModified": "2026-09-17",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/law-firms-ai-client-intake"
-        },
-        "keywords": ["AI automation for law firms", "legal intake automation", "AI client intake", "best AI automation agency for small businesses"]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "AI Intake for Law Firms: Automate Client Intake",
+            "description": "How law firms automate client intake with AI: 24/7 call answering, conflict checks, document collection, and the ethics limits on each step.",
+            "image": "https://rajsuyash.com/Photo.png",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-02-16",
+            "dateModified": "2026-09-17",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/law-firms-ai-client-intake"
+            },
+            "keywords": [
+                "AI automation for law firms",
+                "legal intake automation",
+                "AI client intake",
+                "best AI automation agency for small businesses"
+            ]
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
         {
-            "@type": "Question",
-            "name": "Can an AI voice agent handle legal intake calls without sounding robotic?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Modern voice agents use conversational speech models rather than a recorded phone tree, and they adapt follow-up questions to what the caller actually said. Callers are told up front that they are speaking with an automated assistant, which legal ethics rules require anyway. Expect it to sound like a competent intake coordinator, not like an attorney, and design the script that way."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "How does an AI agent qualify leads for a law firm?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "It follows a qualification script written around your own practice areas. A personal injury firm might ask the date of the incident, whether medical treatment was received and whether another party was at fault. A family law practice asks the matter type and whether the caller already has an attorney. Callers who meet your criteria get booked. Callers who do not get referral information or a voicemail route, never an opinion about their case."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "What happens to law firm calls that come in outside business hours?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "The agent handles them the same way it handles daytime calls: collect contact details, take preliminary intake, and book the next available consultation slot. Matters flagged as urgent can page the on-call attorney instead. Nothing waits for morning triage."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "How much does an AI voice agent cost compared to a receptionist?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "The US Bureau of Labor Statistics puts the median receptionist wage at $38,010 a year as of May 2025, before benefits and before cover for holidays and sickness, and that buys business-hours coverage only. A traditional answering service runs $300 to $1,200 a month and takes messages without qualifying anyone. AI voice agents are generally quoted in the $300 to $1,500 a month range for round-the-clock coverage with qualification and booking."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "What AI tools work best for law firm intake automation?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "The usual stack is Make.com or n8n for workflow orchestration, an LLM from OpenAI or Anthropic for conversation and document handling, and API integration with practice management software such as Clio, MyCase or PracticePanther. That combination covers intelligent web forms, conflict checking and engagement letter generation."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "Is AI intake automation compliant with legal ethics rules?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes, when implemented correctly. The automation handles administrative work: scheduling, document collection, data entry. Attorney judgment stays responsible for legal advice and case acceptance. The system flags potential conflicts and ethical issues for review rather than resolving them. Disclosure that the caller is speaking to an automated system, and an easy route to a human, are not optional extras."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "How long does it take to implement AI intake automation?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "A basic system with 24/7 lead response and scheduling can be live in one to two weeks. A full implementation with intelligent screening, conflict checking, document collection and engagement automation typically takes six to eight weeks."
-            }
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Can an AI voice agent handle legal intake calls without sounding robotic?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Modern voice agents use conversational speech models rather than a recorded phone tree, and they adapt follow-up questions to what the caller actually said. Callers are told up front that they are speaking with an automated assistant, which legal ethics rules require anyway. Expect it to sound like a competent intake coordinator, not like an attorney, and design the script that way."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How does an AI agent qualify leads for a law firm?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "It follows a qualification script written around your own practice areas. A personal injury firm might ask the date of the incident, whether medical treatment was received and whether another party was at fault. A family law practice asks the matter type and whether the caller already has an attorney. Callers who meet your criteria get booked. Callers who do not get referral information or a voicemail route, never an opinion about their case."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What happens to law firm calls that come in outside business hours?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The agent handles them the same way it handles daytime calls: collect contact details, take preliminary intake, and book the next available consultation slot. Matters flagged as urgent can page the on-call attorney instead. Nothing waits for morning triage."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How much does an AI voice agent cost compared to a receptionist?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The US Bureau of Labor Statistics puts the median receptionist wage at $38,010 a year as of May 2025, before benefits and before cover for holidays and sickness, and that buys business-hours coverage only. A traditional answering service runs $300 to $1,200 a month and takes messages without qualifying anyone. AI voice agents are generally quoted in the $300 to $1,500 a month range for round-the-clock coverage with qualification and booking."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What AI tools work best for law firm intake automation?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The usual stack is Make.com or n8n for workflow orchestration, an LLM from OpenAI or Anthropic for conversation and document handling, and API integration with practice management software such as Clio, MyCase or PracticePanther. That combination covers intelligent web forms, conflict checking and engagement letter generation."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is AI intake automation compliant with legal ethics rules?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes, when implemented correctly. The automation handles administrative work: scheduling, document collection, data entry. Attorney judgment stays responsible for legal advice and case acceptance. The system flags potential conflicts and ethical issues for review rather than resolving them. Disclosure that the caller is speaking to an automated system, and an easy route to a human, are not optional extras."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How long does it take to implement AI intake automation?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A basic system with 24/7 lead response and scheduling can be live in one to two weeks. A full implementation with intelligent screening, conflict checking, document collection and engagement automation typically takes six to eight weeks."
+                    }
+                }
+            ]
         }
-    ]
-}
     </script>
 
     <!-- Fonts -->
@@ -347,7 +350,32 @@
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://rajsuyash.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://rajsuyash.com/blog/"},{"@type":"ListItem","position":3,"name":"Article","item":"https://rajsuyash.com/blog/law-firms-ai-client-intake.html"}]}</script>
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://rajsuyash.com/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Blog",
+                "item": "https://rajsuyash.com/blog/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Article",
+                "item": "https://rajsuyash.com/blog/law-firms-ai-client-intake.html"
+            }
+        ]
+    }
+</script>
 </head>
 <body>
     <div class="noise-overlay" aria-hidden="true"></div>
@@ -572,7 +600,7 @@
 
         <p>For most small to mid-sized law firms, the combination of <strong>Make.com + OpenAI + your existing practice management system</strong> provides the best balance of capability and ease of implementation. Make.com handles the orchestration with a visual workflow builder, OpenAI provides the intelligence, and everything connects to the software you already use.</p>
 
-        <p>If you prefer open source and self-hosting for maximum data control, <a href="/n8n-automation.html">n8n</a> is a strong alternative to Make.com, and the call-handling layer is covered on our <a href="/ai-voice-agent.html">AI voice agent page</a>.</p>
+        <p>If you prefer open source and self-hosting for maximum data control, <a href="/n8n-automation.html">n8n</a> is a strong alternative to Make.com, and the call-handling layer is covered on our <a href="https://voxdonna.com/ai-voice-agents.html">AI voice agent page</a>.</p>
 
         <h2>How This Compares to Your Current Options</h2>
 
@@ -624,7 +652,7 @@
 
         <p>For context on the first row: the US Bureau of Labor Statistics puts the median annual wage for receptionists at $38,010 as of May 2025, before benefits, payroll tax or cover for holiday and sickness. The other three rows are market ranges, so price your own quotes rather than taking them as fixed.</p>
 
-        <p>The cost comparison is the easy part. The harder question is what happens to conversion when every call is answered, every qualified prospect leaves with a booking, and every data point lands in your system without anyone retyping it. Our <a href="/ai-voice-agent.html">AI voice agent page</a> covers the call-handling half of this in detail.</p>
+        <p>The cost comparison is the easy part. The harder question is what happens to conversion when every call is answered, every qualified prospect leaves with a booking, and every data point lands in your system without anyone retyping it. Our <a href="https://voxdonna.com/ai-voice-agents.html">AI voice agent page</a> covers the call-handling half of this in detail.</p>
 
         <h2>What Practice Areas Benefit Most</h2>
 
@@ -800,7 +828,7 @@
         <div class="internal-links" style="background: #f8f9fa; border-left: 4px solid #2563eb; padding: 1.5rem; margin: 2rem 0; border-radius: 0 8px 8px 0;">
             <p style="font-weight: 600; margin-bottom: 0.75rem; color: #1e293b;">Explore More</p>
             <ul style="list-style: none; padding: 0; margin: 0;">
-                <li style="margin-bottom: 0.5rem;"><a href="/ai-voice-agent.html">How our AI voice agents handle inbound calls</a></li>
+                <li style="margin-bottom: 0.5rem;"><a href="https://voxdonna.com/ai-voice-agents.html">How our AI voice agents handle inbound calls</a></li>
                 <li style="margin-bottom: 0.5rem;"><a href="/blog/ai-voice-agent-vs-live-answering-service.html">AI voice agent vs a live answering service</a></li>
                 <li style="margin-bottom: 0.5rem;"><a href="/blog/ai-voice-agent-compliance-tcpa-hipaa.html">Compliance: TCPA, HIPAA and recorded calls</a></li>
                 <li style="margin-bottom: 0.5rem;"><a href="/roi-calculator.html">Calculate your AI automation ROI</a></li>

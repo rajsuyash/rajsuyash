@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "N8N Email Marketing Automation: Sync Leads to MailChimp, Brevo & ActiveCampaign (2026)",
-        "description": "Learn how to automate email marketing with N8N. Step-by-step tutorial to sync leads, trigger welcome sequences, and connect MailChimp, Brevo, and ActiveCampaign to any source.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-04-29",
-        "dateModified": "2026-04-29",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-email-marketing-automation.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "N8N Email Marketing Automation: Sync Leads to MailChimp, Brevo & ActiveCampaign (2026)",
+            "description": "Learn how to automate email marketing with N8N. Step-by-step tutorial to sync leads, trigger welcome sequences, and connect MailChimp, Brevo, and ActiveCampaign to any source.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-04-29",
+            "dateModified": "2026-04-29",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-email-marketing-automation.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "How do I connect N8N to MailChimp?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "In N8N, create a new credential of type 'Mailchimp API'. Grab your API key from your MailChimp account under Account > Extras > API Keys. Paste it into N8N, name the credential, and save. You can then use the Mailchimp node to add/update subscribers, tag contacts, or trigger campaigns from any workflow."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "How do I connect N8N to MailChimp?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "In N8N, create a new credential of type 'Mailchimp API'. Grab your API key from your MailChimp account under Account > Extras > API Keys. Paste it into N8N, name the credential, and save. You can then use the Mailchimp node to add/update subscribers, tag contacts, or trigger campaigns from any workflow."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can N8N trigger welcome email sequences automatically?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N can add a subscriber to your email platform (MailChimp, Brevo, or ActiveCampaign) the moment a lead comes in from any source: a form, a CRM, a webhook, or a Google Sheet. Once the subscriber is added with the correct tag or list, your platform's automation sequences fire automatically. N8N handles the sync; your email tool handles the send."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What is the best email marketing platform to use with N8N?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "All three major options work well. MailChimp has a native N8N node and the widest name recognition. Brevo (formerly Sendinblue) offers more generous free limits and has good API documentation. ActiveCampaign is the strongest for complex tag-based automations and CRM-style segmentation. Choose based on your existing stack and the complexity of segmentation you need."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Does N8N have a native MailChimp integration?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N ships with a dedicated Mailchimp node that supports adding subscribers, updating subscriber data, managing tags, and retrieving list members. For Brevo and ActiveCampaign, you can use their dedicated nodes or fall back to the HTTP Request node with their REST APIs."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I prevent duplicate subscribers when using N8N?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The safest approach is to use 'upsert' behavior: add or update based on email address. Most email platforms treat the email as the unique key, so adding an existing subscriber just updates their record rather than creating a duplicate. In N8N, set the Mailchimp node to 'Subscribe' mode, which behaves as an upsert by default. For ActiveCampaign, use the 'Contact - Create/Update' action."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "Can N8N trigger welcome email sequences automatically?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N can add a subscriber to your email platform (MailChimp, Brevo, or ActiveCampaign) the moment a lead comes in from any source: a form, a CRM, a webhook, or a Google Sheet. Once the subscriber is added with the correct tag or list, your platform's automation sequences fire automatically. N8N handles the sync; your email tool handles the send."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What is the best email marketing platform to use with N8N?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "All three major options work well. MailChimp has a native N8N node and the widest name recognition. Brevo (formerly Sendinblue) offers more generous free limits and has good API documentation. ActiveCampaign is the strongest for complex tag-based automations and CRM-style segmentation. Choose based on your existing stack and the complexity of segmentation you need."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Does N8N have a native MailChimp integration?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N ships with a dedicated Mailchimp node that supports adding subscribers, updating subscriber data, managing tags, and retrieving list members. For Brevo and ActiveCampaign, you can use their dedicated nodes or fall back to the HTTP Request node with their REST APIs."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How do I prevent duplicate subscribers when using N8N?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The safest approach is to use 'upsert' behavior: add or update based on email address. Most email platforms treat the email as the unique key, so adding an existing subscriber just updates their record rather than creating a duplicate. In N8N, set the Mailchimp node to 'Subscribe' mode, which behaves as an upsert by default. For ActiveCampaign, use the 'Contact - Create/Update' action."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N Email Marketing Automation", "item": "https://rajsuyash.com/blog/n8n-email-marketing-automation.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N Email Marketing Automation",
+                    "item": "https://rajsuyash.com/blog/n8n-email-marketing-automation.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -712,8 +727,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

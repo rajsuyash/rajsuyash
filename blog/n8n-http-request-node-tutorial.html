@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "N8N HTTP Request Node: Connect Any API, Step by Step",
-        "description": "6 steps from first GET to paginated POST: auth types, JSON bodies, parsing responses, plus 5 business workflows and fixes for common errors.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-04-16",
-        "dateModified": "2026-09-18",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-http-request-node-tutorial.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "N8N HTTP Request Node: Connect Any API, Step by Step",
+            "description": "6 steps from first GET to paginated POST: auth types, JSON bodies, parsing responses, plus 5 business workflows and fixes for common errors.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-04-16",
+            "dateModified": "2026-09-18",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-http-request-node-tutorial.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "What is the N8N HTTP Request node used for?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The N8N HTTP Request node lets you connect to any REST API that N8N does not have a built-in node for. You configure the URL, HTTP method, headers, authentication, and request body directly in the node. It handles GET, POST, PUT, PATCH, and DELETE requests, making it the universal connector for any third-party service with an API."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "What is the N8N HTTP Request node used for?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The N8N HTTP Request node lets you connect to any REST API that N8N does not have a built-in node for. You configure the URL, HTTP method, headers, authentication, and request body directly in the node. It handles GET, POST, PUT, PATCH, and DELETE requests, making it the universal connector for any third-party service with an API."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I add authentication to the N8N HTTP Request node?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N supports several authentication methods natively in the HTTP Request node: API Key (header or query string), Bearer Token, Basic Auth (username/password), OAuth2, and Digest Auth. You create a credential object in N8N's credential store, then select it from the Authentication dropdown in the node. This keeps your API keys out of the workflow JSON."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can the N8N HTTP Request node handle paginated API responses?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N has built-in pagination support in the HTTP Request node. Under Options, you can configure pagination using cursor-based, offset-based, or page-based strategies. N8N will automatically loop through pages and merge results into a single output array, so you do not need to build manual looping logic."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What is the difference between using the HTTP Request node and a built-in N8N integration?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Built-in N8N integrations (like the Google Sheets node or Slack node) are pre-configured with field mappings and OAuth flows. They are faster to set up for common operations. The HTTP Request node gives you full access to every API endpoint, including custom or less common ones that built-in nodes do not expose. Use built-in nodes for standard operations, and the HTTP Request node for advanced API calls or services without a dedicated N8N integration."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I parse a JSON API response in N8N after using the HTTP Request node?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "When the HTTP Request node returns JSON, N8N automatically parses it. You can access fields using expressions in subsequent nodes: {{ $json.fieldName }} for top-level fields, or {{ $json.nested.field }} for nested objects. Enable 'JSON/RAW Parameters' mode if you need to pass the raw response to another node. Use the Set node to reshape the data before passing it downstream."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "How do I add authentication to the N8N HTTP Request node?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N supports several authentication methods natively in the HTTP Request node: API Key (header or query string), Bearer Token, Basic Auth (username/password), OAuth2, and Digest Auth. You create a credential object in N8N's credential store, then select it from the Authentication dropdown in the node. This keeps your API keys out of the workflow JSON."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can the N8N HTTP Request node handle paginated API responses?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N has built-in pagination support in the HTTP Request node. Under Options, you can configure pagination using cursor-based, offset-based, or page-based strategies. N8N will automatically loop through pages and merge results into a single output array, so you do not need to build manual looping logic."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What is the difference between using the HTTP Request node and a built-in N8N integration?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Built-in N8N integrations (like the Google Sheets node or Slack node) are pre-configured with field mappings and OAuth flows. They are faster to set up for common operations. The HTTP Request node gives you full access to every API endpoint, including custom or less common ones that built-in nodes do not expose. Use built-in nodes for standard operations, and the HTTP Request node for advanced API calls or services without a dedicated N8N integration."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How do I parse a JSON API response in N8N after using the HTTP Request node?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "When the HTTP Request node returns JSON, N8N automatically parses it. You can access fields using expressions in subsequent nodes: {{ $json.fieldName }} for top-level fields, or {{ $json.nested.field }} for nested objects. Enable 'JSON/RAW Parameters' mode if you need to pass the raw response to another node. Use the Set node to reshape the data before passing it downstream."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N HTTP Request Node Tutorial", "item": "https://rajsuyash.com/blog/n8n-http-request-node-tutorial.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N HTTP Request Node Tutorial",
+                    "item": "https://rajsuyash.com/blog/n8n-http-request-node-tutorial.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -760,8 +775,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

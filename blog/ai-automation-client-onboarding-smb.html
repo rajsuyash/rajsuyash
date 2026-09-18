@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "AI Automation for SMB Client Onboarding: Cut Time-to-Value in Half",
-        "description": "Slow client onboarding costs you retention before the work begins. Learn which onboarding steps AI can automate, and how SMBs are cutting onboarding time from weeks to days.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-08-28T09:00:00+00:00",
-        "dateModified": "2026-08-28T09:00:00+00:00",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/ai-automation-client-onboarding-smb.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "AI Automation for SMB Client Onboarding: Cut Time-to-Value in Half",
+            "description": "Slow client onboarding costs you retention before the work begins. Learn which onboarding steps AI can automate, and how SMBs are cutting onboarding time from weeks to days.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-08-28T09:00:00+00:00",
+            "dateModified": "2026-08-28T09:00:00+00:00",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/ai-automation-client-onboarding-smb.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "What parts of client onboarding can AI actually automate?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "AI can automate intake form collection and routing, contract generation and e-signature requests, welcome email sequences, kickoff meeting scheduling, document collection reminders, CRM record creation, and internal task assignment. Anything that follows a repeatable pattern is a candidate for automation."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "What parts of client onboarding can AI actually automate?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "AI can automate intake form collection and routing, contract generation and e-signature requests, welcome email sequences, kickoff meeting scheduling, document collection reminders, CRM record creation, and internal task assignment. Anything that follows a repeatable pattern is a candidate for automation."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How long does it take to set up an automated client onboarding workflow?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A basic automated onboarding workflow covering intake, contract, and welcome sequence can typically be built and tested in two to four weeks. A more comprehensive workflow that includes CRM integration, document collection, and internal team handoffs usually takes four to eight weeks depending on existing tooling."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Will automated onboarding feel impersonal to my clients?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Not if it is designed well. The goal is to automate the administrative friction so your human touchpoints feel more valuable, not to replace them. Clients notice when onboarding is slow and disorganized far more than they notice whether a welcome email came from a tool or a person. Speed and clarity signal professionalism."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What tools do SMBs typically use to automate client onboarding?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The most common stack for SMB onboarding automation includes N8N or Make for workflow orchestration, a CRM like HubSpot or Pipedrive for client records, an e-signature tool like DocuSign or PandaDoc, and a scheduling tool like Calendly. N8N is particularly cost-effective for SMBs since it can be self-hosted."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How much time does automated client onboarding actually save?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Most SMBs spend three to six hours per new client on onboarding administration. Automation typically reduces this to under one hour of human attention, saving 10 to 20 hours per month for a business onboarding five or more clients. The secondary benefit is consistency: every client gets the same quality experience regardless of workload."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "How long does it take to set up an automated client onboarding workflow?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A basic automated onboarding workflow covering intake, contract, and welcome sequence can typically be built and tested in two to four weeks. A more comprehensive workflow that includes CRM integration, document collection, and internal team handoffs usually takes four to eight weeks depending on existing tooling."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Will automated onboarding feel impersonal to my clients?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Not if it is designed well. The goal is to automate the administrative friction so your human touchpoints feel more valuable, not to replace them. Clients notice when onboarding is slow and disorganized far more than they notice whether a welcome email came from a tool or a person. Speed and clarity signal professionalism."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What tools do SMBs typically use to automate client onboarding?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The most common stack for SMB onboarding automation includes N8N or Make for workflow orchestration, a CRM like HubSpot or Pipedrive for client records, an e-signature tool like DocuSign or PandaDoc, and a scheduling tool like Calendly. N8N is particularly cost-effective for SMBs since it can be self-hosted."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How much time does automated client onboarding actually save?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Most SMBs spend three to six hours per new client on onboarding administration. Automation typically reduces this to under one hour of human attention, saving 10 to 20 hours per month for a business onboarding five or more clients. The secondary benefit is consistency: every client gets the same quality experience regardless of workload."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "AI Automation for SMB Client Onboarding", "item": "https://rajsuyash.com/blog/ai-automation-client-onboarding-smb.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "AI Automation for SMB Client Onboarding",
+                    "item": "https://rajsuyash.com/blog/ai-automation-client-onboarding-smb.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -477,7 +492,7 @@
             <li><strong>Time drain is symmetric.</strong> Every hour your team spends chasing intake forms or sending manual follow-ups is an hour not spent delivering work. Automation recovers that time and redirects it to higher-value activity.</li>
         </ul>
 
-        <p>If you are evaluating where to start your <a href="/ai-automation-agency.html">AI automation journey</a>, onboarding is frequently the answer. The workflow is repeatable, the stakes are high, and the ROI is measurable from week one. Use the <a href="/roi-calculator.html">free ROI calculator</a> to estimate what faster onboarding is worth in your specific business.</p>
+        <p>If you are evaluating where to start your <a href="/consulting.html">AI automation journey</a>, onboarding is frequently the answer. The workflow is repeatable, the stakes are high, and the ROI is measurable from week one. Use the <a href="/roi-calculator.html">free ROI calculator</a> to estimate what faster onboarding is worth in your specific business.</p>
 
         <h2>What Client Onboarding Actually Involves (And Where the Time Goes)</h2>
 
@@ -691,8 +706,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

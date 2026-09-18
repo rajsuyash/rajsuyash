@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "AI Voice Agent Conversation Design: How to Write Scripts That Sound Natural and Convert",
-        "description": "Learn how to design AI voice agent conversations and write scripts that sound natural, build caller trust, and convert inquiries into booked appointments or sales.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-07-29",
-        "dateModified": "2026-07-29",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/ai-voice-agent-conversation-design-scripts.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "AI Voice Agent Conversation Design: How to Write Scripts That Sound Natural and Convert",
+            "description": "Learn how to design AI voice agent conversations and write scripts that sound natural, build caller trust, and convert inquiries into booked appointments or sales.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-07-29",
+            "dateModified": "2026-07-29",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/ai-voice-agent-conversation-design-scripts.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "How long should an AI voice agent greeting be?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Keep greetings under 10 seconds. State the business name, confirm you can help, and ask a single open or focused question. Anything longer causes callers to interrupt or hang up. A good rule: if you would not say it in a real conversation, cut it from the script."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "How long should an AI voice agent greeting be?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Keep greetings under 10 seconds. State the business name, confirm you can help, and ask a single open or focused question. Anything longer causes callers to interrupt or hang up. A good rule: if you would not say it in a real conversation, cut it from the script."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Should an AI voice agent identify itself as AI?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. Disclosing that the caller is speaking with an AI assistant is both a legal requirement in many jurisdictions and a trust builder. Callers who know upfront that it is AI and still have a good experience rate the interaction higher than callers who feel deceived. Transparency does not hurt conversion; deception does."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How many conversation flows do I need to build before going live?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Start with the five core flows: greeting and intent capture, appointment booking, hours and location inquiries, pricing inquiries, and escalation to a human. These cover roughly 80 to 90 percent of inbound call volume for most SMBs. Add more flows after go-live based on what callers actually ask, using call transcripts to prioritize."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What is the biggest mistake businesses make when writing AI voice agent scripts?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Over-scripting. Businesses try to anticipate every possible caller path and build rigid menu trees. Modern AI voice agents handle natural language dynamically, so long deterministic scripts actually make conversations worse. Write clear intents and responses, not exhaustive decision trees. Let the AI handle variations; your job is to define the goal of each conversation and the information needed to reach it."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I test my AI voice agent scripts before going live?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Call it yourself using ten realistic scenarios drawn from actual customer calls. Include off-topic questions, interruptions, and confused callers. Then have three to five people unfamiliar with the system call it cold. Listen for moments where the agent sounds robotic, repeats itself, or fails to redirect gracefully. Refine those paths before launch, then review call transcripts weekly for the first month."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "Should an AI voice agent identify itself as AI?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. Disclosing that the caller is speaking with an AI assistant is both a legal requirement in many jurisdictions and a trust builder. Callers who know upfront that it is AI and still have a good experience rate the interaction higher than callers who feel deceived. Transparency does not hurt conversion; deception does."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How many conversation flows do I need to build before going live?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Start with the five core flows: greeting and intent capture, appointment booking, hours and location inquiries, pricing inquiries, and escalation to a human. These cover roughly 80 to 90 percent of inbound call volume for most SMBs. Add more flows after go-live based on what callers actually ask, using call transcripts to prioritize."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What is the biggest mistake businesses make when writing AI voice agent scripts?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Over-scripting. Businesses try to anticipate every possible caller path and build rigid menu trees. Modern AI voice agents handle natural language dynamically, so long deterministic scripts actually make conversations worse. Write clear intents and responses, not exhaustive decision trees. Let the AI handle variations; your job is to define the goal of each conversation and the information needed to reach it."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How do I test my AI voice agent scripts before going live?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Call it yourself using ten realistic scenarios drawn from actual customer calls. Include off-topic questions, interruptions, and confused callers. Then have three to five people unfamiliar with the system call it cold. Listen for moments where the agent sounds robotic, repeats itself, or fails to redirect gracefully. Refine those paths before launch, then review call transcripts weekly for the first month."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "AI Voice Agent Conversation Design", "item": "https://rajsuyash.com/blog/ai-voice-agent-conversation-design-scripts.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "AI Voice Agent Conversation Design",
+                    "item": "https://rajsuyash.com/blog/ai-voice-agent-conversation-design-scripts.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -461,7 +476,7 @@
 
         <p>A voice agent with a poorly written script will frustrate callers, generate complaints, and ultimately get turned off within weeks. A voice agent with well-crafted conversations can handle 80 to 90 percent of inbound calls autonomously, fill your appointment book overnight, and free your team from the phone without a single caller feeling shortchanged. The technology is largely commoditized. The script is where the real work is.</p>
 
-        <p>This guide covers what conversation design actually means for AI voice agents, how to structure the five core flows every business needs, the mistakes that kill caller trust, and how to test and refine before launch. If you are evaluating whether an <a href="/ai-voice-agent.html">AI voice agent</a> is right for your business, the <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> is a good place to start.</p>
+        <p>This guide covers what conversation design actually means for AI voice agents, how to structure the five core flows every business needs, the mistakes that kill caller trust, and how to test and refine before launch. If you are evaluating whether an <a href="https://voxdonna.com/ai-voice-agents.html">AI voice agent</a> is right for your business, the <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> is a good place to start.</p>
 
         <h2>What Conversation Design Means for AI Voice Agents</h2>
 
@@ -674,8 +689,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

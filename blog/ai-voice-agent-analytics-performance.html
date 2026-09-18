@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "AI Voice Agent Analytics: The 6 Metrics That Matter",
-        "description": "Containment, escalation, and resolution rates explained, with human agent benchmarks, the measurement stack to build, and fixes when numbers slip.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-05-01",
-        "dateModified": "2026-05-01",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/ai-voice-agent-analytics-performance.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "AI Voice Agent Analytics: The 6 Metrics That Matter",
+            "description": "Containment, escalation, and resolution rates explained, with human agent benchmarks, the measurement stack to build, and fixes when numbers slip.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-05-01",
+            "dateModified": "2026-05-01",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/ai-voice-agent-analytics-performance.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "What is a good AI containment rate for a voice agent?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A well-configured AI voice agent should contain (fully resolve without human handoff) 85-95% of inbound calls. Anything below 80% usually points to knowledge gaps, poor intent coverage, or overly aggressive escalation thresholds. Top performers like the Le Marquier deployment hit 98% containment across high-volume call scenarios."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "What is a good AI containment rate for a voice agent?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A well-configured AI voice agent should contain (fully resolve without human handoff) 85-95% of inbound calls. Anything below 80% usually points to knowledge gaps, poor intent coverage, or overly aggressive escalation thresholds. Top performers like the Le Marquier deployment hit 98% containment across high-volume call scenarios."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How often should I review AI voice agent performance data?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Review the core dashboard weekly for the first three months after launch. After stabilization, monthly reviews are sufficient unless you make changes to the agent script, add new intents, or see a sudden shift in call volume or escalation rate. Always review immediately after any major business event like a product launch or seasonal campaign."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What causes a high escalation rate in AI voice agents?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "High escalation rates most often come from insufficient intent coverage (callers asking about something the agent was never trained to handle), poorly designed conversation flows that confuse callers into repeating themselves, or incorrect confidence thresholds that hand off too eagerly. Reviewing transcripts of escalated calls for a single week usually reveals the top two or three fixable causes."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can I track customer satisfaction for AI voice agent calls?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. Most platforms support end-of-call CSAT surveys delivered via voice or SMS. A one-question 'Did we resolve your issue today? Press 1 for yes, 2 for no' survey gives a clear resolved/unresolved signal even from callers who would never complete a longer form. Aim for 80% resolution confirmation on contained calls."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What is the average cost per call for an AI voice agent versus a human agent?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Human agents typically cost $4 to $12 per inbound call when you factor in salary, benefits, training, and overhead. AI voice agents typically run $0.10 to $0.50 per call depending on call length and platform. That gap compounds fast at scale. A business handling 500 calls per month can save $2,000 to $5,000 monthly just from containment."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "How often should I review AI voice agent performance data?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Review the core dashboard weekly for the first three months after launch. After stabilization, monthly reviews are sufficient unless you make changes to the agent script, add new intents, or see a sudden shift in call volume or escalation rate. Always review immediately after any major business event like a product launch or seasonal campaign."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What causes a high escalation rate in AI voice agents?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "High escalation rates most often come from insufficient intent coverage (callers asking about something the agent was never trained to handle), poorly designed conversation flows that confuse callers into repeating themselves, or incorrect confidence thresholds that hand off too eagerly. Reviewing transcripts of escalated calls for a single week usually reveals the top two or three fixable causes."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can I track customer satisfaction for AI voice agent calls?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. Most platforms support end-of-call CSAT surveys delivered via voice or SMS. A one-question 'Did we resolve your issue today? Press 1 for yes, 2 for no' survey gives a clear resolved/unresolved signal even from callers who would never complete a longer form. Aim for 80% resolution confirmation on contained calls."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What is the average cost per call for an AI voice agent versus a human agent?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Human agents typically cost $4 to $12 per inbound call when you factor in salary, benefits, training, and overhead. AI voice agents typically run $0.10 to $0.50 per call depending on call length and platform. That gap compounds fast at scale. A business handling 500 calls per month can save $2,000 to $5,000 monthly just from containment."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "AI Voice Agent Analytics: The Metrics That Actually Matter", "item": "https://rajsuyash.com/blog/ai-voice-agent-analytics-performance.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "AI Voice Agent Analytics: The Metrics That Actually Matter",
+                    "item": "https://rajsuyash.com/blog/ai-voice-agent-analytics-performance.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -642,7 +657,7 @@
 
         <p>If you want to see what a real deployment looks like at scale, the <a href="/case-studies/le-marquier.html">Le Marquier case study</a> documents the full analytics journey from initial deployment to 98% containment rate, including the specific tuning steps that drove each improvement milestone.</p>
 
-        <p>For businesses considering their first voice agent deployment or looking to migrate from a legacy IVR system, our <a href="/ai-voice-agent.html">AI voice agent service</a> includes a structured 30-day optimization sprint with analytics setup built in from day one.</p>
+        <p>For businesses considering their first voice agent deployment or looking to migrate from a legacy IVR system, our <a href="https://voxdonna.com/ai-voice-agents.html">AI voice agent service</a> includes a structured 30-day optimization sprint with analytics setup built in from day one.</p>
 
         <!-- FAQ Section -->
         <div class="article-faq">
@@ -683,8 +698,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

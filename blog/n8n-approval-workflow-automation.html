@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "N8N Approval Workflow Automation: Eliminate Bottlenecks in Purchase and Budget Approvals",
-        "description": "Learn how to build N8N approval workflows that automate purchase requests, expense reports, and budget sign-offs with email notifications, Slack alerts, and conditional routing.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-07-30T00:00:00Z",
-        "dateModified": "2026-07-30T00:00:00Z",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-approval-workflow-automation.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "N8N Approval Workflow Automation: Eliminate Bottlenecks in Purchase and Budget Approvals",
+            "description": "Learn how to build N8N approval workflows that automate purchase requests, expense reports, and budget sign-offs with email notifications, Slack alerts, and conditional routing.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-07-30T00:00:00Z",
+            "dateModified": "2026-07-30T00:00:00Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-approval-workflow-automation.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Can N8N handle multi-step approvals with more than one approver?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N supports sequential and parallel approval chains. You can chain multiple Wait nodes so the workflow pauses at each approval stage, sends a notification to the next approver only after the previous one signs off, and routes to a rejection path at any step. For parallel approvals where two people must both approve, you can split the execution and use a Merge node to wait for both responses before proceeding."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Can N8N handle multi-step approvals with more than one approver?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N supports sequential and parallel approval chains. You can chain multiple Wait nodes so the workflow pauses at each approval stage, sends a notification to the next approver only after the previous one signs off, and routes to a rejection path at any step. For parallel approvals where two people must both approve, you can split the execution and use a Merge node to wait for both responses before proceeding."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What happens if an approver does not respond in time?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N's Wait node has a timeout setting. When the timeout fires, you can route to an escalation branch that sends a reminder to the original approver, alerts their manager, or auto-approves the request if your policy allows it. This eliminates requests dying silently in an inbox."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do approvers actually approve or reject in N8N?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The most common pattern is a unique approval link embedded in the notification email or Slack message. Clicking the link sends a GET or POST request to an N8N Webhook node, which resumes the paused workflow and routes it based on the response. No login required for the approver. The link can be single-use and expire after the timeout period."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is N8N approval automation secure enough for financial approvals?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "When self-hosted, all data stays in your infrastructure. Each approval link uses a unique UUID token that is invalidated after use. You can add an additional layer by requiring approvers to be logged into your internal system before the webhook responds. For audit compliance, N8N logs every execution with timestamps, inputs, and outputs, giving you a full audit trail without additional tooling."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How long does it take to build an N8N approval workflow?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A basic single-approver workflow — form submission, notification email, approve/reject link, outcome action — takes two to four hours to build and test. A multi-tier approval chain with escalations, conditional routing based on spend thresholds, and Slack integration takes one to two days. Most businesses see ROI within the first week from time saved chasing approvals manually."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "What happens if an approver does not respond in time?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N's Wait node has a timeout setting. When the timeout fires, you can route to an escalation branch that sends a reminder to the original approver, alerts their manager, or auto-approves the request if your policy allows it. This eliminates requests dying silently in an inbox."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How do approvers actually approve or reject in N8N?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The most common pattern is a unique approval link embedded in the notification email or Slack message. Clicking the link sends a GET or POST request to an N8N Webhook node, which resumes the paused workflow and routes it based on the response. No login required for the approver. The link can be single-use and expire after the timeout period."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Is N8N approval automation secure enough for financial approvals?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "When self-hosted, all data stays in your infrastructure. Each approval link uses a unique UUID token that is invalidated after use. You can add an additional layer by requiring approvers to be logged into your internal system before the webhook responds. For audit compliance, N8N logs every execution with timestamps, inputs, and outputs, giving you a full audit trail without additional tooling."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How long does it take to build an N8N approval workflow?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A basic single-approver workflow — form submission, notification email, approve/reject link, outcome action — takes two to four hours to build and test. A multi-tier approval chain with escalations, conditional routing based on spend thresholds, and Slack integration takes one to two days. Most businesses see ROI within the first week from time saved chasing approvals manually."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N Approval Workflow Automation", "item": "https://rajsuyash.com/blog/n8n-approval-workflow-automation.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N Approval Workflow Automation",
+                    "item": "https://rajsuyash.com/blog/n8n-approval-workflow-automation.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -688,8 +703,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

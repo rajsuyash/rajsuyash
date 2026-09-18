@@ -31,66 +31,64 @@
 
     <!-- Structured Data - Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "5 AI Voice Agent Use Cases That Save SMBs Money in 2026",
-        "description": "Discover 5 proven AI voice agent use cases for small businesses. From appointment booking to after-hours routing, see how AI phone agents cut costs and boost revenue.",
-        "image": "https://rajsuyash.com/Photo.png",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "logo": {
-                "@type": "ImageObject",
-                "url": "https://rajsuyash.com/Photo.png"
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "5 AI Voice Agent Use Cases That Save SMBs Money in 2026",
+            "description": "Discover 5 proven AI voice agent use cases for small businesses. From appointment booking to after-hours routing, see how AI phone agents cut costs and boost revenue.",
+            "image": "https://rajsuyash.com/Photo.png",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-02-15",
+            "dateModified": "2026-02-15",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/ai-voice-agent-use-cases"
             }
-        },
-        "datePublished": "2026-02-15",
-        "dateModified": "2026-02-15",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/ai-voice-agent-use-cases"
         }
-    }
     </script>
 
     <!-- Structured Data - FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "How much does an AI voice agent cost per month?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Most AI voice agent platforms charge between $0.05 and $0.25 per minute of call time. For a small business handling 500 calls per month at an average of 3 minutes each, that works out to $75 to $375 per month. Compare that to a full-time receptionist at $3,000 to $4,000 per month or an answering service at $800 to $1,500 per month. The exact cost depends on your call volume, call duration, and the platform you choose."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "How much does an AI voice agent cost per month?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Most AI voice agent platforms charge between $0.05 and $0.25 per minute of call time. For a small business handling 500 calls per month at an average of 3 minutes each, that works out to $75 to $375 per month. Compare that to a full-time receptionist at $3,000 to $4,000 per month or an answering service at $800 to $1,500 per month. The exact cost depends on your call volume, call duration, and the platform you choose."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can an AI voice agent handle complex customer questions?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Modern AI voice agents can handle multi-turn conversations, understand context, and answer questions based on your business knowledge base. They work best for structured interactions like booking appointments, answering FAQs, qualifying leads, and routing calls. For highly technical or emotional conversations, the best approach is to have the AI agent handle the initial triage and transfer to a human when needed."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How long does it take to set up an AI voice agent for my business?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A basic AI voice agent for appointment booking or FAQ handling can be set up in 3 to 5 business days. More complex setups involving CRM integrations, custom call flows, and multi-department routing typically take 1 to 3 weeks. The biggest time investment is building your knowledge base and defining call scripts, not the technical setup itself."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "Can an AI voice agent handle complex customer questions?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Modern AI voice agents can handle multi-turn conversations, understand context, and answer questions based on your business knowledge base. They work best for structured interactions like booking appointments, answering FAQs, qualifying leads, and routing calls. For highly technical or emotional conversations, the best approach is to have the AI agent handle the initial triage and transfer to a human when needed."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How long does it take to set up an AI voice agent for my business?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A basic AI voice agent for appointment booking or FAQ handling can be set up in 3 to 5 business days. More complex setups involving CRM integrations, custom call flows, and multi-department routing typically take 1 to 3 weeks. The biggest time investment is building your knowledge base and defining call scripts, not the technical setup itself."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Fonts -->
@@ -347,7 +345,32 @@
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://rajsuyash.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://rajsuyash.com/blog/"},{"@type":"ListItem","position":3,"name":"Article","item":"https://rajsuyash.com/blog/ai-voice-agent-use-cases.html"}]}</script>
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://rajsuyash.com/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Blog",
+                "item": "https://rajsuyash.com/blog/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Article",
+                "item": "https://rajsuyash.com/blog/ai-voice-agent-use-cases.html"
+            }
+        ]
+    }
+</script>
 </head>
 <body>
     <!-- Noise Texture Overlay -->
@@ -383,7 +406,7 @@
         <!-- Intro -->
         <h2>Why AI Voice Agents Matter for Small Businesses</h2>
 
-        <p>An <a href="/ai-voice-agent.html">AI voice agent</a> is software that answers, makes, and manages phone calls using natural-sounding AI. It listens, understands intent, responds in real time, and takes action. It can book appointments, answer questions, qualify leads, and route calls to the right person.</p>
+        <p>An <a href="https://voxdonna.com/ai-voice-agents.html">AI voice agent</a> is software that answers, makes, and manages phone calls using natural-sounding AI. It listens, understands intent, responds in real time, and takes action. It can book appointments, answer questions, qualify leads, and route calls to the right person.</p>
 
         <p>This is not the clunky IVR system that makes you press 1, then press 3, then wait on hold. Modern AI phone agents hold real conversations. They pause when you pause. They handle interruptions. They sound human enough that most callers cannot tell the difference.</p>
 
@@ -539,7 +562,7 @@
 
         <p>For most SMBs, the right setup is a hybrid approach. The AI voice agent handles the first line: answering, qualifying, booking, and routing. Humans step in for the calls that need empathy, negotiation, or deep expertise. This gives you full coverage at a fraction of the cost.</p>
 
-        <p>Check our <a href="/ai-voice-agent.html">voice agent service page</a> for specifics on what we build and how pricing works for custom setups.</p>
+        <p>Check our <a href="https://voxdonna.com/ai-voice-agents.html">voice agent service page</a> for specifics on what we build and how pricing works for custom setups.</p>
 
         <!-- FAQ -->
         <h2>Frequently Asked Questions</h2>
@@ -568,7 +591,7 @@
                 <li style="margin-bottom: 0.5rem;"><a href="/case-studies/le-marquier.html">See how Le Marquier cut support costs by 80% with AI voice agents</a></li>
                 <li style="margin-bottom: 0.5rem;"><a href="/roi-calculator.html">Calculate your AI automation ROI</a></li>
                 <li style="margin-bottom: 0.5rem;"><a href="/tools/ai-readiness-assessment.html">Take the free AI readiness assessment</a></li>
-                <li style="margin-bottom: 0.5rem;"><a href="/ai-voice-agent.html">Learn about our AI voice agent solution</a></li>
+                <li style="margin-bottom: 0.5rem;"><a href="https://voxdonna.com/ai-voice-agents.html">Learn about our AI voice agent solution</a></li>
             </ul>
         </div>
 

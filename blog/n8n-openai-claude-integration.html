@@ -38,100 +38,116 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "N8N + OpenAI & Claude Integration: Build AI-Powered Workflows (2026)",
-        "description": "Learn how to connect N8N to OpenAI and Claude to build AI-powered automation workflows. Step-by-step tutorial covering the AI node, HTTP request setup, prompt design, and 6 real business use cases.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-04-27",
-        "dateModified": "2026-04-27",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-openai-claude-integration.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "N8N + OpenAI & Claude Integration: Build AI-Powered Workflows (2026)",
+            "description": "Learn how to connect N8N to OpenAI and Claude to build AI-powered automation workflows. Step-by-step tutorial covering the AI node, HTTP request setup, prompt design, and 6 real business use cases.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-04-27",
+            "dateModified": "2026-04-27",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-openai-claude-integration.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Does N8N have a built-in OpenAI node?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N ships a native OpenAI node that supports chat completions, text completion, image generation, and embeddings. You authenticate with your OpenAI API key, then drag the node into any workflow without writing any code."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Does N8N have a built-in OpenAI node?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N ships a native OpenAI node that supports chat completions, text completion, image generation, and embeddings. You authenticate with your OpenAI API key, then drag the node into any workflow without writing any code."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I connect N8N to Claude (Anthropic)?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Use the N8N HTTP Request node pointed at https://api.anthropic.com/v1/messages. Set the method to POST, add an x-api-key header with your Anthropic API key, add an anthropic-version header (e.g., 2023-06-01), and pass your model and messages in the JSON body. N8N also offers an Anthropic node in its AI Agent component starting from version 1.30."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Which is better for N8N workflows: OpenAI GPT-4o or Claude?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "For most N8N automation tasks, both models perform well. GPT-4o is slightly faster for short classification tasks and has native function-calling support. Claude 3.5 Sonnet tends to produce more consistent structured output (JSON) and handles longer documents well. Many teams use GPT-4o for quick routing decisions and Claude for detailed summarization or drafting tasks within the same workflow."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How much does it cost to run AI nodes in N8N?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N itself does not charge for AI node executions beyond normal execution credits. You pay OpenAI or Anthropic directly based on tokens used. GPT-4o costs roughly $5 per million input tokens and $15 per million output tokens. Claude 3.5 Sonnet is priced at $3 per million input tokens and $15 per million output tokens. For most small business workflows (a few hundred executions per day with modest prompts), monthly AI API costs typically run $10 to $50."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can I use N8N AI workflows without cloud hosting?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N can be self-hosted on your own server using Docker. Your N8N instance makes outbound API calls to OpenAI or Anthropic, so your data is sent to those providers but not to any N8N cloud. If data privacy is a concern, you can also route requests through a local LLM (like Ollama running LLaMA 3) using the same HTTP Request node pattern."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What are the most common N8N + AI workflow use cases?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The six most common patterns are: (1) lead scoring and qualification from form submissions, (2) customer email drafting with personalized context, (3) support ticket classification and routing, (4) content summarization from documents or URLs, (5) sentiment analysis on reviews or feedback, and (6) structured data extraction from unstructured text like invoices or emails."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "How do I connect N8N to Claude (Anthropic)?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Use the N8N HTTP Request node pointed at https://api.anthropic.com/v1/messages. Set the method to POST, add an x-api-key header with your Anthropic API key, add an anthropic-version header (e.g., 2023-06-01), and pass your model and messages in the JSON body. N8N also offers an Anthropic node in its AI Agent component starting from version 1.30."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Which is better for N8N workflows: OpenAI GPT-4o or Claude?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "For most N8N automation tasks, both models perform well. GPT-4o is slightly faster for short classification tasks and has native function-calling support. Claude 3.5 Sonnet tends to produce more consistent structured output (JSON) and handles longer documents well. Many teams use GPT-4o for quick routing decisions and Claude for detailed summarization or drafting tasks within the same workflow."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How much does it cost to run AI nodes in N8N?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N itself does not charge for AI node executions beyond normal execution credits. You pay OpenAI or Anthropic directly based on tokens used. GPT-4o costs roughly $5 per million input tokens and $15 per million output tokens. Claude 3.5 Sonnet is priced at $3 per million input tokens and $15 per million output tokens. For most small business workflows (a few hundred executions per day with modest prompts), monthly AI API costs typically run $10 to $50."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can I use N8N AI workflows without cloud hosting?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N can be self-hosted on your own server using Docker. Your N8N instance makes outbound API calls to OpenAI or Anthropic, so your data is sent to those providers but not to any N8N cloud. If data privacy is a concern, you can also route requests through a local LLM (like Ollama running LLaMA 3) using the same HTTP Request node pattern."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What are the most common N8N + AI workflow use cases?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The six most common patterns are: (1) lead scoring and qualification from form submissions, (2) customer email drafting with personalized context, (3) support ticket classification and routing, (4) content summarization from documents or URLs, (5) sentiment analysis on reviews or feedback, and (6) structured data extraction from unstructured text like invoices or emails."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N + OpenAI & Claude Integration", "item": "https://rajsuyash.com/blog/n8n-openai-claude-integration.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N + OpenAI & Claude Integration",
+                    "item": "https://rajsuyash.com/blog/n8n-openai-claude-integration.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -434,9 +450,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -714,8 +729,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

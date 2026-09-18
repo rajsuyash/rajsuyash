@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "AI Automation for Billing and Invoicing: How Small Businesses Stop Chasing Late Payments",
-        "description": "Late payments cost small businesses an average of $30,000 per year in lost time and cash flow stress. Learn how AI billing automation eliminates the cycle of manual follow-up and gets you paid faster.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-09-04T09:00:00+00:00",
-        "dateModified": "2026-09-04T09:00:00+00:00",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/ai-automation-billing-invoicing-smb.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "AI Automation for Billing and Invoicing: How Small Businesses Stop Chasing Late Payments",
+            "description": "Late payments cost small businesses an average of $30,000 per year in lost time and cash flow stress. Learn how AI billing automation eliminates the cycle of manual follow-up and gets you paid faster.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-09-04T09:00:00+00:00",
+            "dateModified": "2026-09-04T09:00:00+00:00",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/ai-automation-billing-invoicing-smb.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "How does AI automation help with billing and invoicing for small businesses?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "AI automation handles the full invoicing lifecycle without manual effort. It generates invoices automatically when a job is completed or a subscription renews, sends them via email, monitors payment status, and fires a sequence of escalating reminders on a schedule you set. When payment arrives, it reconciles the record in your accounting software. The result is faster collection and zero hours spent on invoice admin."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "How does AI automation help with billing and invoicing for small businesses?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "AI automation handles the full invoicing lifecycle without manual effort. It generates invoices automatically when a job is completed or a subscription renews, sends them via email, monitors payment status, and fires a sequence of escalating reminders on a schedule you set. When payment arrives, it reconciles the record in your accounting software. The result is faster collection and zero hours spent on invoice admin."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What tools do I need to automate billing for my small business?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The core stack is an invoicing platform (QuickBooks, Xero, FreshBooks, or Stripe), an automation layer (N8N, Zapier, or Make), and optionally a CRM (HubSpot, Pipedrive) to track client billing status. N8N is particularly effective because it handles complex conditional logic, like skipping a reminder for a client who already paid, without expensive per-task pricing."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How much can AI billing automation save a small business?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The savings come from two places: staff time and faster collection. A typical SMB owner or office manager spends 4-6 hours per week on billing admin. At $35/hour that is $7,000-$10,000 per year. On top of that, businesses that automate payment reminders collect invoices 18-22 days faster on average, which directly improves cash flow and reduces financing costs."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Will automated payment reminders damage my client relationships?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Only if they are poorly timed or impersonal. A well-designed automation sends a polite confirmation when the invoice is issued, a friendly nudge a few days before the due date, a matter-of-fact notice on the due date, and a firmer escalation only after the payment is genuinely overdue. Most clients appreciate the clarity and consistency. The reminders feel professional, not aggressive, when the tone and timing are right."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can I automate partial payments and custom payment plans?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. Modern billing automation can handle installment schedules, milestone-based invoices, and deposit-plus-balance flows. N8N workflows can check whether a partial payment was received and adjust the reminder sequence accordingly, only chasing the outstanding balance and skipping clients who are on an agreed payment plan."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "What tools do I need to automate billing for my small business?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The core stack is an invoicing platform (QuickBooks, Xero, FreshBooks, or Stripe), an automation layer (N8N, Zapier, or Make), and optionally a CRM (HubSpot, Pipedrive) to track client billing status. N8N is particularly effective because it handles complex conditional logic, like skipping a reminder for a client who already paid, without expensive per-task pricing."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How much can AI billing automation save a small business?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The savings come from two places: staff time and faster collection. A typical SMB owner or office manager spends 4-6 hours per week on billing admin. At $35/hour that is $7,000-$10,000 per year. On top of that, businesses that automate payment reminders collect invoices 18-22 days faster on average, which directly improves cash flow and reduces financing costs."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Will automated payment reminders damage my client relationships?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Only if they are poorly timed or impersonal. A well-designed automation sends a polite confirmation when the invoice is issued, a friendly nudge a few days before the due date, a matter-of-fact notice on the due date, and a firmer escalation only after the payment is genuinely overdue. Most clients appreciate the clarity and consistency. The reminders feel professional, not aggressive, when the tone and timing are right."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can I automate partial payments and custom payment plans?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. Modern billing automation can handle installment schedules, milestone-based invoices, and deposit-plus-balance flows. N8N workflows can check whether a partial payment was received and adjust the reminder sequence accordingly, only chasing the outstanding balance and skipping clients who are on an agreed payment plan."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "AI Automation for Billing and Invoicing", "item": "https://rajsuyash.com/blog/ai-automation-billing-invoicing-smb.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "AI Automation for Billing and Invoicing",
+                    "item": "https://rajsuyash.com/blog/ai-automation-billing-invoicing-smb.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -662,8 +677,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

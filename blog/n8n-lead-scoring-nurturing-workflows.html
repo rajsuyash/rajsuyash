@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "N8N Lead Scoring and Nurturing Workflows: A Practical Guide (2026)",
-        "description": "Build automated lead scoring and nurturing workflows in N8N. Route hot leads instantly, nurture cold ones with timed sequences, and stop manually triaging your CRM.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-06-01",
-        "dateModified": "2026-06-01",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-lead-scoring-nurturing-workflows.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "N8N Lead Scoring and Nurturing Workflows: A Practical Guide (2026)",
+            "description": "Build automated lead scoring and nurturing workflows in N8N. Route hot leads instantly, nurture cold ones with timed sequences, and stop manually triaging your CRM.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-06-01",
+            "dateModified": "2026-06-01",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-lead-scoring-nurturing-workflows.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Can N8N replace a dedicated marketing automation platform for lead nurturing?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "For most SMBs, yes. N8N can handle triggered email sequences, lead scoring logic, CRM updates, and Slack notifications without the cost of platforms like Marketo or Pardot. The main trade-off is that N8N requires more initial setup but gives you full flexibility and no per-contact pricing."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Can N8N replace a dedicated marketing automation platform for lead nurturing?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "For most SMBs, yes. N8N can handle triggered email sequences, lead scoring logic, CRM updates, and Slack notifications without the cost of platforms like Marketo or Pardot. The main trade-off is that N8N requires more initial setup but gives you full flexibility and no per-contact pricing."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What CRMs does N8N support for lead scoring automation?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N has native nodes for HubSpot, Pipedrive, Salesforce, Zoho CRM, and Airtable. For any CRM without a native node, the HTTP Request node connects to any REST API. This covers virtually all modern CRM platforms."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I trigger a lead scoring workflow in N8N?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The most common trigger is a webhook. When a form is submitted (via Typeform, HubSpot Forms, or a custom form), it fires a webhook to N8N, which then runs your scoring logic. You can also use scheduled polling to check CRM records on an interval, or N8N's native HubSpot or Pipedrive nodes to listen for deal stage changes."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What is a realistic lead score threshold for a small business?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A common starting point is three tiers: Hot (70+), Warm (40-69), Cold (under 40). You assign points based on signals like company size, budget fit, specific pages visited, and how they responded to initial outreach. These thresholds should be calibrated against your actual close rates over the first 60-90 days and adjusted from there."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How long does it take to build an N8N lead scoring workflow?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A basic scoring and routing workflow (form trigger, scoring logic, CRM update, Slack notification) takes two to four hours to build and test. A full multi-touch nurturing sequence with conditional branching and follow-up timing typically takes one to two days. Working with an N8N specialist can compress both timelines significantly."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "What CRMs does N8N support for lead scoring automation?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N has native nodes for HubSpot, Pipedrive, Salesforce, Zoho CRM, and Airtable. For any CRM without a native node, the HTTP Request node connects to any REST API. This covers virtually all modern CRM platforms."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How do I trigger a lead scoring workflow in N8N?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The most common trigger is a webhook. When a form is submitted (via Typeform, HubSpot Forms, or a custom form), it fires a webhook to N8N, which then runs your scoring logic. You can also use scheduled polling to check CRM records on an interval, or N8N's native HubSpot or Pipedrive nodes to listen for deal stage changes."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What is a realistic lead score threshold for a small business?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A common starting point is three tiers: Hot (70+), Warm (40-69), Cold (under 40). You assign points based on signals like company size, budget fit, specific pages visited, and how they responded to initial outreach. These thresholds should be calibrated against your actual close rates over the first 60-90 days and adjusted from there."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How long does it take to build an N8N lead scoring workflow?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A basic scoring and routing workflow (form trigger, scoring logic, CRM update, Slack notification) takes two to four hours to build and test. A full multi-touch nurturing sequence with conditional branching and follow-up timing typically takes one to two days. Working with an N8N specialist can compress both timelines significantly."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N Lead Scoring and Nurturing Workflows", "item": "https://rajsuyash.com/blog/n8n-lead-scoring-nurturing-workflows.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N Lead Scoring and Nurturing Workflows",
+                    "item": "https://rajsuyash.com/blog/n8n-lead-scoring-nurturing-workflows.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -810,8 +825,8 @@ return [{ json: { ...lead, score, tier } }];</pre>
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

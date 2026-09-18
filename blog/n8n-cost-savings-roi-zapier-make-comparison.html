@@ -38,100 +38,116 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "N8N Cost Savings ROI: What Switching from Zapier or Make Really Costs (And Saves)",
-        "description": "A real-numbers breakdown of N8N vs Zapier vs Make costs. See exactly how much SMBs save by switching to N8N, with ROI calculations and a decision framework.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-07-28T00:00:00Z",
-        "dateModified": "2026-07-28T00:00:00Z",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-cost-savings-roi-zapier-make-comparison.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "N8N Cost Savings ROI: What Switching from Zapier or Make Really Costs (And Saves)",
+            "description": "A real-numbers breakdown of N8N vs Zapier vs Make costs. See exactly how much SMBs save by switching to N8N, with ROI calculations and a decision framework.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-07-28T00:00:00Z",
+            "dateModified": "2026-07-28T00:00:00Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-cost-savings-roi-zapier-make-comparison.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "How much does N8N cost compared to Zapier?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N Cloud starts at $20/month for 2,500 executions, while Zapier's Professional plan runs $49/month for 2,000 tasks. At higher volumes (10,000+ tasks/month), the gap widens dramatically: Zapier charges $99-$299/month, while N8N self-hosted on a $10-20/month VPS handles unlimited executions. Businesses running 20,000+ tasks monthly typically save $150-$500/month by switching to self-hosted N8N."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "How much does N8N cost compared to Zapier?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N Cloud starts at $20/month for 2,500 executions, while Zapier's Professional plan runs $49/month for 2,000 tasks. At higher volumes (10,000+ tasks/month), the gap widens dramatically: Zapier charges $99-$299/month, while N8N self-hosted on a $10-20/month VPS handles unlimited executions. Businesses running 20,000+ tasks monthly typically save $150-$500/month by switching to self-hosted N8N."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is switching from Zapier to N8N worth the effort?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "For businesses running more than 5,000 tasks per month, switching is almost always worth it financially. The break-even point on migration effort (typically 4-8 hours for a small stack) is usually within 2-3 months of savings. Beyond cost, N8N gives you unlimited executions, no per-task pricing surprises, and the ability to run complex logic that Zapier does not support natively."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What does it cost to self-host N8N?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Self-hosting N8N requires a VPS or cloud instance. A basic DigitalOcean or Hetzner server ($5-$20/month) handles most SMB workloads up to 50,000 executions per month. Add SSL via Let's Encrypt at no cost, and your total infrastructure spend is typically $10-$25/month, compared to $99-$299/month for equivalent capacity on Zapier or Make."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How does N8N pricing compare to Make (formerly Integromat)?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Make is cheaper than Zapier but still per-operation. Make's Core plan runs $9/month for 10,000 operations and their Pro plan is $16/month for 10,000 operations. However, Make counts each node execution as an operation, so complex multi-step scenarios burn through operations quickly. N8N Cloud's $20/month covers 2,500 workflow executions with no per-node charging, and self-hosted N8N has no execution limits."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What hidden costs does N8N avoid?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Zapier and Make both charge per task or operation, meaning a single 10-step workflow costs 10x what a 1-step workflow costs. Error retries count as additional tasks. Premium app connectors cost more on higher-tier plans. N8N avoids all of these: every node in a workflow executes for free on self-hosted, retries do not cost extra, and there are no premium connector fees."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Does N8N require technical expertise to run?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N Cloud requires zero technical setup. Self-hosted N8N requires basic Linux comfort and one-time Docker or npm setup, typically one to two hours for someone new to it. Once running, the workflow builder is visual and similar in experience to Zapier. For businesses without in-house technical staff, working with an N8N automation agency removes this barrier entirely."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "Is switching from Zapier to N8N worth the effort?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "For businesses running more than 5,000 tasks per month, switching is almost always worth it financially. The break-even point on migration effort (typically 4-8 hours for a small stack) is usually within 2-3 months of savings. Beyond cost, N8N gives you unlimited executions, no per-task pricing surprises, and the ability to run complex logic that Zapier does not support natively."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What does it cost to self-host N8N?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Self-hosting N8N requires a VPS or cloud instance. A basic DigitalOcean or Hetzner server ($5-$20/month) handles most SMB workloads up to 50,000 executions per month. Add SSL via Let's Encrypt at no cost, and your total infrastructure spend is typically $10-$25/month, compared to $99-$299/month for equivalent capacity on Zapier or Make."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How does N8N pricing compare to Make (formerly Integromat)?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Make is cheaper than Zapier but still per-operation. Make's Core plan runs $9/month for 10,000 operations and their Pro plan is $16/month for 10,000 operations. However, Make counts each node execution as an operation, so complex multi-step scenarios burn through operations quickly. N8N Cloud's $20/month covers 2,500 workflow executions with no per-node charging, and self-hosted N8N has no execution limits."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What hidden costs does N8N avoid?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Zapier and Make both charge per task or operation, meaning a single 10-step workflow costs 10x what a 1-step workflow costs. Error retries count as additional tasks. Premium app connectors cost more on higher-tier plans. N8N avoids all of these: every node in a workflow executes for free on self-hosted, retries do not cost extra, and there are no premium connector fees."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Does N8N require technical expertise to run?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N Cloud requires zero technical setup. Self-hosted N8N requires basic Linux comfort and one-time Docker or npm setup, typically one to two hours for someone new to it. Once running, the workflow builder is visual and similar in experience to Zapier. For businesses without in-house technical staff, working with an N8N automation agency removes this barrier entirely."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N Cost Savings ROI vs Zapier and Make", "item": "https://rajsuyash.com/blog/n8n-cost-savings-roi-zapier-make-comparison.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N Cost Savings ROI vs Zapier and Make",
+                    "item": "https://rajsuyash.com/blog/n8n-cost-savings-roi-zapier-make-comparison.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -434,9 +450,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -720,8 +735,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

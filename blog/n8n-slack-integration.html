@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "N8N Slack Integration: Automated Team Notifications",
-        "description": "Create the Slack app, add credentials, and format messages with mrkdwn and Block Kit. 7 workflow patterns plus fixes for the usual errors.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-04-22",
-        "dateModified": "2026-04-22",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-slack-integration.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "N8N Slack Integration: Automated Team Notifications",
+            "description": "Create the Slack app, add credentials, and format messages with mrkdwn and Block Kit. 7 workflow patterns plus fixes for the usual errors.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-04-22",
+            "dateModified": "2026-04-22",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-slack-integration.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "How do I connect N8N to Slack?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "You connect N8N to Slack using OAuth 2.0. In N8N, add a new credential of type 'Slack OAuth2 API', then create a Slack App at api.slack.com/apps, enable the required bot token scopes (chat:write, channels:read, users:read), install the app to your workspace, and paste the Client ID and Client Secret into N8N. The connection authorizes in under 2 minutes."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "How do I connect N8N to Slack?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "You connect N8N to Slack using OAuth 2.0. In N8N, add a new credential of type 'Slack OAuth2 API', then create a Slack App at api.slack.com/apps, enable the required bot token scopes (chat:write, channels:read, users:read), install the app to your workspace, and paste the Client ID and Client Secret into N8N. The connection authorizes in under 2 minutes."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can N8N send Slack messages to a specific user instead of a channel?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. In the N8N Slack node, set 'Send To' to 'User' and provide the Slack User ID (found in the user's profile under 'Copy member ID'). You can also use dynamic user IDs pulled from earlier nodes in your workflow, which is useful for routing alerts to whoever triggered an event."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What Slack message types can N8N send?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N can send plain text messages, messages with Slack Block Kit blocks (rich formatting with buttons, images, and sections), file uploads, and replies to existing threads. For business notifications, Block Kit messages are the most useful because they support bold text, dividers, action buttons, and inline data fields."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is N8N Slack integration free?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The N8N Slack node is included in all N8N plans, including the free community edition. Slack's free plan allows up to 90 days of message history and 10 integrations, which is sufficient for most small business automation workflows. The Slack app you create for N8N counts as one of those integrations."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I format N8N Slack messages with dynamic data?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Use N8N expressions inside the message text field. For example, write 'New lead: {{ $json.name }} from {{ $json.company }}' and N8N will substitute live data from the previous node. For richer formatting, build a Block Kit JSON payload in a Code node and pass it as the 'Blocks' parameter to the Slack node."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "Can N8N send Slack messages to a specific user instead of a channel?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. In the N8N Slack node, set 'Send To' to 'User' and provide the Slack User ID (found in the user's profile under 'Copy member ID'). You can also use dynamic user IDs pulled from earlier nodes in your workflow, which is useful for routing alerts to whoever triggered an event."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What Slack message types can N8N send?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N can send plain text messages, messages with Slack Block Kit blocks (rich formatting with buttons, images, and sections), file uploads, and replies to existing threads. For business notifications, Block Kit messages are the most useful because they support bold text, dividers, action buttons, and inline data fields."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Is N8N Slack integration free?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The N8N Slack node is included in all N8N plans, including the free community edition. Slack's free plan allows up to 90 days of message history and 10 integrations, which is sufficient for most small business automation workflows. The Slack app you create for N8N counts as one of those integrations."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How do I format N8N Slack messages with dynamic data?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Use N8N expressions inside the message text field. For example, write 'New lead: {{ $json.name }} from {{ $json.company }}' and N8N will substitute live data from the previous node. For richer formatting, build a Block Kit JSON payload in a Code node and pass it as the 'Blocks' parameter to the Slack node."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N + Slack Integration Tutorial", "item": "https://rajsuyash.com/blog/n8n-slack-integration.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N + Slack Integration Tutorial",
+                    "item": "https://rajsuyash.com/blog/n8n-slack-integration.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -471,7 +486,7 @@
 
         <p>The practical result is faster response times. A client who books a discovery call gets a Slack ping to the sales team the moment the booking confirms. A failed N8N workflow fires an alert to the ops channel before anyone notices the downstream problem. A weekly report compiles and posts itself on Friday at 9 AM without anyone having to remember to send it.</p>
 
-        <p>This is the same infrastructure we use at <a href="/ai-automation-agency.html">rajsuyash.com</a> and the same approach behind the automation system we built for <a href="/case-studies/le-marquier.html">Le Marquier</a>, which reduced manual coordination overhead by 80%. Slack notifications are a small piece of that, but they compound quickly across a team.</p>
+        <p>This is the same infrastructure we use at <a href="/consulting.html">rajsuyash.com</a> and the same approach behind the automation system we built for <a href="/case-studies/le-marquier.html">Le Marquier</a>, which reduced manual coordination overhead by 80%. Slack notifications are a small piece of that, but they compound quickly across a team.</p>
 
         <h2>Prerequisites</h2>
 
@@ -750,7 +765,7 @@
 
         <p>Once your Slack integration is running, the most valuable next step is connecting it to your other data sources. The <a href="/blog/n8n-airtable-integration.html">N8N + Airtable integration</a> pairs naturally with Slack, since Airtable is often where operational data lives. Similarly, if you're using Google Sheets, the <a href="/blog/n8n-google-sheets-integration.html">N8N + Google Sheets guide</a> shows you how to read and write sheet data inside the same workflows.</p>
 
-        <p>For teams dealing with high inbound volume, pairing Slack alerts with an <a href="/ai-voice-agent.html">AI voice agent</a> creates a complete picture: the AI handles calls and routes outcomes, and Slack keeps the team informed in real time.</p>
+        <p>For teams dealing with high inbound volume, pairing Slack alerts with an <a href="https://voxdonna.com/ai-voice-agents.html">AI voice agent</a> creates a complete picture: the AI handles calls and routes outcomes, and Slack keeps the team informed in real time.</p>
 
         <!-- FAQ Section -->
         <div class="article-faq">
@@ -791,8 +806,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

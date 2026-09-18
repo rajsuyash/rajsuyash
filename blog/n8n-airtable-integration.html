@@ -39,92 +39,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "Airtable n8n Integration: Setup Guide and Workflows",
-        "description": "Connect Airtable to n8n with a Personal Access Token, then read, create and update records automatically. Setup steps, node operations, 5 workflows.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-04-08",
-        "dateModified": "2026-09-17",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-airtable-integration.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "Airtable n8n Integration: Setup Guide and Workflows",
+            "description": "Connect Airtable to n8n with a Personal Access Token, then read, create and update records automatically. Setup steps, node operations, 5 workflows.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-04-08",
+            "dateModified": "2026-09-17",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-airtable-integration.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Does N8N have a native Airtable integration?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. n8n ships a built-in Airtable node with five documented operations: append data to a table, list data, read a record, update a record, and delete a record. Authenticate with an Airtable Personal Access Token or with OAuth2; the old Airtable API keys were fully deprecated in February 2024."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Does N8N have a native Airtable integration?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. n8n ships a built-in Airtable node with five documented operations: append data to a table, list data, read a record, update a record, and delete a record. Authenticate with an Airtable Personal Access Token or with OAuth2; the old Airtable API keys were fully deprecated in February 2024."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What can I automate between N8N and Airtable?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Common N8N-Airtable automations include: syncing form submissions to Airtable, sending Slack alerts when new Airtable records are created, generating invoices from Airtable data, routing leads from Airtable to your CRM, and scheduling reports from Airtable to email or Google Sheets."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is N8N free to use with Airtable?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "n8n Community Edition is free to self-host with no per-execution fee. n8n Cloud Starter is EUR 20 per month for 2,500 executions. Airtable's Free plan allows 1,000 records per base, which is enough for most small business automations."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I trigger an N8N workflow when an Airtable record changes?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Use the Airtable Trigger node. It polls your base on a Poll Times setting of Every Minute, Every Hour, Every Day or Every Week and emits new Airtable events. It is polling rather than a push webhook, so the shortest detection delay is one minute."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can N8N connect Airtable to other apps automatically?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. n8n lists over 2,100 integrations. You can connect Airtable to Gmail, Slack, HubSpot, Google Sheets, Notion, Typeform and hundreds of other tools in a single workflow, and reach anything else through the HTTP Request node."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "What can I automate between N8N and Airtable?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Common N8N-Airtable automations include: syncing form submissions to Airtable, sending Slack alerts when new Airtable records are created, generating invoices from Airtable data, routing leads from Airtable to your CRM, and scheduling reports from Airtable to email or Google Sheets."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Is N8N free to use with Airtable?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "n8n Community Edition is free to self-host with no per-execution fee. n8n Cloud Starter is EUR 20 per month for 2,500 executions. Airtable's Free plan allows 1,000 records per base, which is enough for most small business automations."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How do I trigger an N8N workflow when an Airtable record changes?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Use the Airtable Trigger node. It polls your base on a Poll Times setting of Every Minute, Every Hour, Every Day or Every Week and emits new Airtable events. It is polling rather than a push webhook, so the shortest detection delay is one minute."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can N8N connect Airtable to other apps automatically?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. n8n lists over 2,100 integrations. You can connect Airtable to Gmail, Slack, HubSpot, Google Sheets, Notion, Typeform and hundreds of other tools in a single workflow, and reach anything else through the HTTP Request node."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N Airtable Integration Tutorial", "item": "https://rajsuyash.com/blog/n8n-airtable-integration.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N Airtable Integration Tutorial",
+                    "item": "https://rajsuyash.com/blog/n8n-airtable-integration.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -427,9 +443,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -778,8 +793,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

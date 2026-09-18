@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "N8N + Notion Integration: Automate Your Workspace Without Code (2026)",
-        "description": "Learn how to connect N8N to Notion and automate database entries, page creation, and data sync. Step-by-step tutorial with 6 real business workflows you can deploy today.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-05-04",
-        "dateModified": "2026-05-04",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-notion-integration.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "N8N + Notion Integration: Automate Your Workspace Without Code (2026)",
+            "description": "Learn how to connect N8N to Notion and automate database entries, page creation, and data sync. Step-by-step tutorial with 6 real business workflows you can deploy today.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-05-04",
+            "dateModified": "2026-05-04",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-notion-integration.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "How do I connect N8N to Notion?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "You connect N8N to Notion using a Notion Internal Integration Token. Go to notion.so/my-integrations, create a new integration, copy the secret token, and add it as a Notion API credential in N8N. Then share your Notion databases with the integration by clicking 'Share' on each database page and selecting your integration name."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "How do I connect N8N to Notion?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "You connect N8N to Notion using a Notion Internal Integration Token. Go to notion.so/my-integrations, create a new integration, copy the secret token, and add it as a Notion API credential in N8N. Then share your Notion databases with the integration by clicking 'Share' on each database page and selecting your integration name."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can N8N create Notion pages and database entries automatically?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N's Notion node supports creating pages, updating existing pages, appending blocks to a page, and querying databases. You can trigger these actions from any event: form submissions, CRM updates, webhook calls, scheduled cron jobs, or incoming emails."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What can I automate with N8N and Notion?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Common automations include: logging new CRM leads into a Notion database, creating client onboarding pages from a template when a deal closes, syncing form submissions to a Notion tracker, generating weekly status reports in Notion from project data, and routing support tickets to a Notion board. Any data that moves between tools can be mirrored to Notion automatically."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Do I need a paid Notion plan for N8N automation?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "No. Notion's Internal Integration API is available on the free plan. You can create integrations, share databases, and automate reads and writes without upgrading. The free plan has API rate limits (3 requests per second), which is more than enough for typical business workflows."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is N8N better than Zapier for Notion automation?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "For most small businesses, N8N offers more flexibility at a lower cost. N8N lets you build multi-step workflows with conditional logic, loops, and API calls without paying per task. Zapier's Notion integration is easier to set up but expensive at scale and limited in what you can customize. If you need advanced logic or run hundreds of automations per month, N8N wins."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "Can N8N create Notion pages and database entries automatically?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N's Notion node supports creating pages, updating existing pages, appending blocks to a page, and querying databases. You can trigger these actions from any event: form submissions, CRM updates, webhook calls, scheduled cron jobs, or incoming emails."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What can I automate with N8N and Notion?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Common automations include: logging new CRM leads into a Notion database, creating client onboarding pages from a template when a deal closes, syncing form submissions to a Notion tracker, generating weekly status reports in Notion from project data, and routing support tickets to a Notion board. Any data that moves between tools can be mirrored to Notion automatically."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Do I need a paid Notion plan for N8N automation?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "No. Notion's Internal Integration API is available on the free plan. You can create integrations, share databases, and automate reads and writes without upgrading. The free plan has API rate limits (3 requests per second), which is more than enough for typical business workflows."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Is N8N better than Zapier for Notion automation?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "For most small businesses, N8N offers more flexibility at a lower cost. N8N lets you build multi-step workflows with conditional logic, loops, and API calls without paying per task. Zapier's Notion integration is easier to set up but expensive at scale and limited in what you can customize. If you need advanced logic or run hundreds of automations per month, N8N wins."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N + Notion Integration", "item": "https://rajsuyash.com/blog/n8n-notion-integration.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N + Notion Integration",
+                    "item": "https://rajsuyash.com/blog/n8n-notion-integration.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -685,8 +700,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

@@ -32,66 +32,64 @@
 
     <!-- Structured Data - Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "n8n vs Zapier vs Make: Pricing and Features Compared",
-        "description": "n8n self-hosts free or from €20/mo, Zapier Professional from $19.99/mo, Make from $9/mo. 2026 pricing, app counts and feature comparison.",
-        "image": "https://rajsuyash.com/Photo.png",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "logo": {
-                "@type": "ImageObject",
-                "url": "https://rajsuyash.com/Photo.png"
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "n8n vs Zapier vs Make: Pricing and Features Compared",
+            "description": "n8n self-hosts free or from €20/mo, Zapier Professional from $19.99/mo, Make from $9/mo. 2026 pricing, app counts and feature comparison.",
+            "image": "https://rajsuyash.com/Photo.png",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-02-15",
+            "dateModified": "2026-09-17",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-vs-zapier-vs-make"
             }
-        },
-        "datePublished": "2026-02-15",
-        "dateModified": "2026-09-17",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-vs-zapier-vs-make"
         }
-    }
     </script>
 
     <!-- Structured Data - FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Is N8N really free?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. n8n Community Edition is open source and free to self-host. You can run it on your own server with no per-execution fee; you pay only for the server. n8n also sells a managed cloud plan, n8n Cloud Starter, at EUR 20 per month for 2,500 workflow executions."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Is N8N really free?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. n8n Community Edition is open source and free to self-host. You can run it on your own server with no per-execution fee; you pay only for the server. n8n also sells a managed cloud plan, n8n Cloud Starter, at EUR 20 per month for 2,500 workflow executions."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can I migrate from Zapier to N8N?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes, but there is no one-click migration. You will need to rebuild your Zaps as N8N workflows. For simple automations this is straightforward. For complex multi-step Zaps, an automation expert can help you migrate and often improve the workflows during the transition."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Which platform is best for AI automation workflows?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N is the strongest choice for AI automation. It supports custom JavaScript and Python code nodes, direct API calls to any AI model, and complex branching logic that AI workflows require. Make handles moderate AI use cases well. Zapier's AI capabilities are more limited and better suited to simple AI tasks like text generation or summarization."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "Can I migrate from Zapier to N8N?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes, but there is no one-click migration. You will need to rebuild your Zaps as N8N workflows. For simple automations this is straightforward. For complex multi-step Zaps, an automation expert can help you migrate and often improve the workflows during the transition."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Which platform is best for AI automation workflows?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N is the strongest choice for AI automation. It supports custom JavaScript and Python code nodes, direct API calls to any AI model, and complex branching logic that AI workflows require. Make handles moderate AI use cases well. Zapier's AI capabilities are more limited and better suited to simple AI tasks like text generation or summarization."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Fonts -->
@@ -348,7 +346,32 @@
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://rajsuyash.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://rajsuyash.com/blog/"},{"@type":"ListItem","position":3,"name":"Article","item":"https://rajsuyash.com/blog/n8n-vs-zapier-vs-make.html"}]}</script>
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://rajsuyash.com/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Blog",
+                "item": "https://rajsuyash.com/blog/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Article",
+                "item": "https://rajsuyash.com/blog/n8n-vs-zapier-vs-make.html"
+            }
+        ]
+    }
+</script>
 </head>
 <body>
     <!-- Noise Texture Overlay -->
@@ -578,7 +601,7 @@
             <li>You need AI automation (LLM chains, <a href="/ai-agents.html">AI agents</a>, custom AI pipelines).</li>
             <li>You want to control costs at volume, or keep data on your own servers.</li>
             <li>Your team has at least one person comfortable with technical concepts.</li>
-            <li>You are an <a href="/ai-automation-agency.html">AI automation agency</a> building workflows for clients.</li>
+            <li>You are an <a href="/consulting.html">AI automation agency</a> building workflows for clients.</li>
         </ul>
 
         <h3>Choose Zapier if...</h3>
@@ -599,7 +622,7 @@
         <!-- Our Recommendation -->
         <h2>Our Recommendation</h2>
 
-        <p>At our <a href="/ai-automation-agency.html">AI automation agency</a>, we use <a href="/n8n-automation.html">N8N for the majority of client projects</a>. Here is why.</p>
+        <p>At our <a href="/consulting.html">AI automation agency</a>, we use <a href="/n8n-automation.html">N8N for the majority of client projects</a>. Here is why.</p>
 
         <p>Most clients come to us needing more than app-to-app connections: workflows that process data, decide, touch several systems and handle edge cases without falling over. n8n is built for that. One client was paying over $400/month on Zapier for a lead processing pipeline; we rebuilt it in n8n on a $12/month server with better error handling.</p>
 
@@ -632,7 +655,7 @@
                 <li style="margin-bottom: 0.5rem;"><a href="/case-studies/le-marquier.html">See how Le Marquier cut support costs by 80% with AI voice agents</a></li>
                 <li style="margin-bottom: 0.5rem;"><a href="/roi-calculator.html">Calculate your AI automation ROI</a></li>
                 <li style="margin-bottom: 0.5rem;"><a href="/tools/ai-readiness-assessment.html">Take the free AI readiness assessment</a></li>
-                <li style="margin-bottom: 0.5rem;"><a href="/ai-automation-agency.html">Explore our AI automation services</a></li>
+                <li style="margin-bottom: 0.5rem;"><a href="/consulting.html">Explore our AI automation services</a></li>
             </ul>
         </div>
 

@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "How to Evaluate AI Automation Tools: A Buyer's Guide for SMBs",
-        "description": "A practical buyer's guide for small businesses evaluating AI automation tools. Learn the 7 criteria that separate tools that deliver ROI from ones that collect dust.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-07-10",
-        "dateModified": "2026-07-10",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/how-to-evaluate-ai-automation-tools.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "How to Evaluate AI Automation Tools: A Buyer's Guide for SMBs",
+            "description": "A practical buyer's guide for small businesses evaluating AI automation tools. Learn the 7 criteria that separate tools that deliver ROI from ones that collect dust.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-07-10",
+            "dateModified": "2026-07-10",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/how-to-evaluate-ai-automation-tools.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "What is the most important factor when evaluating AI automation tools for a small business?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Integration compatibility with your existing tools matters most. An AI automation platform that cannot connect to your CRM, accounting software, or communication tools is useless regardless of how powerful it is. Always verify native integrations before committing to any platform."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "What is the most important factor when evaluating AI automation tools for a small business?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Integration compatibility with your existing tools matters most. An AI automation platform that cannot connect to your CRM, accounting software, or communication tools is useless regardless of how powerful it is. Always verify native integrations before committing to any platform."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How long does it take to see ROI from an AI automation tool?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "For simple workflow automation (data entry, email routing, appointment booking), most SMBs see payback within 60 to 90 days. More complex implementations involving AI agents or voice automation typically reach ROI within 3 to 6 months. The Le Marquier case study showed 80% cost reduction within the first quarter of deployment."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Should a small business buy an all-in-one AI automation platform or use best-of-breed tools?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "For most SMBs under 50 employees, a workflow orchestration layer like N8N combined with purpose-built AI tools (voice agents, document processors) outperforms all-in-one platforms. All-in-one tools tend to be mediocre at everything rather than excellent at what you actually need."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What questions should I ask an AI automation vendor before signing a contract?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Ask: (1) What happens to my data if I cancel? (2) Can I see live examples of the integration with my specific tools? (3) What is the implementation timeline and who does the setup? (4) What support do I get after go-live? (5) What does the pricing look like at 2x and 5x my current volume? Vendors who dodge any of these questions are a red flag."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is no-code AI automation good enough for small businesses, or do I need custom development?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "No-code platforms like N8N handle 80% of SMB automation needs: data sync, notifications, lead routing, invoice generation, and basic AI tasks. Custom development is warranted when you have unique data structures, compliance requirements, or processes that no off-the-shelf tool supports. Start with no-code, upgrade to custom only when you hit real limits."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "How long does it take to see ROI from an AI automation tool?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "For simple workflow automation (data entry, email routing, appointment booking), most SMBs see payback within 60 to 90 days. More complex implementations involving AI agents or voice automation typically reach ROI within 3 to 6 months. The Le Marquier case study showed 80% cost reduction within the first quarter of deployment."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Should a small business buy an all-in-one AI automation platform or use best-of-breed tools?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "For most SMBs under 50 employees, a workflow orchestration layer like N8N combined with purpose-built AI tools (voice agents, document processors) outperforms all-in-one platforms. All-in-one tools tend to be mediocre at everything rather than excellent at what you actually need."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What questions should I ask an AI automation vendor before signing a contract?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Ask: (1) What happens to my data if I cancel? (2) Can I see live examples of the integration with my specific tools? (3) What is the implementation timeline and who does the setup? (4) What support do I get after go-live? (5) What does the pricing look like at 2x and 5x my current volume? Vendors who dodge any of these questions are a red flag."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Is no-code AI automation good enough for small businesses, or do I need custom development?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "No-code platforms like N8N handle 80% of SMB automation needs: data sync, notifications, lead routing, invoice generation, and basic AI tasks. Custom development is warranted when you have unique data structures, compliance requirements, or processes that no off-the-shelf tool supports. Start with no-code, upgrade to custom only when you hit real limits."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "How to Evaluate AI Automation Tools", "item": "https://rajsuyash.com/blog/how-to-evaluate-ai-automation-tools.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "How to Evaluate AI Automation Tools",
+                    "item": "https://rajsuyash.com/blog/how-to-evaluate-ai-automation-tools.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -601,7 +616,7 @@
             <li>Are there workflow or data storage limits that might constrain you within 12 months?</li>
         </ul>
 
-        <p>One pattern that works well for growing SMBs: use a flexible workflow orchestration layer (like N8N, which you can self-host) as your central automation hub, and connect purpose-built tools for specific functions like <a href="/ai-voice-agent.html">AI voice agents</a> or document processing. This avoids vendor lock-in and lets you swap individual components as better options emerge.</p>
+        <p>One pattern that works well for growing SMBs: use a flexible workflow orchestration layer (like N8N, which you can self-host) as your central automation hub, and connect purpose-built tools for specific functions like <a href="https://voxdonna.com/ai-voice-agents.html">AI voice agents</a> or document processing. This avoids vendor lock-in and lets you swap individual components as better options emerge.</p>
 
         <h3>7. Vendor Viability and Support Quality</h3>
 
@@ -641,7 +656,7 @@
 
         <h2>When to Hire an AI Automation Agency Instead</h2>
 
-        <p>Evaluating and implementing automation tools is itself a significant time investment. If your team does not have the bandwidth to run proper pilots, or if you have been burned by a previous implementation that stalled, working with an <a href="/ai-automation-agency.html">AI automation agency</a> can compress the timeline significantly.</p>
+        <p>Evaluating and implementing automation tools is itself a significant time investment. If your team does not have the bandwidth to run proper pilots, or if you have been burned by a previous implementation that stalled, working with an <a href="/consulting.html">AI automation agency</a> can compress the timeline significantly.</p>
 
         <p>An experienced agency has already evaluated dozens of tools across the same criteria above. They know which platforms have hidden scaling costs, which integrations break frequently, and which vendors have poor post-sale support. That knowledge has real value when you are making a decision that will affect your operations for the next two to three years.</p>
 
@@ -688,8 +703,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

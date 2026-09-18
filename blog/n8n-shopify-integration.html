@@ -39,76 +39,92 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "n8n Shopify Integration: Automate Orders and Inventory",
-        "description": "Connect Shopify to n8n: what the Shopify node and trigger really support, 7 workflows worth building, and what needs the HTTP Request node.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-04-30T08:00:00Z",
-        "dateModified": "2026-09-17",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-shopify-integration.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "n8n Shopify Integration: Automate Orders and Inventory",
+            "description": "Connect Shopify to n8n: what the Shopify node and trigger really support, 7 workflows worth building, and what needs the HTTP Request node.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-04-30T08:00:00Z",
+            "dateModified": "2026-09-17",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-shopify-integration.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Does N8N have a native Shopify integration?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. n8n ships a Shopify node and a Shopify Trigger node. The action node covers two resources, Order and Product, with create, get, get-all, update and delete on each. It has no Customer resource, so customer reads and writes go through the HTTP Request node against the Shopify Admin API using the same credential. The trigger registers a Shopify webhook and covers orders, customers, products, carts, checkouts, fulfillments, refunds, collections and locations. Authenticate with an access token from a custom app (recommended) or OAuth2 for public apps; API key auth is deprecated."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Does N8N have a native Shopify integration?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. n8n ships a Shopify node and a Shopify Trigger node. The action node covers two resources, Order and Product, with create, get, get-all, update and delete on each. It has no Customer resource, so customer reads and writes go through the HTTP Request node against the Shopify Admin API using the same credential. The trigger registers a Shopify webhook and covers orders, customers, products, carts, checkouts, fulfillments, refunds, collections and locations. Authenticate with an access token from a custom app (recommended) or OAuth2 for public apps; API key auth is deprecated."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What can I automate between N8N and Shopify?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "With n8n and Shopify you can automate: order confirmation and fulfillment routing, syncing order data to Google Sheets or Airtable, creating HubSpot or CRM contacts from new customers, generating daily revenue reports, and triggering email or SMS sequences from order events. Customer tagging and inventory checks are possible too, but they run through the HTTP Request node rather than the Shopify node, because the node has no Customer or Inventory resource."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is N8N better than Zapier for Shopify automation?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "It depends on step count, not order count. Zapier bills per task, where a task is one action step, so a five-step Zap on 2,000 orders is 10,000 tasks. Zapier's Professional plan at the 10,000-task tier is $129 per month billed annually, or $193.50 billed monthly. Self-hosted n8n bills nothing per execution; you pay for the VPS, roughly $20 per month. n8n also handles multi-step branching, data transformation and error handling that Zapier does not match at lower tiers."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "What can I automate between N8N and Shopify?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "With n8n and Shopify you can automate: order confirmation and fulfillment routing, syncing order data to Google Sheets or Airtable, creating HubSpot or CRM contacts from new customers, generating daily revenue reports, and triggering email or SMS sequences from order events. Customer tagging and inventory checks are possible too, but they run through the HTTP Request node rather than the Shopify node, because the node has no Customer or Inventory resource."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Is N8N better than Zapier for Shopify automation?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "It depends on step count, not order count. Zapier bills per task, where a task is one action step, so a five-step Zap on 2,000 orders is 10,000 tasks. Zapier's Professional plan at the 10,000-task tier is $129 per month billed annually, or $193.50 billed monthly. Self-hosted n8n bills nothing per execution; you pay for the VPS, roughly $20 per month. n8n also handles multi-step branching, data transformation and error handling that Zapier does not match at lower tiers."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N Shopify Integration", "item": "https://rajsuyash.com/blog/n8n-shopify-integration.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N Shopify Integration",
+                    "item": "https://rajsuyash.com/blog/n8n-shopify-integration.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -411,9 +427,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -723,8 +738,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

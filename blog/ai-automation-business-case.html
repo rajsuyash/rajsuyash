@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "How to Build an AI Automation Business Case for Your Boss",
-        "description": "Step-by-step guide to building an AI automation business case that gets approved. Includes cost templates, ROI math, and how to handle every objection.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-04-03",
-        "dateModified": "2026-04-03",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/ai-automation-business-case.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "How to Build an AI Automation Business Case for Your Boss",
+            "description": "Step-by-step guide to building an AI automation business case that gets approved. Includes cost templates, ROI math, and how to handle every objection.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-04-03",
+            "dateModified": "2026-04-03",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/ai-automation-business-case.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "What should a business case for AI automation include?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A strong AI automation business case covers four things: the current cost of the manual process (time x hourly rate x volume), the projected savings after automation, the implementation cost (one-time and recurring), and a payback timeline. It should also name a specific first process to automate rather than pitching 'AI' in the abstract."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "What should a business case for AI automation include?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A strong AI automation business case covers four things: the current cost of the manual process (time x hourly rate x volume), the projected savings after automation, the implementation cost (one-time and recurring), and a payback timeline. It should also name a specific first process to automate rather than pitching 'AI' in the abstract."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I calculate ROI for AI automation?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "ROI = (Annual savings - Annual automation cost) / Implementation cost. Start by measuring how many hours per week the manual task consumes, multiply by the fully-loaded hourly rate, then subtract the monthly platform and maintenance fee. Most well-scoped SMB automations break even within 3-6 months and return 3-6x their cost in year one."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What if my boss says AI automation is too expensive?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Reframe the conversation: the question is not whether AI automation costs money, but whether the current manual process costs more. Calculate the fully-loaded cost of the existing process (staff time + error correction + missed capacity) and compare it to the automation fee. In most cases, doing nothing is the more expensive option."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Which process should I automate first when building a business case?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Pick the process that is high-volume, rule-based, and currently causing visible pain. Good candidates include invoice processing, lead follow-up emails, appointment scheduling, data entry between systems, and customer inquiry triage. Avoid automating anything that requires significant human judgment as a first project."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How long does it take to implement AI automation after approval?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A focused first automation project typically takes 2-4 weeks from kickoff to go-live. This includes process mapping, tool setup, testing, and staff training. More complex workflows involving multiple systems and custom logic can take 6-8 weeks. The key is scoping tightly: one process, one clear outcome, measurable results."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "How do I calculate ROI for AI automation?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "ROI = (Annual savings - Annual automation cost) / Implementation cost. Start by measuring how many hours per week the manual task consumes, multiply by the fully-loaded hourly rate, then subtract the monthly platform and maintenance fee. Most well-scoped SMB automations break even within 3-6 months and return 3-6x their cost in year one."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What if my boss says AI automation is too expensive?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Reframe the conversation: the question is not whether AI automation costs money, but whether the current manual process costs more. Calculate the fully-loaded cost of the existing process (staff time + error correction + missed capacity) and compare it to the automation fee. In most cases, doing nothing is the more expensive option."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Which process should I automate first when building a business case?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Pick the process that is high-volume, rule-based, and currently causing visible pain. Good candidates include invoice processing, lead follow-up emails, appointment scheduling, data entry between systems, and customer inquiry triage. Avoid automating anything that requires significant human judgment as a first project."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How long does it take to implement AI automation after approval?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A focused first automation project typically takes 2-4 weeks from kickoff to go-live. This includes process mapping, tool setup, testing, and staff training. More complex workflows involving multiple systems and custom logic can take 6-8 weeks. The key is scoping tightly: one process, one clear outcome, measurable results."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "How to Build an AI Automation Business Case for Your Boss", "item": "https://rajsuyash.com/blog/ai-automation-business-case.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "How to Build an AI Automation Business Case for Your Boss",
+                    "item": "https://rajsuyash.com/blog/ai-automation-business-case.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -662,7 +677,7 @@
 
         <p>Approval is the beginning, not the end. Once the first automation is live, document the results obsessively. Screenshot the before and after. Track hours saved per week. Calculate the actual payback period against your projection.</p>
 
-        <p>That documentation becomes the business case for the second automation, the third, and eventually a broader <a href="/ai-automation-agency.html">AI automation program</a> that touches multiple departments. Companies that scale automation successfully do it one well-documented win at a time.</p>
+        <p>That documentation becomes the business case for the second automation, the third, and eventually a broader <a href="/consulting.html">AI automation program</a> that touches multiple departments. Companies that scale automation successfully do it one well-documented win at a time.</p>
 
         <p>For a practical look at how costs compare once you start scaling, read <a href="/blog/ai-automation-vs-hiring-small-business.html">AI Automation vs. Hiring: What SMBs Should Know</a>. And if you want to understand how to measure the financial impact once things are running, <a href="/blog/how-to-measure-ai-automation-roi.html">How to Measure AI Automation ROI</a> covers the metrics that matter.</p>
 
@@ -705,8 +720,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

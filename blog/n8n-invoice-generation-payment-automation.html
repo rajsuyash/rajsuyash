@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "N8N Invoice Generation and Payment Processing Automation (2026)",
-        "description": "Automate invoice generation and payment processing with N8N. Connect Stripe, QuickBooks, and your CRM to create, send, and reconcile invoices without touching them manually.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-06-03",
-        "dateModified": "2026-06-03",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-invoice-generation-payment-automation.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "N8N Invoice Generation and Payment Processing Automation (2026)",
+            "description": "Automate invoice generation and payment processing with N8N. Connect Stripe, QuickBooks, and your CRM to create, send, and reconcile invoices without touching them manually.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-06-03",
+            "dateModified": "2026-06-03",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-invoice-generation-payment-automation.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Can N8N generate PDF invoices automatically?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N can generate PDF invoices using the HTML-to-PDF approach: pull deal data from your CRM, populate an HTML invoice template, convert it to PDF using a service like Puppeteer or a PDF API node, then email it as an attachment. Many teams use the N8N HTTP Request node to call a PDF generation API and attach the result to an email sent via Gmail or SendGrid."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Can N8N generate PDF invoices automatically?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N can generate PDF invoices using the HTML-to-PDF approach: pull deal data from your CRM, populate an HTML invoice template, convert it to PDF using a service like Puppeteer or a PDF API node, then email it as an attachment. Many teams use the N8N HTTP Request node to call a PDF generation API and attach the result to an email sent via Gmail or SendGrid."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Does N8N integrate with QuickBooks for invoice automation?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N has a native QuickBooks Online node that can create invoices, mark them paid, and pull customer records directly. You can trigger this node from a CRM deal stage change, a form submission, or a Stripe payment event to keep your books updated without manual data entry."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I automate payment reminders with N8N?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Build a scheduled N8N workflow that polls your invoicing system (QuickBooks, Stripe, or a spreadsheet) for overdue invoices each morning. For each unpaid invoice past its due date, trigger an email via Gmail or SendGrid with a payment link. Add conditional logic to escalate the tone on day 7, day 14, and day 30 overdue. This whole workflow takes about two hours to build."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can N8N handle failed Stripe payments automatically?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. Set up a Stripe webhook trigger in N8N that fires on the payment_intent.payment_failed event. The workflow can send the customer an email with a payment retry link, update your CRM, notify your team on Slack, and pause any service delivery workflows until payment is confirmed. This prevents manual intervention for every failed charge."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How much does it cost to run invoice automation in N8N vs. dedicated billing software?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N self-hosted is free beyond server costs (typically $10 to $30 per month on a VPS). N8N cloud starts at $20 per month. Compare this to dedicated billing automation tools that often charge $50 to $200 per month plus per-invoice fees. For SMBs sending 20 to 200 invoices per month, N8N typically costs 60% to 80% less while offering more flexibility. Use the ROI calculator at rajsuyash.com/roi-calculator.html to model your specific volume."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "Does N8N integrate with QuickBooks for invoice automation?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N has a native QuickBooks Online node that can create invoices, mark them paid, and pull customer records directly. You can trigger this node from a CRM deal stage change, a form submission, or a Stripe payment event to keep your books updated without manual data entry."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How do I automate payment reminders with N8N?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Build a scheduled N8N workflow that polls your invoicing system (QuickBooks, Stripe, or a spreadsheet) for overdue invoices each morning. For each unpaid invoice past its due date, trigger an email via Gmail or SendGrid with a payment link. Add conditional logic to escalate the tone on day 7, day 14, and day 30 overdue. This whole workflow takes about two hours to build."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can N8N handle failed Stripe payments automatically?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. Set up a Stripe webhook trigger in N8N that fires on the payment_intent.payment_failed event. The workflow can send the customer an email with a payment retry link, update your CRM, notify your team on Slack, and pause any service delivery workflows until payment is confirmed. This prevents manual intervention for every failed charge."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How much does it cost to run invoice automation in N8N vs. dedicated billing software?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N self-hosted is free beyond server costs (typically $10 to $30 per month on a VPS). N8N cloud starts at $20 per month. Compare this to dedicated billing automation tools that often charge $50 to $200 per month plus per-invoice fees. For SMBs sending 20 to 200 invoices per month, N8N typically costs 60% to 80% less while offering more flexibility. Use the ROI calculator at rajsuyash.com/roi-calculator.html to model your specific volume."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N Invoice Generation and Payment Automation", "item": "https://rajsuyash.com/blog/n8n-invoice-generation-payment-automation.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N Invoice Generation and Payment Automation",
+                    "item": "https://rajsuyash.com/blog/n8n-invoice-generation-payment-automation.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -743,8 +758,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

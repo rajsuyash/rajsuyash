@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "AI Automation KPIs: How to Measure Success Beyond Cost Savings",
-        "description": "Cost savings is just one metric. Learn the 5 KPI categories that reveal whether your AI automation is truly working — time recapture, quality, customer experience, capacity, and revenue impact.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-07-17",
-        "dateModified": "2026-07-17",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/ai-automation-kpis-beyond-cost-savings.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "AI Automation KPIs: How to Measure Success Beyond Cost Savings",
+            "description": "Cost savings is just one metric. Learn the 5 KPI categories that reveal whether your AI automation is truly working — time recapture, quality, customer experience, capacity, and revenue impact.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-07-17",
+            "dateModified": "2026-07-17",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/ai-automation-kpis-beyond-cost-savings.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "How soon after implementing AI automation should I start tracking KPIs?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "You should establish baseline measurements before you launch any automation, then check results at 30, 60, and 90 days. The first 30 days often show dips as the team adjusts. Real signal emerges between days 60 and 90, when the system has handled enough volume to show stable patterns. Do not judge an automation by week-one numbers."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "How soon after implementing AI automation should I start tracking KPIs?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "You should establish baseline measurements before you launch any automation, then check results at 30, 60, and 90 days. The first 30 days often show dips as the team adjusts. Real signal emerges between days 60 and 90, when the system has handled enough volume to show stable patterns. Do not judge an automation by week-one numbers."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What is the most important KPI for AI automation in a small business?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "It depends on the process you automated, but for most SMBs the most impactful metric is hours recaptured per week multiplied by what those hours are now used for. If your team recaptures 10 hours weekly and reinvests them into revenue-generating activity, that is more valuable than a raw cost-reduction number because it compounds. For customer-facing automations, first-response time and resolution rate matter most."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I track KPIs if I do not have sophisticated analytics tools?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "You do not need sophisticated tools. A simple spreadsheet with weekly entries works for most SMBs. Log volume handled (calls answered, emails responded to, leads followed up), time your team spends on the same task manually, error rate if measurable, and customer complaints related to the process. Most automation platforms like N8N also include execution logs that you can export and review monthly."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can AI automation KPIs go negative? What does that mean?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. If error rates increase, customer satisfaction drops, or your team spends more time managing the automation than the old process took, that is a signal to reconfigure rather than expand. Negative KPIs are not a failure — they are diagnostic data pointing to a specific problem: usually poor training data, an edge case the system was not designed to handle, or a handoff point that needs human oversight."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is cost savings a bad metric for AI automation?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "It is not bad, it is just incomplete. Cost savings is easy to calculate and easy to report to stakeholders, so it tends to dominate conversations. The risk is that you optimize purely for cost and miss the bigger win: using the freed capacity to grow revenue. A business that cuts $2,000 per month in labor costs but reinvests that freed time into closing $10,000 in new deals gets a very different outcome than one that simply pockets the savings."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "What is the most important KPI for AI automation in a small business?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "It depends on the process you automated, but for most SMBs the most impactful metric is hours recaptured per week multiplied by what those hours are now used for. If your team recaptures 10 hours weekly and reinvests them into revenue-generating activity, that is more valuable than a raw cost-reduction number because it compounds. For customer-facing automations, first-response time and resolution rate matter most."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How do I track KPIs if I do not have sophisticated analytics tools?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "You do not need sophisticated tools. A simple spreadsheet with weekly entries works for most SMBs. Log volume handled (calls answered, emails responded to, leads followed up), time your team spends on the same task manually, error rate if measurable, and customer complaints related to the process. Most automation platforms like N8N also include execution logs that you can export and review monthly."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can AI automation KPIs go negative? What does that mean?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. If error rates increase, customer satisfaction drops, or your team spends more time managing the automation than the old process took, that is a signal to reconfigure rather than expand. Negative KPIs are not a failure — they are diagnostic data pointing to a specific problem: usually poor training data, an edge case the system was not designed to handle, or a handoff point that needs human oversight."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Is cost savings a bad metric for AI automation?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "It is not bad, it is just incomplete. Cost savings is easy to calculate and easy to report to stakeholders, so it tends to dominate conversations. The risk is that you optimize purely for cost and miss the bigger win: using the freed capacity to grow revenue. A business that cuts $2,000 per month in labor costs but reinvests that freed time into closing $10,000 in new deals gets a very different outcome than one that simply pockets the savings."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "AI Automation KPIs: How to Measure Success Beyond Cost Savings", "item": "https://rajsuyash.com/blog/ai-automation-kpis-beyond-cost-savings.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "AI Automation KPIs: How to Measure Success Beyond Cost Savings",
+                    "item": "https://rajsuyash.com/blog/ai-automation-kpis-beyond-cost-savings.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -629,7 +644,7 @@
 
         <p>You can also explore how <a href="/blog/how-to-measure-ai-automation-roi.html">AI automation ROI is calculated</a> for the financial side of the picture, and <a href="/blog/ai-automation-industry-comparison.html">which industries see the strongest automation results</a> if you are benchmarking your results against sector peers.</p>
 
-        <p>For a broader look at how SMBs are implementing automation, our <a href="/ai-automation-agency.html">AI automation agency page</a> covers the services and approach we use with clients.</p>
+        <p>For a broader look at how SMBs are implementing automation, our <a href="/consulting.html">AI automation agency page</a> covers the services and approach we use with clients.</p>
 
         <!-- FAQ Section -->
         <div class="article-faq">
@@ -670,8 +685,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

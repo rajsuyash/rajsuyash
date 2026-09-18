@@ -31,66 +31,64 @@
 
     <!-- Structured Data - Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "N8N Webhook Tutorial: Trigger Workflows from Any App (2026)",
-        "description": "Learn how to use N8N webhooks to trigger workflows from any app. Step-by-step tutorial with real examples: form submissions, payment events, CRM updates, and more.",
-        "image": "https://rajsuyash.com/Photo.png",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "logo": {
-                "@type": "ImageObject",
-                "url": "https://rajsuyash.com/Photo.png"
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "N8N Webhook Tutorial: Trigger Workflows from Any App (2026)",
+            "description": "Learn how to use N8N webhooks to trigger workflows from any app. Step-by-step tutorial with real examples: form submissions, payment events, CRM updates, and more.",
+            "image": "https://rajsuyash.com/Photo.png",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-03-27",
+            "dateModified": "2026-03-27",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-webhook-tutorial.html"
             }
-        },
-        "datePublished": "2026-03-27",
-        "dateModified": "2026-03-27",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-webhook-tutorial.html"
         }
-    }
     </script>
 
     <!-- Structured Data - FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Can I use N8N webhooks with any app?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. Any application that can send an HTTP request can trigger an N8N webhook. This includes Stripe, Shopify, GitHub, Typeform, HubSpot, custom apps, and thousands of other services. If the app supports outgoing webhooks or has an API, you can connect it to N8N."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Can I use N8N webhooks with any app?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. Any application that can send an HTTP request can trigger an N8N webhook. This includes Stripe, Shopify, GitHub, Typeform, HubSpot, custom apps, and thousands of other services. If the app supports outgoing webhooks or has an API, you can connect it to N8N."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is the N8N webhook URL permanent?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The webhook URL stays the same as long as you do not delete and recreate the Webhook node. N8N generates a unique URL per Webhook node, and it persists across workflow updates and server restarts. If you are self-hosting, the URL is tied to your domain, so it remains stable indefinitely."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I secure my N8N webhook endpoint?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "There are several ways to secure N8N webhooks. You can require a secret header token that the sending app must include. You can validate webhook signatures (Stripe and GitHub both sign their payloads). You can restrict access by IP address using a reverse proxy like Nginx. For maximum security, combine header authentication with signature validation."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "Is the N8N webhook URL permanent?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The webhook URL stays the same as long as you do not delete and recreate the Webhook node. N8N generates a unique URL per Webhook node, and it persists across workflow updates and server restarts. If you are self-hosting, the URL is tied to your domain, so it remains stable indefinitely."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How do I secure my N8N webhook endpoint?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "There are several ways to secure N8N webhooks. You can require a secret header token that the sending app must include. You can validate webhook signatures (Stripe and GitHub both sign their payloads). You can restrict access by IP address using a reverse proxy like Nginx. For maximum security, combine header authentication with signature validation."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Fonts -->
@@ -371,7 +369,32 @@
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://rajsuyash.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://rajsuyash.com/blog/"},{"@type":"ListItem","position":3,"name":"Article","item":"https://rajsuyash.com/blog/n8n-webhook-tutorial.html"}]}</script>
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://rajsuyash.com/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Blog",
+                "item": "https://rajsuyash.com/blog/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Article",
+                "item": "https://rajsuyash.com/blog/n8n-webhook-tutorial.html"
+            }
+        ]
+    }
+</script>
 </head>
 <body>
     <!-- Noise Texture Overlay -->

@@ -38,84 +38,100 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "N8N E-Commerce Order Management: Automate Fulfillment From Order to Delivery (2026)",
-        "description": "Use N8N to automate your e-commerce order management and fulfillment workflow. Route orders, update inventory, trigger shipping, and notify customers automatically.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-07-23",
-        "dateModified": "2026-07-23",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-ecommerce-order-management-automation.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "N8N E-Commerce Order Management: Automate Fulfillment From Order to Delivery (2026)",
+            "description": "Use N8N to automate your e-commerce order management and fulfillment workflow. Route orders, update inventory, trigger shipping, and notify customers automatically.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-07-23",
+            "dateModified": "2026-07-23",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-ecommerce-order-management-automation.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Can N8N handle high-volume order processing for busy e-commerce stores?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N's webhook-based triggers process orders as they arrive with no batch delays. Whether you're processing 10 or 10,000 orders per day, the same workflow handles each one. For very high volumes, configure N8N in queue mode with a Redis backend to handle spikes reliably during flash sales or seasonal peaks."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Can N8N handle high-volume order processing for busy e-commerce stores?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N's webhook-based triggers process orders as they arrive with no batch delays. Whether you're processing 10 or 10,000 orders per day, the same workflow handles each one. For very high volumes, configure N8N in queue mode with a Redis backend to handle spikes reliably during flash sales or seasonal peaks."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What e-commerce platforms does N8N integrate with for order management?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N has native nodes for Shopify, WooCommerce, and Magento. It also connects with third-party logistics platforms, shipping carriers like FedEx and UPS via their APIs, and warehouse management systems. The HTTP Request node covers any platform with a REST API, including custom-built storefronts."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How long does it take to set up an N8N order fulfillment workflow?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A basic order-to-fulfillment workflow (new order triggers fulfillment request, updates inventory, sends confirmation email) typically takes 2 to 4 hours to build and test. More complex setups involving multiple fulfillment centers, conditional routing by SKU or region, or custom 3PL integrations typically run 1 to 2 days."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Does N8N work with third-party logistics providers and fulfillment centers?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N connects to 3PL providers through their APIs or via webhook-based integrations. You can build conditional logic to route orders to different fulfillment centers based on inventory location, shipping zone, or product type. Most 3PLs expose REST APIs that N8N's HTTP Request node can call directly."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "What e-commerce platforms does N8N integrate with for order management?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N has native nodes for Shopify, WooCommerce, and Magento. It also connects with third-party logistics platforms, shipping carriers like FedEx and UPS via their APIs, and warehouse management systems. The HTTP Request node covers any platform with a REST API, including custom-built storefronts."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How long does it take to set up an N8N order fulfillment workflow?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A basic order-to-fulfillment workflow (new order triggers fulfillment request, updates inventory, sends confirmation email) typically takes 2 to 4 hours to build and test. More complex setups involving multiple fulfillment centers, conditional routing by SKU or region, or custom 3PL integrations typically run 1 to 2 days."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Does N8N work with third-party logistics providers and fulfillment centers?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N connects to 3PL providers through their APIs or via webhook-based integrations. You can build conditional logic to route orders to different fulfillment centers based on inventory location, shipping zone, or product type. Most 3PLs expose REST APIs that N8N's HTTP Request node can call directly."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N E-Commerce Order Management Automation", "item": "https://rajsuyash.com/blog/n8n-ecommerce-order-management-automation.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N E-Commerce Order Management Automation",
+                    "item": "https://rajsuyash.com/blog/n8n-ecommerce-order-management-automation.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -418,9 +434,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -731,8 +746,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

@@ -33,46 +33,44 @@
 
     <!-- Structured Data - Person -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Suyash Raj",
-        "jobTitle": "AI Automation Agency Founder",
-        "description": "AI automation expert specializing in N8N automation, AI agents, AI voice agents for SMBs.",
-        "url": "https://rajsuyash.com",
-        "mainEntityOfPage": "https://rajsuyash.com/about.html",
-        "image": "https://rajsuyash.com/Photo_600.jpg",
-        "email": "grow@rajsuyash.com",
-        "sameAs": [
-            "https://www.linkedin.com/in/suyashraj/",
-            "https://x.com/suyash_raj/"
-        ],
-        "knowsAbout": [
-            "N8N Workflow Automation",
-            "AI Agent Development",
-            "AI Voice Agent Development",
-            "Business Process Automation"
-        ],
-        "worksFor": {
-            "@type": "ProfessionalService",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com",
-            "email": "grow@rajsuyash.com",
-            "priceRange": "$$",
-            "address": {
-                "@type": "PostalAddress",
-                "addressCountry": "US"
-            },
-            "areaServed": {
-                "@type": "Country",
-                "name": "United States"
-            },
-            "sameAs": [
-                "https://www.linkedin.com/in/suyashraj/",
-                "https://x.com/suyash_raj/"
-            ]
+        {
+            "@context": "https://schema.org",
+            "@type": "ProfilePage",
+            "url": "https://rajsuyash.com/about.html",
+            "mainEntity": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "jobTitle": "Founder",
+                "url": "https://rajsuyash.com/about.html",
+                "image": "https://rajsuyash.com/Photo_600.jpg",
+                "email": "grow@rajsuyash.com",
+                "sameAs": [
+                    "https://www.linkedin.com/in/suyashraj/",
+                    "https://x.com/suyash_raj/"
+                ],
+                "knowsAbout": [
+                    "AI voice agents",
+                    "n8n workflow automation",
+                    "Indic speech AI",
+                    "Conversational AI"
+                ],
+                "worksFor": [
+                    {
+                        "@type": "Organization",
+                        "@id": "https://voxdonna.com/#organization",
+                        "name": "Voxdonna AI",
+                        "url": "https://voxdonna.com"
+                    },
+                    {
+                        "@type": "Organization",
+                        "@id": "https://aisewak.com/#organization",
+                        "name": "AiSewak",
+                        "url": "https://aisewak.com"
+                    }
+                ]
+            }
         }
-    }
     </script>
 
     <!-- Distinctive Typography: Fraunces (display) + Space Grotesk (body) -->
@@ -88,24 +86,24 @@
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
         {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://rajsuyash.com/"
-        },
-        {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "About",
-            "item": "https://rajsuyash.com/about.html"
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "About",
+                    "item": "https://rajsuyash.com/about.html"
+                }
+            ]
         }
-    ]
-}
     </script>
 </head>
 <body>
@@ -120,9 +118,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/tools/" class="nav-link">Tools</a>
@@ -144,16 +141,16 @@
                     <p class="hero-eyebrow reveal" style="--delay: 0">About</p>
                     <h1 class="hero-headline reveal" style="--delay: 1">
                         <span class="line">Suyash Raj,</span>
-                        <span class="line accent">AI automation agency founder.</span>
+                        <span class="line accent">Founder, Voxdonna AI and AiSewak.</span>
                     </h1>
                 </div>
 
                 <div class="hero-secondary reveal" style="--delay: 2">
                     <p class="hero-description">
-                        I spent years watching SMBs drown in manual work while enterprise companies automated
-                        their way to efficiency. It seemed unfair. So I built an AI automation agency to level
-                        the playing field. Today we help businesses deploy AI agents, N8N workflows, and voice
-                        agents: the same strategies Fortune 500 companies use, tailored to your scale and budget.
+                        I build voice and workflow agents, and I write up how they are put together.
+                        <a href="https://voxdonna.com">Voxdonna AI</a> is the product businesses buy;
+                        <a href="https://aisewak.com">AiSewak</a> is the one government and citizen services buy.
+                        This site is the engineering behind both, plus the n8n work that led to them.
                     </p>
                     <div class="hero-cta-group">
                         <a href="/qualify" class="btn-primary">Book Discovery Call</a>
@@ -211,12 +208,12 @@
                 </article>
 
                 <article class="problem-item reveal" style="--delay: 2">
-                    <h3><a href="/ai-voice-agent.html" style="color: inherit; text-decoration: underline;">AI Voice Agents</a></h3>
+                    <h3><a href="https://voxdonna.com/ai-voice-agents.html" style="color: inherit; text-decoration: underline;">AI Voice Agents</a></h3>
                     <p>Phone agents that answer on the first ring, book appointments, and qualify callers 24/7, so nobody reaches hold music at 9pm.</p>
                 </article>
 
                 <article class="problem-item reveal" style="--delay: 3">
-                    <h3><a href="/ai-automation-agency.html" style="color: inherit; text-decoration: underline;">Full-service AI automation</a></h3>
+                    <h3><a href="/consulting.html" style="color: inherit; text-decoration: underline;">Full-service AI automation</a></h3>
                     <p>From lead generation to workflow orchestration, we design and deploy the whole system rather than handing over a tool and a login.</p>
                 </article>
             </div>
@@ -321,7 +318,7 @@
         <div class="footer-content">
             <div class="footer-brand">
                 <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
-                <p>AI Automation Agency for SMBs</p>
+                <p>Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a></p>
             </div>
 
             <div class="footer-contact">
@@ -340,5 +337,18 @@
     </footer>
 
     <script src="script.js"></script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": "https://rajsuyash.com/#website",
+        "name": "Suyash Raj",
+        "url": "https://rajsuyash.com",
+        "publisher": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person"
+        }
+    }
+    </script>
 </body>
 </html>

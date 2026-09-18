@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "N8N Inventory Management Automation: Stock Alerts, Reorder Workflows, and Supplier Notifications",
-        "description": "Learn how to build N8N workflows that automate inventory tracking, low-stock alerts, purchase order creation, and supplier notifications — so you never run out of stock or tie up cash in dead inventory.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-08-17T00:00:00Z",
-        "dateModified": "2026-08-17T00:00:00Z",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-inventory-management-automation.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "N8N Inventory Management Automation: Stock Alerts, Reorder Workflows, and Supplier Notifications",
+            "description": "Learn how to build N8N workflows that automate inventory tracking, low-stock alerts, purchase order creation, and supplier notifications — so you never run out of stock or tie up cash in dead inventory.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-08-17T00:00:00Z",
+            "dateModified": "2026-08-17T00:00:00Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-inventory-management-automation.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Can N8N connect to my existing inventory system?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N has native nodes for Shopify, WooCommerce, Airtable, Google Sheets, and hundreds of other platforms. For systems without a native node, the HTTP Request node connects to any REST API. Most ERP and warehouse management systems expose an API, making N8N a practical integration layer."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Can N8N connect to my existing inventory system?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N has native nodes for Shopify, WooCommerce, Airtable, Google Sheets, and hundreds of other platforms. For systems without a native node, the HTTP Request node connects to any REST API. Most ERP and warehouse management systems expose an API, making N8N a practical integration layer."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How often should inventory monitoring workflows run?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "For most SMBs, a scheduled check every 1 to 4 hours is sufficient. High-velocity sellers with rapid turnover should check every 15 to 30 minutes. Real-time monitoring via webhooks is possible when your inventory source can push events on stock changes."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What is the difference between a reorder point and a safety stock level?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Safety stock is the minimum buffer you hold to absorb demand spikes or supply delays without going out of stock. The reorder point is the quantity level that triggers a purchase order, calculated as safety stock plus the expected demand during your supplier lead time. Both values are set per SKU in your inventory system and referenced by your N8N workflow logic."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I prevent duplicate purchase orders from firing?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Use a Google Sheet or Airtable table as a simple state tracker. Before your workflow creates a PO, it checks whether an open order already exists for that SKU. If yes, it skips. When the order is fulfilled, update the status to clear the flag. This prevents duplicate orders even if the workflow fires multiple times before stock is replenished."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can N8N automate the supplier email itself?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N's Gmail or SMTP node sends structured emails to suppliers automatically. You can template the email with SKU name, quantity needed, unit price, and delivery address pulled from your inventory data. For suppliers with an order portal API, N8N can submit the order directly without email at all."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "How often should inventory monitoring workflows run?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "For most SMBs, a scheduled check every 1 to 4 hours is sufficient. High-velocity sellers with rapid turnover should check every 15 to 30 minutes. Real-time monitoring via webhooks is possible when your inventory source can push events on stock changes."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What is the difference between a reorder point and a safety stock level?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Safety stock is the minimum buffer you hold to absorb demand spikes or supply delays without going out of stock. The reorder point is the quantity level that triggers a purchase order, calculated as safety stock plus the expected demand during your supplier lead time. Both values are set per SKU in your inventory system and referenced by your N8N workflow logic."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How do I prevent duplicate purchase orders from firing?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Use a Google Sheet or Airtable table as a simple state tracker. Before your workflow creates a PO, it checks whether an open order already exists for that SKU. If yes, it skips. When the order is fulfilled, update the status to clear the flag. This prevents duplicate orders even if the workflow fires multiple times before stock is replenished."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can N8N automate the supplier email itself?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N's Gmail or SMTP node sends structured emails to suppliers automatically. You can template the email with SKU name, quantity needed, unit price, and delivery address pulled from your inventory data. For suppliers with an order portal API, N8N can submit the order directly without email at all."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N Inventory Management Automation", "item": "https://rajsuyash.com/blog/n8n-inventory-management-automation.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N Inventory Management Automation",
+                    "item": "https://rajsuyash.com/blog/n8n-inventory-management-automation.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -679,8 +694,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

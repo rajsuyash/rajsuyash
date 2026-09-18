@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "AI Automation for Back-Office Functions: Accounting, HR, and Admin",
-        "description": "The back office is where SMB owners lose 15+ hours a week to repetitive tasks. Here is how AI automation handles accounting, HR, and admin work so your team can focus on growth.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-07-31",
-        "dateModified": "2026-07-31",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/ai-automation-back-office-functions.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "AI Automation for Back-Office Functions: Accounting, HR, and Admin",
+            "description": "The back office is where SMB owners lose 15+ hours a week to repetitive tasks. Here is how AI automation handles accounting, HR, and admin work so your team can focus on growth.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-07-31",
+            "dateModified": "2026-07-31",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/ai-automation-back-office-functions.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "What back-office tasks are easiest to automate first?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Invoice processing and expense categorization are the fastest wins because the inputs are structured (PDFs and receipts) and the rules are clear. Most SMBs see these automations running reliably within two to four weeks. Employee onboarding document collection and new-hire IT provisioning requests are close behind. Start with the task that consumes the most hours per week and has the clearest pass/fail criteria."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "What back-office tasks are easiest to automate first?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Invoice processing and expense categorization are the fastest wins because the inputs are structured (PDFs and receipts) and the rules are clear. Most SMBs see these automations running reliably within two to four weeks. Employee onboarding document collection and new-hire IT provisioning requests are close behind. Start with the task that consumes the most hours per week and has the clearest pass/fail criteria."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Does automating accounting and HR tasks require replacing existing software?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "No. The most effective back-office automations connect the tools you already use rather than replacing them. N8N, for example, integrates with QuickBooks, Xero, BambooHR, Gusto, Google Workspace, and most modern business apps. The automation layer sits between your existing systems and passes data between them automatically, so your team never has to re-enter information."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How much can AI automation save on back-office labour costs?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The range depends on current volume and process maturity, but SMBs typically recapture 10 to 20 hours per week across accounting, HR, and admin tasks once core automations are live. At an average fully-loaded labour cost of $30 to $50 per hour, that translates to $1,500 to $4,000 per month in recaptured capacity. Our client Le Marquier achieved an 80% reduction in the cost of their customer service operations after automating high-volume, repetitive workflows."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is back-office automation secure for payroll and HR data?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes, when implemented correctly. The key principles are: keep data in its authoritative system (do not move payroll data to a new database just because you can), use credential vaults for API keys and passwords rather than hardcoding them in workflows, and restrict automation access to the minimum permissions needed. A well-architected N8N setup on your own infrastructure means sensitive HR data never leaves your control."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How long does it take to automate back-office functions?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A single well-scoped automation (e.g., invoice capture and coding, or new-hire document collection) typically takes two to four weeks from scoping to production. A full back-office automation programme covering accounting, HR, and admin usually runs across a 60 to 90 day engagement, with the highest-impact workflows live in the first month."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "Does automating accounting and HR tasks require replacing existing software?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "No. The most effective back-office automations connect the tools you already use rather than replacing them. N8N, for example, integrates with QuickBooks, Xero, BambooHR, Gusto, Google Workspace, and most modern business apps. The automation layer sits between your existing systems and passes data between them automatically, so your team never has to re-enter information."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How much can AI automation save on back-office labour costs?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The range depends on current volume and process maturity, but SMBs typically recapture 10 to 20 hours per week across accounting, HR, and admin tasks once core automations are live. At an average fully-loaded labour cost of $30 to $50 per hour, that translates to $1,500 to $4,000 per month in recaptured capacity. Our client Le Marquier achieved an 80% reduction in the cost of their customer service operations after automating high-volume, repetitive workflows."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Is back-office automation secure for payroll and HR data?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes, when implemented correctly. The key principles are: keep data in its authoritative system (do not move payroll data to a new database just because you can), use credential vaults for API keys and passwords rather than hardcoding them in workflows, and restrict automation access to the minimum permissions needed. A well-architected N8N setup on your own infrastructure means sensitive HR data never leaves your control."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How long does it take to automate back-office functions?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A single well-scoped automation (e.g., invoice capture and coding, or new-hire document collection) typically takes two to four weeks from scoping to production. A full back-office automation programme covering accounting, HR, and admin usually runs across a 60 to 90 day engagement, with the highest-impact workflows live in the first month."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "AI Automation for Back-Office Functions", "item": "https://rajsuyash.com/blog/ai-automation-back-office-functions.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "AI Automation for Back-Office Functions",
+                    "item": "https://rajsuyash.com/blog/ai-automation-back-office-functions.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -644,7 +659,7 @@
 
         <p><strong>Week 4: Launch and measure.</strong> Go live with the automation and measure actual time saved versus manual baseline. Use this result to build the case for the next automation. The first win always makes the second one easier to justify.</p>
 
-        <p>If you would rather have an expert run this process for you, the <a href="/ai-automation-agency.html">AI automation agency</a> service covers back-office automation as a core offering. We scope, build, and hand off workflows that your team owns and can modify.</p>
+        <p>If you would rather have an expert run this process for you, the <a href="/consulting.html">AI automation agency</a> service covers back-office automation as a core offering. We scope, build, and hand off workflows that your team owns and can modify.</p>
 
         <!-- FAQ Section -->
         <div class="article-faq">
@@ -685,8 +700,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

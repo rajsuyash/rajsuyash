@@ -31,66 +31,64 @@
 
     <!-- Structured Data - Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "How to Build Your First N8N Workflow: Beginner Guide (2026)",
-        "description": "Step-by-step N8N workflow tutorial for beginners. Build a contact form to CRM workflow with webhook triggers, data enrichment, Slack notifications, and email confirmations.",
-        "image": "https://rajsuyash.com/Photo.png",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "logo": {
-                "@type": "ImageObject",
-                "url": "https://rajsuyash.com/Photo.png"
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "How to Build Your First N8N Workflow: Beginner Guide (2026)",
+            "description": "Step-by-step N8N workflow tutorial for beginners. Build a contact form to CRM workflow with webhook triggers, data enrichment, Slack notifications, and email confirmations.",
+            "image": "https://rajsuyash.com/Photo.png",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-02-15",
+            "dateModified": "2026-02-15",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/build-first-n8n-workflow"
             }
-        },
-        "datePublished": "2026-02-15",
-        "dateModified": "2026-02-15",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/build-first-n8n-workflow"
         }
-    }
     </script>
 
     <!-- Structured Data - FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "How long does it take to build a first N8N workflow?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A simple N8N workflow takes 15 to 30 minutes to build from scratch. The contact form to CRM workflow described in this tutorial takes about 45 minutes if you are completely new to N8N. Once you understand nodes and connections, most basic workflows take under 10 minutes."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "How long does it take to build a first N8N workflow?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A simple N8N workflow takes 15 to 30 minutes to build from scratch. The contact form to CRM workflow described in this tutorial takes about 45 minutes if you are completely new to N8N. Once you understand nodes and connections, most basic workflows take under 10 minutes."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Do I need coding experience to use N8N?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "No. You can build powerful N8N workflows without writing a single line of code. N8N's visual editor lets you drag, drop, and configure nodes through a point-and-click interface. Coding experience helps when you want to add custom logic using JavaScript or Python code nodes, but it is not required to get started."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Should I use N8N Cloud or self-host N8N?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "If you are just getting started, use N8N Cloud. It takes two minutes to set up, requires zero server management, and the free tier gives you enough executions to learn and experiment. Switch to self-hosting later when you need unlimited executions, full data control, or want to reduce costs at scale. Self-hosting on a $10/month server handles most small business workloads."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "Do I need coding experience to use N8N?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "No. You can build powerful N8N workflows without writing a single line of code. N8N's visual editor lets you drag, drop, and configure nodes through a point-and-click interface. Coding experience helps when you want to add custom logic using JavaScript or Python code nodes, but it is not required to get started."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Should I use N8N Cloud or self-host N8N?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "If you are just getting started, use N8N Cloud. It takes two minutes to set up, requires zero server management, and the free tier gives you enough executions to learn and experiment. Switch to self-hosting later when you need unlimited executions, full data control, or want to reduce costs at scale. Self-hosting on a $10/month server handles most small business workloads."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Fonts -->
@@ -342,7 +340,32 @@
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://rajsuyash.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://rajsuyash.com/blog/"},{"@type":"ListItem","position":3,"name":"Article","item":"https://rajsuyash.com/blog/build-first-n8n-workflow.html"}]}</script>
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://rajsuyash.com/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Blog",
+                "item": "https://rajsuyash.com/blog/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Article",
+                "item": "https://rajsuyash.com/blog/build-first-n8n-workflow.html"
+            }
+        ]
+    }
+</script>
 </head>
 <body>
     <!-- Noise Texture Overlay -->
@@ -594,7 +617,7 @@
                 <li style="margin-bottom: 0.5rem;"><a href="/case-studies/le-marquier.html">See how Le Marquier cut support costs by 80% with AI voice agents</a></li>
                 <li style="margin-bottom: 0.5rem;"><a href="/roi-calculator.html">Calculate your AI automation ROI</a></li>
                 <li style="margin-bottom: 0.5rem;"><a href="/tools/ai-readiness-assessment.html">Take the free AI readiness assessment</a></li>
-                <li style="margin-bottom: 0.5rem;"><a href="/ai-automation-agency.html">Explore our AI automation services</a></li>
+                <li style="margin-bottom: 0.5rem;"><a href="/consulting.html">Explore our AI automation services</a></li>
             </ul>
         </div>
 

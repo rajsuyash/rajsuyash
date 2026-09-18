@@ -38,100 +38,116 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "N8N Event-Driven Automation: Build Reactive Workflows with Webhooks and Conditional Logic",
-        "description": "Stop waiting for cron jobs. Learn how to build N8N workflows that react to events in real time using webhooks, IF nodes, and Switch nodes. Practical guide with business use cases.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-07-14T00:00:00Z",
-        "dateModified": "2026-07-14T00:00:00Z",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-event-driven-automation-guide.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "N8N Event-Driven Automation: Build Reactive Workflows with Webhooks and Conditional Logic",
+            "description": "Stop waiting for cron jobs. Learn how to build N8N workflows that react to events in real time using webhooks, IF nodes, and Switch nodes. Practical guide with business use cases.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-07-14T00:00:00Z",
+            "dateModified": "2026-07-14T00:00:00Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-event-driven-automation-guide.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "What is event-driven automation in N8N?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Event-driven automation in N8N means a workflow starts the moment a specific event happens — a form submission, a new CRM contact, a payment failure — rather than running on a fixed schedule. N8N listens for these events through its Webhook node, which receives an HTTP POST from any app that can send one. The workflow then routes data through IF and Switch nodes to trigger the right actions for each scenario."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "What is event-driven automation in N8N?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Event-driven automation in N8N means a workflow starts the moment a specific event happens — a form submission, a new CRM contact, a payment failure — rather than running on a fixed schedule. N8N listens for these events through its Webhook node, which receives an HTTP POST from any app that can send one. The workflow then routes data through IF and Switch nodes to trigger the right actions for each scenario."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What is the difference between a scheduled trigger and a webhook trigger in N8N?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A scheduled trigger (Cron or Schedule node) runs your workflow at set intervals — every hour, every Monday at 9am. It is ideal for batch jobs: pulling reports, syncing databases, sending weekly digests. A webhook trigger fires instantly when an external system sends data to a unique URL N8N provides. It is ideal for real-time reactions: sending a welcome email the moment someone signs up, alerting your team when a payment fails, or routing a support ticket to the right person based on its content."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I add conditional logic to an N8N workflow?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N has two core nodes for conditional logic. The IF node evaluates a single true/false condition — for example, 'Is deal value greater than $5,000?' — and sends data down one of two branches. The Switch node handles multiple conditions in one node, routing data to different branches based on a field's value, such as routing support tickets to different teams based on category. You chain these nodes after your trigger to build decision trees that handle each scenario differently."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can N8N handle multiple event types from a single webhook?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. Many platforms send different event types to the same webhook URL — Stripe sends payment.succeeded, payment.failed, subscription.canceled, and more from one endpoint. In N8N, you use a Switch node immediately after the Webhook node to read the event type field and route each event to its own branch. This means one workflow URL handles your entire integration with a platform rather than requiring separate webhooks for each event."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is event-driven automation faster than scheduled polling in N8N?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Significantly faster. Polling workflows run at intervals — at best every minute — meaning a new lead could wait 59 seconds before your workflow fires. Webhook-based event-driven workflows respond in under a second of the triggering event. For time-sensitive actions like lead response, payment failure recovery, or appointment confirmations, that speed difference directly impacts conversion rates and customer satisfaction."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What apps can trigger N8N event-driven workflows?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Any app that supports webhooks or HTTP callbacks can trigger an N8N event-driven workflow. This includes Stripe, Shopify, HubSpot, Typeform, Calendly, WooCommerce, GitHub, Slack, Twilio, PayPal, and hundreds more. For apps without native webhook support, you can still build event-driven behavior using N8N's polling trigger nodes, which check for changes frequently and are more efficient than you building your own polling loop."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "What is the difference between a scheduled trigger and a webhook trigger in N8N?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A scheduled trigger (Cron or Schedule node) runs your workflow at set intervals — every hour, every Monday at 9am. It is ideal for batch jobs: pulling reports, syncing databases, sending weekly digests. A webhook trigger fires instantly when an external system sends data to a unique URL N8N provides. It is ideal for real-time reactions: sending a welcome email the moment someone signs up, alerting your team when a payment fails, or routing a support ticket to the right person based on its content."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How do I add conditional logic to an N8N workflow?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N has two core nodes for conditional logic. The IF node evaluates a single true/false condition — for example, 'Is deal value greater than $5,000?' — and sends data down one of two branches. The Switch node handles multiple conditions in one node, routing data to different branches based on a field's value, such as routing support tickets to different teams based on category. You chain these nodes after your trigger to build decision trees that handle each scenario differently."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can N8N handle multiple event types from a single webhook?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. Many platforms send different event types to the same webhook URL — Stripe sends payment.succeeded, payment.failed, subscription.canceled, and more from one endpoint. In N8N, you use a Switch node immediately after the Webhook node to read the event type field and route each event to its own branch. This means one workflow URL handles your entire integration with a platform rather than requiring separate webhooks for each event."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Is event-driven automation faster than scheduled polling in N8N?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Significantly faster. Polling workflows run at intervals — at best every minute — meaning a new lead could wait 59 seconds before your workflow fires. Webhook-based event-driven workflows respond in under a second of the triggering event. For time-sensitive actions like lead response, payment failure recovery, or appointment confirmations, that speed difference directly impacts conversion rates and customer satisfaction."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What apps can trigger N8N event-driven workflows?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Any app that supports webhooks or HTTP callbacks can trigger an N8N event-driven workflow. This includes Stripe, Shopify, HubSpot, Typeform, Calendly, WooCommerce, GitHub, Slack, Twilio, PayPal, and hundreds more. For apps without native webhook support, you can still build event-driven behavior using N8N's polling trigger nodes, which check for changes frequently and are more efficient than you building your own polling loop."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N Event-Driven Automation Guide", "item": "https://rajsuyash.com/blog/n8n-event-driven-automation-guide.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N Event-Driven Automation Guide",
+                    "item": "https://rajsuyash.com/blog/n8n-event-driven-automation-guide.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -434,9 +450,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -738,8 +753,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "N8N WhatsApp Business API: Automate Customer Messages, Order Updates, and Support",
-        "description": "Learn how to connect N8N to the WhatsApp Business API and automate order confirmations, appointment reminders, and customer support messages at scale.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-09-10T00:00:00Z",
-        "dateModified": "2026-09-10T00:00:00Z",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-whatsapp-business-api-automation.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "N8N WhatsApp Business API: Automate Customer Messages, Order Updates, and Support",
+            "description": "Learn how to connect N8N to the WhatsApp Business API and automate order confirmations, appointment reminders, and customer support messages at scale.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-09-10T00:00:00Z",
+            "dateModified": "2026-09-10T00:00:00Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-whatsapp-business-api-automation.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Can N8N send WhatsApp messages automatically?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N connects to the WhatsApp Business API either directly via the HTTP Request node using Meta's Cloud API, or through Twilio's WhatsApp sandbox. Once connected, you can trigger messages from any event in your workflow: a new order, a form submission, a CRM status change, or a scheduled reminder."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Can N8N send WhatsApp messages automatically?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N connects to the WhatsApp Business API either directly via the HTTP Request node using Meta's Cloud API, or through Twilio's WhatsApp sandbox. Once connected, you can trigger messages from any event in your workflow: a new order, a form submission, a CRM status change, or a scheduled reminder."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Do I need to pay for the WhatsApp Business API?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Meta's WhatsApp Business API has a conversation-based pricing model. The first 1,000 user-initiated conversations per month are free. Business-initiated conversations (like order confirmations) cost between $0.005 and $0.09 per conversation depending on the recipient's country. For most SMBs sending under 5,000 messages per month, the total cost is under $50. This is far cheaper than SMS rates or third-party messaging platforms."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What is the difference between the WhatsApp Business App and the WhatsApp Business API?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The WhatsApp Business App is a mobile app for small teams. One phone, one user, manual replies. The WhatsApp Business API is a programmatic interface that lets you send messages at scale from any software system, including N8N. The API requires a verified Meta Business account and access via Meta's Cloud API or a BSP (Business Solution Provider) like Twilio or 360dialog. If you want automation, you need the API."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How long does it take to build an N8N WhatsApp workflow?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A basic order confirmation or appointment reminder workflow takes 2 to 4 hours to build from scratch, assuming your WhatsApp Business API access is already approved. The API approval process through Meta takes 1 to 3 business days. A full customer support routing workflow with conditional logic and CRM integration takes 1 to 2 days of development time."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can N8N receive incoming WhatsApp messages too?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. The WhatsApp Cloud API supports webhooks for inbound messages. You configure a webhook URL pointing to your N8N instance, and every time a customer replies or sends a new message, N8N receives the payload and can route it: to your CRM, to a support ticket system, to a Slack channel, or to an AI agent for automated reply. This enables true two-way WhatsApp automation."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "Do I need to pay for the WhatsApp Business API?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Meta's WhatsApp Business API has a conversation-based pricing model. The first 1,000 user-initiated conversations per month are free. Business-initiated conversations (like order confirmations) cost between $0.005 and $0.09 per conversation depending on the recipient's country. For most SMBs sending under 5,000 messages per month, the total cost is under $50. This is far cheaper than SMS rates or third-party messaging platforms."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What is the difference between the WhatsApp Business App and the WhatsApp Business API?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The WhatsApp Business App is a mobile app for small teams. One phone, one user, manual replies. The WhatsApp Business API is a programmatic interface that lets you send messages at scale from any software system, including N8N. The API requires a verified Meta Business account and access via Meta's Cloud API or a BSP (Business Solution Provider) like Twilio or 360dialog. If you want automation, you need the API."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How long does it take to build an N8N WhatsApp workflow?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A basic order confirmation or appointment reminder workflow takes 2 to 4 hours to build from scratch, assuming your WhatsApp Business API access is already approved. The API approval process through Meta takes 1 to 3 business days. A full customer support routing workflow with conditional logic and CRM integration takes 1 to 2 days of development time."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can N8N receive incoming WhatsApp messages too?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. The WhatsApp Cloud API supports webhooks for inbound messages. You configure a webhook URL pointing to your N8N instance, and every time a customer replies or sends a new message, N8N receives the payload and can route it: to your CRM, to a support ticket system, to a Slack channel, or to an AI agent for automated reply. This enables true two-way WhatsApp automation."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N WhatsApp Business API Automation", "item": "https://rajsuyash.com/blog/n8n-whatsapp-business-api-automation.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N WhatsApp Business API Automation",
+                    "item": "https://rajsuyash.com/blog/n8n-whatsapp-business-api-automation.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -715,8 +730,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

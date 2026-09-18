@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "AI Automation Security and Data Privacy for SMBs",
-        "description": "What data your automations actually touch, the 4 questions to ask every vendor, how DPAs work, and least-privilege setup for small teams.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-04-09",
-        "dateModified": "2026-04-09",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/ai-automation-security-data-privacy.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "AI Automation Security and Data Privacy for SMBs",
+            "description": "What data your automations actually touch, the 4 questions to ask every vendor, how DPAs work, and least-privilege setup for small teams.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-04-09",
+            "dateModified": "2026-04-09",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/ai-automation-security-data-privacy.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Is AI automation safe for small businesses?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes, when implemented correctly. The key is to understand exactly what data your automation tools access, ensure vendors sign a data processing agreement, use role-based permissions so tools only touch what they need, and start automation with lower-sensitivity processes before moving to anything involving customer PII or financial data."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Is AI automation safe for small businesses?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes, when implemented correctly. The key is to understand exactly what data your automation tools access, ensure vendors sign a data processing agreement, use role-based permissions so tools only touch what they need, and start automation with lower-sensitivity processes before moving to anything involving customer PII or financial data."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What data does an AI automation tool typically access?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "It depends on the workflow. A lead generation automation might access your CRM contacts and email. A customer support automation might access conversation history and order data. The critical question is not 'does it access data' but 'what data specifically, where does it go, and who can see it.' Ask every vendor for a data flow diagram before signing."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What is a data processing agreement (DPA) and do I need one?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A data processing agreement is a contract between you and a vendor that specifies what data they process, how it is stored, how long it is retained, and what happens if there is a breach. If you are in the EU, Canada, or California, a DPA is legally required when sharing personal data with third-party tools. Even outside those jurisdictions, it is good practice and signals that the vendor takes data seriously."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I know if an AI vendor is handling my data responsibly?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Look for SOC 2 Type II certification, a clear data retention policy (not 'we keep it as long as needed'), the ability to delete your data on request, and encryption at rest and in transit. Ask specifically: does the vendor use your data to train their AI models? Reputable vendors will say no or offer an opt-out."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What processes should SMBs avoid automating due to security risk?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Avoid fully automating anything that involves wire transfers, payment approvals above a threshold, or irreversible account changes without human review in the loop. For processes touching sensitive PII (health data, financial records, legal documents), use automation to route and flag work rather than to process it autonomously. The goal is speed, not removing judgment from high-stakes decisions."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "What data does an AI automation tool typically access?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "It depends on the workflow. A lead generation automation might access your CRM contacts and email. A customer support automation might access conversation history and order data. The critical question is not 'does it access data' but 'what data specifically, where does it go, and who can see it.' Ask every vendor for a data flow diagram before signing."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What is a data processing agreement (DPA) and do I need one?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A data processing agreement is a contract between you and a vendor that specifies what data they process, how it is stored, how long it is retained, and what happens if there is a breach. If you are in the EU, Canada, or California, a DPA is legally required when sharing personal data with third-party tools. Even outside those jurisdictions, it is good practice and signals that the vendor takes data seriously."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How do I know if an AI vendor is handling my data responsibly?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Look for SOC 2 Type II certification, a clear data retention policy (not 'we keep it as long as needed'), the ability to delete your data on request, and encryption at rest and in transit. Ask specifically: does the vendor use your data to train their AI models? Reputable vendors will say no or offer an opt-out."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What processes should SMBs avoid automating due to security risk?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Avoid fully automating anything that involves wire transfers, payment approvals above a threshold, or irreversible account changes without human review in the loop. For processes touching sensitive PII (health data, financial records, legal documents), use automation to route and flag work rather than to process it autonomously. The goal is speed, not removing judgment from high-stakes decisions."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "AI Automation Security and Data Privacy", "item": "https://rajsuyash.com/blog/ai-automation-security-data-privacy.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "AI Automation Security and Data Privacy",
+                    "item": "https://rajsuyash.com/blog/ai-automation-security-data-privacy.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -672,8 +687,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

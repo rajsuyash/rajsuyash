@@ -38,76 +38,92 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "How N8N + AI Phone Agents Handle Peak Season Call Volumes",
-        "description": "Learn how to combine N8N workflow automation with AI phone agents to absorb 10x call volumes during peak season — without hiring, without burnout, and without dropped sales.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-04-21T08:00:00+02:00",
-        "dateModified": "2026-04-21T08:00:00+02:00",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-ai-phone-agents-peak-season.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "How N8N + AI Phone Agents Handle Peak Season Call Volumes",
+            "description": "Learn how to combine N8N workflow automation with AI phone agents to absorb 10x call volumes during peak season — without hiring, without burnout, and without dropped sales.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-04-21T08:00:00+02:00",
+            "dateModified": "2026-04-21T08:00:00+02:00",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-ai-phone-agents-peak-season.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "How does N8N connect to an AI phone agent?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N connects to AI phone agents via webhook triggers or HTTP Request nodes. When the AI phone agent completes a call, it fires a webhook payload to N8N containing the caller's name, phone number, intent, and any captured data. N8N then routes that data — creating CRM records, sending alerts, scheduling follow-ups — all without human intervention."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "How does N8N connect to an AI phone agent?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N connects to AI phone agents via webhook triggers or HTTP Request nodes. When the AI phone agent completes a call, it fires a webhook payload to N8N containing the caller's name, phone number, intent, and any captured data. N8N then routes that data — creating CRM records, sending alerts, scheduling follow-ups — all without human intervention."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can N8N workflows scale automatically during peak season?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N workflows have no fixed capacity ceiling for data processing. The AI phone agent handles the call volume surge at the front end, and N8N processes the resulting data in the back end regardless of volume. Whether you receive 50 calls or 5,000 calls during a peak period, the N8N workflows execute the same logic for each one."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What is the typical cost of an N8N + AI phone agent stack vs. seasonal staff?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A self-hosted N8N instance costs roughly €20-50/month to run. AI phone agent platforms typically charge between €0.05-0.15 per minute of call time. For 1,000 peak-season calls averaging 3 minutes each, that is roughly €150-450 in call costs. Compare that to a seasonal call centre temp at €1,500-2,500/month plus onboarding time, and the savings are significant — often 80% or more."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "Can N8N workflows scale automatically during peak season?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N workflows have no fixed capacity ceiling for data processing. The AI phone agent handles the call volume surge at the front end, and N8N processes the resulting data in the back end regardless of volume. Whether you receive 50 calls or 5,000 calls during a peak period, the N8N workflows execute the same logic for each one."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What is the typical cost of an N8N + AI phone agent stack vs. seasonal staff?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A self-hosted N8N instance costs roughly €20-50/month to run. AI phone agent platforms typically charge between €0.05-0.15 per minute of call time. For 1,000 peak-season calls averaging 3 minutes each, that is roughly €150-450 in call costs. Compare that to a seasonal call centre temp at €1,500-2,500/month plus onboarding time, and the savings are significant — often 80% or more."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "How N8N + AI Phone Agents Handle Peak Season Call Volumes", "item": "https://rajsuyash.com/blog/n8n-ai-phone-agents-peak-season.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "How N8N + AI Phone Agents Handle Peak Season Call Volumes",
+                    "item": "https://rajsuyash.com/blog/n8n-ai-phone-agents-peak-season.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -410,9 +426,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -445,7 +460,7 @@
 
         <p>You scramble. You pull your ops team onto phones. You hire two temps who need three days of training and still get half the answers wrong. You miss calls. You lose sales. You spend January recovering from the chaos of December.</p>
 
-        <p>There is a better architecture for this problem. It combines two technologies that most operators treat separately: <a href="/n8n-automation.html">N8N workflow automation</a> and <a href="/ai-voice-agent.html">AI phone agents</a>. Together, they create a call-handling stack that scales instantly, processes every interaction into your CRM, and costs a fraction of seasonal staffing.</p>
+        <p>There is a better architecture for this problem. It combines two technologies that most operators treat separately: <a href="/n8n-automation.html">N8N workflow automation</a> and <a href="https://voxdonna.com/ai-voice-agents.html">AI phone agents</a>. Together, they create a call-handling stack that scales instantly, processes every interaction into your CRM, and costs a fraction of seasonal staffing.</p>
 
         <p>This post walks through exactly how to build it.</p>
 
@@ -705,8 +720,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

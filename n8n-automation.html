@@ -34,156 +34,98 @@
 
     <!-- Structured Data - ProfessionalService Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "ProfessionalService",
-        "name": "Suyash Raj - N8N Automation Expert",
-        "description": "Expert N8N automation services for small and medium businesses. Custom workflow design, N8N integrations, and Zapier-to-N8N migration with unlimited executions and self-hosted data privacy.",
-        "url": "https://rajsuyash.com/n8n-automation.html",
-        "logo": "https://rajsuyash.com/Photo.png",
-        "image": "https://rajsuyash.com/Photo.png",
-        "priceRange": "$$",
-        "email": "grow@rajsuyash.com",
-        "address": {
-            "@type": "PostalAddress",
-            "addressCountry": "US"
-        },
-        "sameAs": [
-            "https://www.linkedin.com/in/suyashraj/",
-            "https://x.com/suyash_raj/"
-        ],
-        "founder": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "jobTitle": "N8N Automation Expert",
-            "description": "N8N automation specialist building custom workflows, integrations, and automation systems for SMBs.",
-            "url": "https://rajsuyash.com",
-            "sameAs": [
-                "https://www.linkedin.com/in/suyashraj/",
-                "https://x.com/suyash_raj/"
-            ]
-        },
-        "serviceType": [
-            "N8N Workflow Automation",
-            "N8N Integration Services",
-            "N8N Migration from Zapier",
-            "N8N Automation Consulting",
-            "Custom N8N Development"
-        ],
-        "areaServed": {
-            "@type": "Country",
-            "name": "United States"
-        },
-        "hasOfferCatalog": {
-            "@type": "OfferCatalog",
-            "name": "N8N Automation Services",
-            "itemListElement": [
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": "N8N Workflow Design & Architecture",
-                        "description": "Custom N8N workflow design, multi-step automation architecture, and error handling for reliable business processes"
-                    }
-                },
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": "N8N Integration Services",
-                        "description": "Connect CRMs, email platforms, databases, and APIs through N8N's 400+ native integrations and custom HTTP nodes"
-                    }
-                },
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": "N8N Migration from Zapier/Make",
-                        "description": "Complete migration from Zapier or Make to N8N with zero downtime, saving 60-80% on automation costs"
-                    }
-                }
-            ]
-        },
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "5",
-            "reviewCount": "50"
+        {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "url": "https://rajsuyash.com/n8n-automation.html",
+            "name": "Suyash Raj - N8N Automation Expert",
+            "description": "Expert N8N automation services for small and medium businesses. Custom workflow design, N8N integrations, and Zapier-to-N8N migration with unlimited executions and self-hosted data privacy.",
+            "image": "https://rajsuyash.com/Photo.png",
+            "mainEntity": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "isPartOf": {
+                "@type": "WebSite",
+                "@id": "https://rajsuyash.com/#website"
+            }
         }
-    }
     </script>
 
     <!-- FAQ Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "What is N8N automation?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N is an open-source workflow automation platform that lets you connect apps, services, and APIs to automate repetitive tasks. Unlike Zapier or Make, N8N can be self-hosted, charges no per-task fees, and supports unlimited executions. It uses a visual node-based editor to build complex multi-step workflows without coding."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "What is N8N automation?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N is an open-source workflow automation platform that lets you connect apps, services, and APIs to automate repetitive tasks. Unlike Zapier or Make, N8N can be self-hosted, charges no per-task fees, and supports unlimited executions. It uses a visual node-based editor to build complex multi-step workflows without coding."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How much does N8N cost compared to Zapier?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N's self-hosted version is free and open-source with unlimited executions. N8N Cloud starts at $20/month. In contrast, Zapier charges per task and can cost $300-800+/month for high-volume automation. Most businesses save 60-80% by switching from Zapier to N8N, especially those running thousands of automations monthly."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can N8N handle complex multi-step workflows?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N excels at complex automation. It supports conditional branching, loops, error handling, sub-workflows, and custom JavaScript/Python code nodes. You can build workflows with 50+ steps, parallel execution paths, and sophisticated data transformations that would be impossible or prohibitively expensive on Zapier or Make."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is N8N suitable for small businesses?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N is ideal for small businesses because it eliminates per-task pricing that makes other tools expensive at scale. The visual builder requires no coding knowledge, and with 400+ integrations, it connects to virtually every business tool. Small businesses typically automate lead generation, customer onboarding, invoicing, and reporting within the first week."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What integrations does N8N support?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N supports 400+ native integrations including CRMs (HubSpot, Salesforce), email (Gmail, Outlook), databases (PostgreSQL, MySQL, MongoDB), project management (Notion, Asana, Trello), e-commerce (Shopify, WooCommerce), and communication tools (Slack, Teams, Discord). For apps without native nodes, N8N's HTTP Request node connects to any REST API."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How long does it take to build an N8N workflow?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Simple workflows (2-5 steps) take 1-2 days. Medium-complexity workflows with conditional logic and multiple integrations take 3-5 days. Enterprise-grade automation systems with error handling, monitoring, and sub-workflows take 1-3 weeks. Most clients see their first workflow live within the first week of engagement."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can you migrate my existing Zapier workflows to N8N?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. We handle complete Zapier-to-N8N migrations with zero downtime. The process includes auditing your existing Zaps, redesigning them as optimized N8N workflows (often consolidating multiple Zaps into single workflows), testing thoroughly, and running both systems in parallel before cutover. Most migrations complete in 1-2 weeks and immediately reduce automation costs by 60-80%."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Do I need coding knowledge to use N8N?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "No coding is required for most N8N automations. The visual drag-and-drop builder handles the majority of use cases. However, N8N also supports custom JavaScript and Python code nodes for advanced transformations, giving technical teams the flexibility to handle edge cases that no-code tools cannot. We build your workflows so your team can maintain them without coding."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "How much does N8N cost compared to Zapier?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N's self-hosted version is free and open-source with unlimited executions. N8N Cloud starts at $20/month. In contrast, Zapier charges per task and can cost $300-800+/month for high-volume automation. Most businesses save 60-80% by switching from Zapier to N8N, especially those running thousands of automations monthly."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can N8N handle complex multi-step workflows?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N excels at complex automation. It supports conditional branching, loops, error handling, sub-workflows, and custom JavaScript/Python code nodes. You can build workflows with 50+ steps, parallel execution paths, and sophisticated data transformations that would be impossible or prohibitively expensive on Zapier or Make."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Is N8N suitable for small businesses?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N is ideal for small businesses because it eliminates per-task pricing that makes other tools expensive at scale. The visual builder requires no coding knowledge, and with 400+ integrations, it connects to virtually every business tool. Small businesses typically automate lead generation, customer onboarding, invoicing, and reporting within the first week."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What integrations does N8N support?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N supports 400+ native integrations including CRMs (HubSpot, Salesforce), email (Gmail, Outlook), databases (PostgreSQL, MySQL, MongoDB), project management (Notion, Asana, Trello), e-commerce (Shopify, WooCommerce), and communication tools (Slack, Teams, Discord). For apps without native nodes, N8N's HTTP Request node connects to any REST API."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How long does it take to build an N8N workflow?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Simple workflows (2-5 steps) take 1-2 days. Medium-complexity workflows with conditional logic and multiple integrations take 3-5 days. Enterprise-grade automation systems with error handling, monitoring, and sub-workflows take 1-3 weeks. Most clients see their first workflow live within the first week of engagement."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can you migrate my existing Zapier workflows to N8N?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. We handle complete Zapier-to-N8N migrations with zero downtime. The process includes auditing your existing Zaps, redesigning them as optimized N8N workflows (often consolidating multiple Zaps into single workflows), testing thoroughly, and running both systems in parallel before cutover. Most migrations complete in 1-2 weeks and immediately reduce automation costs by 60-80%."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Do I need coding knowledge to use N8N?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "No coding is required for most N8N automations. The visual drag-and-drop builder handles the majority of use cases. However, N8N also supports custom JavaScript and Python code nodes for advanced transformations, giving technical teams the flexibility to handle edge cases that no-code tools cannot. We build your workflows so your team can maintain them without coding."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Distinctive Typography: Fraunces (display) + Space Grotesk (body) -->
@@ -199,24 +141,24 @@
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
         {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://rajsuyash.com/"
-        },
-        {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "N8N Automation",
-            "item": "https://rajsuyash.com/n8n-automation.html"
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "N8N Automation",
+                    "item": "https://rajsuyash.com/n8n-automation.html"
+                }
+            ]
         }
-    ]
-}
     </script>
 </head>
 <body>
@@ -231,9 +173,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/tools/" class="nav-link">Tools</a>
@@ -725,7 +666,7 @@
             </div>
             <div class="problems-grid">
                 <article class="problem-item reveal" style="--delay: 0">
-                    <h3><a href="/ai-automation-agency.html" style="color: inherit; text-decoration: underline;">AI Automation Agency</a></h3>
+                    <h3><a href="/consulting.html" style="color: inherit; text-decoration: underline;">AI Automation Agency</a></h3>
                     <p>Full-service AI automation for SMBs. From lead generation to workflow orchestration, we design and deploy systems that eliminate busywork and scale your operations.</p>
                 </article>
                 <article class="problem-item reveal" style="--delay: 1">
@@ -733,7 +674,7 @@
                     <p>Autonomous AI agents that handle customer service, qualify leads, and complete multi-step tasks 24/7. Build intelligent digital workers for your business.</p>
                 </article>
                 <article class="problem-item reveal" style="--delay: 2">
-                    <h3><a href="/ai-voice-agent.html" style="color: inherit; text-decoration: underline;">AI Voice Agents</a></h3>
+                    <h3><a href="https://voxdonna.com/ai-voice-agents.html" style="color: inherit; text-decoration: underline;">AI Voice Agents</a></h3>
                     <p>AI-powered phone agents that answer calls, book appointments, and qualify leads around the clock. Natural voice AI that replaces hold music with real conversations.</p>
                 </article>
             </div>

@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "N8N Document Processing Automation: Extract, Route, and Act on PDFs Automatically",
-        "description": "Stop manually processing invoices, contracts, and forms. Learn how to build N8N document automation workflows that extract data from PDFs, route files, and trigger actions without touching a thing.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-08-31T00:00:00Z",
-        "dateModified": "2026-08-31T00:00:00Z",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-document-processing-pdf-automation.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "N8N Document Processing Automation: Extract, Route, and Act on PDFs Automatically",
+            "description": "Stop manually processing invoices, contracts, and forms. Learn how to build N8N document automation workflows that extract data from PDFs, route files, and trigger actions without touching a thing.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-08-31T00:00:00Z",
+            "dateModified": "2026-08-31T00:00:00Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-document-processing-pdf-automation.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Can N8N read PDF files directly?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N can handle PDF files as binary data using the Read/Write Binary Files node and the Extract from File node. For deep text extraction from complex PDFs, you can route the file to an external parsing API (like AWS Textract, Google Document AI, or a self-hosted Tika server) via the HTTP Request node. N8N then receives the structured text and processes it in subsequent nodes."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Can N8N read PDF files directly?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N can handle PDF files as binary data using the Read/Write Binary Files node and the Extract from File node. For deep text extraction from complex PDFs, you can route the file to an external parsing API (like AWS Textract, Google Document AI, or a self-hosted Tika server) via the HTTP Request node. N8N then receives the structured text and processes it in subsequent nodes."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What types of documents can N8N automate?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N can automate processing for PDFs, Word documents (DOCX), Excel spreadsheets (XLSX), CSV files, HTML, XML, JSON, and plain text files. For image-based documents (scanned PDFs, photos of receipts), you send the file to an OCR service via HTTP Request and process the returned text inside N8N."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How does N8N document automation compare to expensive platforms like Kofax or ABBYY?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Enterprise document capture platforms can cost $50,000 to $200,000 per year plus implementation fees. N8N self-hosted is free, and even the cloud version costs $20 to $50 per month. You combine N8N with a pay-per-page OCR or extraction API, keeping total costs under $200 per month for most SMBs. You lose some pre-built templates but gain full flexibility and no vendor lock-in."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can I use AI to extract structured data from invoices in N8N?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. You extract the raw text from the PDF, then send that text to an AI model (Claude or GPT-4o) via the HTTP Request node with a structured prompt asking it to return JSON with fields like vendor name, invoice number, line items, total, and due date. The model's JSON response feeds directly into your next N8N nodes to log data, update your accounting system, or trigger an approval."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How long does it take to build a document processing workflow in N8N?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A basic email-to-spreadsheet invoice workflow takes two to four hours to build and test if you already have your N8N instance running. A more complex workflow that includes AI extraction, approval routing, and integration with accounting software like QuickBooks or Xero takes one to two days. Most businesses see the time investment pay back within the first week of automated operation."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "What types of documents can N8N automate?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N can automate processing for PDFs, Word documents (DOCX), Excel spreadsheets (XLSX), CSV files, HTML, XML, JSON, and plain text files. For image-based documents (scanned PDFs, photos of receipts), you send the file to an OCR service via HTTP Request and process the returned text inside N8N."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How does N8N document automation compare to expensive platforms like Kofax or ABBYY?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Enterprise document capture platforms can cost $50,000 to $200,000 per year plus implementation fees. N8N self-hosted is free, and even the cloud version costs $20 to $50 per month. You combine N8N with a pay-per-page OCR or extraction API, keeping total costs under $200 per month for most SMBs. You lose some pre-built templates but gain full flexibility and no vendor lock-in."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can I use AI to extract structured data from invoices in N8N?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. You extract the raw text from the PDF, then send that text to an AI model (Claude or GPT-4o) via the HTTP Request node with a structured prompt asking it to return JSON with fields like vendor name, invoice number, line items, total, and due date. The model's JSON response feeds directly into your next N8N nodes to log data, update your accounting system, or trigger an approval."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How long does it take to build a document processing workflow in N8N?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A basic email-to-spreadsheet invoice workflow takes two to four hours to build and test if you already have your N8N instance running. A more complex workflow that includes AI extraction, approval routing, and integration with accounting software like QuickBooks or Xero takes one to two days. Most businesses see the time investment pay back within the first week of automated operation."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N Document Processing Automation", "item": "https://rajsuyash.com/blog/n8n-document-processing-pdf-automation.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N Document Processing Automation",
+                    "item": "https://rajsuyash.com/blog/n8n-document-processing-pdf-automation.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -672,8 +687,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

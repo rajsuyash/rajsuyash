@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "AI Voice Agent for Dental Offices: Automate Scheduling and Patient Calls 24/7",
-        "description": "How dental offices use AI voice agents to handle appointment scheduling, patient inquiries, and recall reminders 24/7. Cut front desk phone time by 80% and never miss a new patient call.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-04-24",
-        "dateModified": "2026-04-24",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/ai-voice-agent-dental-offices.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "AI Voice Agent for Dental Offices: Automate Scheduling and Patient Calls 24/7",
+            "description": "How dental offices use AI voice agents to handle appointment scheduling, patient inquiries, and recall reminders 24/7. Cut front desk phone time by 80% and never miss a new patient call.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-04-24",
+            "dateModified": "2026-04-24",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/ai-voice-agent-dental-offices.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Can an AI voice agent book dental appointments directly into our practice management software?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. AI voice agents integrate with major dental practice management systems including Dentrix, Eaglesoft, Open Dental, Curve Dental, and Carestream. The agent checks real-time availability, confirms appointment type, collects patient details, and books directly into your schedule without any manual entry from your front desk team."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Can an AI voice agent book dental appointments directly into our practice management software?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. AI voice agents integrate with major dental practice management systems including Dentrix, Eaglesoft, Open Dental, Curve Dental, and Carestream. The agent checks real-time availability, confirms appointment type, collects patient details, and books directly into your schedule without any manual entry from your front desk team."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How does an AI voice agent handle HIPAA compliance for dental practices?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "AI voice agents for dental offices are configured to collect only the minimum necessary patient information for scheduling: name, date of birth (for existing patient lookup), contact number, and appointment type. All data transmission is encrypted and the system operates within HIPAA-compliant infrastructure. We do not store clinical information. Your implementation includes a signed Business Associate Agreement (BAA) as required under HIPAA."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What happens if a patient calls with a dental emergency?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The agent is trained to detect emergency indicators in a patient's description and immediately transfer the call to your on-call team or emergency line with full context from the conversation. You define what qualifies as an emergency during setup: acute pain, swelling, broken tooth, post-procedure complications, and so on. Emergency calls are never handled by AI alone. They route to a human every time."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How long does it take to set up an AI voice agent for a dental office?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Most dental office setups take 2 to 3 weeks from kickoff to live calls. Week one covers integration with your practice management software, training on your service menu (cleanings, exams, fillings, whitening, emergencies), and insurance FAQ setup. Week two is testing with simulated patient calls. Week three goes live with monitoring. Full hands-off operation typically happens within 30 days."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Will patients know they are talking to an AI?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The agent speaks in a natural, warm tone matched to your practice's personality. Most patients who use it rate the experience positively because they get an answer immediately instead of waiting on hold or leaving a voicemail. If asked directly, the agent will not claim to be human. You choose how transparent you want to be in the greeting, and many practices simply say 'our automated scheduling assistant' which sets clear expectations without negative connotations."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "How does an AI voice agent handle HIPAA compliance for dental practices?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "AI voice agents for dental offices are configured to collect only the minimum necessary patient information for scheduling: name, date of birth (for existing patient lookup), contact number, and appointment type. All data transmission is encrypted and the system operates within HIPAA-compliant infrastructure. We do not store clinical information. Your implementation includes a signed Business Associate Agreement (BAA) as required under HIPAA."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What happens if a patient calls with a dental emergency?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The agent is trained to detect emergency indicators in a patient's description and immediately transfer the call to your on-call team or emergency line with full context from the conversation. You define what qualifies as an emergency during setup: acute pain, swelling, broken tooth, post-procedure complications, and so on. Emergency calls are never handled by AI alone. They route to a human every time."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How long does it take to set up an AI voice agent for a dental office?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Most dental office setups take 2 to 3 weeks from kickoff to live calls. Week one covers integration with your practice management software, training on your service menu (cleanings, exams, fillings, whitening, emergencies), and insurance FAQ setup. Week two is testing with simulated patient calls. Week three goes live with monitoring. Full hands-off operation typically happens within 30 days."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Will patients know they are talking to an AI?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The agent speaks in a natural, warm tone matched to your practice's personality. Most patients who use it rate the experience positively because they get an answer immediately instead of waiting on hold or leaving a voicemail. If asked directly, the agent will not claim to be human. You choose how transparent you want to be in the greeting, and many practices simply say 'our automated scheduling assistant' which sets clear expectations without negative connotations."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "AI Voice Agent for Dental Offices", "item": "https://rajsuyash.com/blog/ai-voice-agent-dental-offices.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "AI Voice Agent for Dental Offices",
+                    "item": "https://rajsuyash.com/blog/ai-voice-agent-dental-offices.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -461,7 +476,7 @@
 
         <p>The math is straightforward: if your front desk coordinator spends 4 hours per day on the phone, that is half their productive time. It also means patients waiting to check in or check out feel rushed, questions get shorter answers, and new patient calls that come in during busy periods go to voicemail. New patients who hit voicemail do not call back. They book elsewhere.</p>
 
-        <p>An <a href="/ai-voice-agent.html">AI voice agent</a> changes this by handling every routine call automatically, around the clock, while your team focuses on the people in the office.</p>
+        <p>An <a href="https://voxdonna.com/ai-voice-agents.html">AI voice agent</a> changes this by handling every routine call automatically, around the clock, while your team focuses on the people in the office.</p>
 
         <h2>What Dental Patients Actually Call About</h2>
 
@@ -651,8 +666,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

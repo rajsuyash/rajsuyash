@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "Multilingual AI Voice Agent: English and French Calls",
-        "description": "How language detection works mid-call, Canadian versus European French accuracy, deployment steps, and bilingual staff versus AI cost comparison.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-04-15",
-        "dateModified": "2026-04-15",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/ai-voice-agent-multilingual-support.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "Multilingual AI Voice Agent: English and French Calls",
+            "description": "How language detection works mid-call, Canadian versus European French accuracy, deployment steps, and bilingual staff versus AI cost comparison.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-04-15",
+            "dateModified": "2026-04-15",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/ai-voice-agent-multilingual-support.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Can an AI voice agent automatically detect what language a caller is speaking?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. Modern AI voice agents detect the caller's language within the first two to three seconds of speech. The agent listens to the opening phrase, identifies whether it is English or French, and switches its entire response, personality, and knowledge base to match. No menu prompts, no 'press 1 for English', no waiting. The caller just speaks naturally and the agent responds in kind."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Can an AI voice agent automatically detect what language a caller is speaking?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. Modern AI voice agents detect the caller's language within the first two to three seconds of speech. The agent listens to the opening phrase, identifies whether it is English or French, and switches its entire response, personality, and knowledge base to match. No menu prompts, no 'press 1 for English', no waiting. The caller just speaks naturally and the agent responds in kind."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What happens if a caller switches languages mid-call?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A well-trained multilingual AI voice agent handles mid-call language switches gracefully. If a caller starts in English and then shifts to French to clarify something, the agent detects the switch and continues in the new language. This is particularly common in bilingual markets like Quebec and New Brunswick where code-switching is normal. The conversation stays coherent throughout."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How accurate is the AI voice agent in French compared to English?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The gap in accuracy between English and French has closed significantly. For Canadian French specifically, modern speech models are trained on Quebec and Acadian dialects, not just European French. In our deployments, French call handling accuracy runs within 2 to 3 percentage points of English. Both languages are production-ready for appointment booking, FAQ handling, and lead qualification."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Do I need to hire a bilingual person to set up a multilingual AI voice agent?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "No. The setup process happens in English. You provide your business information, FAQs, and call scripts in English, and we handle the translation and localization into French as part of the implementation. You review the French content before going live, but you do not need to be bilingual to run or manage the system."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How long does it take to deploy a bilingual AI voice agent?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A standard bilingual deployment takes 3 to 4 weeks. Week one covers business knowledge setup and English training. Week two handles French localization and dialect tuning. Week three is testing with simulated calls in both languages. Week four is live monitoring with your team on standby. By the end of month one, the agent handles both languages independently with no staff intervention required."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "What happens if a caller switches languages mid-call?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A well-trained multilingual AI voice agent handles mid-call language switches gracefully. If a caller starts in English and then shifts to French to clarify something, the agent detects the switch and continues in the new language. This is particularly common in bilingual markets like Quebec and New Brunswick where code-switching is normal. The conversation stays coherent throughout."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How accurate is the AI voice agent in French compared to English?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The gap in accuracy between English and French has closed significantly. For Canadian French specifically, modern speech models are trained on Quebec and Acadian dialects, not just European French. In our deployments, French call handling accuracy runs within 2 to 3 percentage points of English. Both languages are production-ready for appointment booking, FAQ handling, and lead qualification."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Do I need to hire a bilingual person to set up a multilingual AI voice agent?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "No. The setup process happens in English. You provide your business information, FAQs, and call scripts in English, and we handle the translation and localization into French as part of the implementation. You review the French content before going live, but you do not need to be bilingual to run or manage the system."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How long does it take to deploy a bilingual AI voice agent?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A standard bilingual deployment takes 3 to 4 weeks. Week one covers business knowledge setup and English training. Week two handles French localization and dialect tuning. Week three is testing with simulated calls in both languages. Week four is live monitoring with your team on standby. By the end of month one, the agent handles both languages independently with no staff intervention required."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "AI Voice Agent Multilingual Support", "item": "https://rajsuyash.com/blog/ai-voice-agent-multilingual-support.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "AI Voice Agent Multilingual Support",
+                    "item": "https://rajsuyash.com/blog/ai-voice-agent-multilingual-support.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -649,7 +664,7 @@
 
         <p>For businesses in bilingual markets, this is not a luxury. It is a competitive baseline. When a French-speaking customer calls your competitor and gets helped immediately, and calls you and reaches voicemail or an English-only experience, they do not try again. They go with your competitor.</p>
 
-        <p>The <a href="/ai-voice-agent.html">AI voice agent service</a> we offer is designed specifically for businesses that want to close this gap without adding headcount. The setup is structured, the results are measurable, and the cost is predictable.</p>
+        <p>The <a href="https://voxdonna.com/ai-voice-agents.html">AI voice agent service</a> we offer is designed specifically for businesses that want to close this gap without adding headcount. The setup is structured, the results are measurable, and the cost is predictable.</p>
 
         <p>If you are serving a bilingual market and your phone coverage does not reflect that, this is the highest-leverage place to start.</p>
 
@@ -692,8 +707,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

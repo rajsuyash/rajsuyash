@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "N8N HR Automation: Streamline Employee Onboarding and HR Workflows (2026)",
-        "description": "Use N8N to automate employee onboarding, offboarding, and recurring HR tasks. Cut onboarding time from days to hours without adding HR headcount.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-07-20",
-        "dateModified": "2026-07-20",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-hr-employee-onboarding-automation.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "N8N HR Automation: Streamline Employee Onboarding and HR Workflows (2026)",
+            "description": "Use N8N to automate employee onboarding, offboarding, and recurring HR tasks. Cut onboarding time from days to hours without adding HR headcount.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-07-20",
+            "dateModified": "2026-07-20",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-hr-employee-onboarding-automation.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Can N8N replace dedicated HR software for onboarding automation?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "For SMBs hiring fewer than 20 people per year, N8N can handle the core onboarding automation that most HR platforms charge $200-500/month for. N8N creates accounts, sends welcome emails, assigns tasks, and syncs with your existing tools. The trade-off: you configure it yourself (or hire someone to), but you pay per workflow run rather than per employee or per seat."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Can N8N replace dedicated HR software for onboarding automation?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "For SMBs hiring fewer than 20 people per year, N8N can handle the core onboarding automation that most HR platforms charge $200-500/month for. N8N creates accounts, sends welcome emails, assigns tasks, and syncs with your existing tools. The trade-off: you configure it yourself (or hire someone to), but you pay per workflow run rather than per employee or per seat."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What tools does N8N connect to for HR workflows?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N has native integrations with Google Workspace (Gmail, Calendar, Drive), Slack, Notion, Airtable, BambooHR, Workday, HubSpot, and hundreds more. For HR workflows specifically, you can trigger workflows from a Google Form, Typeform, or a direct webhook from your HRIS, then push data to Slack, email providers, project management tools, and your payroll system."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How long does it take to build an N8N onboarding workflow?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A basic onboarding workflow (welcome email + Slack notification + task creation) takes 2-4 hours to build if you have existing N8N experience. A full multi-stage workflow covering preboarding, day-one setup, 30-day check-ins, and offboarding typically takes 1-2 days of build time. Most SMBs recoup that time within the first 3 new hires."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is N8N HR automation secure for sensitive employee data?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "When self-hosted, N8N keeps all data on your own infrastructure — employee data never passes through a third-party automation server. For cloud-hosted N8N, data is encrypted in transit and at rest. For truly sensitive fields like SSNs or salary data, use environment variables or N8N credentials storage rather than hardcoding values in workflow nodes."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can N8N handle offboarding as well as onboarding?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N offboarding workflows can be triggered by an HR form submission or calendar event and automatically revoke software access (via API calls to Google Workspace, Slack, GitHub, etc.), archive email, export data to a backup location, notify IT, and schedule an exit survey. Offboarding is often higher priority than onboarding because missed steps create security risks."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "What tools does N8N connect to for HR workflows?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N has native integrations with Google Workspace (Gmail, Calendar, Drive), Slack, Notion, Airtable, BambooHR, Workday, HubSpot, and hundreds more. For HR workflows specifically, you can trigger workflows from a Google Form, Typeform, or a direct webhook from your HRIS, then push data to Slack, email providers, project management tools, and your payroll system."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How long does it take to build an N8N onboarding workflow?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A basic onboarding workflow (welcome email + Slack notification + task creation) takes 2-4 hours to build if you have existing N8N experience. A full multi-stage workflow covering preboarding, day-one setup, 30-day check-ins, and offboarding typically takes 1-2 days of build time. Most SMBs recoup that time within the first 3 new hires."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Is N8N HR automation secure for sensitive employee data?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "When self-hosted, N8N keeps all data on your own infrastructure — employee data never passes through a third-party automation server. For cloud-hosted N8N, data is encrypted in transit and at rest. For truly sensitive fields like SSNs or salary data, use environment variables or N8N credentials storage rather than hardcoding values in workflow nodes."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can N8N handle offboarding as well as onboarding?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N offboarding workflows can be triggered by an HR form submission or calendar event and automatically revoke software access (via API calls to Google Workspace, Slack, GitHub, etc.), archive email, export data to a backup location, notify IT, and schedule an exit survey. Offboarding is often higher priority than onboarding because missed steps create security risks."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N HR Automation", "item": "https://rajsuyash.com/blog/n8n-hr-employee-onboarding-automation.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N HR Automation",
+                    "item": "https://rajsuyash.com/blog/n8n-hr-employee-onboarding-automation.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -723,8 +738,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

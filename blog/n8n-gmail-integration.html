@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "N8N Gmail Integration: Automate Email Without Code",
-        "description": "Set up the N8N Gmail node with OAuth2, then copy 5 working workflows: lead to CRM, follow-up sequences, email to sheet, alerts, and onboarding.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-05-25",
-        "dateModified": "2026-05-25",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-gmail-integration.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "N8N Gmail Integration: Automate Email Without Code",
+            "description": "Set up the N8N Gmail node with OAuth2, then copy 5 working workflows: lead to CRM, follow-up sequences, email to sheet, alerts, and onboarding.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-05-25",
+            "dateModified": "2026-05-25",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-gmail-integration.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Does N8N work with Gmail for free accounts?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N's Gmail node works with any Gmail account, including free @gmail.com addresses. You connect via OAuth2, which means you authorize N8N through Google's secure login flow without sharing your password. The Gmail API free tier allows up to 1 billion quota units per day, which covers the needs of most small businesses running automated workflows."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Does N8N work with Gmail for free accounts?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N's Gmail node works with any Gmail account, including free @gmail.com addresses. You connect via OAuth2, which means you authorize N8N through Google's secure login flow without sharing your password. The Gmail API free tier allows up to 1 billion quota units per day, which covers the needs of most small businesses running automated workflows."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can N8N send emails from my Gmail account automatically?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N can send emails from your Gmail account using the Gmail node's Send action. This includes setting the To, CC, BCC, subject, HTML body, and attachments. Emails sent this way appear in your Gmail Sent folder just like manually sent emails. You can trigger sends from any workflow event: a new CRM contact, a webhook, a form submission, a scheduled cron, or data from a spreadsheet."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What is the difference between using the Gmail node and the SMTP/Email node in N8N?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The Gmail node uses the Gmail API via OAuth2 and supports reading, labeling, replying, and sending emails tied to your specific Gmail account. It also lets you trigger workflows when new emails arrive. The SMTP/Email node uses standard email protocols (SMTP) to send outbound emails only — it cannot read or monitor your inbox. For most Gmail-based workflows, the Gmail node is the right choice because it provides both read and write access."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I trigger an N8N workflow when a new email arrives in Gmail?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Use the Gmail Trigger node (not the regular Gmail node) as the first step in your workflow. Set it to poll for new emails on a schedule (every 1, 5, or 15 minutes) or filter by label, sender, or subject keyword. When a matching email arrives, N8N fires the rest of your workflow automatically. You can then parse the email body, extract data with a Code node or AI extraction, and send it to any other app."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is N8N Gmail automation better than Zapier for email workflows?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N gives you more flexibility at lower cost. Zapier's Gmail integration works well for simple two-step Zaps, but becomes expensive at higher volumes due to task-based pricing. N8N charges per workflow run (or a flat monthly fee on N8N Cloud), and lets you add conditional logic, loops, AI processing, and multiple branches without extra cost per step. For businesses running more than 1,000 email automation triggers per month, N8N is almost always cheaper."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "Can N8N send emails from my Gmail account automatically?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N can send emails from your Gmail account using the Gmail node's Send action. This includes setting the To, CC, BCC, subject, HTML body, and attachments. Emails sent this way appear in your Gmail Sent folder just like manually sent emails. You can trigger sends from any workflow event: a new CRM contact, a webhook, a form submission, a scheduled cron, or data from a spreadsheet."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What is the difference between using the Gmail node and the SMTP/Email node in N8N?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The Gmail node uses the Gmail API via OAuth2 and supports reading, labeling, replying, and sending emails tied to your specific Gmail account. It also lets you trigger workflows when new emails arrive. The SMTP/Email node uses standard email protocols (SMTP) to send outbound emails only — it cannot read or monitor your inbox. For most Gmail-based workflows, the Gmail node is the right choice because it provides both read and write access."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How do I trigger an N8N workflow when a new email arrives in Gmail?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Use the Gmail Trigger node (not the regular Gmail node) as the first step in your workflow. Set it to poll for new emails on a schedule (every 1, 5, or 15 minutes) or filter by label, sender, or subject keyword. When a matching email arrives, N8N fires the rest of your workflow automatically. You can then parse the email body, extract data with a Code node or AI extraction, and send it to any other app."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Is N8N Gmail automation better than Zapier for email workflows?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N gives you more flexibility at lower cost. Zapier's Gmail integration works well for simple two-step Zaps, but becomes expensive at higher volumes due to task-based pricing. N8N charges per workflow run (or a flat monthly fee on N8N Cloud), and lets you add conditional logic, loops, AI processing, and multiple branches without extra cost per step. For businesses running more than 1,000 email automation triggers per month, N8N is almost always cheaper."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N Gmail Integration", "item": "https://rajsuyash.com/blog/n8n-gmail-integration.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N Gmail Integration",
+                    "item": "https://rajsuyash.com/blog/n8n-gmail-integration.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -652,7 +667,7 @@
 
         <p>If you are using N8N to automate lead intake via Gmail, the next logical step is automating what happens after the lead responds: booking a call, sending a proposal, triggering an onboarding sequence. Our <a href="/blog/n8n-scheduled-triggers-tutorial.html">N8N scheduled triggers guide</a> covers how to time these follow-up sequences precisely.</p>
 
-        <p>For businesses that also handle inbound phone calls alongside email, an <a href="/ai-voice-agent.html">AI voice agent</a> can work alongside your N8N workflows. The voice agent handles incoming calls and pushes caller data directly into N8N, which then emails a summary and creates the CRM record. The two systems together cover both phone and email channels without any human touchpoint.</p>
+        <p>For businesses that also handle inbound phone calls alongside email, an <a href="https://voxdonna.com/ai-voice-agents.html">AI voice agent</a> can work alongside your N8N workflows. The voice agent handles incoming calls and pushes caller data directly into N8N, which then emails a summary and creates the CRM record. The two systems together cover both phone and email channels without any human touchpoint.</p>
 
         <p>Not sure how ready your business is for this level of automation? Take our <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> to get a clear picture of where to start.</p>
 
@@ -705,8 +720,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

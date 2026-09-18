@@ -38,76 +38,92 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "How AI Voice Agents Integrate with HubSpot & Shopify Without Ripping and Replacing",
-        "description": "Learn how AI voice agents integrate with HubSpot CRM and Shopify stores without ripping and replacing your existing stack. Step-by-step no-code setup, CRM sync, and workflow preservation.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-04-15T00:00:00Z",
-        "dateModified": "2026-04-15T00:00:00Z",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/ai-voice-agent-hubspot-shopify-integration.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "How AI Voice Agents Integrate with HubSpot & Shopify Without Ripping and Replacing",
+            "description": "Learn how AI voice agents integrate with HubSpot CRM and Shopify stores without ripping and replacing your existing stack. Step-by-step no-code setup, CRM sync, and workflow preservation.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-04-15T00:00:00Z",
+            "dateModified": "2026-04-15T00:00:00Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/ai-voice-agent-hubspot-shopify-integration.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Does integrating an AI voice agent with HubSpot require a developer?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "No. Most AI voice agent platforms offer native HubSpot integrations or connect via Zapier/N8N without writing a single line of code. You authenticate HubSpot, map fields like contact name and call notes, and the agent starts syncing automatically. A typical setup takes 1–3 hours."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Does integrating an AI voice agent with HubSpot require a developer?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "No. Most AI voice agent platforms offer native HubSpot integrations or connect via Zapier/N8N without writing a single line of code. You authenticate HubSpot, map fields like contact name and call notes, and the agent starts syncing automatically. A typical setup takes 1–3 hours."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Will an AI voice agent slow down my Shopify store or affect checkout?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "No. AI voice agents connect to Shopify through the Shopify Admin API, which runs server-side and completely separately from your storefront. Your checkout speed, product pages, and customer-facing experience are entirely unaffected."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What happens to calls the AI voice agent can't handle?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Every well-configured AI voice agent includes a fallback flow. If a caller asks something outside the agent's scope — a complex complaint, a legal query, a VIP situation — it politely informs the caller, logs the call in your CRM, and optionally sends your team an SMS or email alert so a human can follow up within minutes."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "Will an AI voice agent slow down my Shopify store or affect checkout?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "No. AI voice agents connect to Shopify through the Shopify Admin API, which runs server-side and completely separately from your storefront. Your checkout speed, product pages, and customer-facing experience are entirely unaffected."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What happens to calls the AI voice agent can't handle?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Every well-configured AI voice agent includes a fallback flow. If a caller asks something outside the agent's scope — a complex complaint, a legal query, a VIP situation — it politely informs the caller, logs the call in your CRM, and optionally sends your team an SMS or email alert so a human can follow up within minutes."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "AI Voice Agent HubSpot & Shopify Integration", "item": "https://rajsuyash.com/blog/ai-voice-agent-hubspot-shopify-integration.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "AI Voice Agent HubSpot & Shopify Integration",
+                    "item": "https://rajsuyash.com/blog/ai-voice-agent-hubspot-shopify-integration.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -410,9 +426,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -443,7 +458,7 @@
 
         <p>Most small business owners hear "AI voice agent" and immediately picture a painful platform migration. New CRM. New Shopify plugin. A developer on retainer for six months. The sales deck promises magic; the implementation reality promises chaos.</p>
 
-        <p>That concern is understandable — but it's based on outdated assumptions. Modern <a href="/ai-voice-agent.html">AI voice agents</a> are not replacements for HubSpot or Shopify. They are a new front-end layer that sits on top of the tools you already use. Your CRM stays. Your store stays. The AI just learns to read and write to both.</p>
+        <p>That concern is understandable — but it's based on outdated assumptions. Modern <a href="https://voxdonna.com/ai-voice-agents.html">AI voice agents</a> are not replacements for HubSpot or Shopify. They are a new front-end layer that sits on top of the tools you already use. Your CRM stays. Your store stays. The AI just learns to read and write to both.</p>
 
         <p>This post covers exactly how that integration works — for HubSpot on the CRM side and Shopify on the e-commerce side — with a clear picture of what data flows where, how to set it up without code, and what you can realistically expect in the first 30 days.</p>
 
@@ -633,8 +648,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

@@ -38,108 +38,124 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "n8n Sales Pipeline Automation for HubSpot and Pipedrive",
-        "description": "Five n8n workflows that move deals through your CRM on their own: lead capture, stage-triggered follow-up, stagnation alerts, plus Pipedrive webhook setup.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-08-03",
-        "dateModified": "2026-09-17T00:00:00Z",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-sales-pipeline-automation.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "n8n Sales Pipeline Automation for HubSpot and Pipedrive",
+            "description": "Five n8n workflows that move deals through your CRM on their own: lead capture, stage-triggered follow-up, stagnation alerts, plus Pipedrive webhook setup.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-08-03",
+            "dateModified": "2026-09-17T00:00:00Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-sales-pipeline-automation.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Can N8N replace a dedicated sales automation platform like Outreach or Salesloft?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "For SMBs with straightforward pipelines, yes. N8N can handle automated follow-up sequences, stage transitions, deal routing, and CRM sync without the $500-2000/month enterprise pricing of dedicated sales automation platforms. The trade-off is setup time, but you gain full flexibility and no per-seat costs."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Can N8N replace a dedicated sales automation platform like Outreach or Salesloft?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "For SMBs with straightforward pipelines, yes. N8N can handle automated follow-up sequences, stage transitions, deal routing, and CRM sync without the $500-2000/month enterprise pricing of dedicated sales automation platforms. The trade-off is setup time, but you gain full flexibility and no per-seat costs."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Which CRMs does N8N integrate with for sales pipeline automation?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N has native nodes for HubSpot, Pipedrive, Salesforce, and Zoho CRM. For other CRMs, the HTTP Request node handles any REST API. Most modern CRMs support webhooks, which means N8N can react to deal stage changes in real time without polling."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How long does it take to build a basic N8N sales pipeline workflow?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A basic workflow -- new lead in CRM triggers a Slack alert and sends a welcome email -- takes under 30 minutes. A full pipeline automation with scoring, multi-step follow-up sequences, and deal routing typically takes 4-8 hours to build and test properly."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What happens if a deal sits in a pipeline stage too long?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "You can configure N8N's Schedule trigger to query your CRM daily for deals that haven't moved in X days, then automatically send a follow-up email to the prospect and a Slack alert to the rep. This eliminates the silent deal death that kills most SMB pipelines."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is N8N sales pipeline automation suitable for businesses without a dedicated sales team?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Absolutely -- it is arguably more valuable for solo founders and small teams. When you cannot afford to hire another rep, automation fills the gap by ensuring every lead gets followed up, every deal gets tracked, and no opportunity falls through the cracks while you are heads-down delivering work."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Does N8N have a native Pipedrive integration?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N includes a built-in Pipedrive node covering deals, contacts, organizations, activities, and notes. You authenticate with a Pipedrive API token and connect in under five minutes. No third-party connector or paid plan required."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What is the difference between connecting N8N to Pipedrive versus HubSpot?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Both work the same way in N8N. Pipedrive suits sales-focused teams working a visual pipeline; HubSpot suits teams that also need marketing automation. The setup steps are nearly identical, and the real differences are where the API token lives and which fields each platform exposes."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "Which CRMs does N8N integrate with for sales pipeline automation?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N has native nodes for HubSpot, Pipedrive, Salesforce, and Zoho CRM. For other CRMs, the HTTP Request node handles any REST API. Most modern CRMs support webhooks, which means N8N can react to deal stage changes in real time without polling."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How long does it take to build a basic N8N sales pipeline workflow?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A basic workflow -- new lead in CRM triggers a Slack alert and sends a welcome email -- takes under 30 minutes. A full pipeline automation with scoring, multi-step follow-up sequences, and deal routing typically takes 4-8 hours to build and test properly."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What happens if a deal sits in a pipeline stage too long?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "You can configure N8N's Schedule trigger to query your CRM daily for deals that haven't moved in X days, then automatically send a follow-up email to the prospect and a Slack alert to the rep. This eliminates the silent deal death that kills most SMB pipelines."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Is N8N sales pipeline automation suitable for businesses without a dedicated sales team?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Absolutely -- it is arguably more valuable for solo founders and small teams. When you cannot afford to hire another rep, automation fills the gap by ensuring every lead gets followed up, every deal gets tracked, and no opportunity falls through the cracks while you are heads-down delivering work."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Does N8N have a native Pipedrive integration?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N includes a built-in Pipedrive node covering deals, contacts, organizations, activities, and notes. You authenticate with a Pipedrive API token and connect in under five minutes. No third-party connector or paid plan required."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What is the difference between connecting N8N to Pipedrive versus HubSpot?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Both work the same way in N8N. Pipedrive suits sales-focused teams working a visual pipeline; HubSpot suits teams that also need marketing automation. The setup steps are nearly identical, and the real differences are where the API token lives and which fields each platform exposes."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "n8n Sales Pipeline Automation for HubSpot and Pipedrive", "item": "https://rajsuyash.com/blog/n8n-sales-pipeline-automation.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "n8n Sales Pipeline Automation for HubSpot and Pipedrive",
+                    "item": "https://rajsuyash.com/blog/n8n-sales-pipeline-automation.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -442,9 +458,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -656,7 +671,7 @@
 
         <p>If you are using N8N for <a href="/blog/n8n-lead-scoring-nurturing-workflows.html">lead scoring and nurturing</a>, your pipeline automation can pull the lead score at the time of deal creation and use it to set the follow-up cadence. High-score leads get an aggressive same-day sequence. Lower-score leads go into a longer nurture track. The routing is automatic.</p>
 
-        <p>If you want to extend pipeline automation with AI-driven qualification, an AI voice agent can handle inbound qualification calls automatically, log the outcome to your CRM, and trigger the appropriate pipeline workflow based on the call result. See how <a href="/ai-voice-agent.html">AI voice agents integrate with sales workflows</a> for the full picture.</p>
+        <p>If you want to extend pipeline automation with AI-driven qualification, an AI voice agent can handle inbound qualification calls automatically, log the outcome to your CRM, and trigger the appropriate pipeline workflow based on the call result. See how <a href="https://voxdonna.com/ai-voice-agents.html">AI voice agents integrate with sales workflows</a> for the full picture.</p>
 
         <p>Not sure if your current setup is ready for this level of automation? The <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> takes five minutes and gives you a clear picture of where to start.</p>
 
@@ -751,8 +766,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 

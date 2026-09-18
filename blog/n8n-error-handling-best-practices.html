@@ -38,92 +38,108 @@
 
     <!-- Article Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "N8N Error Handling Best Practices: Build Bulletproof Workflows (2026)",
-        "description": "Stop losing data when N8N workflows break. Learn N8N error handling best practices: try/catch nodes, error triggers, retry logic, alerting, and real-world patterns to keep automations running.",
-        "author": {
-            "@type": "Person",
-            "name": "Suyash Raj",
-            "url": "https://rajsuyash.com"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Suyash Raj - AI Automation Agency",
-            "url": "https://rajsuyash.com"
-        },
-        "datePublished": "2026-04-14",
-        "dateModified": "2026-04-14",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://rajsuyash.com/blog/n8n-error-handling-best-practices.html"
-        },
-        "image": "https://rajsuyash.com/og-image.jpg"
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "N8N Error Handling Best Practices: Build Bulletproof Workflows (2026)",
+            "description": "Stop losing data when N8N workflows break. Learn N8N error handling best practices: try/catch nodes, error triggers, retry logic, alerting, and real-world patterns to keep automations running.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-04-14",
+            "dateModified": "2026-04-14",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/n8n-error-handling-best-practices.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
     </script>
 
     <!-- FAQPage Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "How do I stop an N8N workflow when an error occurs?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "N8N stops the current execution path automatically when a node throws an error. To catch the error instead of halting the whole workflow, add an Error Trigger node in a separate workflow, or use the Stop and Error node to throw a deliberate error with a custom message. For granular control within a single workflow, route node outputs using the On Error option to send failed items to a fallback branch."
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "How do I stop an N8N workflow when an error occurs?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "N8N stops the current execution path automatically when a node throws an error. To catch the error instead of halting the whole workflow, add an Error Trigger node in a separate workflow, or use the Stop and Error node to throw a deliberate error with a custom message. For granular control within a single workflow, route node outputs using the On Error option to send failed items to a fallback branch."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What is the N8N Error Trigger node used for?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The N8N Error Trigger node starts a dedicated error-handling workflow whenever another workflow fails. You link a workflow to an error handler in Settings > Error Workflow. When the main workflow errors, N8N automatically runs the error handler and passes context including the workflow name, node that failed, error message, and execution ID. This is the standard pattern for sending Slack or email alerts on failures."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can N8N automatically retry failed workflow steps?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. N8N has built-in retry logic on most nodes. In the node settings, you can enable Retry On Fail with a configurable number of attempts and wait time between retries. This is particularly useful for HTTP requests or API calls that may fail due to rate limits or transient network issues. For more advanced retry control, use a loop with a Wait node and conditional logic."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I log errors in N8N for debugging?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The simplest approach is to write errors to a Google Sheet or Airtable via your error handler workflow. Include fields like timestamp, workflow name, node name, error message, and input data. For self-hosted N8N, you can also pipe logs to a monitoring service. The Execution log in the N8N UI stores recent runs with full input/output data per node, which is useful for immediate debugging without additional setup."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What is the difference between Continue on Error and Retry on Fail in N8N?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Continue on Error tells N8N to keep the workflow running even if that node fails, passing the error as output data so you can inspect or route it. Retry on Fail tells N8N to attempt the node again (up to a set number of times) before marking it as failed. They serve different purposes: use Retry for transient failures like API timeouts, and Continue on Error when you want to handle partial failures gracefully without stopping the whole run."
+                    }
                 }
-            },
-            {
-                "@type": "Question",
-                "name": "What is the N8N Error Trigger node used for?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The N8N Error Trigger node starts a dedicated error-handling workflow whenever another workflow fails. You link a workflow to an error handler in Settings > Error Workflow. When the main workflow errors, N8N automatically runs the error handler and passes context including the workflow name, node that failed, error message, and execution ID. This is the standard pattern for sending Slack or email alerts on failures."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can N8N automatically retry failed workflow steps?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. N8N has built-in retry logic on most nodes. In the node settings, you can enable Retry On Fail with a configurable number of attempts and wait time between retries. This is particularly useful for HTTP requests or API calls that may fail due to rate limits or transient network issues. For more advanced retry control, use a loop with a Wait node and conditional logic."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How do I log errors in N8N for debugging?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The simplest approach is to write errors to a Google Sheet or Airtable via your error handler workflow. Include fields like timestamp, workflow name, node name, error message, and input data. For self-hosted N8N, you can also pipe logs to a monitoring service. The Execution log in the N8N UI stores recent runs with full input/output data per node, which is useful for immediate debugging without additional setup."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What is the difference between Continue on Error and Retry on Fail in N8N?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Continue on Error tells N8N to keep the workflow running even if that node fails, passing the error as output data so you can inspect or route it. Retry on Fail tells N8N to attempt the node again (up to a set number of times) before marking it as failed. They serve different purposes: use Retry for transient failures like API timeouts, and Continue on Error when you want to handle partial failures gracefully without stopping the whole run."
-                }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
-            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "N8N Error Handling Best Practices", "item": "https://rajsuyash.com/blog/n8n-error-handling-best-practices.html"}
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "N8N Error Handling Best Practices",
+                    "item": "https://rajsuyash.com/blog/n8n-error-handling-best-practices.html"
+                }
+            ]
+        }
     </script>
 
     <style>
@@ -426,9 +442,8 @@
 
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/ai-automation-agency.html" class="nav-link">Agency</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
                 <a href="/ai-agents.html" class="nav-link">AI Agents</a>
-                <a href="/ai-voice-agent.html" class="nav-link">Voice Agents</a>
                 <a href="/n8n-automation.html" class="nav-link">N8N</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/about.html" class="nav-link">About</a>
@@ -752,8 +767,8 @@
         <div class="article-author">
             <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
             <div class="author-info">
-                <span class="author-name">Suyash Raj</span>
-                <span class="author-bio">Founder of <a href="/ai-automation-agency.html">rajsuyash.com</a>, an AI automation agency helping SMBs save time and scale with AI agents, N8N workflows, and voice automation.</span>
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
             </div>
         </div>
 
