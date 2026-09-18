@@ -54,7 +54,7 @@
             "url": "https://rajsuyash.com"
         },
         "datePublished": "2026-04-16",
-        "dateModified": "2026-04-16",
+        "dateModified": "2026-09-18",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https://rajsuyash.com/blog/n8n-http-request-node-tutorial.html"
@@ -457,11 +457,9 @@
     <!-- Article Body -->
     <article class="article-body">
 
-        <p>Most N8N tutorials cover the popular built-in integrations: Google Sheets, Slack, HubSpot, Gmail. Those are great. But what happens when you need to connect to a service N8N does not have a native node for?</p>
+        <p>The <strong>N8N HTTP Request node</strong> sends HTTP requests to any REST API endpoint you specify. It supports all standard methods (GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS), every common authentication type (API Key, Bearer, Basic Auth, OAuth1, OAuth2, Digest), built-in pagination, and automatic JSON parsing. If a service has an API, this node can reach it — no built-in N8N integration required.</p>
 
-        <p>That is where the <strong>HTTP Request node</strong> comes in. It is the single most powerful node in N8N because it gives you direct access to any REST API in the world. No built-in integration required.</p>
-
-        <p>This tutorial walks you through everything: basic GET and POST requests, adding authentication, handling pagination, parsing JSON responses, and five real business workflows you can build today. By the end, you will be able to connect N8N to virtually any software your business uses.</p>
+        <p><em>Updated September 2026.</em> This tutorial covers six steps: making your first GET request, adding authentication, sending a JSON POST body, handling paginated responses, parsing the output, and five real business workflows you can build today.</p>
 
         <p>If you are still getting started with N8N, read <a href="/blog/build-first-n8n-workflow.html">how to build your first N8N workflow</a> first. If you are looking to connect N8N to Google Sheets specifically, that is covered in <a href="/blog/n8n-google-sheets-integration.html">the Google Sheets integration guide</a>.</p>
 
@@ -488,6 +486,8 @@
         </ul>
 
         <p>Start with the simplest case: a GET request that requires no authentication.</p>
+
+        <p><strong>Tip:</strong> Most API documentation includes example curl commands. N8N has a built-in curl import feature — paste a curl command into the import field at the top of the HTTP Request node and N8N will auto-populate the method, URL, headers, and body. This is the fastest way to configure requests from any API docs page.</p>
 
         <h2>Step 2: Make Your First GET Request</h2>
 
@@ -526,6 +526,11 @@
                     <td>Create "Header Auth" credential. Set header to Authorization, value to "Bearer your-token"</td>
                 </tr>
                 <tr>
+                    <td><strong>OAuth1</strong></td>
+                    <td>Older APIs (Twitter v1, some payment gateways)</td>
+                    <td>Create "OAuth1 API" credential. Enter consumer key, consumer secret, and token URLs</td>
+                </tr>
+                <tr>
                     <td><strong>Basic Auth</strong></td>
                     <td>Legacy APIs, WordPress REST API, some internal tools</td>
                     <td>Create "Basic Auth" credential. Enter username and password</td>
@@ -543,7 +548,7 @@
             </tbody>
         </table>
 
-        <p>To add a credential: click "Authentication" in the node panel, select the method, then click "Create new credential." N8N stores the credential encrypted and separate from your workflow JSON. This means you can share or export workflow templates without exposing API keys.</p>
+        <p>To add a credential: click "Authentication" in the node panel, select the method, then click "Create new credential." N8N stores the credential encrypted and separate from your workflow JSON. This means you can share or export workflow templates without exposing API keys. For APIs with unusual auth schemes, N8N also offers a "Simplified Custom Auth" option where you define the auth logic directly in the credential.</p>
 
         <h3>Practical Example: OpenAI API Call</h3>
 
@@ -584,24 +589,31 @@
 
         <p>Many APIs return results in pages. Without pagination handling, your workflow only gets the first page and silently misses everything else. N8N has built-in pagination support that handles this automatically.</p>
 
-        <p>In the HTTP Request node, scroll down to <strong>Options</strong> and enable <strong>Pagination</strong>. You will see three strategies:</p>
+        <p>In the HTTP Request node, scroll down to <strong>Options</strong> and enable <strong>Pagination</strong>. N8N supports two modes — check your API's documentation to see which pattern it uses:</p>
 
-        <ul>
-            <li><strong>Offset / Limit:</strong> The API accepts a page number or offset parameter. N8N increments it until the response returns fewer results than the limit.</li>
-            <li><strong>Cursor-based:</strong> The API returns a cursor or "next page" token in each response. N8N reads that token and uses it in the next request automatically.</li>
-            <li><strong>URL-based:</strong> The API returns a full "next page" URL in the response. N8N follows it until no next URL exists.</li>
-        </ul>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Mode</th>
+                    <th>When to Use</th>
+                    <th>How It Works</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Update a Parameter in Each Request</strong></td>
+                    <td>APIs that accept a page number, offset, or cursor in a query parameter or body</td>
+                    <td>N8N increments or updates the parameter on each request. You define the parameter name, starting value, and the completion condition. Works for offset-based, page-number-based, and cursor-based APIs where you update the parameter yourself.</td>
+                </tr>
+                <tr>
+                    <td><strong>Response Contains Next URL</strong></td>
+                    <td>APIs that return a "next page" URL inside the response body or headers</td>
+                    <td>N8N reads the next-page URL from each response and follows it automatically. You specify the JSON path or header where the URL lives (e.g. <code>body.meta.next</code>). N8N stops when the field is empty or missing.</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <p>For offset-based pagination, configure it like this:</p>
-        <ul>
-            <li>Pagination type: Offset</li>
-            <li>Limit parameter name: <code>limit</code> (whatever your API calls it)</li>
-            <li>Offset parameter name: <code>offset</code></li>
-            <li>Page size: 100 (or whatever the API maximum is)</li>
-            <li>Complete when: Response count is less than page size</li>
-        </ul>
-
-        <p>N8N merges all pages into a single output array, so downstream nodes see the complete dataset as if it came from one request.</p>
+        <p>N8N merges all pages into a single output array, so downstream nodes see the complete dataset as if it came from one request. Use the built-in variable <code>$pageCount</code> inside completion conditions to add a safety cap on the number of pages fetched.</p>
 
         <h2>Step 6: Parse and Use the Response Data</h2>
 
@@ -638,6 +650,12 @@
         <p>Pull weekly data from your analytics platform using its API and the HTTP Request node. Format the data into a prompt. Use a second HTTP Request node to call OpenAI's API. Take the AI-generated summary and send it via a third HTTP Request node to your email API (SendGrid, Postmark, etc.). One workflow, no subscriptions beyond the APIs you already use.</p>
 
         <p>Want to see what this looks like in production? The <a href="/case-studies/le-marquier.html">Le Marquier case study</a> shows how multi-API N8N workflows cut operational costs by 80% for a real SMB. The same HTTP Request node patterns you are learning here are the building blocks.</p>
+
+        <h2>Using the HTTP Request Node with N8N AI Agents</h2>
+
+        <p>When you attach the HTTP Request node as a tool to an N8N AI agent, N8N automatically optimizes the response format to reduce token usage. Instead of passing raw HTML or oversized JSON back to the model, N8N strips it down to the relevant content. You can also configure the response type (JSON, HTML, or Text) explicitly in the node to control what the agent receives.</p>
+
+        <p>This makes the HTTP Request node the standard way to give N8N AI agents access to external APIs — for example, letting an agent query a knowledge base API, look up customer records, or fetch live pricing data mid-conversation.</p>
 
         <h2>Common Errors and How to Fix Them</h2>
 
