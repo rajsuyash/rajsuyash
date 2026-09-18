@@ -58,6 +58,7 @@ RewriteRule ^ai-voice-agent/?$ https://voxdonna.com/ai-voice-agents.html [R=301,
 RewriteRule ^ai-voice-agent-hubspot\.html$ https://voxdonna.com/ai-voice-agents.html [R=301,L]
 RewriteRule ^ai-voice-agent-for-veterinary-clinics\.html$ https://voxdonna.com/ai-voice-agents.html [R=301,L]
 RewriteRule ^ai-intake-for-law-firms\.html$ https://voxdonna.com/ai-voice-agents.html [R=301,L]
+RewriteRule ^case-studies/le-marquier\.html$ https://voxdonna.com/case-studies/le-marquier.html [R=301,L]
 
 # ==========================================
 # URL CLEANUP: Remove .html extension
