@@ -32,8 +32,8 @@ RewriteRule ^blog/ai-voice-agent-law-firms\.html$ /blog/law-firms-ai-client-inta
 RewriteRule ^blog/ai-voice-agents-peak-season-customer-service\.html$ /blog/consumer-brand-call-center-scaling-peak-season.html [R=301,L]
 
 # Section redirects
-RewriteRule ^services/?$ /ai-automation-agency.html [R=301,L]
-RewriteRule ^about/?$ /#about [R=301,L,NE]
+RewriteRule ^services/?$ /consulting.html [R=301,L]
+RewriteRule ^about/?$ /about.html [R=301,L]
 RewriteRule ^contact/?$ /qualify.html [R=301,L]
 
 # Redirect /home and /home/ to homepage
@@ -47,6 +47,17 @@ RewriteRule ^moltbot-automation\.html$ / [R=301,L]
 # Block WordPress folder
 RewriteRule ^wordpress/ - [F,L]
 RewriteRule ^wp-.*\.php$ - [F,L]
+
+# Consolidation 2026-09-18: product intent moves to voxdonna.com, agency page
+# becomes /consulting.html. These must stay ABOVE the extension-cleanup rule
+# below, which carries [L] and would otherwise terminate the round first.
+RewriteRule ^ai-automation-agency\.html$ /consulting.html [R=301,L]
+RewriteRule ^ai-automation-agency/?$ /consulting.html [R=301,L]
+RewriteRule ^ai-voice-agent\.html$ https://voxdonna.com/ai-voice-agents.html [R=301,L]
+RewriteRule ^ai-voice-agent/?$ https://voxdonna.com/ai-voice-agents.html [R=301,L]
+RewriteRule ^ai-voice-agent-hubspot\.html$ https://voxdonna.com/ai-voice-agents.html [R=301,L]
+RewriteRule ^ai-voice-agent-for-veterinary-clinics\.html$ https://voxdonna.com/ai-voice-agents.html [R=301,L]
+RewriteRule ^ai-intake-for-law-firms\.html$ https://voxdonna.com/ai-voice-agents.html [R=301,L]
 
 # ==========================================
 # URL CLEANUP: Remove .html extension
