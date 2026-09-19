@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>Voice Agent Latency Benchmark: Vendors and Languages</title>
+    <meta name="description" content="Every published latency figure for STT, TTS and voice platforms, what each one actually measures, and a method for reproducing a fair end-to-end number.">
+    <meta name="keywords" content="voice agent latency, tts latency benchmark, stt streaming latency, time to first audio, voice agent benchmark, hindi voice agent latency">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/voice-agent-latency-benchmark.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/voice-agent-latency-benchmark.html">
+    <meta property="og:title" content="Voice Agent Latency Benchmark: Vendors and Languages">
+    <meta property="og:description" content="Every published latency figure for STT, TTS and voice platforms, what each one actually measures, and a method for reproducing a fair end-to-end number.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj">
+    <meta property="article:published_time" content="2026-09-19">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Voice Agent Latency Benchmark: Vendors and Languages">
+    <meta name="twitter:description" content="Every published latency figure for STT, TTS and voice platforms, what each one actually measures, and a method for reproducing a fair end-to-end number.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260919a">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "Voice Agent Latency Benchmark: Vendors and Languages",
+            "description": "Every published latency figure for STT, TTS and voice platforms, what each one actually measures, and a method for reproducing a fair end-to-end number.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-09-19",
+            "dateModified": "2026-09-19",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/voice-agent-latency-benchmark.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "Voice Agent Latency Benchmark",
+                    "item": "https://rajsuyash.com/blog/voice-agent-latency-benchmark.html"
+                }
+            ]
+        }
+    </script>
+
+    <!-- FAQ Schema -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "What is a good latency for an AI voice agent?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "There is no published standard. Vapi's own documentation describes roughly 800 ms end-to-end as typical, and Vapi's engineering blog treats 1,200 ms as the point where conversational flow breaks down. Both are vendor statements, not independent measurements, and neither is expressed as a percentile. Set your own target by measuring your own stack at p50 and p95 and deciding what your callers tolerate."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Why can't I compare vendor latency numbers directly?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Because they measure different things. ElevenLabs' 75 ms is model inference with application and network time explicitly excluded. Cartesia's sub-90 ms is time to the first audio byte. AssemblyAI's 300 ms is the gap between a word ending in the audio and that word appearing in a partial transcript. Deepgram's 300 ms is how far the transcript lags the audio being sent. Adding them together does not produce an end-to-end number."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Do any vendors publish latency figures for Hindi or other Indic languages?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "No vendor publishes a per-language latency figure. Sarvam is the only one whose published number comes from a system built Indic-first: sub-150 ms response initiation in Fast mode for Saaras v3, across 23 languages. Deepgram, ElevenLabs and OpenAI list Hindi among supported languages but their latency claims are not language-specific, and Bhashini publishes a model and language catalogue with no timing data at all."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How many calls do I need to measure voice agent latency properly?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Enough turns for p95 to stop moving when you add more. In practice that means several hundred turns, collected across different times of day and from the network path your callers actually use. Report the sample size alongside p50 and p95. A mean over twenty turns tells you nothing, because latency distributions have a long tail and the tail is what callers remember."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Should I measure latency from platform dashboards or from call recordings?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "From recordings. A platform's own timestamps start and stop inside its stack, so they exclude the telephony leg, the jitter buffer and the audio player buffer, all of which sit between the agent and the caller's ear. Detect speech boundaries in the recorded audio and measure from the caller's last syllable to the first syllable of the reply."
+                    }
+                }
+            ]
+        }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/about.html" class="nav-link">About</a>
+                <a href="/qualify.html" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">Research</span>
+                <span class="article-date">September 19, 2026</span>
+                <span class="article-read-time">11 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">Voice Agent Latency: What Every Vendor Actually Publishes</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">A compilation of published latency figures across STT, TTS and full-stack platforms, what each number measures, where the Indic-language gap sits, and how to reproduce an end-to-end measurement yourself.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <p>Every voice vendor publishes a latency number and almost none of them measure the same thing. One is model inference with the network explicitly subtracted. One is the gap between a word ending in the audio and that word showing up in a partial transcript. One is time to the first audio byte. One is a whole-turn figure from a platform's own dashboard, which starts and stops inside that platform's stack. Stack them and you get a total that corresponds to nothing a caller would experience.</p>
+
+        <p>This page is a compilation, not a measurement. Every figure below comes from a published, linkable source, and each row states what that source was actually measuring and when it was published. I have no vendor credentials for most of this list and did not run a single timing test for it. The second half is the part you can act on: a method for producing your own end-to-end number, and the controls that make it comparable between two stacks.</p>
+
+        <div class="definition-block">
+            <p><strong>The short version:</strong> no vendor publishes a per-language latency figure, nobody publishes an end-to-end number derived from call recordings, and the two widely used independent evaluations of speech models measure accuracy and throughput rather than latency. The numbers below are real and useful. They are not comparable to each other.</p>
+        </div>
+
+        <h2>The four things called "latency"</h2>
+
+        <p>Before the tables, the vocabulary. These are distinct measurements and the naming across vendors is inconsistent enough that you have to read the definition every time.</p>
+
+        <p><strong>Transcript lag (STT).</strong> How far behind the transcription is from the audio being sent. Deepgram's documentation defines it exactly that way and gives the arithmetic: subtract the transcript cursor from the audio cursor, where the transcript cursor is the amount of audio processed so far according to interim results. It is a measure of a stream falling behind, not of a response arriving.</p>
+
+        <p><strong>Word emission latency (STT).</strong> AssemblyAI's definition, quoted from their Universal-Streaming announcement: "for each correctly transcribed word, measure the time from when the word ends in the audio stream to when that same word first appears in the partial transcript received by the client." Per-word, client-side, and measured on a stream that is already flowing.</p>
+
+        <p><strong>End-of-turn detection delay.</strong> The time from a caller stopping speaking to the system deciding the turn is over. Deepgram's docs call this EOT latency and put the expected range at 100 to 500 ms. LiveKit calls it <code>end_of_utterance_delay</code> and defines it as time from the end of speech as detected by VAD to the point when the user's turn is considered complete. This is the stage where most of the perceived delay in a slow agent actually lives, and it is the stage vendors are least likely to include in a headline figure.</p>
+
+        <p><strong>Time to first audio (TTS), and voice-to-voice.</strong> For a TTS model, the elapsed time from the request to the first playable audio. For a whole agent, the elapsed time from the caller's last syllable to the first syllable of the reply. Only the second one describes what a caller experiences, and no vendor in this compilation publishes it as a measured distribution.</p>
+
+        <p>LiveKit publishes the cleanest decomposition of the three machine stages, as a formula in its agent metrics documentation: <code>total_latency = eou.end_of_utterance_delay + llm.ttft + tts.ttfb</code>, where TTFT is the time for the LLM to generate the first token of the completion and TTFB is the time for the TTS model to generate the first byte of its audio output. Worth noting what that sum leaves out: network transit, the telephony leg, jitter buffering and the audio player's own buffer. It is a diagnostic breakdown, not an end-to-end number.</p>
+
+        <h2>Speech-to-text</h2>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Published figure</th>
+                    <th>What it measures</th>
+                    <th>Source and date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Deepgram Nova-3 (streaming)</td>
+                    <td>300 ms or less</td>
+                    <td>Transcript lag: how far the transcript trails the audio being sent. EOT detection listed separately at 100&ndash;500 ms</td>
+                    <td><a href="https://developers.deepgram.com/docs/measuring-streaming-latency" target="_blank" rel="noopener">Deepgram docs</a>, no date shown on page</td>
+                </tr>
+                <tr>
+                    <td>Deepgram Flux</td>
+                    <td>p90 1 s, p95 1.5 s for end-of-turn; claims a 200&ndash;600 ms reduction vs STT+VAD</td>
+                    <td>Median audio time elapsed after the user has finished speaking, for a successful end-of-turn detection</td>
+                    <td><a href="https://deepgram.com/learn/introducing-flux-conversational-speech-recognition" target="_blank" rel="noopener">Deepgram announcement</a>, October 2025</td>
+                </tr>
+                <tr>
+                    <td>AssemblyAI Universal-Streaming</td>
+                    <td>~300 ms median (307 ms vs Deepgram Nova-3 at 516 ms); p99 1,012 ms vs 1,907 ms</td>
+                    <td>Per-word emission latency, client-side, as defined above. Vendor-run comparison against a named competitor</td>
+                    <td><a href="https://www.assemblyai.com/blog/introducing-universal-streaming" target="_blank" rel="noopener">AssemblyAI blog</a>, 2 June 2025</td>
+                </tr>
+                <tr>
+                    <td>Sarvam Saaras v3</td>
+                    <td>Sub-150 ms response initiation in Fast mode</td>
+                    <td>Time to first token. 23 languages (22 Indian plus English); figure is not broken out per language</td>
+                    <td><a href="https://www.sarvam.ai/blogs/asr" target="_blank" rel="noopener">Sarvam blog</a>, 10 February 2026</td>
+                </tr>
+                <tr>
+                    <td>OpenAI (whisper-1, gpt-4o-transcribe)</td>
+                    <td>No published figure</td>
+                    <td>Docs state that <code>gpt-4o-transcribe</code>, <code>gpt-4o-mini-transcribe</code> and <code>gpt-4o-transcribe-diarize</code> support streaming and that <code>whisper-1</code> does not. No timing data</td>
+                    <td><a href="https://developers.openai.com/api/docs/guides/speech-to-text" target="_blank" rel="noopener">OpenAI API docs</a></td>
+                </tr>
+                <tr>
+                    <td>Google Cloud STT (Chirp 3)</td>
+                    <td>No published figure</td>
+                    <td>Streaming recognition is documented, language coverage is documented, latency is not quantified anywhere on the model page</td>
+                    <td><a href="https://docs.cloud.google.com/speech-to-text/docs/models/chirp-3" target="_blank" rel="noopener">Google Cloud docs</a></td>
+                </tr>
+                <tr>
+                    <td>Bhashini (MeitY)</td>
+                    <td>No published figure</td>
+                    <td>The API documentation lists ASR service IDs across 22 scheduled languages plus regional variants. No timing data of any kind</td>
+                    <td><a href="https://dibd-bhashini.gitbook.io/bhashini-apis/available-models-for-usage" target="_blank" rel="noopener">Bhashini API docs</a></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>Two of these deserve a caveat in bold type. The AssemblyAI figures are a vendor benchmarking a named competitor, which is exactly the situation where you read the method before the number. To their credit the method is stated precisely, which is more than most such comparisons offer. And the Deepgram Flux numbers describe a different quantity from the Nova-3 numbers on the row above: Flux merges transcription and turn detection into one model, so its p90 and p95 cover the decision that a turn has ended, not the lag of a transcript stream.</p>
+
+        <h2>Text-to-speech</h2>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Published figure</th>
+                    <th>What it measures</th>
+                    <th>Source and date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ElevenLabs Flash v2.5</td>
+                    <td>~75 ms</td>
+                    <td>Model inference for short inputs. The docs carry an explicit footnote: "Excluding application &amp; network latency"</td>
+                    <td><a href="https://elevenlabs.io/docs/models" target="_blank" rel="noopener">ElevenLabs models page</a></td>
+                </tr>
+                <tr>
+                    <td>ElevenLabs v3 Conversational</td>
+                    <td>~280 ms</td>
+                    <td>Same basis: model inference, network excluded</td>
+                    <td><a href="https://elevenlabs.io/docs/models" target="_blank" rel="noopener">ElevenLabs models page</a></td>
+                </tr>
+                <tr>
+                    <td>ElevenLabs, the rest of the path</td>
+                    <td>Network round trip 20&ndash;200 ms; server processing single-digit ms; 500 ms player buffer described as common</td>
+                    <td>The vendor's own accounting of what sits between model inference and a caller hearing audio</td>
+                    <td><a href="https://elevenlabs.io/docs/eleven-api/concepts/latency" target="_blank" rel="noopener">ElevenLabs latency docs</a></td>
+                </tr>
+                <tr>
+                    <td>Cartesia Sonic 3.5</td>
+                    <td>Sub-90 ms</td>
+                    <td>Time to first audio; the docs describe it as streaming the first byte of audio in about 90 ms</td>
+                    <td><a href="https://docs.cartesia.ai/get-started/overview" target="_blank" rel="noopener">Cartesia docs</a></td>
+                </tr>
+                <tr>
+                    <td>Sarvam Bulbul v3</td>
+                    <td>No published figure</td>
+                    <td>The launch post describes a low-latency streaming output mode without quantifying it. 11 languages, 10 Indian plus English</td>
+                    <td><a href="https://www.sarvam.ai/blogs/bulbul-v3" target="_blank" rel="noopener">Sarvam blog</a>, 5 February 2026</td>
+                </tr>
+                <tr>
+                    <td>Google Cloud TTS (Chirp 3: HD)</td>
+                    <td>No published figure</td>
+                    <td>Bidirectional streaming synthesis is documented. No latency figure on the page. Hindi (hi-IN) is listed in the language table</td>
+                    <td><a href="https://docs.cloud.google.com/text-to-speech/docs/chirp3-hd" target="_blank" rel="noopener">Google Cloud docs</a></td>
+                </tr>
+                <tr>
+                    <td>OpenAI Speech API</td>
+                    <td>No published figure</td>
+                    <td>Streaming audio output via chunked transfer encoding is documented. No timing data. Hindi appears in the supported-language list</td>
+                    <td><a href="https://developers.openai.com/api/docs/guides/text-to-speech" target="_blank" rel="noopener">OpenAI API docs</a></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>The ElevenLabs rows are the most honest set of numbers in this entire compilation, and worth reading together rather than separately. A 75 ms model with a 20 to 200 ms network round trip and a 500 ms player buffer in front of it does not deliver audio to a caller in 75 ms. The vendor says so on its own documentation page. Anyone quoting the 75 ms as an agent's response time is quoting a number the vendor did not make that claim about.</p>
+
+        <h2>Full-stack platforms</h2>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Platform</th>
+                    <th>Published figure</th>
+                    <th>What it measures</th>
+                    <th>Source and date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Vapi</td>
+                    <td>"Typically around 800 milliseconds"</td>
+                    <td>End-to-end voice processing. No percentile given, no sample size, no measurement point specified</td>
+                    <td><a href="https://docs.vapi.ai/faq" target="_blank" rel="noopener">Vapi FAQ</a></td>
+                </tr>
+                <tr>
+                    <td>Vapi (engineering blog)</td>
+                    <td>1,200 ms named as the point where conversational flow breaks; claims over 1,000 ms shaved off p95</td>
+                    <td>Latency to response, defined as the duration between a user's end of statement and the agent's start of statement. No before/after p95 values published</td>
+                    <td><a href="https://vapi.ai/blog/how-we-solved-latency-at-vapi" target="_blank" rel="noopener">Vapi blog</a>, 14 July 2025</td>
+                </tr>
+                <tr>
+                    <td>Retell AI</td>
+                    <td>620 ms average end-to-end; 180 ms TTFT; 140 ms barge-in. Competitors: Dialogflow CX 920 ms, Twilio Voice 1,040 ms, PolyAI 780 ms</td>
+                    <td>Voice-to-voice latency from standardised FAQ dialogs, captured via WebSocket timestamps. Averages, not percentiles. Sample size not disclosed</td>
+                    <td><a href="https://www.retellai.com/resources/ai-voice-agent-latency-face-off-2025" target="_blank" rel="noopener">Retell resources</a>, 13 July 2025</td>
+                </tr>
+                <tr>
+                    <td>ElevenLabs Agents</td>
+                    <td>No published figure</td>
+                    <td>The platform overview quantifies voices and languages, not response time</td>
+                    <td><a href="https://elevenlabs.io/docs/agents-platform/overview" target="_blank" rel="noopener">ElevenLabs docs</a></td>
+                </tr>
+                <tr>
+                    <td>LiveKit Agents</td>
+                    <td>No figure, by choice</td>
+                    <td>Publishes the decomposition instead. The latency guide states that specific recommendations would go out of date quickly and are therefore not provided</td>
+                    <td><a href="https://docs.livekit.io/agents/ops/logging/" target="_blank" rel="noopener">LiveKit metrics docs</a> and <a href="https://livekit.com/blog/understand-and-improve-agent-latency" target="_blank" rel="noopener">LiveKit blog</a>, 13 April 2026</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>Retell's table is the only published head-to-head of full-stack platforms I could find from a primary source, and it is a vendor scoring itself against three competitors with no disclosed sample size and no percentiles. That does not make the numbers wrong. It makes them a starting hypothesis rather than evidence. If you are choosing between platforms on latency, this table is the thing you should be replicating, not citing.</p>
+
+        <p>LiveKit's refusal is the more useful position for a reader. Publishing a formula that stays true while publishing no numbers that will rot is a defensible call, and the formula is the one I use when a pipeline is slow and I need to know which stage to blame.</p>
+
+        <h2>The language axis</h2>
+
+        <p>This is the shortest section in the compilation, because the answer is nearly uniform: <strong>no vendor in this list publishes a latency figure broken out by language.</strong></p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Vendor</th>
+                    <th>Hindi / Indic language support</th>
+                    <th>Indic-specific latency figure</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Sarvam (Saaras v3, Bulbul v3)</td>
+                    <td>22 Indian languages plus English for STT; 10 Indian plus English for TTS</td>
+                    <td>Closest thing that exists: the sub-150 ms Fast-mode figure comes from an Indic-first system, but is not per language</td>
+                </tr>
+                <tr>
+                    <td>Deepgram</td>
+                    <td>Hindi listed in Nova-3's multilingual set</td>
+                    <td>None. The 300 ms figure is not language-qualified</td>
+                </tr>
+                <tr>
+                    <td>ElevenLabs</td>
+                    <td>Hindi in the Flash v2.5 language list</td>
+                    <td>None. The 75 ms figure is not language-qualified</td>
+                </tr>
+                <tr>
+                    <td>OpenAI</td>
+                    <td>Hindi, Tamil, Kannada, Marathi, Nepali, Urdu in the Speech API language list</td>
+                    <td>None, for any language</td>
+                </tr>
+                <tr>
+                    <td>Google Cloud</td>
+                    <td>hi-IN documented for Chirp 3: HD voices</td>
+                    <td>None, for any language</td>
+                </tr>
+                <tr>
+                    <td>AssemblyAI</td>
+                    <td>99+ languages claimed</td>
+                    <td>None. The streaming benchmark is not presented as multilingual</td>
+                </tr>
+                <tr>
+                    <td>Cartesia</td>
+                    <td>Not stated on the overview page beyond voice cloning into 40+ languages</td>
+                    <td>None</td>
+                </tr>
+                <tr>
+                    <td>Bhashini</td>
+                    <td>22 scheduled languages plus Bhojpuri, Chhattisgarhi, Haryanvi, Bhili and others</td>
+                    <td>None. No timing data published at all</td>
+                </tr>
+                <tr>
+                    <td>Vapi, Retell, ElevenLabs Agents, LiveKit</td>
+                    <td>Inherit whatever their configured STT and TTS support</td>
+                    <td>None</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>Why this matters more than it looks: language changes the work at almost every stage. Code-mixed Hindi-English speech is harder to segment, which moves end-of-turn detection. Devanagari text expands differently from Latin text for the same spoken content, which moves TTS first-byte time. A model serving 23 languages from one endpoint has different routing behaviour from a model serving one. None of that is captured by a single number published once, in English, in a launch post.</p>
+
+        <p>If you are building for Indian callers, the practical consequence is that nothing in the published record substitutes for measuring your own language mix. That is doubly true for anything touching Indian government service delivery, where the language list runs well past the ones any commercial vendor benchmarks and where <a href="https://aisewak.com" target="_blank" rel="noopener">Indic-language public service agents</a> have to work in languages that have never appeared in a vendor latency chart.</p>
+
+        <h2>What the independent evaluations measure, and what they don't</h2>
+
+        <p>There are two widely used independent evaluations of speech models. Neither measures latency.</p>
+
+        <p>Artificial Analysis reports, for <a href="https://artificialanalysis.ai/speech-to-text" target="_blank" rel="noopener">speech-to-text</a>, a word error rate and a "Speed Factor" defined as input audio seconds transcribed per second, measured as a median across trials on ten-minute audio files. For <a href="https://artificialanalysis.ai/text-to-speech" target="_blank" rel="noopener">text-to-speech</a> it reports a quality Elo from its Speech Arena, price, and throughput in characters per second of generation time. Throughput on a ten-minute file and time-to-first-token on a live stream are different quantities, and only the second one predicts whether a conversation feels responsive.</p>
+
+        <p>That is the state of it. Every latency figure in circulation is a vendor figure. There is no neutral, reproducible, published end-to-end benchmark of voice agents that I was able to verify from a primary source, which is a strange gap in a category this large.</p>
+
+        <h2>How to measure it yourself</h2>
+
+        <p>What follows is a method, not a result. It is what I would hand to someone comparing two stacks who needs an answer they can defend.</p>
+
+        <h3>Measure voice-to-voice, from the recording</h3>
+
+        <p>The only number that describes a caller's experience is the elapsed time from the caller's last syllable to the first audible syllable of the reply, measured at the caller's end. Get it from the recorded audio, not from a platform dashboard. Platform timestamps start and stop inside the platform, which means they systematically exclude the telephony leg, the jitter buffer and the player buffer. Those are not rounding errors; ElevenLabs' own documentation describes a 500 ms player buffer as common.</p>
+
+        <p>Detect the speech boundaries with a voice activity detector run over the recording, then refine with an energy threshold and eyeball a random sample to confirm the detector is finding what you think it is. A VAD that clips trailing breath or counts line noise as speech will shift every number in the same direction, and you will not notice from the aggregate.</p>
+
+        <h3>Control these, or the comparison means nothing</h3>
+
+        <ul>
+            <li><strong>Region and point of presence.</strong> Same region for both stacks. A model served from Virginia and one served from Mumbai are not being compared on model speed.</li>
+            <li><strong>Transport and codec.</strong> PSTN with 8 kHz &mu;-law and WebRTC with 48 kHz Opus are different measurements. Pick one and state it.</li>
+            <li><strong>Network path.</strong> Same connection, ideally the connection your callers use. A test from an office fibre line does not predict a mobile call in a market town.</li>
+            <li><strong>Prompt and context length.</strong> LLM time-to-first-token moves with context size. Two stacks with different system prompts are not being compared on infrastructure.</li>
+            <li><strong>Turn detection settings.</strong> Endpointing thresholds, turn timeouts and any eagerness setting. These change latency more than the model choice does, and they are usually left at default in a comparison where one default happens to be aggressive.</li>
+            <li><strong>Barge-in.</strong> On or off, stated. Interruption handling changes both the measurement and what counts as a turn boundary.</li>
+            <li><strong>Warm versus cold.</strong> First request after an idle period behaves differently. Discard or report the cold starts separately; do not average them in silently.</li>
+            <li><strong>Utterance script.</strong> Same set of caller utterances through both stacks, covering short confirmations and long questions. A "yes" and a forty-word question do not exercise turn detection the same way.</li>
+        </ul>
+
+        <h3>Sample size and what to report</h3>
+
+        <p>Collect enough turns that p95 stops moving when you add more, which in practice means several hundred, spread across times of day. Then report p50 and p95 together with n, and never the mean. Latency distributions have a long tail, the mean hides it, and the tail is the part callers remember, because a caller does not average their turns.</p>
+
+        <p>Alongside the end-to-end figure, log the decomposition from LiveKit's formula if your stack exposes it: end-of-utterance delay, LLM time-to-first-token, TTS time-to-first-byte. The sum will be lower than your measured end-to-end. The difference is your network, telephony and buffering, and knowing its size tells you whether swapping a model is worth doing at all.</p>
+
+        <h3>One reference point that does not apply</h3>
+
+        <p>Telephony has a long-standing standard for delay, <a href="https://www.itu.int/rec/T-REC-G.114-200305-I/en" target="_blank" rel="noopener">ITU-T Recommendation G.114</a>, on one-way transmission time. It is worth knowing it exists and worth knowing it does not answer this question: it governs transmission delay on a call path, not the time an agent takes to decide a turn has ended and start speaking. There is no equivalent standard for conversational turn latency, which is a large part of why every vendor gets to define the term for themselves.</p>
+
+        <h2>What I take from the compilation</h2>
+
+        <p>Three things. Vendor latency figures are mostly honest and mostly useless for comparison, because each one measures the stage its publisher controls. The stage that dominates perceived delay, end-of-turn detection, is the one least often included in a headline number. And for Indic languages, the published record is close to empty, so anyone building for Indian callers is measuring for themselves or guessing.</p>
+
+        <p>For the cost side of the same decision, the <a href="/blog/ai-voice-agent-pricing-cost-2026.html">pricing breakdown across the three commercial models</a> covers what these stacks bill for and where the per-minute rates land. And if you want the operational view rather than the timing one, <a href="/blog/how-ai-voice-agents-handle-customer-support.html">how voice agents actually handle support calls</a> goes through the stages above from the caller's side. I build on several of these stacks in production through <a href="https://voxdonna.com/ai-voice-agents.html" target="_blank" rel="noopener">Voxdonna</a>, which is how I came to care about the difference between a 75 ms number and a 900 ms call.</p>
+
+        <!-- FAQ -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>What is a good latency for an AI voice agent?</h3>
+                <p>There is no published standard. Vapi's own documentation describes roughly 800 ms end-to-end as typical, and Vapi's engineering blog treats 1,200 ms as the point where conversational flow breaks down. Both are vendor statements, not independent measurements, and neither is expressed as a percentile. Set your own target by measuring your own stack at p50 and p95 and deciding what your callers tolerate.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Why can't I compare vendor latency numbers directly?</h3>
+                <p>Because they measure different things. ElevenLabs' 75 ms is model inference with application and network time explicitly excluded. Cartesia's sub-90 ms is time to the first audio byte. AssemblyAI's 300 ms is the gap between a word ending in the audio and that word appearing in a partial transcript. Deepgram's 300 ms is how far the transcript lags the audio being sent. Adding them together does not produce an end-to-end number.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Do any vendors publish latency figures for Hindi or other Indic languages?</h3>
+                <p>No vendor publishes a per-language latency figure. Sarvam is the only one whose published number comes from a system built Indic-first: sub-150 ms response initiation in Fast mode for Saaras v3, across 23 languages. Deepgram, ElevenLabs and OpenAI list Hindi among supported languages but their latency claims are not language-specific, and Bhashini publishes a model and language catalogue with no timing data at all.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How many calls do I need to measure voice agent latency properly?</h3>
+                <p>Enough turns for p95 to stop moving when you add more. In practice that means several hundred turns, collected across different times of day and from the network path your callers actually use. Report the sample size alongside p50 and p95. A mean over twenty turns tells you nothing, because latency distributions have a long tail and the tail is what callers remember.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Should I measure latency from platform dashboards or from call recordings?</h3>
+                <p>From recordings. A platform's own timestamps start and stop inside its stack, so they exclude the telephony leg, the jitter buffer and the audio player buffer, all of which sit between the agent and the caller's ear. Detect speech boundaries in the recorded audio and measure from the caller's last syllable to the first syllable of the reply.</p>
+            </div>
+        </div>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/ai-voice-agent-pricing-cost-2026.html" class="related-card">
+                <h3 class="related-card-title">AI Voice Agent Pricing 2026: What the Three Models Really Cost</h3>
+                <p class="related-card-excerpt">Agency retainers, self-serve per-minute rates and enterprise pricing, with a first-year budget and the vendor red flags.</p>
+            </a>
+            <a href="/blog/how-ai-voice-agents-handle-customer-support.html" class="related-card">
+                <h3 class="related-card-title">How AI Voice Agents Handle Customer Support</h3>
+                <p class="related-card-excerpt">What happens between a caller speaking and an answer arriving, and which parts a business actually controls.</p>
+            </a>
+            <a href="/blog/building-le-marquier-french-voice-agent.html" class="related-card">
+                <h3 class="related-card-title">Building Le Marquier's French Voice Agent: Five Lessons</h3>
+                <p class="related-card-excerpt">Language routing, TTS quality and escalation design on a three-language support line.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Comparing stacks</span>
+                <span class="line">on latency?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Thirty minutes. Bring the two candidates and your language mix, and we'll work out
+                what to measure before anyone signs a contract.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify.html" class="btn-primary btn-large">Book a call</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a></p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
