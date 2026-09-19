@@ -4,19 +4,59 @@ on:
   push:
     branches: [main]
 
+# One deploy at a time, in push order. A second push queues behind the first.
+concurrency:
+  group: deploy-rajsuyash
+  cancel-in-progress: false
+
+env:
+  HOST: 92.112.189.106
+  PORT: "65002"
+  USER: u649993053
+  TARGET: domains/rajsuyash.com/public_html/
+  # Set to "--dry-run" to see what rsync WOULD change/delete without touching the host.
+  RSYNC_DRY_RUN: "--dry-run"
+
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Validate pages changed in this push
+        run: |
+          BASE="${{ github.event.before }}"
+          # First push or force-push: 'before' may not exist locally; fall back to the parent.
+          git cat-file -e "$BASE^{commit}" 2>/dev/null || BASE=$(git rev-parse HEAD~1)
+          bash .github/scripts/validate-site.sh "$BASE" "${{ github.sha }}"
+
   deploy:
+    needs: validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy via SCP
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: 92.112.189.106
-          username: u649993053
-          key: ${{ secrets.HOSTINGER_SSH_KEY }}
-          port: 65002
-          source: ".,.htaccess,blog/.htaccess,!.git,!.github,!.gitignore,!*.bak"
-          target: domains/rajsuyash.com/public_html/
-          overwrite: true
+      - name: Install SSH key
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.HOSTINGER_SSH_KEY }}" > ~/.ssh/hostinger
+          chmod 600 ~/.ssh/hostinger
+          ssh-keyscan -p "$PORT" "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+      # rsync --delete makes the host mirror git for everything git owns.
+      # --exclude: never uploaded AND (without --delete-excluded) never deleted on the host.
+      # --filter 'P': host-only paths git does not own; protected from deletion.
+      - name: Sync site to Hostinger
+        run: |
+          rsync -rlcz --delete --itemize-changes $RSYNC_DRY_RUN \
+            -e "ssh -i ~/.ssh/hostinger -p $PORT" \
+            --exclude='.git/' --exclude='.github/' --exclude='.gitignore' --exclude='*.bak' \
+            --filter='P /wordpress/' \
+            --filter='P /foresta/' \
+            --filter='P /FEB/' \
+            --filter='P /.private/' \
+            --filter='P /.claude/' \
+            --filter='P /case-studies/' \
+            --filter='P /84b003091d5fae52496f5a2aa8493a4f.txt' \
+            ./ "$USER@$HOST:$TARGET"
