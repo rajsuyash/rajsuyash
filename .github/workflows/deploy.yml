@@ -15,7 +15,7 @@ env:
   USER: u649993053
   TARGET: domains/rajsuyash.com/public_html/
   # Set to "--dry-run" to see what rsync WOULD change/delete without touching the host.
-  RSYNC_DRY_RUN: "--dry-run"
+  RSYNC_DRY_RUN: ""
 
 jobs:
   validate:
