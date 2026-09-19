@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>Your First AI Project: Why Most Companies Pick the Wrong One</title>
+    <meta name="description" content="The criteria executives use to select first AI projects are almost perfectly designed to produce failures. Here is a structured framework for choosing an AI use case that actually succeeds.">
+    <meta name="keywords" content="first AI project, how to choose AI use case, AI project selection, AI pilot project, starting AI initiative, AI use case evaluation, AI project criteria, enterprise AI first project">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/how-to-choose-your-first-ai-project.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/how-to-choose-your-first-ai-project.html">
+    <meta property="og:title" content="Your First AI Project: Why Most Companies Pick the Wrong One">
+    <meta property="og:description" content="The criteria executives use to select first AI projects are almost perfectly designed to produce failures. Here is a structured framework for choosing an AI use case that actually succeeds.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj">
+    <meta property="article:published_time" content="2026-07-21">
+    <meta property="article:modified_time" content="2026-09-19">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Your First AI Project: Why Most Companies Pick the Wrong One">
+    <meta name="twitter:description" content="The criteria executives use to select first AI projects are almost perfectly designed to produce failures. Here is a structured framework for choosing an AI use case that actually succeeds.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260919a">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "Your First AI Project: Why Most Companies Pick the Wrong One",
+            "description": "The criteria executives use to select first AI projects are almost perfectly designed to produce failures. Here is a structured framework for choosing an AI use case that actually succeeds.",
+            "author": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj",
+                "url": "https://rajsuyash.com/about.html"
+            },
+            "publisher": {
+                "@type": "Person",
+                "@id": "https://rajsuyash.com/about.html#person",
+                "name": "Suyash Raj"
+            },
+            "datePublished": "2026-07-21",
+            "dateModified": "2026-09-19",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://rajsuyash.com/blog/how-to-choose-your-first-ai-project.html"
+            },
+            "image": "https://rajsuyash.com/og-image.jpg"
+        }
+    </script>
+
+    <!-- FAQ Schema -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "How long should a first AI project take from selection to deployment?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A well-scoped first AI project — one that scores highly on process clarity, data availability, measurability, and reversibility — should move from vendor selection to live deployment in 60 to 90 days. Projects that take longer at this scope have usually encountered a data problem or an integration problem that was not surfaced during use case evaluation. Scope that discovery period as part of the pre-project phase, not the project itself."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Should the first AI project be in the department with the highest pain or the most enthusiasm for AI?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Neither, necessarily. The correct selection criterion is use case suitability, not organizational enthusiasm or pain intensity. A department with moderate enthusiasm and a well-documented, high-volume, measurable process is a better starting point than a department with strong enthusiasm and a complex, judgment-heavy workflow. That said, you need a business owner who will actively sponsor the deployment and manage change — which requires at least functional enthusiasm."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What if our highest-scoring use case is in a department that leadership considers low-priority?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "This is a legitimate tension. The correct resolution is to be explicit about the dual objective of a first AI project: it has a direct business impact objective (the measurable outcome you are targeting) and a capability-building objective (learning how to deploy AI successfully). A lower-priority use case can still deliver on both objectives. Present it as such — not as a compromise, but as the right starting point for building organizational AI capability."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do we know if our candidate use case requires AI or just better process automation?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Ask whether the decision involves variation that rules cannot capture. A rule-based system (traditional automation or RPA) handles decisions where the logic can be written as explicit if-then conditions. AI is appropriate when the decision space is too large or too variable for rule-based logic, or when the system needs to learn from outcomes to improve over time. If you can write your decision logic as a flowchart with a finite number of branches, you may not need AI — you need process automation. That distinction matters for comparing AI automation to RPA."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What is the single most common reason first AI projects fail?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "In practice, the most common failure is selecting a use case whose data is not ready. The use case itself may be well-suited to AI. But the discovery that the required data is locked in PDFs, distributed across incompatible systems, or simply absent is one that consistently surfaces mid-project rather than before it begins. Evaluate data availability rigorously before committing to a use case."
+                    }
+                }
+            ]
+        }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://rajsuyash.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://rajsuyash.com/blog/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "Your First AI Project: Why Most Companies Pick the Wrong One",
+                    "item": "https://rajsuyash.com/blog/how-to-choose-your-first-ai-project.html"
+                }
+            ]
+        }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/about.html" class="nav-link">About</a>
+                <a href="/qualify.html" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">AI Strategy</span>
+                <span class="article-date">July 21, 2026</span>
+                <span class="article-read-time">9 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">Your First AI Project: Why Most Companies Pick the Wrong One</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">The criteria executives use to select first AI projects are almost perfectly designed to produce failures. Here is a structured framework for choosing an AI use case that actually succeeds.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <h2>The Selection Problem Nobody Talks About</h2>
+
+        <p>Most executives approach their first AI project the same way. They ask their leadership team for a list of pain points, identify the one that generates the most agreement in the room, and hand it to their technology team or a vendor. Six months later, the project is either cancelled, "deprioritized," or delivering results nobody can measure.</p>
+
+        <p>The failure is not in the technology. It is in the selection logic. The criteria executives use to choose their first AI project — biggest pain point, highest executive enthusiasm, most obvious ROI — are almost perfectly designed to produce the wrong choice.</p>
+
+        <p>McKinsey's research on AI adoption found that companies that scale AI successfully are significantly more likely than laggards to have a disciplined process for identifying and prioritizing use cases. They treat use case selection as a strategic decision, not a brainstorming exercise. The organizations that struggle treat every opportunity as roughly equivalent and move on instinct.</p>
+
+        <p>This article gives you the framework that separates the projects that succeed from the ones that become cautionary tales.</p>
+
+        <h2>Why the "Biggest Pain Point" Logic Fails</h2>
+
+        <p>The largest pain points in most organizations are large precisely because they are complex. Complexity is the enemy of a first AI project.</p>
+
+        <p>Consider what a "big pain point" usually means in practice: the problem has been present for years, meaning previous attempts to fix it have failed; it spans multiple departments, meaning it has an ownership problem; it involves exception-heavy workflows, meaning it has edge cases that were never documented; and it carries political weight, meaning any failure will be visible.</p>
+
+        <p>A first AI project carries an additional constraint that most executives do not account for: your organization does not yet know how to deploy AI successfully. You are building that capability for the first time. The correct use case for building a new organizational capability is not the highest-stakes problem in the business. It is the problem that teaches you the most while risking the least.</p>
+
+        <p>The Gartner research on AI project outcomes consistently shows that organizations with no prior successful AI deployment have higher rates of failure on their first initiative than on subsequent ones. The lesson is simple: the first project exists to make the second one possible. It is a learning vehicle, not a transformation program.</p>
+
+        <h2>The Four Selection Criteria That Actually Matter</h2>
+
+        <h3>1. Process Clarity: Can You Describe What the AI Needs to Do?</h3>
+
+        <p>AI systems automate decisions. Before selecting a use case, you need to be able to describe — with specificity — what inputs arrive, what decision gets made, and what output gets produced. If you cannot write that description in two sentences, the process is not ready for automation.</p>
+
+        <p>The test: Ask the team that runs this process today to describe it step by step. If two different team members give materially different descriptions of how it works, your edge case documentation is incomplete. Incomplete edge case documentation becomes production failures.</p>
+
+        <p>Customer service call triage is a good example of a process that passes this test: a caller states a problem, the system classifies it into one of a defined set of categories, and routes the call accordingly. The decision space is bounded. Invoice processing, appointment scheduling, and FAQ response are similar.</p>
+
+        <p>Sales strategy, new product development, and key account management are examples of processes that fail this test. They involve open-ended judgment, contextual factors that resist classification, and outcomes that are hard to define in advance. They are genuinely important. They are not good first AI projects.</p>
+
+        <h3>2. Data Availability: Does the Data Already Exist and Is It Accessible?</h3>
+
+        <p>This is where most first AI projects encounter their first crisis. The use case is selected. The vendor is engaged. And then someone discovers that the data required to build the system is locked in a format the AI cannot read, is distributed across three systems with no common key, or simply does not exist in structured form.</p>
+
+        <p>The correct sequence is to evaluate data availability before committing to a use case, not after. For any candidate use case, ask: What data does this AI system need to read? Where does that data currently live? Can it be accessed programmatically? Is its quality sufficient?</p>
+
+        <p>For a voice AI handling customer service calls, the data question is: do you have call recordings or transcripts, and are they labeled by outcome? For a demand forecasting system, it is: do you have two or more years of demand history in a queryable database? For a document classification system, it is: do you have a labeled training set, and who labeled it?</p>
+
+        <p>If the data answer requires a significant pre-project before the AI project can begin, factor that into your scope — or choose a different use case whose data is ready. The <a href="/blog/business-ready-for-ai.html">AI readiness assessment checklist</a> covers data foundation scoring in detail.</p>
+
+        <h3>3. Measurability: Can You Prove Whether It Worked?</h3>
+
+        <p>The inability to measure outcomes is the most reliable predictor of a first AI project that quietly disappears. If you cannot define a success metric before the project begins, you will not be able to defend the outcome when leadership asks whether it was worth it.</p>
+
+        <p>Success metrics need two characteristics. First, they must be quantitative: not "customer satisfaction improved" but "CSAT score increased from 3.8 to 4.2." Second, they must be attributable to the AI system specifically, not to other changes happening simultaneously.</p>
+
+        <p>The best first AI projects have metrics that are straightforward to measure and hard to dispute. Call deflection rate. Time-to-resolution. Cost per transaction. Error rate. These metrics exist as current-state baselines before the project begins and are easily measured after deployment.</p>
+
+        <p>The projects that lack measurable outcomes are the ones framed around "transformation," "capability building," or "competitive positioning." These are real objectives. They are not measurable outcomes for a specific AI project.</p>
+
+        <h3>4. Reversibility: What Happens If It Does Not Work?</h3>
+
+        <p>Every AI deployment carries some probability of underperformance. The question is what happens to your customers, your operations, and your organization's confidence in AI when the system underperforms.</p>
+
+        <p>A reversible use case is one where the fallback is available and low-cost. If an AI system handling appointment scheduling underperforms, calls route to a human scheduler. If an AI system classifying support tickets underperforms, a human agent reviews the classification before acting. The AI is in the loop, not the only actor in the process.</p>
+
+        <p>An irreversible use case is one where AI decisions trigger actions before a human can intervene, or where the volume is too high for human fallback to be practical. These projects are not inappropriate forever. They are inappropriate as a first deployment.</p>
+
+        <p>The combination of reversibility with measurability is what makes a first AI project teachable. You can compare AI and human performance directly. You can identify the specific failure modes. You can improve the system iteratively. That learning is the real output of a first AI project, and it compounds into organizational capability for every subsequent deployment. See our framework on the <a href="/blog/ai-automation-implementation-roadmap.html">full AI adoption roadmap</a> for how this compounding works across a 90-day and longer timeline.</p>
+
+        <h2>The Use Case Scoring Framework</h2>
+
+        <p>Apply these four criteria as a structured scoring exercise before selecting your first AI project. For each candidate use case, score from 0 to 3 on each dimension:</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Criterion</th>
+                    <th>0</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Process Clarity</strong></td>
+                    <td>Cannot be described precisely</td>
+                    <td>Roughly understood, many exceptions</td>
+                    <td>Documented with known exceptions</td>
+                    <td>Fully documented, decision logic is bounded</td>
+                </tr>
+                <tr>
+                    <td><strong>Data Availability</strong></td>
+                    <td>Data does not exist or is inaccessible</td>
+                    <td>Exists but requires significant cleaning or consolidation</td>
+                    <td>Exists and is accessible, quality is moderate</td>
+                    <td>Exists, accessible, high quality, and labeled</td>
+                </tr>
+                <tr>
+                    <td><strong>Measurability</strong></td>
+                    <td>No clear success metric</td>
+                    <td>Success can be described but not easily quantified</td>
+                    <td>Quantifiable but requires new instrumentation</td>
+                    <td>Existing metrics that can be measured before and after</td>
+                </tr>
+                <tr>
+                    <td><strong>Reversibility</strong></td>
+                    <td>AI decision is final, no human fallback</td>
+                    <td>Human fallback possible but operationally costly</td>
+                    <td>Human fallback available and practical</td>
+                    <td>Human and AI run in parallel; performance is directly comparable</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>Score each candidate use case. The highest-scoring use case is your first AI project. If two candidates score similarly, prefer the one with higher data availability — data problems are the hardest to resolve mid-project.</p>
+
+        <h2>What Good First Projects Look Like</h2>
+
+        <p>The use cases that consistently score well on this framework share common characteristics. They involve repetitive decisions over high volume. The decision space is bounded — there is a finite set of inputs and a finite set of appropriate outputs. The current process already generates data that can be used to evaluate the AI system's performance. A human fallback exists and is operationally practical.</p>
+
+        <p>Customer service triage and call routing. First-level support response for a defined FAQ set. Document classification and routing. Appointment scheduling against a set of defined availability constraints. Invoice validation against a defined rule set. Demand forecasting for products with sufficient historical data.</p>
+
+        <p>What these use cases have in common is not that they are unimportant. Several of them have significant business impact. What they share is that they are well-suited to the learning objectives of a first deployment: they teach your organization how to evaluate AI vendor claims, how to integrate AI into existing workflows, how to measure AI performance, and how to manage the change management challenges that come with any AI deployment.</p>
+
+        <p>For organizations evaluating whether to build a voice AI deployment, the <a href="/blog/ai-automation-build-vs-buy-vs-outsource.html">build vs. buy decision framework</a> applies the same logic to vendor versus internal development decisions.</p>
+
+        <h2>The Pilot Trap</h2>
+
+        <p>One common mistake deserves specific attention: the use case that scores well on paper but is scoped as a "pilot" indefinitely.</p>
+
+        <p>A pilot without a defined path to production is a project designed to avoid commitment. It creates a situation where the organization is spending resources on AI without setting conditions under which the investment will be scaled or stopped. Pilots that do not have pre-defined go/no-go criteria have a reliable tendency to continue forever at small scale, consuming management attention without producing organizational learning or business outcomes.</p>
+
+        <p>A well-designed first AI project has three characteristics that distinguish it from a permanent pilot. First, success metrics are defined before the project begins. Second, a timeline for evaluation is established — typically 60 to 90 days of live operation. Third, the criteria for scaling to full production (or stopping) are agreed in advance by the executive sponsor, the technology team, and the operational team.</p>
+
+        <p>This structure creates accountability. It also makes the project's outcome legible: the organization either learned what it needed to learn and has a path forward, or it learned that this use case was not the right starting point. Both outcomes are valuable.</p>
+
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>How long should a first AI project take from selection to deployment?</h3>
+                <p>A well-scoped first AI project — one that scores highly on process clarity, data availability, measurability, and reversibility — should move from vendor selection to live deployment in 60 to 90 days. Projects that take longer at this scope have usually encountered a data problem or an integration problem that was not surfaced during use case evaluation. Scope that discovery period as part of the pre-project phase, not the project itself.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Should the first AI project be in the department with the highest pain or the most enthusiasm for AI?</h3>
+                <p>Neither, necessarily. The correct selection criterion is use case suitability, not organizational enthusiasm or pain intensity. A department with moderate enthusiasm and a well-documented, high-volume, measurable process is a better starting point than a department with strong enthusiasm and a complex, judgment-heavy workflow. That said, you need a business owner who will actively sponsor the deployment and manage change — which requires at least functional enthusiasm.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What if our highest-scoring use case is in a department that leadership considers low-priority?</h3>
+                <p>This is a legitimate tension. The correct resolution is to be explicit about the dual objective of a first AI project: it has a direct business impact objective (the measurable outcome you are targeting) and a capability-building objective (learning how to deploy AI successfully). A lower-priority use case can still deliver on both objectives. Present it as such — not as a compromise, but as the right starting point for building organizational AI capability.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do we know if our candidate use case requires AI or just better process automation?</h3>
+                <p>Ask whether the decision involves variation that rules cannot capture. A rule-based system (traditional automation or RPA) handles decisions where the logic can be written as explicit if-then conditions. AI is appropriate when the decision space is too large or too variable for rule-based logic, or when the system needs to learn from outcomes to improve over time. If you can write your decision logic as a flowchart with a finite number of branches, you may not need AI — you need process automation. That distinction matters for <a href="/blog/ai-automation-build-vs-buy-vs-outsource.html">comparing AI automation to RPA</a>.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What is the single most common reason first AI projects fail?</h3>
+                <p>In practice, the most common failure is selecting a use case whose data is not ready. The use case itself may be well-suited to AI. But the discovery that the required data is locked in PDFs, distributed across incompatible systems, or simply absent is one that consistently surfaces mid-project rather than before it begins. Evaluate data availability rigorously before committing to a use case.</p>
+            </div>
+        </div>
+
+        <p>The irony of first AI projects is that the ones selected with the most ambition — the transformational initiatives, the big pain points, the CEO's personal priority — are the ones most likely to generate the failure experiences that slow an organization's AI journey for years. The ones selected with discipline — clear process, ready data, measurable outcome, reversible fallback — are the ones that build the organizational confidence and capability that make every subsequent AI investment more likely to succeed.</p>
+
+        <p>The question is not which AI use case is most important. The question is which use case teaches your organization the most while risking the least. Start there.</p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/business-ready-for-ai.html" class="related-card">
+                <h3 class="related-card-title">Is Your Business Ready for AI? 5 Signs You Should Automate Now</h3>
+                <p class="related-card-excerpt">5 clear signs your business is ready for AI automation. A practical self-assessment for SMB owners who want to save time and cut costs without overcomplicating things.</p>
+            </a>
+            <a href="/blog/ai-automation-implementation-roadmap.html" class="related-card">
+                <h3 class="related-card-title">AI Automation Implementation Roadmap for SMBs: A Phased Approach That Actually Works (2026)</h3>
+                <p class="related-card-excerpt">A practical, phased AI automation implementation roadmap for small businesses. Know what to automate first, how to sequence your rollout, and how to avoid the mistakes that stall most SMB automation projects.</p>
+            </a>
+            <a href="/blog/ai-automation-build-vs-buy-vs-outsource.html" class="related-card">
+                <h3 class="related-card-title">AI Automation: Build vs Buy vs Outsource — Which Is Right for Your SMB?</h3>
+                <p class="related-card-excerpt">Should your SMB build AI automation in-house, buy off-the-shelf tools, or outsource to an agency? An honest breakdown of costs, timelines, and tradeoffs to help you decide.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Working out</span>
+                <span class="line">where to start?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Thirty minutes. Bring the process you are thinking about automating and the numbers
+                behind it, and we'll work out whether it is worth doing before anyone builds anything.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify.html" class="btn-primary btn-large">Book a call</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a></p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
