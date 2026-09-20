@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>MCP server vs webhook: when the server wins</title>
+    <meta name="description" content="I rebuilt an n8n lead webhook as an MCP server, ran both, and timed them. What MCP adds, what it costs, and the rule I use to pick between them.">
+    <meta name="keywords" content="mcp server vs webhook, model context protocol, mcp server python, n8n webhook, ai agent tools, tool calling">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/mcp-server-vs-webhook-automation-builders.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/mcp-server-vs-webhook-automation-builders.html">
+    <meta property="og:title" content="MCP server vs webhook: when the server wins">
+    <meta property="og:description" content="I rebuilt an n8n lead webhook as an MCP server, ran both, and timed them. What MCP adds, what it costs, and the rule I use to pick between them.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj">
+    <meta property="article:published_time" content="2026-09-20">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MCP server vs webhook: when the server wins">
+    <meta name="twitter:description" content="I rebuilt an n8n lead webhook as an MCP server, ran both, and timed them. What MCP adds, what it costs, and the rule I use to pick between them.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260920a">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "MCP server vs webhook: when the server wins",
+        "description": "I rebuilt an n8n lead webhook as an MCP server, ran both, and timed them. What MCP adds, what it costs, and the rule I use to pick between them.",
+        "author": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com/about.html"
+        },
+        "publisher": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj"
+        },
+        "datePublished": "2026-09-20",
+        "dateModified": "2026-09-20",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/mcp-server-vs-webhook-automation-builders.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Does an MCP server replace my n8n webhooks?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. They answer different questions. A webhook is the right shape when something outside your system decides that work should happen and hands you a payload. An MCP server is the right shape when a model decides that work should happen and needs to pick the right operation from a list. In my own setup both exist side by side: the webhook keeps catching form posts, and the MCP server wraps the same two functions so an agent can call them by name."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is an MCP server slower than a webhook?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "On my laptop it was, slightly. Twenty warm calls over stdio to a local MCP server averaged 0.63 ms each. Twenty warm HTTP POSTs to a local Python http.server averaged 0.22 ms each. Both numbers are loopback measurements on one machine with trivial handlers, so they measure protocol overhead and nothing else. Against a real network hop or a real database read, that difference disappears into the noise."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What does MCP give me that a webhook does not?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Three things I could point at in the output. Discovery: the client asks tools/list and gets back every tool with a name, a description and a JSON Schema, without me writing that description anywhere in a prompt. Typed arguments: the schema is enforced before my function body runs, so a bad value comes back as a validation error rather than a silent wrong answer. Selection: the model chooses which tool to call and when, instead of my code choosing for it."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "When is MCP overkill?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Whenever no model is in the loop. A Stripe event firing into a workflow, a cron job, a form submission, a Shopify order: none of those involve anything choosing between options, so the discovery and schema machinery buys you nothing and you pay for a second process and a second protocol. If the caller already knows exactly which operation it wants, a webhook or a plain HTTP endpoint is the lighter tool."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can an MCP server call my existing n8n workflow?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, and that is the cheapest migration path. The tool function body can be a single HTTP POST to the n8n production webhook URL you already run. You keep the workflow, the credentials and the execution history in n8n, and the MCP server becomes a typed, discoverable front door for a model. I would start there before rewriting any workflow logic in Python."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Which Python package should I use to build an MCP server?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "I used the official SDK, installed with pip install mcp, which resolved to version 2.2.0 on Python 3.14.6. Version 2 renamed the FastMCP class to MCPServer and switched protocol model fields from camelCase to snake_case, so most tutorials written against version 1 will not run as printed. If you need the old API, the SDK error message itself suggests pinning mcp below 2."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "MCP server vs webhook", "item": "https://rajsuyash.com/blog/mcp-server-vs-webhook-automation-builders.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Code */
+        .article-body pre {
+            background: var(--color-paper-warm);
+            border-left: 3px solid var(--color-accent);
+            padding: var(--space-sm) var(--space-md);
+            margin: var(--space-md) 0;
+            overflow-x: auto;
+            font-size: 0.8125rem;
+            line-height: 1.65;
+        }
+
+        .article-body pre code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            color: var(--color-ink);
+            white-space: pre;
+        }
+
+        .article-body p code,
+        .article-body li code,
+        .article-body td code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 0.875em;
+            background: var(--color-paper-warm);
+            padding: 0.1em 0.35em;
+        }
+
+        .code-caption {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+            margin-top: calc(var(--space-md) * -1 + 0.5rem);
+            margin-bottom: var(--space-md);
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/about.html" class="nav-link">About</a>
+                <a href="/qualify.html" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">AI Agents</span>
+                <span class="article-date">September 20, 2026</span>
+                <span class="article-read-time">14 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">MCP server vs webhook: when the server wins</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">I took one job my n8n webhook already does, rebuilt it as an MCP server, ran both, and wrote down what actually changed.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <p>I have a webhook that does two things: it looks up a company from an email domain, and it writes the lead to a sheet. It has worked for months and I had no reason to touch it. Then I wanted an agent to do the same two things on its own, mid-conversation, and the webhook stopped being the right shape. Not because it was slow or broken, but because a webhook is a door someone else opens, and what I needed was a menu something else could read.</p>
+
+        <p>So I rebuilt it as an MCP server, ran both versions on the same machine, and timed them. Below is the code, the real output, the errors I hit, and the rule I now use to decide which one a job gets. Everything in the code blocks is pasted from my terminal on 20 September 2026, on Python 3.14.6 with the official MCP Python SDK at version 2.2.0.</p>
+
+        <h2>What the webhook already does</h2>
+
+        <p>The job is unglamorous and probably looks like something you already run. A form posts a lead. Something enriches the domain. Something writes the row. In n8n that is three nodes: a Webhook trigger, a Code node that resolves the domain against a lookup, and a Google Sheets append.</p>
+
+        <p>Here is the workflow JSON, trimmed to the three nodes and their connections. I built this file and validated it with <code>python -m json.tool</code>, which passed. I did not run n8n on this machine, so treat the node parameters as the ones the n8n docs describe rather than a screenshot of my own canvas.</p>
+
+<pre><code>{
+  "name": "lead-desk-webhook",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "lead"
+    },
+    {
+      "parameters": {
+        "jsCode": "const dir = { 'n8n.io': { name: 'n8n', ... } };\nconst d = String($json.body.domain || '').toLowerCase();\nreturn [{ json: dir[d] ? { domain: d, found: true, ...dir[d] } : { domain: d, found: false } }];"
+      },
+      "name": "Lookup Company",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": "={{ $env.LEAD_SHEET_ID }}",
+        "sheetName": "leads",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "email": "={{ $('Webhook').item.json.body.email }}",
+            "domain": "={{ $json.domain }}",
+            "stage": "={{ $('Webhook').item.json.body.stage }}"
+          }
+        }
+      },
+      "name": "Log Lead",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [440, 0]
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "Lookup Company", "type": "main", "index": 0 }]] },
+    "Lookup Company": { "main": [[{ "node": "Log Lead", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}</code></pre>
+        <p class="code-caption">Paste into n8n with Ctrl+V on the canvas. The Code node body is abbreviated here for width.</p>
+
+        <p>What that gives me is genuinely good, and I want to be fair to it before I start comparing. The <a href="https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/" target="_blank" rel="noopener">n8n Webhook node docs</a> (read 20 September 2026) list DELETE, GET, HEAD, PATCH, POST and PUT as supported methods, dynamic path segments in the <code>/:variable</code> form, four response modes including returning the last node's data or handing control to a Respond to Webhook node, and built in Basic auth, Header auth and JWT auth plus an IP allowlist. The docs also draw the line I forget every single time: the test URL shows incoming data in the editor, and the production URL only registers once the workflow is published.</p>
+
+        <p>That is a lot of infrastructure I get for free. Retries, credential storage, execution history, a visual log of every run. If you have not built this piece yet, my <a href="/blog/n8n-webhook-tutorial.html">n8n webhook tutorial</a> walks the trigger setup end to end, and the <a href="/blog/n8n-http-request-node-tutorial.html">HTTP Request node guide</a> covers the outbound half.</p>
+
+        <p>The one thing the webhook does not do is describe itself. Nothing about that URL tells a caller what it accepts. If I want a model to use it, I have to write the description by hand into a prompt, keep that description in sync with the workflow, and hope the model produces a body my Code node can read. That is the gap MCP fills.</p>
+
+        <h2>The same two operations as an MCP server</h2>
+
+        <p>I started a clean virtualenv and installed the official Python SDK. One package gives me both halves, server and client, so I did not need a second dependency to test it.</p>
+
+<pre><code>python3 -m venv .venv
+./.venv/bin/pip install mcp
+./.venv/bin/pip show mcp | head -3
+
+Name: mcp
+Version: 2.2.0
+Summary: Model Context Protocol SDK</code></pre>
+
+        <p>Then the server. Two functions, two decorators, one <code>run()</code>. This is the whole file.</p>
+
+<pre><code>"""Minimal MCP server: the two things my n8n lead webhook already does."""
+import json, pathlib
+from typing import Literal
+from mcp.server.mcpserver import MCPServer
+
+LEADS = pathlib.Path(__file__).with_name("leads.jsonl")
+
+DIRECTORY = {
+    "voxdonna.com": {"name": "Voxdonna AI", "industry": "Voice AI",
+                     "size": "1-10", "country": "IN"},
+    "n8n.io": {"name": "n8n", "industry": "Workflow automation",
+               "size": "51-200", "country": "DE"},
+    "anthropic.com": {"name": "Anthropic", "industry": "AI research",
+                      "size": "501-1000", "country": "US"},
+}
+
+mcp = MCPServer("lead-desk")
+
+
+@mcp.tool()
+def lookup_company(domain: str) -&gt; dict:
+    """Look up a company by its web domain. Returns name, industry, size band and country."""
+    key = domain.strip().lower().removeprefix("www.")
+    if key not in DIRECTORY:
+        return {"domain": key, "found": False}
+    return {"domain": key, "found": True, **DIRECTORY[key]}
+
+
+@mcp.tool()
+def log_lead(email: str, domain: str, stage: Literal["new", "qualified", "dropped"]) -&gt; dict:
+    """Append a lead to the local ledger. Stage must be new, qualified or dropped."""
+    row = {"email": email, "domain": domain.strip().lower(), "stage": stage}
+    with LEADS.open("a") as f:
+        f.write(json.dumps(row) + "\n")
+    return {"written": True, "row": row, "total": sum(1 for _ in LEADS.open())}
+
+
+if __name__ == "__main__":
+    mcp.run()</code></pre>
+
+        <p>Two details in there are doing more work than they look like they are. The docstrings are not comments, they become the tool descriptions a model reads. And the type annotations are not decoration, they become the JSON Schema the client enforces. <code>stage: Literal["new", "qualified", "dropped"]</code> is the entire validation layer for that argument. I wrote no validation code.</p>
+
+        <h2>The version trap I walked straight into</h2>
+
+        <p>My first attempt at that import was <code>from mcp.server.fastmcp import FastMCP</code>, because that is what every tutorial I had read said. It failed, and the SDK's own error message told me why:</p>
+
+<pre><code>ModuleNotFoundError: No module named 'mcp.server.fastmcp'. This is mcp 2.x,
+where FastMCP was renamed to MCPServer (from mcp.server.mcpserver import
+MCPServer) and other APIs changed; see the migration guide at
+https://py.sdk.modelcontextprotocol.io/v2/migration/#fastmcp-renamed-to-mcpserver
+or pin 'mcp&lt;2' to keep running v1 code.</code></pre>
+
+        <p>That is the most helpful import error I have hit this year, and it saved me the search. The <a href="https://py.sdk.modelcontextprotocol.io/v2/migration/" target="_blank" rel="noopener">v1 to v2 migration guide</a> (read 20 September 2026) confirms the rename and adds a second change that bit me on the client side a minute later: every Pydantic model field in the protocol types moved from camelCase to snake_case for Python attribute access. So <code>inputSchema</code> is now <code>input_schema</code>, <code>isError</code> is <code>is_error</code>, <code>structuredContent</code> is <code>structured_content</code>, <code>mimeType</code> is <code>mime_type</code>, and <code>McpError</code> is <code>MCPError</code>.</p>
+
+        <p>The wire format did not change. The JSON on the socket still says <code>inputSchema</code>. Only the Python attribute names moved. If you are following a tutorial written before this and it will not run, that is almost certainly why, and pinning <code>mcp&lt;2</code> is a legitimate answer if you are mid project.</p>
+
+        <h2>What the agent sees before it calls anything</h2>
+
+        <p>This is the part that has no webhook equivalent. Before any work happens, the client asks the server what it can do. In the spec that request is <code>tools/list</code>, and the reply is the full definition of every tool: name, description, and a JSON Schema for the inputs.</p>
+
+        <p>I wrote a small client that launches the server as a subprocess over stdio and prints exactly that. Here is the real reply, unedited:</p>
+
+<pre><code>--- list_tools ---
+[
+  {
+    "name": "lookup_company",
+    "description": "Look up a company by its web domain. Returns name, industry, size band and country.",
+    "inputSchema": {
+      "properties": {
+        "domain": { "title": "Domain", "type": "string" }
+      },
+      "required": ["domain"],
+      "type": "object",
+      "title": "lookup_companyArguments"
+    }
+  },
+  {
+    "name": "log_lead",
+    "description": "Append a lead to the local ledger. Stage must be new, qualified or dropped.",
+    "inputSchema": {
+      "properties": {
+        "email": { "title": "Email", "type": "string" },
+        "domain": { "title": "Domain", "type": "string" },
+        "stage": {
+          "enum": ["new", "qualified", "dropped"],
+          "title": "Stage",
+          "type": "string"
+        }
+      },
+      "required": ["email", "domain", "stage"],
+      "type": "object",
+      "title": "log_leadArguments"
+    }
+  }
+]</code></pre>
+
+        <p>I did not write a word of that JSON. It came from two docstrings and six type annotations. The <code>enum</code> on <code>stage</code> came from the <code>Literal</code>. And because the model gets this list at connection time, adding a third tool to the server makes that tool available to the agent without touching the agent.</p>
+
+        <p>The <a href="https://modelcontextprotocol.io/docs/concepts/tools" target="_blank" rel="noopener">MCP tools specification</a> (read 20 September 2026) is explicit that this is the design intent: tools are model controlled, meaning the model can discover and invoke them based on its understanding of the conversation. It also specifies a <code>listChanged</code> capability so a server can notify a connected client that its tool set has changed, which is the version of hot reload I would previously have faked with a config file.</p>
+
+        <p>One line in the same spec page is worth pinning above your desk, because it is a product decision and not a technical one: for trust and safety, there should always be a human in the loop with the ability to deny tool invocations. Discovery makes tools easy to add. It does not make them safe to add.</p>
+
+        <h2>Calling the tools</h2>
+
+        <p>A call is <code>tools/call</code> with a name and an arguments object. My client does it like this, with a <code>perf_counter</code> either side:</p>
+
+<pre><code>async with stdio_client(PARAMS) as (r, w):
+    async with ClientSession(r, w) as s:
+        await s.initialize()
+        tools = await s.list_tools()
+
+        t0 = time.perf_counter()
+        res = await s.call_tool("lookup_company", {"domain": "n8n.io"})
+        t1 = time.perf_counter()
+        print(f"round-trip: {(t1 - t0) * 1000:.2f} ms")</code></pre>
+
+        <p>And the output:</p>
+
+<pre><code>--- lookup_company('n8n.io') ---
+{
+  "is_error": false,
+  "text": [
+    "{\n  \"domain\": \"n8n.io\",\n  \"found\": true,\n  \"name\": \"n8n\",\n  \"industry\": \"Workflow automation\",\n  \"size\": \"51-200\",\n  \"country\": \"DE\"\n}"
+  ]
+}
+round-trip: 1.93 ms
+
+--- log_lead(... stage='qualified') ---
+{
+  "is_error": false
+}</code></pre>
+
+        <p>And the side effect landed where it should have:</p>
+
+<pre><code>$ cat leads.jsonl
+{"email": "ops@n8n.io", "domain": "n8n.io", "stage": "qualified"}</code></pre>
+
+        <p>One thing surprised me: <code>structured_content</code> came back as <code>None</code> on both calls even though my functions return dicts. The dict is serialised into a text content block instead. The spec allows structured results but ties them to an <code>outputSchema</code> on the tool definition, and I never declared one. If I wanted a client to validate my return shape as strictly as it validates my inputs, I would have to declare that schema. I did not, so I got text. That is a fair trade for a first version and a thing I would fix in a second one.</p>
+
+        <h2>What a wrong argument looks like</h2>
+
+        <p>This is where the difference stopped being theoretical for me. I deliberately called <code>log_lead</code> with a stage value that is not in the enum, and <code>lookup_company</code> with an integer where a string belongs.</p>
+
+<pre><code>--- log_lead(... stage='warm')  # wrong value on purpose ---
+{
+  "is_error": true,
+  "text": [
+    "Error executing tool log_lead: 1 validation error for log_leadArguments\nstage\n  Input should be 'new', 'qualified' or 'dropped' [type=literal_error, input_value='warm', input_type=str]"
+  ]
+}
+
+--- lookup_company(domain=42)  # wrong type on purpose ---
+{
+  "is_error": true,
+  "text": [
+    "Error executing tool lookup_company: 1 validation error for lookup_companyArguments\ndomain\n  Input should be a valid string [type=string_type, input_value=42, input_type=int]"
+  ]
+}</code></pre>
+
+        <p>My function body never ran in either case. The server also logged the rejections to stderr, so I could see them without instrumenting anything:</p>
+
+<pre><code>Tool 'log_lead' rejected arguments: ['stage']
+Tool 'lookup_company' rejected arguments: ['domain']</code></pre>
+
+        <p>Compare that to the webhook. If a caller posts <code>{"stage": "warm"}</code> to my n8n endpoint, the Code node runs, the Sheets node appends, and I now have a row with a stage value nothing downstream knows how to filter. The workflow succeeded. The data is wrong. That class of failure is the one I lose the most time to, and it is the one I have to write defensive nodes for by hand. Here I got it from a type annotation.</p>
+
+        <p>The spec draws a distinction I had not appreciated before reading it properly. Protocol errors, like calling a tool that does not exist, come back as JSON-RPC errors. Tool execution errors, which includes input validation, come back inside a normal result with <code>isError: true</code>. The reason is that the second kind is meant to be handed to the model so it can correct itself and retry. That is not error handling for my benefit. It is error handling for the agent's benefit, which is a different design goal from anything in my n8n <a href="/blog/n8n-error-handling-best-practices.html">error handling setup</a>.</p>
+
+        <h2>Timing both paths</h2>
+
+        <p>I wanted a number, so I built the webhook side as a local Python <code>http.server</code> with the same lookup logic behind a POST endpoint, and hit it twenty times with <code>urllib</code>. Same machine, same process for the handler, same trivial dictionary read. Then twenty warm calls to the MCP tool over stdio.</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Path</th>
+                    <th>First call</th>
+                    <th>20 warm calls</th>
+                    <th>Per call</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>MCP tool over stdio</td>
+                    <td>1.93 ms</td>
+                    <td>12.67 ms</td>
+                    <td>0.63 ms</td>
+                </tr>
+                <tr>
+                    <td>HTTP POST to loopback</td>
+                    <td>not timed separately</td>
+                    <td>4.34 ms</td>
+                    <td>0.22 ms</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>I want to be careful about what that table is and is not. It is a local measurement on one laptop, with handlers that do a dictionary lookup and nothing else, measured with <code>time.perf_counter()</code> around the call. It is not a benchmark of MCP against webhooks in production. What it measures is protocol overhead with everything else removed, and on that narrow question the HTTP path was about three times cheaper per call, at a difference of four tenths of a millisecond.</p>
+
+        <p>Four tenths of a millisecond is nothing next to a real network hop, a database read, or the several hundred milliseconds a model spends deciding to call the tool at all. I went in half expecting MCP to be the slow one and planning to say so. It is the slower one here, and it does not matter. If you are picking between these two on latency grounds, you are optimising the wrong stage. I made the same argument about voice pipelines in the <a href="/blog/voice-agent-latency-benchmark.html">voice agent latency benchmark</a>: measure the stage that actually holds the time before you tune anything.</p>
+
+        <h2>Side by side</h2>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>n8n webhook</th>
+                    <th>MCP server</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Who decides a call happens</td>
+                    <td>The external system that posts to the URL</td>
+                    <td>The model, from the tool list and the conversation</td>
+                </tr>
+                <tr>
+                    <td>How the caller learns the interface</td>
+                    <td>Out of band: docs, a prompt, tribal knowledge</td>
+                    <td><code>tools/list</code> returns names, descriptions and schemas</td>
+                </tr>
+                <tr>
+                    <td>Input validation</td>
+                    <td>Whatever nodes you add by hand</td>
+                    <td>JSON Schema from type annotations, before your code runs</td>
+                </tr>
+                <tr>
+                    <td>Error shape</td>
+                    <td>HTTP status plus whatever body you build</td>
+                    <td><code>isError: true</code> with text a model can act on</td>
+                </tr>
+                <tr>
+                    <td>Adding a second operation</td>
+                    <td>A second endpoint, a second path, a second integration</td>
+                    <td>A second decorated function on the same connection</td>
+                </tr>
+                <tr>
+                    <td>Auth</td>
+                    <td>Basic, Header or JWT auth in the node, plus IP allowlist</td>
+                    <td>Transport level. Nothing by default over stdio</td>
+                </tr>
+                <tr>
+                    <td>Retries and run history</td>
+                    <td>Built into the n8n execution log</td>
+                    <td>Yours to build</td>
+                </tr>
+                <tr>
+                    <td>Per call overhead (local, this test)</td>
+                    <td>0.22 ms</td>
+                    <td>0.63 ms</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>The two rows I would read first are the last two. MCP gives you a better interface and hands back the operational furniture. n8n gives you the furniture and leaves the interface undescribed.</p>
+
+        <h2>When a webhook is enough</h2>
+
+        <p>Most of the time, in my own work. The test I apply is one question: <strong>does anything need to choose?</strong> If the answer is no, a webhook is the lighter tool and MCP is a second process and a second protocol for no return.</p>
+
+        <ul>
+            <li><strong>An external event fires.</strong> A Stripe payment, a Shopify order, a Typeform submission, a Calendly booking. The event already knows what it is. There is no menu to read.</li>
+            <li><strong>One caller, one operation.</strong> If there is exactly one thing the endpoint does and exactly one system that calls it, discovery has nothing to discover.</li>
+            <li><strong>The schedule decides.</strong> Cron style triggers have no conversation and no choice. Nothing about MCP helps a nightly sync.</li>
+            <li><strong>You need the execution log more than the interface.</strong> n8n's run history has saved me more debugging hours than any typed schema would have. Do not trade it away casually.</li>
+            <li><strong>The consumer is code you control.</strong> If you wrote both ends, you already know the contract. Writing it down twice is not free.</li>
+        </ul>
+
+        <p>None of my scheduled n8n workflows changed after this exercise, and I do not plan to change them. A <a href="/blog/n8n-openai-claude-integration.html">model called from inside a workflow</a> is still a workflow: my code decides when the model runs, and a webhook is the correct front door for it.</p>
+
+        <h2>When MCP earns its keep</h2>
+
+        <p>The pattern is the mirror image. If something has to pick, MCP is worth the extra process.</p>
+
+        <ul>
+            <li><strong>The model picks the operation.</strong> The moment you have more than two or three tools and the right one depends on what the user said, hand-written prompt descriptions start drifting from the code. Discovery stops that by construction.</li>
+            <li><strong>The tool set changes while the agent lives.</strong> Adding a function to the server is the whole deployment. The <code>listChanged</code> notification is in the spec for exactly this.</li>
+            <li><strong>Wrong arguments are expensive.</strong> Anything that writes, charges, emails or schedules. I would rather a bad enum bounce at the schema than land in a ledger.</li>
+            <li><strong>More than one client uses the same capability.</strong> One server, several agents, one definition of what the operation accepts. I have maintained the alternative, which is three prompts describing the same endpoint slightly differently, and I would not go back.</li>
+            <li><strong>You want the model to recover from its own mistakes.</strong> The <code>isError</code> convention exists so the model can read the validation message and retry. That loop only works if the error text is written for a reader, which is a reason to write real tool descriptions.</li>
+        </ul>
+
+        <p>For work where an agent is qualifying or routing in real time, this is the difference between a demo and something you can leave running. I made a related point about qualification flows in <a href="/blog/ai-agents-qualify-leads-faster.html">how AI agents qualify leads faster</a>, and about the organisational side in <a href="/blog/agentic-ai-enterprise-2027.html">agentic AI in the enterprise</a>. If the deciding you want is happening on a phone call rather than in a chat window, the product side of that lives on <a href="https://voxdonna.com/ai-voice-agents.html" target="_blank" rel="noopener">Voxdonna's voice agents page</a>.</p>
+
+        <h2>What I would do differently</h2>
+
+        <p>Four things, in the order I would fix them.</p>
+
+        <p><strong>Declare an output schema.</strong> My structured content came back empty because I typed the return as <code>dict</code> and stopped there. The inputs got schema enforcement for free and the outputs got nothing. Next time I define a return model so the client can validate both directions.</p>
+
+        <p><strong>Wrap the existing webhook instead of reimplementing it.</strong> I rewrote the lookup in Python because it was three lines. For anything with real workflow logic, credentials or retry behaviour, the tool body should be one HTTP POST to the n8n production URL. You keep the execution history and the credential store and still get a typed, discoverable front door. That is the migration I would actually ship, and it is far less work than it sounds.</p>
+
+        <p><strong>Write the docstrings for the model, not for me.</strong> "Look up a company by its web domain" is fine. "Use this before log_lead when you only have an email address" would be better, because it tells the model when to call the tool and not just what it does. The description field is prompt engineering wearing a docstring costume, and I under-invested in it.</p>
+
+        <p><strong>Decide the auth story before the second tool.</strong> Over stdio the server inherits the trust of the process that launched it, which is fine for a local experiment and not fine for anything shared. The n8n side had Basic, Header and JWT auth sitting in a dropdown. On the MCP side that is a transport decision I have to make on purpose. I would rather make it before the server has a tool that writes to something real.</p>
+
+        <h2>The rule I use now</h2>
+
+        <div class="definition-block">
+            <p><strong>If the caller already knows which operation it wants, use a webhook. If the caller has to choose, use an MCP server. If the caller is a model and the operation writes to something you care about, use an MCP server and declare the schemas on both sides.</strong></p>
+        </div>
+
+        <p>That is it. It is not about speed, because the speed difference here was four tenths of a millisecond and it went the wrong way for the newer protocol. It is about whether discovery and typing are doing work for you, or whether you are paying for a menu that nobody reads.</p>
+
+        <p>The version of this I ship next keeps every n8n workflow exactly where it is and puts a thin MCP server in front of three of them. If you want to sanity check whether that is worth your time before you build it, the <a href="/roi-calculator.html">ROI calculator</a> will give you the hours side, and the <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> covers whether the rest of your stack is ready for an agent that can act. The wider picture of how these pieces fit together is on the <a href="/ai-agents.html">AI agents hub</a>.</p>
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>Does an MCP server replace my n8n webhooks?</h3>
+                <p>No. They answer different questions. A webhook is the right shape when something outside your system decides that work should happen and hands you a payload. An MCP server is the right shape when a model decides that work should happen and needs to pick the right operation from a list. In my own setup both exist side by side: the webhook keeps catching form posts, and the MCP server wraps the same two functions so an agent can call them by name.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is an MCP server slower than a webhook?</h3>
+                <p>On my laptop it was, slightly. Twenty warm calls over stdio to a local MCP server averaged 0.63 ms each. Twenty warm HTTP POSTs to a local Python <code>http.server</code> averaged 0.22 ms each. Both numbers are loopback measurements on one machine with trivial handlers, so they measure protocol overhead and nothing else. Against a real network hop or a real database read, that difference disappears into the noise.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What does MCP give me that a webhook does not?</h3>
+                <p>Three things I could point at in the output. Discovery: the client asks <code>tools/list</code> and gets back every tool with a name, a description and a JSON Schema, without me writing that description anywhere in a prompt. Typed arguments: the schema is enforced before my function body runs, so a bad value comes back as a validation error rather than a silent wrong answer. Selection: the model chooses which tool to call and when, instead of my code choosing for it.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>When is MCP overkill?</h3>
+                <p>Whenever no model is in the loop. A Stripe event firing into a workflow, a cron job, a form submission, a Shopify order: none of those involve anything choosing between options, so the discovery and schema machinery buys you nothing and you pay for a second process and a second protocol. If the caller already knows exactly which operation it wants, a webhook or a plain HTTP endpoint is the lighter tool.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can an MCP server call my existing n8n workflow?</h3>
+                <p>Yes, and that is the cheapest migration path. The tool function body can be a single HTTP POST to the n8n production webhook URL you already run. You keep the workflow, the credentials and the execution history in n8n, and the MCP server becomes a typed, discoverable front door for a model. I would start there before rewriting any workflow logic in Python.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Which Python package should I use to build an MCP server?</h3>
+                <p>I used the official SDK, installed with <code>pip install mcp</code>, which resolved to version 2.2.0 on Python 3.14.6. Version 2 renamed the <code>FastMCP</code> class to <code>MCPServer</code> and switched protocol model fields from camelCase to snake_case, so most tutorials written against version 1 will not run as printed. If you need the old API, the SDK error message itself suggests pinning <code>mcp&lt;2</code>.</p>
+            </div>
+        </div>
+
+        <!-- CTA in article -->
+        <h2>Want a second pair of eyes on your build?</h2>
+        <p>Book a free 30-minute discovery call. Bring the workflow you are unsure about and we will work out whether it wants a webhook, a tool, or neither.</p>
+        <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/n8n-webhook-tutorial.html" class="related-card">
+                <h3 class="related-card-title">n8n Webhook Tutorial</h3>
+                <p class="related-card-excerpt">Setting up the trigger this post rebuilt, from test URL to production URL, with auth and response modes.</p>
+            </a>
+            <a href="/blog/n8n-openai-claude-integration.html" class="related-card">
+                <h3 class="related-card-title">n8n with OpenAI and Claude</h3>
+                <p class="related-card-excerpt">Calling a model from inside a workflow, where your code decides when the model runs.</p>
+            </a>
+            <a href="/blog/agentic-ai-enterprise-2027.html" class="related-card">
+                <h3 class="related-card-title">Agentic AI in the Enterprise</h3>
+                <p class="related-card-excerpt">What changes organisationally once agents pick their own actions rather than following a fixed path.</p>
+            </a>
+            <a href="/blog/voice-agent-latency-benchmark.html" class="related-card">
+                <h3 class="related-card-title">Voice Agent Latency Benchmark</h3>
+                <p class="related-card-excerpt">Every published latency figure, what each one measures, and why measuring the wrong stage wastes tuning effort.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify.html" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a></p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
