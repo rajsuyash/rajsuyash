@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>n8n Expressions and JavaScript in Workflows</title>
+    <meta name="description" content="How n8n expressions work, which variables to reach for first, and when the Code node does the job better. Copy-paste examples for everyday transforms.">
+    <meta name="keywords" content="n8n expressions, n8n javascript, n8n expression syntax, n8n code node, n8n variables, n8n workflow automation">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/n8n-expressions-javascript-workflows.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/n8n-expressions-javascript-workflows.html">
+    <meta property="og:title" content="n8n Expressions and JavaScript in Workflows">
+    <meta property="og:description" content="How n8n expressions work, which variables to reach for first, and when the Code node does the job better. Copy-paste examples for everyday transforms.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj">
+    <meta property="article:published_time" content="2026-09-21T00:00:00Z">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="n8n Expressions and JavaScript in Workflows">
+    <meta name="twitter:description" content="How n8n expressions work, which variables to reach for first, and when the Code node does the job better. Copy-paste examples for everyday transforms.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260216b">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "n8n Expressions and JavaScript in Workflows",
+        "description": "How n8n expressions work, which variables to reach for first, and when the Code node does the job better. Copy-paste examples for everyday transforms.",
+        "author": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com/about.html"
+        },
+        "publisher": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj"
+        },
+        "datePublished": "2026-09-21T00:00:00Z",
+        "dateModified": "2026-09-21T00:00:00Z",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/n8n-expressions-javascript-workflows.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What is the expression syntax in n8n?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "n8n expressions use double curly braces: {{ your_expression_here }}. Inside those braces you can write JavaScript and reference built-in variables like $json (current item's data), $now (current datetime via Luxon), and $input (the full input collection). You can use expressions in most text fields inside any node by clicking the = icon next to the field."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is the difference between $json and $input in n8n?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "$json refers to the JSON data of the current item being processed. $input gives you access to all items coming into the node, with methods like $input.all() (array of all items), $input.first() (the first item), and $input.last() (the last). Use $json when you're processing one item at a time; use $input when you need to reference or aggregate across multiple items."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "When should I use a Code node instead of expressions?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Use expressions when you need to transform a single field inline: formatting a date, concatenating strings, pulling a nested value. Reach for the Code node when you need to: loop over all items and reshape the output, call multiple functions in sequence, handle try/catch error logic, or produce a different number of output items than you received as input."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I format a date in an n8n expression?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "n8n uses Luxon for dates inside expressions. $now gives you the current DateTime object. To format it, use $now.toFormat('yyyy-MM-dd') for ISO date or $now.toFormat('dd MMM yyyy') for a human-readable date. To parse a date from your incoming data, use $json.created_at.toDateTime() then call .toFormat() on the result."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I reference data from a previous node in an n8n expression?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. Use $('NodeName').item.json.fieldName to reference a specific field from a named node upstream in the same workflow execution. If you want the first item from a node named 'HTTP Request', write $('HTTP Request').first().json.status. This is how you merge data from parallel branches without a Merge node."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "n8n Expressions and JavaScript in Workflows", "item": "https://rajsuyash.com/blog/n8n-expressions-javascript-workflows.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: #1a1a1a;
+            color: #e8e8e8;
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.875rem;
+            line-height: 1.7;
+            border-radius: 2px;
+        }
+
+        .code-block code {
+            color: inherit;
+            font-family: inherit;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/about.html" class="nav-link">About</a>
+                <a href="/qualify.html" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">N8N Automation</span>
+                <span class="article-date">September 21, 2026</span>
+                <span class="article-read-time">14 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">n8n Expressions and JavaScript in Workflows</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">How expressions work, which built-in variables to reach for first, and when the Code node is the better tool. Practical syntax you can copy into any node field today.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <p>I was building a lead-notification workflow for a client. The setup was straightforward: Typeform submission triggers n8n, n8n sends a Slack message to the sales channel. The problem was the message body. The client wanted the lead's name, the form they filled out, the submission timestamp in Paris time, and a calculated score based on three answers. Four fields, each needing a different transform.</p>
+
+        <p>I could have added four separate Set nodes to reshape each field. Instead, I wrote four expressions directly inside the Slack node's Message field. The workflow stayed at two nodes, and I had exactly what I needed in under ten minutes.</p>
+
+        <p>That's what expressions are for. They let you transform data inline, right where you need it, without adding nodes just to reshape fields. This post covers the syntax from scratch, the variables I use most often, date and time formatting with Luxon, and when to stop using expressions and reach for the Code node instead.</p>
+
+        <h2>What an expression is</h2>
+
+        <p>An expression in n8n is a JavaScript snippet wrapped in double curly braces: <code>{{ your_code_here }}</code>. You write it directly inside any text field in any node by clicking the equals (<strong>=</strong>) icon to the right of the field label. That switches the field from static text to expression mode.</p>
+
+        <p>Everything inside the braces runs as JavaScript. The result of the expression replaces the braces when the workflow executes. If you write <code>{{ 2 + 2 }}</code>, the field gets the value <code>4</code>. If you write <code>{{ $json.email.toLowerCase() }}</code>, the field gets the incoming email address converted to lowercase.</p>
+
+        <div class="definition-block">
+            <p>Expression fields evaluate once per item. If your workflow is processing 50 rows from a spreadsheet, each expression evaluates 50 times, once with each row's data as the current context. This matters when you're using <code>$json</code>: it always refers to the current item, not the entire batch.</p>
+        </div>
+
+        <p>Expressions support full JavaScript: ternary operators, string methods, array methods, arithmetic, template literals, and conditional logic. The constraint is that you can't declare functions, use <code>await</code>, or write multi-statement blocks. For that you need the Code node, which I cover later.</p>
+
+        <h2>The core variables</h2>
+
+        <p>n8n gives you a set of variables you can reference inside any expression. These are available in every node without any setup. Here are the ones I use in almost every workflow.</p>
+
+        <h3>$json</h3>
+
+        <p><code>$json</code> is the data object of the current item. If your workflow just received this from a webhook:</p>
+
+        <div class="code-block"><code>{
+  "name": "Priya Sharma",
+  "email": "priya@example.com",
+  "score": 87,
+  "tags": ["enterprise", "india"]
+}</code></div>
+
+        <p>Then <code>{{ $json.name }}</code> returns <code>Priya Sharma</code>, <code>{{ $json.score }}</code> returns <code>87</code>, and <code>{{ $json.tags[0] }}</code> returns <code>enterprise</code>.</p>
+
+        <p>For nested objects, just keep dotting in: <code>{{ $json.address.city }}</code>. For arrays, use bracket notation: <code>{{ $json.tags[1] }}</code>. If a field might not exist, I use optional chaining: <code>{{ $json.address?.city ?? "Unknown" }}</code>. The <code>??</code> operator returns the right side if the left is <code>null</code> or <code>undefined</code>.</p>
+
+        <h3>$input</h3>
+
+        <p><code>$input</code> gives you access to all items coming into the current node, not just the one being processed right now. The methods I use:</p>
+
+        <ul>
+            <li><code>$input.all()</code> returns an array of all input items. Each item has a <code>.json</code> property.</li>
+            <li><code>$input.first()</code> returns the first item.</li>
+            <li><code>$input.last()</code> returns the last item.</li>
+            <li><code>$input.item</code> returns the current item (same as using <code>$json</code> in context).</li>
+        </ul>
+
+        <p>I reach for <code>$input</code> when I need to count items or pull a value from a different item in the same batch. For example, to show how many leads came in with one notification, I'd write <code>{{ $input.all().length }} new leads this hour</code> in the message field.</p>
+
+        <h3>Referencing a named node: $('NodeName')</h3>
+
+        <p>This one is less documented but more powerful. You can reference data from any upstream node by name using <code>$('NodeName')</code>. The methods are the same as <code>$input</code>: <code>.all()</code>, <code>.first()</code>, <code>.last()</code>.</p>
+
+        <p>Say your workflow has a node named "Get Contact" that fetched a contact record, and later you're in a "Send Email" node wanting to use that contact's name. You don't need to pass it through every intermediate node. Just write <code>{{ $('Get Contact').first().json.name }}</code>.</p>
+
+        <p>This is how I handle split branches that rejoin. One branch fetches CRM data, another fetches calendar availability. In the final Slack node I reference both by name, and n8n picks the right item from each.</p>
+
+        <h3>$now and $today</h3>
+
+        <p><code>$now</code> is the current date and time as a Luxon <code>DateTime</code> object. <code>$today</code> is today's date at midnight. Both are ready to call Luxon methods on directly.</p>
+
+        <div class="code-block"><code>{{ $now.toISO() }}                      // "2026-09-21T14:30:00.000+05:30"
+{{ $now.toFormat('yyyy-MM-dd') }}       // "2026-09-21"
+{{ $now.toFormat('dd MMM yyyy') }}      // "21 Sep 2026"
+{{ $now.setZone('Europe/Paris').toFormat('HH:mm') }}   // current time in Paris</code></div>
+
+        <p>I build these timestamps into every notification. "Lead received at {{ $now.setZone('Asia/Kolkata').toFormat('HH:mm, dd MMM') }}" is more useful than an ISO string, and it's one expression.</p>
+
+        <h3>$runIndex</h3>
+
+        <p><code>$runIndex</code> is a zero-based counter that tells you which item you're on in the current execution. First item is 0, second is 1, and so on. I use it when generating sequential IDs or adding a row number to a spreadsheet export: <code>{{ $runIndex + 1 }}</code>.</p>
+
+        <h3>$vars</h3>
+
+        <p><code>$vars</code> gives you access to workflow variables you set in the workflow's Variables panel (the toolbar at the top). These are static values shared across all executions of that workflow. I keep API base URLs, environment labels, and default values there so I can change them once without hunting through every node.</p>
+
+        <div class="code-block"><code>{{ $vars.API_BASE_URL }}/contacts
+{{ $vars.ENV === "production" ? "live" : "test" }}</code></div>
+
+        <h2>Date and time formatting with Luxon</h2>
+
+        <p>n8n uses <a href="https://moment.github.io/luxon/" rel="noopener noreferrer" target="_blank">Luxon</a> for date handling inside expressions. It's available everywhere without any import. The key thing to understand is that <code>$now</code> is already a Luxon <code>DateTime</code> instance, so you call methods on it directly. For incoming date strings, you need to parse them first.</p>
+
+        <h3>Parsing an incoming date string</h3>
+
+        <p>If <code>$json.created_at</code> is the string <code>"2026-09-21T09:00:00Z"</code>, you can parse it and reformat it like this:</p>
+
+        <div class="code-block"><code>{{ DateTime.fromISO($json.created_at).toFormat('dd MMM yyyy, HH:mm') }}</code></div>
+
+        <p>The <code>DateTime</code> global is Luxon's main class, available directly in n8n expressions. <code>fromISO</code> parses ISO 8601 strings. <code>fromMillis</code> parses Unix timestamps in milliseconds. <code>fromFormat</code> parses custom formats using <a href="https://moment.github.io/luxon/#/parsing?id=table-of-tokens" rel="noopener noreferrer" target="_blank">Luxon's token table</a>.</p>
+
+        <h3>Date arithmetic</h3>
+
+        <p>Luxon's <code>.plus()</code> and <code>.minus()</code> take duration objects. I use this for follow-up scheduling, expiry dates, and reporting windows:</p>
+
+        <div class="code-block"><code>// 7 days from now, ISO format
+{{ $now.plus({ days: 7 }).toISO() }}
+
+// Start of this month
+{{ $now.startOf('month').toFormat('yyyy-MM-dd') }}
+
+// How many days since a date field
+{{ $now.diff(DateTime.fromISO($json.start_date), 'days').days }}</code></div>
+
+        <h3>Timezone handling</h3>
+
+        <p>Every <code>DateTime</code> object has a timezone. <code>$now</code> is in UTC. To display in another zone, use <code>.setZone()</code>:</p>
+
+        <div class="code-block"><code>{{ $now.setZone('Asia/Kolkata').toFormat('HH:mm, dd MMM') }}
+{{ $now.setZone('Europe/Paris').toFormat('HH:mm z') }}</code></div>
+
+        <p>This is the one I reach for when I'm building notifications for a client in France but the server runs on UTC. I display timestamps in their local time without storing a separate field.</p>
+
+        <h2>String operations in expressions</h2>
+
+        <p>JavaScript string methods work directly in expressions. Here are the patterns I use most:</p>
+
+        <div class="code-block"><code>// Concatenation
+{{ $json.firstName + " " + $json.lastName }}
+
+// Template literal (cleaner for multiple fields)
+{{ `${$json.firstName} ${$json.lastName} | ${$json.company}` }}
+
+// Case transforms
+{{ $json.email.toLowerCase() }}
+{{ $json.name.toUpperCase() }}
+{{ $json.slug.replace(/-/g, " ") }}
+
+// Truncate to 100 characters
+{{ $json.body.length > 100 ? $json.body.slice(0, 100) + "..." : $json.body }}
+
+// Split on delimiter and take the first part
+{{ $json.email.split("@")[0] }}   // username from email
+
+// Check if a string contains a substring
+{{ $json.tags.includes("enterprise") ? "Priority" : "Standard" }}</code></div>
+
+        <p>Template literals (backtick strings) are my preference over string concatenation when combining more than two values. They're easier to read and I make fewer mistakes with spacing.</p>
+
+        <h2>Conditional logic</h2>
+
+        <p>Ternary operators are the only conditional you can write in a single expression. The pattern is <code>{{ condition ? value_if_true : value_if_false }}</code>. I nest them when I need more than two branches, though past two levels I'll usually move to the Code node:</p>
+
+        <div class="code-block"><code>// Single condition
+{{ $json.score >= 80 ? "High" : "Low" }}
+
+// Two conditions, three outcomes
+{{ $json.score >= 80 ? "High" : $json.score >= 50 ? "Medium" : "Low" }}
+
+// Null/undefined fallback
+{{ $json.phone ?? "No phone provided" }}
+
+// Falsy check (catches empty string, 0, null, undefined)
+{{ $json.company || "Independent" }}</code></div>
+
+        <p>The difference between <code>??</code> and <code>||</code> matters here. <code>??</code> only falls back on <code>null</code> or <code>undefined</code>. <code>||</code> falls back on any falsy value, including <code>0</code> and empty string. If your field can legitimately be zero, use <code>??</code>.</p>
+
+        <h2>Array operations in expressions</h2>
+
+        <p>When a field holds an array, you can manipulate it inline:</p>
+
+        <div class="code-block"><code>// Join an array into a string
+{{ $json.tags.join(", ") }}
+
+// Count items
+{{ $json.items.length }}
+
+// Get the last element
+{{ $json.items[$json.items.length - 1] }}
+
+// Filter (returns array)
+{{ $json.items.filter(i => i.status === "active").length }} active items
+
+// Map and join (flattens to string in one step)
+{{ $json.contacts.map(c => c.name).join(", ") }}</code></div>
+
+        <p>The catch with array methods in expressions: the return value must be a primitive (string, number, boolean) for most field types. If you need the filtered array itself as the output, that's a Code node job.</p>
+
+        <h2>When to use the Code node instead</h2>
+
+        <p>Expressions cover 80% of what I need. The other 20% is where the Code node comes in. It gives you a full JavaScript function body: multiple statements, loops, <code>try/catch</code>, and the ability to return a different number of items than you received.</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Situation</th>
+                    <th>Expression field</th>
+                    <th>Code node</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Format a date or string inline</td>
+                    <td>Yes</td>
+                    <td>Overkill</td>
+                </tr>
+                <tr>
+                    <td>Conditional value for one field</td>
+                    <td>Yes (ternary)</td>
+                    <td>Overkill</td>
+                </tr>
+                <tr>
+                    <td>Multiple transforms on the same item</td>
+                    <td>One expression per field</td>
+                    <td>Better: transform once, set all fields</td>
+                </tr>
+                <tr>
+                    <td>Loop over all items and aggregate</td>
+                    <td>No</td>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <td>Return a different number of output items</td>
+                    <td>No</td>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <td>Multi-step logic (build a URL, validate it, then format the result)</td>
+                    <td>Possible but messy</td>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <td>Error handling with fallback</td>
+                    <td>Limited (<code>??</code> and <code>||</code>)</td>
+                    <td>Yes (<code>try/catch</code>)</td>
+                </tr>
+                <tr>
+                    <td>Parse non-standard data formats (CSV inside JSON, etc.)</td>
+                    <td>No</td>
+                    <td>Yes</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>What Code node JavaScript looks like</h3>
+
+        <p>The Code node gives you a <code>$input</code> variable (the full input), and you return an array of items. Each item must have a <code>json</code> property:</p>
+
+        <div class="code-block"><code>// Transform all items: add fullName and a score tier
+const items = $input.all();
+
+return items.map(item => {
+  const score = item.json.score ?? 0;
+  const tier = score >= 80 ? "hot" : score >= 50 ? "warm" : "cold";
+
+  return {
+    json: {
+      ...item.json,
+      fullName: `${item.json.firstName} ${item.json.lastName}`,
+      tier,
+      processedAt: new Date().toISOString()
+    }
+  };
+});</code></div>
+
+        <p>Notice the spread operator (<code>...item.json</code>): this copies all original fields so I don't lose them. I only add the new ones. If I wanted to remove a field, I'd destructure it out: <code>const { sensitiveField, ...rest } = item.json;</code> then use <code>rest</code> in the return.</p>
+
+        <h3>Splitting one item into many</h3>
+
+        <p>This is the Code node feature I use most. Say an HTTP Request returns a list of orders as a single item with a <code>orders</code> array field. I want to process each order as its own item downstream. The Code node handles this:</p>
+
+        <div class="code-block"><code>const orders = $input.first().json.orders;
+
+return orders.map(order => ({
+  json: {
+    id: order.id,
+    amount: order.amount,
+    status: order.status,
+    customer_email: order.customer.email
+  }
+}));</code></div>
+
+        <p>In goes 1 item. Out comes N items, one per order. Every subsequent node in the workflow sees N items. I described this pattern in more detail in the <a href="/blog/n8n-event-driven-automation-guide.html">event-driven automation guide</a>, but splitting arrays is where I reach for it first.</p>
+
+        <h2>Three expression patterns I use in every workflow</h2>
+
+        <h3>Pattern 1: Timestamped subject lines</h3>
+
+        <p>For any email or Slack notification from a workflow, I include the date and time in the subject so it's scannable in an inbox:</p>
+
+        <div class="code-block"><code>// Email subject
+{{ `[${$now.setZone('Asia/Kolkata').toFormat('dd MMM HH:mm')}] New lead: ${$json.name}` }}</code></div>
+
+        <h3>Pattern 2: Safe field access with fallbacks</h3>
+
+        <p>Incoming data is inconsistent. Fields that should always be present sometimes aren't. I build defensive expressions for anything going into a database or a CRM write:</p>
+
+        <div class="code-block"><code>{{ ($json.firstName ?? "").trim() + " " + ($json.lastName ?? "").trim() }}
+{{ $json.phone?.replace(/\s+/g, "").replace(/^0/, "+91") ?? "" }}
+{{ $json.company?.slice(0, 100) ?? "Unknown" }}</code></div>
+
+        <p>Optional chaining (<code>?.</code>) prevents the expression from throwing when a field is missing. The <code>?? ""</code> at the end returns an empty string instead of <code>undefined</code>, which most downstream nodes handle more gracefully.</p>
+
+        <h3>Pattern 3: Computed routing values</h3>
+
+        <p>In <a href="/blog/n8n-error-handling-best-practices.html">error-handling workflows</a>, I use expressions to set a <code>severity</code> or <code>priority</code> field that the IF node then routes on, rather than duplicating the condition logic in the IF node itself:</p>
+
+        <div class="code-block"><code>// In a Set node before the IF node
+severity: {{ $json.http_status >= 500 ? "critical" : $json.http_status >= 400 ? "warning" : "info" }}</code></div>
+
+        <p>The IF node then just checks <code>severity === "critical"</code>. If I need to change the thresholds, I change one expression, not every branch condition.</p>
+
+        <h2>Expressions inside HTTP Request node headers and body</h2>
+
+        <p>Expressions work in any field that accepts them, including HTTP Request node headers and JSON body. This is where I see builders get tripped up most: they try to use static JSON in the Body field and wonder why they can't inject values from earlier nodes.</p>
+
+        <p>The fix is to switch the Body Content Type to "JSON" and set it to "Expression" mode. Then you can write the entire JSON body as an expression:</p>
+
+        <div class="code-block"><code>{{
+  JSON.stringify({
+    contact: {
+      email: $json.email,
+      name: $json.firstName + " " + $json.lastName,
+      source: "n8n-workflow",
+      created_at: $now.toISO()
+    }
+  })
+}}</code></div>
+
+        <p>For headers, I use expressions to inject Bearer tokens stored in workflow variables: <code>{{ "Bearer " + $vars.API_TOKEN }}</code>. The token lives in one place and updates everywhere.</p>
+
+        <h2>What I got wrong at first and how I corrected it</h2>
+
+        <p>When I started, I reached for the Code node reflexively whenever something felt complex. That meant workflows with Code nodes doing three-line transforms that should have been expressions. The workflows were harder to read and debug because the logic was buried in a code editor instead of visible in the field.</p>
+
+        <p>I also underused <code>$('NodeName')</code>. I was passing every field forward through intermediate Set nodes to "make it available later" when I could have just referenced the earlier node by name. Now I only pass fields forward if they'll be modified. Otherwise I reference the source node directly.</p>
+
+        <p>The rule I settled on: if a transform fits in one line and produces one value, it's an expression. If I'm writing more than two nested ternaries, or if I need intermediate variables, it's a Code node. The cognitive overhead of reading a three-level nested ternary in a compressed field isn't worth the node savings.</p>
+
+        <h2>Testing expressions before you run the workflow</h2>
+
+        <p>n8n's expression editor has a preview pane that shows you what the expression evaluates to with the last test data from the upstream node. I always run my workflow once manually with test data, then edit expressions while the output is visible. The preview updates in real time.</p>
+
+        <p>For the Code node, I paste a sample of the input data into a temporary Set node at the start of the workflow so the Code node always has data to test against, even when I'm building in isolation. Once the Code node is stable, I remove the test Set node.</p>
+
+        <p>If you're building production workflows and want a more systematic approach to testing, I covered that in the context of the <a href="/blog/n8n-data-validation-cleaning-workflows.html">data validation workflow guide</a>, which walks through pre-flight checks you can build using expressions and the IF node before data reaches any write operation.</p>
+
+        <h2>Summary</h2>
+
+        <p>Expressions are the fastest way to transform data inline in n8n. The syntax is <code>{{ JavaScript expression }}</code>, accessible from any field with the <strong>=</strong> icon. The variables I use most: <code>$json</code> for the current item's data, <code>$input.all()</code> when I need the full batch, <code>$('NodeName')</code> to reference upstream nodes by name, and <code>$now</code> for timestamps via Luxon.</p>
+
+        <p>The Code node is for the rest: multi-step logic, loops, splitting arrays into separate items, and anything requiring <code>try/catch</code>. It runs Node.js JavaScript in a function body and returns an array of items.</p>
+
+        <p>If you want to see how these fit into a full <a href="/n8n-automation.html">n8n automation</a> build, I run discovery calls to map which transforms in your existing manual processes can be handled with expressions versus which need a Code node or a purpose-built integration node. The ROI difference between "three extra nodes" and "two expressions" in a workflow you run 500 times a month adds up.</p>
+
+        <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <p>Want to estimate the time savings before you commit? The <a href="/roi-calculator.html">automation ROI calculator</a> takes your current manual time per task and weekly volume and shows you the hours back per month.</p>
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>What is the expression syntax in n8n?</h3>
+                <p>n8n expressions use double curly braces: <code>{{ your_expression_here }}</code>. Inside the braces you write JavaScript and reference built-in variables like <code>$json</code> (current item's data), <code>$now</code> (current datetime via Luxon), and <code>$input</code> (the full input collection). Enable expression mode by clicking the equals (<strong>=</strong>) icon next to any field in any node.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What is the difference between $json and $input in n8n?</h3>
+                <p><code>$json</code> refers to the JSON data of the item currently being processed. <code>$input</code> gives access to all items coming into the node, with methods like <code>$input.all()</code> (array of all items), <code>$input.first()</code>, and <code>$input.last()</code>. Use <code>$json</code> when processing one item at a time; use <code>$input</code> when you need to reference or count across multiple items.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>When should I use a Code node instead of expressions?</h3>
+                <p>Use expressions for single-field transforms: formatting a date, concatenating strings, pulling a nested value. Use the Code node when you need to loop over all items and reshape the output, call multiple functions in sequence, handle <code>try/catch</code> error logic, or produce a different number of output items than you received as input.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I format a date in an n8n expression?</h3>
+                <p>n8n uses Luxon for dates. <code>$now</code> is already a Luxon <code>DateTime</code> object: call <code>$now.toFormat('yyyy-MM-dd')</code> for ISO date or <code>$now.toFormat('dd MMM yyyy')</code> for a human-readable date. To parse an incoming date string, use <code>DateTime.fromISO($json.created_at).toFormat('dd MMM yyyy')</code>.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I reference data from a previous node in an n8n expression?</h3>
+                <p>Yes. Use <code>$('NodeName').first().json.fieldName</code> to reference a field from any upstream node by its name. This is how you merge data from parallel branches without threading every field through intermediate nodes. The node name must match exactly, including capitalisation.</p>
+            </div>
+        </div>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/n8n-error-handling-best-practices.html" class="related-card">
+                <h3 class="related-card-title">n8n Error Handling: Error Trigger, Retries and Alerts</h3>
+                <p class="related-card-excerpt">How to catch errors at the workflow level, set up retry logic, and build Slack or email alerts when things break.</p>
+            </a>
+            <a href="/blog/n8n-event-driven-automation-guide.html" class="related-card">
+                <h3 class="related-card-title">n8n Event-Driven Automation: Webhooks and Reactive Workflows</h3>
+                <p class="related-card-excerpt">Build workflows that fire the moment something happens using webhooks, IF nodes, and Switch nodes.</p>
+            </a>
+            <a href="/blog/n8n-data-validation-cleaning-workflows.html" class="related-card">
+                <h3 class="related-card-title">n8n Data Validation and Cleaning Workflows</h3>
+                <p class="related-card-excerpt">Pre-flight checks, type coercion, and deduplication patterns you can add to any workflow before a write operation.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify.html" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a></p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
