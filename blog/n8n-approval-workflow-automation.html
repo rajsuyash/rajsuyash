@@ -502,7 +502,7 @@
         <p>Before building anything, understand the three primitives N8N uses to make approval workflows possible:</p>
 
         <h3>1. The Webhook Trigger (or Form Trigger)</h3>
-        <p>Every approval workflow starts when a request is submitted. In N8N, this is typically a Webhook node or an N8N Form Trigger node. The webhook receives structured data -- who is requesting, what they want, how much it costs, and any supporting context. The Form Trigger gives you a no-code intake form that employees can fill out directly in a browser, with responses automatically structured for the workflow.</p>
+        <p>Every approval workflow starts when a request is submitted. In N8N, this is typically a <a href="/blog/mcp-server-vs-webhook-automation-builders.html">Webhook node</a> or an N8N Form Trigger node. The webhook receives structured data -- who is requesting, what they want, how much it costs, and any supporting context. The Form Trigger gives you a no-code intake form that employees can fill out directly in a browser, with responses automatically structured for the workflow.</p>
 
         <h3>2. The Wait Node</h3>
         <p>This is the key node that makes approval workflows possible in N8N. The Wait node pauses workflow execution for a specified duration or until it receives a webhook callback. When you send an approver a notification with an approve/reject link, those links hit a second Webhook node that resumes the paused Wait node. Until that callback arrives, the workflow stays suspended without consuming resources.</p>
