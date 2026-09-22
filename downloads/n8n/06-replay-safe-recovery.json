@@ -1,0 +1,112 @@
+{
+  "name": "A2-02 Replay-safe recovery - re-run without doing the work twice",
+  "meta": {
+    "description": "After a failure you re-run the workflow. Everything it already did successfully happens again unless something stops it. This is the guard: a durable record of which business events have been processed, checked before the side effect rather than after it.",
+    "builtFor": "n8n Code node typeVersion 2, HTTP Request node typeVersion 4.2",
+    "author": "Suyash Raj - https://rajsuyash.com/blog/n8n-error-handling-best-practices.html",
+    "setup": "None. Run it, then run it again.",
+    "expectedOutput": "First run: 3 items marked new, 3 POSTs sent. Second run with the same input: 0 new, 0 POSTs, 3 skipped. The 'Recovery report' node prints both counts.",
+    "failureCases": "Comment out the seen-key write in 'Skip what was already done' and run twice - the second run sends all 3 again, which is the bug this workflow exists to prevent. Change one orderId and only that one is treated as new.",
+    "limits": "getWorkflowStaticData is stored with the workflow on this n8n instance. It is fine for dedupe windows measured in hours or days and for a single instance. For multi-instance deployments, long retention, or anything financial, keep the processed-key record in the destination system or a database the destination shares, so the guard survives an instance rebuild."
+  },
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "a2-02-trigger",
+      "name": "When clicking Test workflow",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [-380, 300]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// The same batch a re-run would fetch again. Keys are stable business\n// identifiers - not row numbers, not timestamps, not a random UUID.\nreturn [\n  { json: { orderId: 'ORD-10042', amountCents: 4900 } },\n  { json: { orderId: 'ORD-10043', amountCents: 12500 } },\n  { json: { orderId: 'ORD-10044', amountCents: 800 } }\n];"
+      },
+      "id": "a2-02-input",
+      "name": "Batch to process",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-140, 300]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Durable across executions of this workflow, unlike anything held in an\n// item. This is what turns a re-run from 'do it all again' into 'finish\n// what was left'.\nconst store = $getWorkflowStaticData('global');\nstore.processed = store.processed ?? {};\n\n// Drop keys older than the replay window so the record cannot grow forever.\nconst WINDOW_MS = 7 * 24 * 60 * 60 * 1000;\nconst now = Date.now();\nfor (const [key, ts] of Object.entries(store.processed)) {\n  if (now - ts > WINDOW_MS) delete store.processed[key];\n}\n\nconst out = [];\nlet skipped = 0;\n\nfor (const item of $input.all()) {\n  const key = `order:${item.json.orderId}`;\n  if (store.processed[key]) { skipped++; continue; }\n\n  // Claim the key BEFORE the side effect, not after. Writing it afterwards\n  // leaves a window in which a crash between the POST and the write makes\n  // the next run repeat the POST - the exact failure this guards against.\n  store.processed[key] = now;\n  out.push({ json: { ...item.json, idempotencyKey: key } });\n}\n\nif (out.length === 0) {\n  return [{ json: { nothingToDo: true, skipped } }];\n}\nreturn out.map(o => ({ json: { ...o.json, skippedThisRun: skipped } }));"
+      },
+      "id": "a2-02-guard",
+      "name": "Skip what was already done",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [120, 300],
+      "notes": "Claiming before the side effect trades one failure mode for a strictly cheaper one: a crash between the claim and the POST means one order is skipped and must be replayed deliberately. The alternative - claiming after - means one order is charged twice. Under-delivering is recoverable; double-charging is not."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://httpbin.org/post",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Idempotency-Key", "value": "={{ $json.idempotencyKey }}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ orderId: $json.orderId, amountCents: $json.amountCents }) }}",
+        "options": { "timeout": 15000 }
+      },
+      "id": "a2-02-send",
+      "name": "Do the side effect",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [400, 300],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "onError": "continueErrorOutput",
+      "notes": "Two independent guards, deliberately. The static-data record stops US repeating the call; the Idempotency-Key lets the SERVER reject it if we do anyway. Either one alone has a gap the other covers."
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const items = $input.all();\nconst sent = items.filter(i => !i.json.nothingToDo).length;\nconst skipped = items[0]?.json?.skippedThisRun ?? items[0]?.json?.skipped ?? 0;\nreturn [{ json: { sentThisRun: sent, skippedAsAlreadyDone: skipped } }];"
+      },
+      "id": "a2-02-report",
+      "name": "Recovery report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [700, 220]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Items that still failed after retries. They keep their claimed key, so\n// a blind re-run will NOT resend them - they need a deliberate replay.\n// Route this to your alerting so a silent skip cannot pass for success.\nreturn $input.all().map(item => ({\n  json: {\n    needsManualReplay: item.json.orderId ?? null,\n    error: item.json.error?.message ?? item.json.error ?? 'unknown',\n    howToReplay: 'Delete this key from workflow static data, then re-run.'\n  }\n}));"
+      },
+      "id": "a2-02-dlq",
+      "name": "Failed after retries - needs replay",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [700, 400]
+    }
+  ],
+  "connections": {
+    "When clicking Test workflow": {
+      "main": [[{ "node": "Batch to process", "type": "main", "index": 0 }]]
+    },
+    "Batch to process": {
+      "main": [[{ "node": "Skip what was already done", "type": "main", "index": 0 }]]
+    },
+    "Skip what was already done": {
+      "main": [[{ "node": "Do the side effect", "type": "main", "index": 0 }]]
+    },
+    "Do the side effect": {
+      "main": [
+        [{ "node": "Recovery report", "type": "main", "index": 0 }],
+        [{ "node": "Failed after retries - needs replay", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" }
+}

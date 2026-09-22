@@ -55,7 +55,7 @@
                 "name": "Suyash Raj"
             },
             "datePublished": "2026-04-14",
-            "dateModified": "2026-04-14",
+            "dateModified": "2026-09-22",
             "mainEntityOfPage": {
                 "@type": "WebPage",
                 "@id": "https://rajsuyash.com/blog/n8n-error-handling-best-practices.html"
@@ -713,6 +713,93 @@
         <p>This kind of resilient architecture is what separates businesses that trust their automations from those that live in constant fear of what might have broken. For a broader view of what this looks like in practice, the <a href="https://voxdonna.com/case-studies/le-marquier.html">Le Marquier case study</a> shows how a restaurant chain achieved 98% AI handling rate and 80% cost reduction by building automations that do not drop data.</p>
 
         <p>If you want to calculate what reliable automation could save your business, the <a href="/roi-calculator.html">ROI calculator</a> gives you a concrete number based on your team size and current manual workload.</p>
+
+        <h2>The Failure-Handling Playbook: Detection and Recovery, Mapped</h2>
+
+        <p>Most error-handling advice stops at "catch the error and send an alert". That covers detection. It says nothing about the harder half: after the alert, is it safe to press re-run?</p>
+
+        <p>This table maps each failure to how you find out and what recovery actually costs. The right-hand column is the one that matters, because it is the only one that distinguishes a failure you can replay from one that has already half-happened.</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Failure</th>
+                    <th>How you detect it</th>
+                    <th>Recovery, and whether a blind re-run is safe</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Rate limit (429)</strong></td>
+                    <td>Status code on the response. Only visible if <em>Never Error</em> is on — otherwise the node throws and the code is lost.</td>
+                    <td>Retry after the interval the server names in <code>Retry-After</code>. <strong>Safe:</strong> the request was rejected, so nothing happened.</td>
+                </tr>
+                <tr>
+                    <td><strong>Auth failure (401/403)</strong></td>
+                    <td>Status code. Usually arrives in a burst across every workflow sharing the credential.</td>
+                    <td>Fix or rotate the credential. <strong>Safe to re-run, pointless to retry:</strong> three attempts is three identical rejections and a three-times-later alert.</td>
+                </tr>
+                <tr>
+                    <td><strong>Server error (500/502/503)</strong></td>
+                    <td>Status code, often intermittent.</td>
+                    <td>Back off and retry. <strong>Usually safe</strong> — but a 502 from a proxy can sit in front of a request the origin already processed.</td>
+                </tr>
+                <tr>
+                    <td><strong>Timeout / connection reset</strong></td>
+                    <td>Node throws <code>ETIMEDOUT</code>, <code>ECONNRESET</code> or "socket hang up". No status code, because no response arrived.</td>
+                    <td><strong>Ambiguous — the dangerous one.</strong> You do not know whether the server completed the work. Check the destination before replaying, or send an idempotency key so it can reject the duplicate itself.</td>
+                </tr>
+                <tr>
+                    <td><strong>Malformed or unexpected response</strong></td>
+                    <td>A downstream expression returns <code>undefined</code>. Frequently silent: the workflow succeeds and writes empty fields.</td>
+                    <td>Validate the shape before using it and fail loudly with <em>Stop and Error</em>. <strong>Safe</strong> once the guard exists — but nothing detects this until you add the guard.</td>
+                </tr>
+                <tr>
+                    <td><strong>Partial batch failure</strong></td>
+                    <td>Only visible with <em>Continue (using error output)</em>; otherwise item 40 of 50 fails and items 1–39 are already written.</td>
+                    <td>Replay the failed items only. <strong>A blind re-run is not safe</strong> — it repeats the 39 that succeeded.</td>
+                </tr>
+                <tr>
+                    <td><strong>Workflow never ran</strong></td>
+                    <td>Nothing fires, so nothing alerts. Error workflows catch failures, not absences.</td>
+                    <td>Needs a separate heartbeat check that alerts on silence. <strong>Safe to run late</strong> — the risk is that nobody notices for days.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>The last row is the one that costs people the most. An error workflow only fires when an execution fails. An execution that never started produces no failure to catch, so a disabled trigger or a dead schedule looks exactly like a quiet week.</p>
+
+        <h3>Download: the alert workflow and the replay-safe recovery workflow</h3>
+
+        <p>Two complete n8n workflow JSONs implementing the right-hand column. Import with <strong>Workflows → Import from File</strong>.</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Workflow</th>
+                    <th>What it does</th>
+                    <th>How to prove it works</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="/downloads/n8n/05-error-workflow-slack-alert.json" download>05 — Error workflow with a Slack alert</a></td>
+                    <td>Fires on any failed execution and posts the workflow, the node, the error, the execution link, and a verdict on whether re-running is safe. Treats timeouts and 5xx as ambiguous rather than retryable.</td>
+                    <td>Add a <em>Stop and Error</em> node to any workflow and run it. If the message never arrives, the error workflow was never configured — it was only saved.</td>
+                </tr>
+                <tr>
+                    <td><a href="/downloads/n8n/06-replay-safe-recovery.json" download>06 — Replay-safe recovery</a></td>
+                    <td>Keeps a durable record of which business events have been processed and claims each key <em>before</em> the side effect, so a re-run finishes the batch instead of repeating it. Failed items route to a separate branch that names them for deliberate replay.</td>
+                    <td>Run it twice. First run: 3 sent. Second run: 0 sent, 3 skipped. Remove the record write and the second run sends all 3 again.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>Workflow 06 makes one trade deliberately. Claiming the key before the side effect means a crash in between causes an order to be skipped and need a manual replay. Claiming it afterwards means that crash causes the order to be sent twice. Under-delivering is recoverable; double-charging is not — so the guard is placed where the cheaper failure lives, and the skipped item is routed somewhere a human will see it.</p>
+
+        <p>Both files record their limits in a <code>meta</code> block. The durable record in workflow 06 uses n8n's workflow static data, which is scoped to one instance: fine for a replay window of hours or days, not a substitute for a processed-events table in the destination system when the writes are financial.</p>
+
+        <p>If you are building the request side rather than the recovery side, the four HTTP Request examples in the <a href="/blog/n8n-http-request-node-tutorial.html">n8n HTTP Request node guide</a> cover authentication, pagination, rate limits and idempotency keys with the same import-and-run format. And if these workflows are protecting something you cannot afford to have fail quietly, <a href="/n8n-automation.html">n8n automation</a> and <a href="/consulting.html">an architecture review</a> are what I do — reliability design is usually a shorter conversation than the outage that prompts it.</p>
 
         <h2>Common N8N Error Handling Mistakes to Avoid</h2>
 

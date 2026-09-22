@@ -1,0 +1,121 @@
+{
+  "name": "A1-01 HTTP Request - authentication patterns",
+  "meta": {
+    "description": "Three ways to authenticate an HTTP Request node, and the one you should not use. Targets httpbin.org, which echoes back what it received so you can see exactly which header went out. No secrets are stored in this file.",
+    "builtFor": "n8n HTTP Request node typeVersion 4.2",
+    "author": "Suyash Raj - https://rajsuyash.com/blog/n8n-http-request-node-tutorial.html",
+    "setup": "Create one n8n credential of type 'Header Auth' named 'httpbin demo token' with Name=Authorization and Value=Bearer demo-token-value. Nothing else is needed.",
+    "expectedOutput": "Node 'A. Header auth (recommended)' returns {\"authenticated\": true, \"token\": \"demo-token-value\"}. Node 'B. Query auth' returns a JSON body whose args object contains your key. Node 'C. Secret pasted into the node (do not do this)' returns the same shape as A, which is the point: it works, and that is why it gets shipped.",
+    "failureCases": "Remove the credential from node A and it fails with 401. Change the credential value to anything not starting with 'Bearer ' and httpbin returns 401 with an empty body."
+  },
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "a1-01-trigger",
+      "name": "When clicking Test workflow",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [-220, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://httpbin.org/bearer",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "a1-01-header",
+      "name": "A. Header auth (recommended)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [60, 120],
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "httpbin demo token"
+        }
+      },
+      "notes": "The token lives in an n8n credential, not in the workflow. Exporting this workflow exports the credential NAME only, which is why this file is safe to publish."
+    },
+    {
+      "parameters": {
+        "url": "https://httpbin.org/get",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "demo-key-not-a-real-secret"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1-01-query",
+      "name": "B. Query auth",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [60, 300],
+      "notes": "Some APIs only accept a key in the query string. It works, but the key lands in server access logs, proxy logs and browser referrers. Prefer a header when the API offers both. For a real key use a 'Query Auth' credential instead of a literal value."
+    },
+    {
+      "parameters": {
+        "url": "https://httpbin.org/bearer",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer demo-token-value"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1-01-inline",
+      "name": "C. Secret pasted into the node (do not do this)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [60, 480],
+      "notes": "This is the pattern to avoid. It works identically to node A, so nothing in n8n warns you. The cost appears later: the secret is now in every workflow export, every backup, and every screenshot, and rotating it means editing workflows instead of editing one credential."
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Which request actually carried the token? httpbin tells us.\n// Run all three nodes and compare: A and C authenticate, B does not hit /bearer at all.\nreturn $input.all().map(item => ({\n  json: {\n    authenticated: item.json.authenticated ?? item.json.body?.authenticated ?? null,\n    seenByServer: item.json.args ?? item.json.body?.args ?? null,\n    statusCode: item.json.statusCode ?? null\n  }\n}));"
+      },
+      "id": "a1-01-inspect",
+      "name": "What the server actually received",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 300]
+    }
+  ],
+  "connections": {
+    "When clicking Test workflow": {
+      "main": [
+        [
+          { "node": "A. Header auth (recommended)", "type": "main", "index": 0 },
+          { "node": "B. Query auth", "type": "main", "index": 0 },
+          { "node": "C. Secret pasted into the node (do not do this)", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "A. Header auth (recommended)": {
+      "main": [[{ "node": "What the server actually received", "type": "main", "index": 0 }]]
+    },
+    "B. Query auth": {
+      "main": [[{ "node": "What the server actually received", "type": "main", "index": 0 }]]
+    },
+    "C. Secret pasted into the node (do not do this)": {
+      "main": [[{ "node": "What the server actually received", "type": "main", "index": 0 }]]
+    }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" }
+}

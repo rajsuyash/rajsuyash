@@ -1,0 +1,122 @@
+{
+  "name": "A1-04 HTTP Request - safe retries and idempotency",
+  "meta": {
+    "description": "A retry is only safe if the second attempt cannot do the work twice. This shows the difference between an idempotency key derived from the business event and one generated per attempt - the second looks identical in the node and silently defeats the server's deduplication.",
+    "builtFor": "n8n HTTP Request node typeVersion 4.2",
+    "author": "Suyash Raj - https://rajsuyash.com/blog/n8n-error-handling-best-practices.html",
+    "setup": "None. httpbin.org/post echoes the headers it received, so you can read the key that actually went out.",
+    "expectedOutput": "Both POST nodes return 200. In 'Safe retry (stable key)' the echoed Idempotency-Key is the same on every attempt of the same order. In 'Unsafe retry (per-attempt key)' it changes on every execution, which is exactly what makes the retry unsafe.",
+    "failureCases": "Run the workflow twice. The stable key is identical across both runs for the same orderId - a correctly implemented server would reject the duplicate. The per-attempt key differs, so the server sees two distinct charges."
+  },
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "a1-04-trigger",
+      "name": "When clicking Test workflow",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [-320, 300]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// One business event. In production this is the order that arrived on a\n// webhook, not a value invented inside the workflow.\nreturn [{ json: { orderId: 'ORD-10042', amountCents: 4900, currency: 'EUR' } }];"
+      },
+      "id": "a1-04-input",
+      "name": "Synthetic order",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-60, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://httpbin.org/post",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Idempotency-Key",
+              "value": "=charge-{{ $json.orderId }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ orderId: $json.orderId, amountCents: $json.amountCents, currency: $json.currency }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "a1-04-safe",
+      "name": "Safe retry (stable key)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [240, 180],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "notes": "The key is derived from the order, so attempt 1, attempt 2 and a replay next Tuesday all send the same value. The server can recognise the repeat and return the original result instead of charging again."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://httpbin.org/post",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Idempotency-Key",
+              "value": "={{ $runIndex }}-{{ Date.now() }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ orderId: $json.orderId, amountCents: $json.amountCents, currency: $json.currency }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "a1-04-unsafe",
+      "name": "Unsafe retry (per-attempt key)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [240, 420],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "notes": "This is the common mistake. It has an idempotency header, it passes review, and it deduplicates nothing: every attempt announces itself as a new operation. The failure only shows up as duplicate charges after a timeout, which is the one moment nobody is reading logs."
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// httpbin echoes the request back. Read the key the server actually saw.\nreturn $input.all().map(item => ({\n  json: {\n    keyServerReceived: item.json.headers?.['Idempotency-Key'] ?? null,\n    bodyServerReceived: item.json.json ?? null\n  }\n}));"
+      },
+      "id": "a1-04-inspect",
+      "name": "Key the server actually saw",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [560, 300]
+    }
+  ],
+  "connections": {
+    "When clicking Test workflow": {
+      "main": [[{ "node": "Synthetic order", "type": "main", "index": 0 }]]
+    },
+    "Synthetic order": {
+      "main": [[
+        { "node": "Safe retry (stable key)", "type": "main", "index": 0 },
+        { "node": "Unsafe retry (per-attempt key)", "type": "main", "index": 0 }
+      ]]
+    },
+    "Safe retry (stable key)": {
+      "main": [[{ "node": "Key the server actually saw", "type": "main", "index": 0 }]]
+    },
+    "Unsafe retry (per-attempt key)": {
+      "main": [[{ "node": "Key the server actually saw", "type": "main", "index": 0 }]]
+    }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" }
+}

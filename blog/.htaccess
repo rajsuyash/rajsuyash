@@ -16,6 +16,24 @@ RewriteRule ^n8n-pipedrive-integration\.html$ /blog/n8n-sales-pipeline-automatio
 RewriteRule ^ai-voice-agent-law-firms\.html$ /blog/law-firms-ai-client-intake.html [R=301,L]
 RewriteRule ^ai-voice-agents-peak-season-customer-service\.html$ /blog/consumer-brand-call-center-scaling-peak-season.html [R=301,L]
 
+# ------------------------------------------------------------------
+# URL-VARIANT PRESERVATION (2026-09-22, backlink strategy S13)
+# Third-party pages cite our posts with a trailing slash after .html
+# (verified live on aibusinesssites.com) and without the extension.
+# Both 404'd. This per-directory file has its own RewriteEngine, so the
+# root .htaccess extension-cleanup rule never runs under /blog/ --
+# these rules must live here.
+# ------------------------------------------------------------------
+
+# /blog/post.html/  ->  /blog/post.html
+RewriteRule ^(.+)\.html/+$ /blog/$1.html [R=301,L]
+
+# /blog/post  ->  /blog/post.html  (internal rewrite, no redirect).
+# Mirrors the root .htaccess cleanup rule; $1 is relative to /blog/.
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.*)$ /blog/$1.html [L]
+
 # Disable caching for this directory
 <IfModule mod_headers.c>
     Header set Cache-Control "no-cache, no-store, must-revalidate"

@@ -19,3 +19,10 @@ wordpress/
 
 # Old versions
 FEB/
+
+# SEO/strategy working docs -- the repo root deploys to public_html,
+# so anything committed here becomes publicly fetchable.
+rajsuyash-seo-strategy.md
+rajsuyash-seo-strategy-semrush.md
+ai creator list.md
+graphify-out/

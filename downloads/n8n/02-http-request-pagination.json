@@ -1,0 +1,110 @@
+{
+  "name": "A1-02 HTTP Request - pagination, both modes",
+  "meta": {
+    "description": "The two pagination modes the HTTP Request node supports, each against a real public API that needs no key, each with a page cap so a misconfigured completion condition cannot loop forever.",
+    "builtFor": "n8n HTTP Request node typeVersion 4.2",
+    "author": "Suyash Raj - https://rajsuyash.com/blog/n8n-http-request-node-tutorial.html",
+    "setup": "None. Both APIs are public and unauthenticated.",
+    "expectedOutput": "'Offset pagination' returns 150 products from dummyjson.com (3 requests of 50). 'Next-URL pagination' returns 60 Pokemon from pokeapi.co (3 requests of 20). The Code node prints the item count and the number of requests each made.",
+    "failureCases": "Delete the completeExpression on either node and the node paginates until maxRequests stops it - which is why maxRequests is set. Set limitPagesFetched to false with a wrong completion condition and the node will keep requesting until the workflow times out."
+  },
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "a1-02-trigger",
+      "name": "When clicking Test workflow",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [-220, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://dummyjson.com/products",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "limit", "value": "50" }
+          ]
+        },
+        "options": {
+          "pagination": {
+            "pagination": {
+              "paginationMode": "updateAParameterInEachRequest",
+              "parameters": {
+                "parameters": [
+                  {
+                    "type": "qs",
+                    "name": "skip",
+                    "value": "={{ $pageCount * 50 }}"
+                  }
+                ]
+              },
+              "paginationCompleteWhen": "other",
+              "completeExpression": "={{ $response.body.products.length === 0 }}",
+              "limitPagesFetched": true,
+              "maxRequests": 3,
+              "requestInterval": 250
+            }
+          }
+        }
+      },
+      "id": "a1-02-offset",
+      "name": "Offset pagination",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [60, 180],
+      "notes": "$pageCount is 0 on the first request, so skip is 0, 50, 100. The completion condition reads the CURRENT response, not the next one: it stops when a page comes back empty. requestInterval spaces the calls so a burst of pages does not trip a rate limit."
+    },
+    {
+      "parameters": {
+        "url": "https://pokeapi.co/api/v2/pokemon?limit=20",
+        "options": {
+          "pagination": {
+            "pagination": {
+              "paginationMode": "responseContainsNextURL",
+              "nextURL": "={{ $response.body.next }}",
+              "paginationCompleteWhen": "other",
+              "completeExpression": "={{ $response.body.next === null }}",
+              "limitPagesFetched": true,
+              "maxRequests": 3,
+              "requestInterval": 250
+            }
+          }
+        }
+      },
+      "id": "a1-02-nexturl",
+      "name": "Next-URL pagination",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [60, 420],
+      "notes": "Use this when the API hands you the next page's URL. nextURL and completeExpression must read the same field, or the node will follow a URL it has already decided is absent."
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// n8n merges every page into one output array, so a paginated node looks\n// like a single request downstream. Count what actually arrived.\nconst items = $input.all();\nreturn [{ json: { itemsReturned: items.length, firstItem: items[0]?.json ?? null } }];"
+      },
+      "id": "a1-02-count",
+      "name": "Count what came back",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 300]
+    }
+  ],
+  "connections": {
+    "When clicking Test workflow": {
+      "main": [[
+        { "node": "Offset pagination", "type": "main", "index": 0 },
+        { "node": "Next-URL pagination", "type": "main", "index": 0 }
+      ]]
+    },
+    "Offset pagination": {
+      "main": [[{ "node": "Count what came back", "type": "main", "index": 0 }]]
+    },
+    "Next-URL pagination": {
+      "main": [[{ "node": "Count what came back", "type": "main", "index": 0 }]]
+    }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" }
+}

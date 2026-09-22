@@ -61,6 +61,15 @@ RewriteRule ^ai-intake-for-law-firms\.html$ https://voxdonna.com/ai-voice-agents
 RewriteRule ^case-studies/le-marquier\.html$ https://voxdonna.com/case-studies/le-marquier.html [R=301,L]
 
 # ==========================================
+# URL-VARIANT PRESERVATION (2026-09-22, backlink strategy S13)
+# Third-party citations append a trailing slash after .html; that 404'd.
+# Must stay ABOVE the extension-cleanup rule below, which carries [L].
+# (The /blog/ equivalent lives in blog/.htaccess -- that per-directory
+# file declares its own RewriteEngine, so these rules never reach it.)
+# ==========================================
+RewriteRule ^(.+)\.html/+$ /$1.html [R=301,L]
+
+# ==========================================
 # URL CLEANUP: Remove .html extension
 # ==========================================
 RewriteCond %{REQUEST_FILENAME} !-d

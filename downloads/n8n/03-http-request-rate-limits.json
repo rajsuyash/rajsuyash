@@ -1,0 +1,87 @@
+{
+  "name": "A1-03 HTTP Request - rate limits and back-off",
+  "meta": {
+    "description": "How to survive a 429. Spaces requests out with batching, retries on failure, and - the part most workflows get wrong - tells a retryable error apart from a permanent one instead of retrying both.",
+    "builtFor": "n8n HTTP Request node typeVersion 4.2",
+    "author": "Suyash Raj - https://rajsuyash.com/blog/n8n-error-handling-best-practices.html",
+    "setup": "None. httpbin.org returns whatever status code you ask it for, so the failure is reproducible on demand.",
+    "expectedOutput": "'Call a rate-limited API' runs once per input item with a 1s gap every 5 items. 'Classify the failure' outputs one row per item with retryable: true for 429/500/502/503/504 and false for 400/401/403/404/422.",
+    "failureCases": "Change the status code in the Set node to 401 and watch 'Classify the failure' mark it permanent. That is the case where retrying is not resilience - it is three identical rejections and a three-times-longer outage before anyone is told."
+  },
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "a1-03-trigger",
+      "name": "When clicking Test workflow",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [-320, 300]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Synthetic input: a mix of codes an API really returns under load.\n// 429 and 5xx are worth retrying. 4xx client errors are not.\nreturn [429, 503, 200, 401, 404, 200].map((code, i) => ({\n  json: { requestId: `req-${i + 1}`, statusToSimulate: code }\n}));"
+      },
+      "id": "a1-03-input",
+      "name": "Synthetic input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-60, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://httpbin.org/status/{{ $json.statusToSimulate }}",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 5,
+              "batchInterval": 1000
+            }
+          },
+          "timeout": 15000,
+          "response": {
+            "response": {
+              "neverError": true,
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "a1-03-call",
+      "name": "Call a rate-limited API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 300],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "onError": "continueRegularOutput",
+      "alwaysOutputData": true,
+      "notes": "Three settings do three different jobs. batching spaces requests so you are less likely to be rate-limited at all. retryOnFail/maxTries/waitBetweenTries handle it when you are anyway. neverError + fullResponse stop the node throwing on a non-2xx, so the status code reaches the next node as data and you can decide what it means - which you cannot do if the node has already failed the execution."
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Retryable vs permanent. Retrying a 401 three times does not fix the\n// credential; it just delays the alert by three attempts.\nconst RETRYABLE = new Set([408, 425, 429, 500, 502, 503, 504]);\n\nreturn $input.all().map(item => {\n  const status = item.json.statusCode;\n  const headers = item.json.headers ?? {};\n  // Honour the server's own instruction when it gives one.\n  const retryAfterRaw = headers['retry-after'] ?? headers['Retry-After'] ?? null;\n  const retryAfterSeconds = retryAfterRaw === null ? null : Number(retryAfterRaw);\n\n  return {\n    json: {\n      status,\n      retryable: RETRYABLE.has(status),\n      retryAfterSeconds: Number.isFinite(retryAfterSeconds) ? retryAfterSeconds : null,\n      action: RETRYABLE.has(status)\n        ? (retryAfterSeconds ? `wait ${retryAfterSeconds}s, then retry` : 'back off and retry')\n        : 'do not retry - alert a human'\n    }\n  };\n});"
+      },
+      "id": "a1-03-classify",
+      "name": "Classify the failure",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [520, 300]
+    }
+  ],
+  "connections": {
+    "When clicking Test workflow": {
+      "main": [[{ "node": "Synthetic input", "type": "main", "index": 0 }]]
+    },
+    "Synthetic input": {
+      "main": [[{ "node": "Call a rate-limited API", "type": "main", "index": 0 }]]
+    },
+    "Call a rate-limited API": {
+      "main": [[{ "node": "Classify the failure", "type": "main", "index": 0 }]]
+    }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" }
+}

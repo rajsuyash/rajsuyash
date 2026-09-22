@@ -55,7 +55,7 @@
                 "name": "Suyash Raj"
             },
             "datePublished": "2026-04-16",
-            "dateModified": "2026-09-18",
+            "dateModified": "2026-09-22",
             "mainEntityOfPage": {
                 "@type": "WebPage",
                 "@id": "https://rajsuyash.com/blog/n8n-http-request-node-tutorial.html"
@@ -727,6 +727,50 @@
                 </tr>
             </tbody>
         </table>
+
+        <h2>Download: Four Tested-by-You HTTP Request Examples</h2>
+
+        <p>Everything above describes what the node does. These four workflows let you watch it do it. Each one is a complete n8n workflow JSON — import it, press Test workflow, and read the output. They point at public APIs that need no key, so the only setup is one credential in the first example.</p>
+
+        <p>They are built for <strong>HTTP Request node typeVersion 4.2</strong>. They contain no credentials and no secrets; the auth example references an n8n credential by name, which is the whole point it is making.</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Example</th>
+                    <th>What it demonstrates</th>
+                    <th>What you should see</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="/downloads/n8n/01-http-request-auth-patterns.json" download>01 — Authentication patterns</a></td>
+                    <td>Header auth via a credential, query auth, and the same token pasted straight into the node</td>
+                    <td>All three authenticate. That is the lesson: nothing in n8n warns you about the third, and the cost only arrives at rotation time.</td>
+                </tr>
+                <tr>
+                    <td><a href="/downloads/n8n/02-http-request-pagination.json" download>02 — Pagination, both modes</a></td>
+                    <td><em>Update a parameter in each request</em> against an offset API, and <em>Response contains next URL</em> against a cursor API</td>
+                    <td>150 products and 60 Pokémon, from three requests each, merged into one output array.</td>
+                </tr>
+                <tr>
+                    <td><a href="/downloads/n8n/03-http-request-rate-limits.json" download>03 — Rate limits and back-off</a></td>
+                    <td>Request batching, retry settings, and separating a retryable 429 from a permanent 401</td>
+                    <td>Each simulated status classified <code>retryable: true/false</code>, with <code>Retry-After</code> honoured when the server sends it.</td>
+                </tr>
+                <tr>
+                    <td><a href="/downloads/n8n/04-http-request-safe-retries.json" download>04 — Safe retries and idempotency</a></td>
+                    <td>An idempotency key derived from the order, next to one generated per attempt</td>
+                    <td>The stable key is identical across runs. The per-attempt key is not — which is why it deduplicates nothing.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p><strong>How to import one:</strong> download the file, open n8n, choose <strong>Workflows → Import from File</strong>, and select it. Every node carries a note explaining what it is doing and why; open the node and read the Notes panel rather than only running it.</p>
+
+        <p>Each file's <code>meta</code> block records the n8n version it was written for, the setup required, the expected output, and the failure cases worth triggering on purpose. Two of the four exist specifically to show a plausible pattern failing: example 01's third node and example 04's second node both work, pass review, and are wrong. Run them and watch what the server actually receives.</p>
+
+        <p>The examples cover the request. The thing that breaks in production is the recovery — what happens on the retry, and whether re-running is safe. That is the subject of the <a href="/blog/n8n-error-handling-best-practices.html">n8n error handling guide</a>, which carries two more downloadable workflows: an error workflow that tells you whether a failed run is safe to replay, and a recovery workflow that will not do the same work twice.</p>
 
         <h2>Taking This Further: N8N Automation for Your Business</h2>
 

@@ -1,0 +1,64 @@
+{
+  "name": "A2-01 Error workflow - Slack alert that says what to do",
+  "meta": {
+    "description": "The workflow you attach under Settings > Error Workflow. It fires once for any failed execution in any workflow that points at it, and posts an alert carrying the three facts an on-call person needs: what broke, where, and whether it is safe to re-run.",
+    "builtFor": "n8n Error Trigger node typeVersion 1, HTTP Request node typeVersion 4.2",
+    "author": "Suyash Raj - https://rajsuyash.com/blog/n8n-error-handling-best-practices.html",
+    "setup": "1. Create a Slack Incoming Webhook and paste its URL into the 'Post the alert to Slack' node (replace SLACK_WEBHOOK_URL_GOES_HERE). 2. Save this workflow. 3. In each workflow you want covered, open Settings > Error Workflow and select it. n8n calls it automatically; it needs no schedule and no activation.",
+    "expectedOutput": "One Slack message per failed execution, naming the workflow, the node, the error message, the execution URL, and a re-run verdict.",
+    "failureCases": "Trigger it deliberately: add a Stop and Error node to any workflow, run it, and confirm the Slack message arrives and its execution link opens the failed run. An error workflow that has never been made to fire is not configured - it is untested.",
+    "warning": "Do not set THIS workflow as its own error workflow. If the alert step fails it would call itself, and n8n would keep producing failed executions."
+  },
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "a2-01-trigger",
+      "name": "On workflow failure",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [-220, 300]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// The Error Trigger hands over the whole failed execution. Pull out the\n// few fields a human needs at 2am and add the judgement the raw payload\n// cannot make: is re-running this safe?\nconst e = $input.first().json;\n\nconst workflowName = e.workflow?.name ?? 'unknown workflow';\nconst workflowId   = e.workflow?.id ?? 'unknown';\nconst failedNode   = e.execution?.lastNodeExecuted ?? 'unknown node';\nconst message      = e.execution?.error?.message ?? 'no error message';\nconst executionUrl = e.execution?.url ?? null;\nconst mode         = e.execution?.mode ?? 'unknown';\n\n// Re-running is safe only when every write the workflow performs is\n// idempotent. That is a property of the workflow, not of the error, so it\n// is declared here per workflow rather than guessed from the message.\nconst REPLAY_SAFE_WORKFLOWS = ['Sync orders to 3PL', 'Refresh CRM enrichment'];\nconst replaySafe = REPLAY_SAFE_WORKFLOWS.includes(workflowName);\n\n// A timeout or a 5xx may well have completed on the server side. Saying\n// \"just re-run it\" without knowing that is how one outage becomes two.\nconst ambiguous = /timeout|ETIMEDOUT|ECONNRESET|socket hang up|502|503|504/i.test(message);\n\nlet verdict;\nif (replaySafe) {\n  verdict = 'Safe to re-run: every write in this workflow is idempotent.';\n} else if (ambiguous) {\n  verdict = 'DO NOT blind re-run: the request may have succeeded server-side. Check the downstream system first.';\n} else {\n  verdict = 'Re-run only after confirming no partial write occurred.';\n}\n\nconst text = [\n  `:rotating_light: *${workflowName}* failed`,\n  `*Node:* ${failedNode}`,\n  `*Error:* ${message}`,\n  `*Mode:* ${mode}`,\n  executionUrl ? `*Execution:* ${executionUrl}` : `*Workflow ID:* ${workflowId}`,\n  `*Re-run:* ${verdict}`\n].join('\\n');\n\nreturn [{ json: { text, workflowName, failedNode, message, executionUrl, replaySafe, ambiguous } }];"
+      },
+      "id": "a2-01-build",
+      "name": "Build the alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [60, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "SLACK_WEBHOOK_URL_GOES_HERE",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: $json.text }) }}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "a2-01-slack",
+      "name": "Post the alert to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [360, 300],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "notes": "An Incoming Webhook URL is itself a secret - anyone holding it can post to the channel. Store it in an n8n credential or an environment variable rather than in the workflow if you keep workflow exports in version control. It is a literal here only so the file is readable as an example."
+    }
+  ],
+  "connections": {
+    "On workflow failure": {
+      "main": [[{ "node": "Build the alert", "type": "main", "index": 0 }]]
+    },
+    "Build the alert": {
+      "main": [[{ "node": "Post the alert to Slack", "type": "main", "index": 0 }]]
+    }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" }
+}
