@@ -611,7 +611,7 @@
 
         <h3>Step 2: Add Stripe credentials and a Stripe node</h3>
 
-        <p>Add a Stripe node. Authenticate using your Stripe secret key (store this in N8N credentials, never hardcode it). Set the operation to List Charges. Filter by date range using N8N expressions:</p>
+        <p>Add a Stripe node. Authenticate using your Stripe secret key (store this in N8N credentials, never hardcode it). Set the operation to List Charges. Filter by date range using <a href="/blog/n8n-expressions-javascript-workflows.html">N8N expressions</a>:</p>
 
         <div class="definition-block">
             <p>Created after: {{ $now.minus({days: 7}).toUnixInteger() }}<br>
