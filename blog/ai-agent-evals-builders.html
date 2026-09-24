@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>AI agent evals: what to measure before you ship</title>
+    <meta name="description" content="I shipped an agent without evals and it failed in production. Here are the five metrics I track now and how to run them before you push.">
+    <meta name="keywords" content="AI agent evals, how to evaluate AI agents, LLM eval metrics, AI agent testing, agent golden set, DeepEval, Langfuse">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/ai-agent-evals-builders.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/ai-agent-evals-builders.html">
+    <meta property="og:title" content="AI agent evals: what to measure before you ship">
+    <meta property="og:description" content="I shipped an agent without evals and it failed in production. Here are the five metrics I track now and how to run them before you push.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj">
+    <meta property="article:published_time" content="2026-09-24">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI agent evals: what to measure before you ship">
+    <meta name="twitter:description" content="I shipped an agent without evals and it failed in production. Here are the five metrics I track now and how to run them before you push.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260924a">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "AI agent evals: what to measure before you ship",
+        "description": "I shipped an agent without evals and it failed in production. Here are the five metrics I track now and how to run them before you push.",
+        "author": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com/about.html"
+        },
+        "publisher": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj"
+        },
+        "datePublished": "2026-09-24",
+        "dateModified": "2026-09-24",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/ai-agent-evals-builders.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What are AI agent evals?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "AI agent evals are automated tests that measure whether your agent does the right thing before you ship. They go beyond unit tests: they check that the agent picks the right tools, returns accurate information, completes tasks end-to-end, and does not regress when you change the prompt. Evals run against a golden set of representative inputs with known expected outputs."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is a golden set in AI agent testing?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "A golden set is a curated list of input-output pairs that represent real or realistic agent tasks, annotated with what the correct response or action looks like. You run your agent against these inputs on every code or prompt change and check whether the outputs still match expectations. The golden set grows over time as you discover edge cases in production."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How many examples do I need in a golden set?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Start with 20 to 50 examples that cover your most common scenarios and your known failure modes. That is enough to catch most regressions and to get meaningful pass rates within a CI run that finishes in a few minutes. Do not aim for 100% coverage before shipping; aim for coverage of the scenarios where failure would actually matter."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Should I use an LLM as a judge for my evals?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "LLM-as-judge is useful for criteria that are hard to express as assertions, like whether a response is polite or whether it answers the user's intent. But it adds cost and latency to your eval loop, and the judge's own biases can make scores noisy. For tool calls and task completion, deterministic assertions are cheaper and more reliable. Use LLM-as-judge only for the criteria that genuinely need it."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What tools do builders use to run AI agent evals?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "DeepEval is a popular open-source Python library that integrates with pytest and provides metrics like faithfulness, answer relevancy, and tool call accuracy out of the box. Langfuse is an open-source observability platform that lets you run evals against logged traces from production. Inspect AI, from the UK AI Safety Institute, is a task-based eval framework suited to agentic workflows. You can also write evals by hand using pytest and assertion functions, which gives you maximum control at the cost of more setup."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I run AI agent evals in CI?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Create a test file that loads your golden set, runs the agent against each input, and asserts on the output or tool calls using pytest. Add that test job to your GitHub Actions or GitLab CI configuration. Set a minimum pass rate (for example, 90%) rather than requiring 100%, because a small fraction of LLM outputs will vary. Track the pass rate over time so you can spot trends before they become incidents."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "AI agent evals: what to measure before you ship", "item": "https://rajsuyash.com/blog/ai-agent-evals-builders.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Code Block */
+        .article-body pre {
+            background: var(--color-paper-warm);
+            border-left: 3px solid var(--color-accent);
+            padding: var(--space-md);
+            overflow-x: auto;
+            margin: var(--space-md) 0;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .article-body code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.875em;
+            background: rgba(13, 13, 13, 0.07);
+            padding: 0.1em 0.35em;
+        }
+
+        .article-body pre code {
+            background: none;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/about.html" class="nav-link">About</a>
+                <a href="/qualify.html" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">AI Agents</span>
+                <span class="article-date">September 24, 2026</span>
+                <span class="article-read-time">14 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">AI agent evals: what to measure before you ship</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">I shipped an agent without evals and it failed in production in ways I did not see coming. Here is what I measure now.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <p>The agent worked perfectly in my tests. I ran it against a dozen inputs, the outputs looked right, and I shipped it. Three days later it started calling the wrong tool on inputs that seemed ordinary, hallucinating field names that were not in its context, and completing tasks in the wrong order when the user phrased things slightly differently than I expected. I had no numbers, no baseline, and no way to tell whether a prompt change made things better or worse.</p>
+
+        <p>I had been doing vibe checks and calling them testing. That is the mistake nearly every builder makes when they first ship an agent, because agents look different from software. The outputs are text, they vary run to run, and there is no obvious assertion to write. So most people skip evals entirely, or run a handful of manual tests and hope for the best. Then something breaks in production and there is no signal to act on.</p>
+
+        <p>I have since added evals to every agent I build before it goes live. This post covers the five metrics I track, how I build and maintain a golden set, and the tools I use to run evals in CI. Everything here is from working on real agents, not from theory. I will show actual code, paste real outputs, and tell you what did not work as well as what did.</p>
+
+        <p>If you are working on <a href="/ai-agents.html">AI agents</a> and want to ship with confidence rather than hope, this is the workflow I use.</p>
+
+        <h2>What evals are, and what they are not</h2>
+
+        <p>Evals are not unit tests in the traditional sense. A unit test checks that a function returns the expected value for a given input. With a deterministic function, that works perfectly. An LLM-based agent is not deterministic: the same prompt can produce slightly different outputs on different runs, and "correct" is often a matter of degree rather than a binary.</p>
+
+        <p>Evals are also not human review alone. I do manual review on new agent builds, and it is useful. But I cannot run a hundred manual tests on every prompt change. The feedback loop is too slow. The point of automated evals is to give you a pass rate you can track over time, and to catch regressions before they reach users.</p>
+
+        <p>A useful mental model, which I borrowed from <a href="https://hamel.dev/blog/posts/evals/" rel="noopener noreferrer">Hamel Husain's eval framework</a>, is three levels:</p>
+
+        <ul>
+            <li><strong>Level 1: Assertions.</strong> Deterministic checks on tool calls, output format, and specific facts. These run fast, cost almost nothing, and catch the most common failures. I run these on every code and prompt change.</li>
+            <li><strong>Level 2: Human or LLM review on traces.</strong> You log every agent run, then score a sample for quality, tone, and correctness. More expensive, slower, but it catches the subtler failures that assertions miss. I run these on a weekly cadence or after a major prompt rewrite.</li>
+            <li><strong>Level 3: A/B or large-scale evaluation.</strong> You run two versions of the agent against the same user base and measure real outcomes. This is the most reliable signal but requires production traffic. I only do this once an agent is already earning enough usage to split.</li>
+        </ul>
+
+        <p>Most builders skip Level 1 entirely and try to go straight to Level 2 or 3. The problem is that Level 1 is the cheapest and catches the most bugs. Get Level 1 right before worrying about anything else.</p>
+
+        <h2>The five metrics I track</h2>
+
+        <h3>1. Tool call precision</h3>
+
+        <p>This is the metric I care about most for tool-using agents. Tool call precision measures whether the agent called the right tool with the right arguments. A wrong tool call can have consequences: updating the wrong record, sending a message to the wrong recipient, or triggering an action the user did not ask for.</p>
+
+        <p>I measure it as: (number of correct tool calls) / (total tool calls). "Correct" means the agent called the tool the golden set specifies, with the parameter values that match expectations within a defined tolerance.</p>
+
+        <p>For example, when I built a lead-qualification agent, I had it call a <code>qualify_lead</code> tool with the lead's score and a boolean for whether to follow up. In my golden set I had 30 inputs with the expected tool name and argument ranges. On the first version, precision was 0.73. After fixing the prompt to be more explicit about the score calculation, it went to 0.93. That number told me the fix was real, not just a feeling.</p>
+
+        <pre><code>import json
+
+def check_tool_call(actual: dict, expected: dict) -> bool:
+    """Check that actual tool call matches expected name and key args."""
+    if actual.get("name") != expected.get("name"):
+        return False
+    for key, exp_val in expected.get("required_args", {}).items():
+        act_val = actual.get("arguments", {}).get(key)
+        if isinstance(exp_val, dict) and "range" in exp_val:
+            lo, hi = exp_val["range"]
+            if act_val is None or not (lo <= act_val <= hi):
+                return False
+        elif act_val != exp_val:
+            return False
+    return True</code></pre>
+
+        <p>I run this against every test case in the golden set and report the fraction that pass. Below 0.90 on tool precision and I do not ship.</p>
+
+        <h3>2. Task completion rate</h3>
+
+        <p>Tool precision tells you whether individual tool calls are correct. Task completion rate tells you whether the agent actually finished what it was supposed to do from end to end. An agent can call the right tool and still fail the task if it stops too early, calls the right tool with the wrong sequencing, or misses a required step.</p>
+
+        <p>I define task completion in my golden set by annotating each test case with a set of "must happen" events: specific tools that must be called, specific values that must appear in the final response, or a specific state the world must be in after the agent finishes. If all of those happen, the task is complete.</p>
+
+        <p>For a booking agent, the "must happen" set for a confirmation request might be: <code>check_availability</code> called, <code>create_booking</code> called, confirmation message contains booking ID. If any of those is missing, I count it as incomplete.</p>
+
+        <p>In my experience, task completion rate drops most when the agent's system prompt is too long and starts truncating context, or when the user's phrasing triggers a different branch than expected. Both are fixable once you can see the number drop.</p>
+
+        <h3>3. Faithfulness (hallucination rate)</h3>
+
+        <p>Faithfulness measures whether every factual claim the agent makes is grounded in the context it was given. For a retrieval-augmented agent, that means: did it say anything that was not in the retrieved documents? For a tool-using agent, it means: did it cite or describe results that were not in the tool's response?</p>
+
+        <p>This is the hardest metric to check with pure assertions because it requires semantic understanding. I use an LLM-as-judge here: I pass the agent's response and its context to a judge model and ask it to identify claims in the response that have no support in the context. I then compute (unsupported claims) / (total factual claims).</p>
+
+        <p>DeepEval has a <code>FaithfulnessMetric</code> that does this automatically against a set of "retrieval context" strings. The score it returns is 0 to 1, where 1 means every claim is supported. I use it directly for RAG agents:</p>
+
+        <pre><code># requires: pip install deepeval
+from deepeval.metrics import FaithfulnessMetric
+from deepeval.test_case import LLMTestCase
+
+metric = FaithfulnessMetric(threshold=0.8, model="gpt-4o-mini")
+
+test_case = LLMTestCase(
+    input="What is the refund policy?",
+    actual_output=agent_response,
+    retrieval_context=retrieved_docs
+)
+
+metric.measure(test_case)
+print(metric.score, metric.reason)</code></pre>
+
+        <p>For tool-using agents without retrieval, I skip the formal faithfulness check and instead assert on specific fields: if the agent says the booking is confirmed, check that <code>create_booking</code> was actually called and returned success. Grounding in tool results is more reliable than grounding in documents.</p>
+
+        <h3>4. Latency: p50 and p95</h3>
+
+        <p>Latency is not just a performance metric; it tells you something about agent behavior. An agent that is suddenly 30% slower than baseline might be calling more tools than expected, entering a loop, or processing a longer context window. I track latency not because I need to hit a specific number, but because changes in latency often signal something else is wrong.</p>
+
+        <p>I measure wall-clock time from the first token of the user's message to the agent's final response. I track p50 (median) and p95. The p95 tells me about my worst cases, which are often the edge-case inputs in my golden set.</p>
+
+        <pre><code>import time
+
+def run_with_timing(agent_fn, inputs: list) -> list:
+    results = []
+    for inp in inputs:
+        start = time.perf_counter()
+        output = agent_fn(inp)
+        elapsed = time.perf_counter() - start
+        results.append({"input": inp, "output": output, "latency_s": elapsed})
+    return results
+
+def p95(latencies: list) -> float:
+    sorted_l = sorted(latencies)
+    idx = int(len(sorted_l) * 0.95)
+    return sorted_l[min(idx, len(sorted_l) - 1)]</code></pre>
+
+        <p>I set a soft threshold: if my p95 crosses 10 seconds on the golden set, I investigate before shipping. That threshold is specific to my use case. Yours will be different depending on what the agent is doing and who is waiting for it.</p>
+
+        <h3>5. Regression rate against the golden set</h3>
+
+        <p>The previous four metrics tell you the absolute quality of your agent on a given version. Regression rate tells you whether a specific change made things worse. It is the metric I run most often because I am constantly tuning prompts.</p>
+
+        <p>I define regression rate as: (test cases that passed in the previous run and fail in this run) / (test cases that passed in the previous run). If I change the system prompt and 5 out of 40 previously-passing cases now fail, the regression rate is 0.125 and I need to understand why before shipping.</p>
+
+        <p>To track this across runs, I store the pass/fail state of each test case by its ID, keyed by git commit. Then before shipping I compare the current run's results to the last known-good run. This gives me a diff rather than just an absolute score, which is easier to act on.</p>
+
+        <h2>Building the golden set</h2>
+
+        <p>The golden set is the hardest part, and skipping it is the most common mistake I see. Without a golden set, evals are just running the agent against random inputs and hoping the output looks reasonable. That is not measurable.</p>
+
+        <p>I build the golden set in two stages.</p>
+
+        <p>First, I create synthetic cases before shipping. I think through the main scenarios the agent needs to handle: the happy path, the most common edge cases, and any inputs where I already know the agent should behave a specific way. For a 10-tool agent, I usually end up with 25 to 40 synthetic cases at this stage. I write the expected tool calls and expected response properties by hand for each one.</p>
+
+        <p>Second, I add real cases from production as they accumulate. When I see an interesting or unexpected interaction in the logs, I add it to the golden set with the correct behavior annotated. Over time, the golden set shifts from synthetic to mostly real, and it becomes more representative of what users actually do.</p>
+
+        <p>The format I use is a JSON file per test suite:</p>
+
+        <pre><code>[
+  {
+    "id": "lead-qual-001",
+    "input": "I run a 15-person design agency, revenue around $800k, want to automate client onboarding",
+    "expected_tool": "qualify_lead",
+    "expected_args": {
+      "score": {"range": [70, 100]},
+      "follow_up": true
+    },
+    "expected_response_contains": ["onboarding", "automation"]
+  },
+  {
+    "id": "lead-qual-002",
+    "input": "just browsing, not sure if I need this",
+    "expected_tool": "qualify_lead",
+    "expected_args": {
+      "score": {"range": [0, 40]},
+      "follow_up": false
+    }
+  }
+]</code></pre>
+
+        <p>I keep this file in the repo next to the agent code. When the agent's intended behavior changes, I update the golden set to match before making the code change. That way the golden set reflects what I intend, not just what the previous version happened to do.</p>
+
+        <h2>Running evals with DeepEval and pytest</h2>
+
+        <p>I use two tools for running evals: DeepEval for the faithfulness and relevancy metrics that require LLM-as-judge, and plain pytest with assertion functions for everything else. The two work well together because DeepEval integrates with pytest natively.</p>
+
+        <p>Here is the test file structure I use for a tool-using agent:</p>
+
+        <pre><code>import json
+import pytest
+from pathlib import Path
+from my_agent import run_agent  # your agent function
+
+GOLDEN_SET = json.loads(Path("tests/golden_set.json").read_text())
+
+@pytest.mark.parametrize("case", GOLDEN_SET, ids=[c["id"] for c in GOLDEN_SET])
+def test_tool_call_precision(case):
+    result = run_agent(case["input"])
+    tool_calls = result.get("tool_calls", [])
+    assert len(tool_calls) > 0, f"No tool calls for: {case['input']}"
+    last_call = tool_calls[-1]
+    assert last_call["name"] == case["expected_tool"], (
+        f"Expected {case['expected_tool']}, got {last_call['name']}"
+    )
+    for arg, expectation in case.get("expected_args", {}).items():
+        actual_val = last_call.get("arguments", {}).get(arg)
+        if isinstance(expectation, dict) and "range" in expectation:
+            lo, hi = expectation["range"]
+            assert lo <= actual_val <= hi, f"{arg}={actual_val} outside [{lo},{hi}]"
+        else:
+            assert actual_val == expectation, f"{arg}: expected {expectation}, got {actual_val}"</code></pre>
+
+        <p>I run this with <code>pytest tests/ -v --tb=short</code>. The parametrize decorator gives me one test result per case, so I can see exactly which cases pass and which fail. The output looks like this:</p>
+
+        <pre><code>tests/test_agent.py::test_tool_call_precision[lead-qual-001] PASSED
+tests/test_agent.py::test_tool_call_precision[lead-qual-002] PASSED
+tests/test_agent.py::test_tool_call_precision[lead-qual-003] FAILED
+...
+15 passed, 3 failed in 42.3s</code></pre>
+
+        <p>The 42-second runtime is because each test case makes a real LLM call. I accept that cost. Running 40 test cases takes about 2 minutes on GPT-4o-mini, which costs roughly $0.08. That is a worthwhile gate before a deployment.</p>
+
+        <p>For production monitoring, I also instrument the live agent with <a href="https://langfuse.com" rel="noopener noreferrer">Langfuse</a>, which captures every trace including tool calls, latency, token counts, and model responses. When something goes wrong in production, I can pull the trace, reproduce the input in my test suite, and add it to the golden set. The combination of pre-ship evals and production tracing covers both the planned and unplanned failure modes.</p>
+
+        <h2>Eval frameworks compared</h2>
+
+        <p>I have tried four different approaches over the past year. Here is what each one is actually good for:</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Framework</th>
+                    <th>Best for</th>
+                    <th>LLM-as-judge</th>
+                    <th>CI-ready</th>
+                    <th>Cost per run</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>DeepEval</strong></td>
+                    <td>RAG + tool agents, many built-in metrics</td>
+                    <td>Yes, configurable</td>
+                    <td>Yes (pytest plugin)</td>
+                    <td>LLM API cost only</td>
+                </tr>
+                <tr>
+                    <td><strong>Langfuse evals</strong></td>
+                    <td>Production trace scoring</td>
+                    <td>Yes, runs async on traces</td>
+                    <td>Via webhooks</td>
+                    <td>Free OSS, cloud pricing above free tier</td>
+                </tr>
+                <tr>
+                    <td><strong>Inspect AI</strong></td>
+                    <td>Task-based agents, safety evals</td>
+                    <td>Yes, model graders</td>
+                    <td>Yes (Python CLI)</td>
+                    <td>LLM API cost only</td>
+                </tr>
+                <tr>
+                    <td><strong>pytest + assertions</strong></td>
+                    <td>Tool calls, format checks, regression</td>
+                    <td>No (hand-roll it)</td>
+                    <td>Yes (native)</td>
+                    <td>LLM API cost only</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>My current setup: pytest for all Level 1 assertion checks, DeepEval for faithfulness and relevancy on the small subset of cases where I need semantic scoring, and Langfuse in production for trace capture. I do not use all three at once in CI; pytest runs on every push, DeepEval runs on a scheduled daily job, and Langfuse is always-on in production.</p>
+
+        <h2>Putting evals in CI</h2>
+
+        <p>The eval workflow only pays off if it runs automatically. Running it manually before every deploy is something I will skip when I am in a hurry, and that is exactly when I most need it.</p>
+
+        <p>My GitHub Actions job looks like this:</p>
+
+        <pre><code>name: Agent Evals
+on:
+  push:
+    branches: [main, staging]
+  pull_request:
+    paths:
+      - "agent/**"
+      - "prompts/**"
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: pytest tests/test_agent.py -v --tb=short --junitxml=eval-results.xml
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: eval-results.xml</code></pre>
+
+        <p>I set the CI job to fail the PR if the test pass rate drops below 90%. Not 100%: LLM outputs vary slightly run to run, and a small number of cases will occasionally fail due to natural variance, not a real regression. Setting the threshold at 90% means a random-variation failure does not block a deploy, but a systematic regression does. I tune this per agent depending on how sensitive the task is.</p>
+
+        <p>I also track the pass rate over time. I store each run's results in a simple JSON file committed to the repo, and I have a script that plots pass rate by commit. After a prompt change, I can see immediately whether the rate went up, down, or stayed flat, which is more useful than a single green or red CI result.</p>
+
+        <h2>The LLM-as-judge calibration problem</h2>
+
+        <p>LLM-as-judge is useful but it has a failure mode I did not see until I started comparing judge scores against my own manual labels. The judge model tends to agree with the agent model's style, especially if they are from the same family. This means GPT-4o judging GPT-4o outputs will give higher scores than a human would, particularly on fluency and tone.</p>
+
+        <p>I calibrate my judge by running it against a set of cases I have already labeled myself. I take 20 to 30 cases from the golden set and manually score each one on the metric I care about, then compare my scores to the judge's scores. If the judge is consistently higher than me by more than 0.15 points, I adjust the threshold I use for pass/fail downward by that offset. This is not perfect, but it keeps the judge from becoming a rubber stamp.</p>
+
+        <p>The other issue is that LLM-as-judge is expensive compared to assertions. Each judged case adds one LLM call. For a 50-case golden set evaluated on two metrics, that is 100 extra calls per eval run. I run the judge-based metrics less frequently and reserve assertions for the CI gate.</p>
+
+        <h2>What I do differently now, and what it changed</h2>
+
+        <p>Before I added evals, my deploy process was: run the agent manually a few times, look at the outputs, and push if they looked right. After adding evals, my deploy process is: run the 40-case pytest suite, look at the pass rate, review any new failures, and push only if the rate is above 90%.</p>
+
+        <p>The difference in practice: I caught a regression in a lead-qualification agent three days before it would have reached production users. I had changed the system prompt to be more concise and the tool call precision dropped from 0.93 to 0.71 on the golden set. Without the eval, I would have shipped that change because the outputs I manually reviewed all looked fine. The regression was only visible on the edge cases I did not think to check by hand.</p>
+
+        <p>I have also reduced the time I spend on manual review after prompt changes, because the eval tells me whether the change was structurally good or bad before I read any outputs. That frees up time to look at the interesting cases rather than trying to spot regressions by eye across 50 outputs.</p>
+
+        <p>If you want to talk through what evals make sense for your specific agent, <a href="/consulting.html">book a call</a>. I am happy to look at your setup and tell you where the most useful eval would be.</p>
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>What are AI agent evals?</h3>
+                <p>AI agent evals are automated tests that measure whether your agent does the right thing before you ship. They go beyond unit tests: they check that the agent picks the right tools, returns accurate information, completes tasks end-to-end, and does not regress when you change the prompt. Evals run against a golden set of representative inputs with known expected outputs.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What is a golden set in AI agent testing?</h3>
+                <p>A golden set is a curated list of input-output pairs that represent real or realistic agent tasks, annotated with what the correct response or action looks like. You run your agent against these inputs on every code or prompt change and check whether the outputs still match expectations. The golden set grows over time as you discover edge cases in production.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How many examples do I need in a golden set?</h3>
+                <p>Start with 20 to 50 examples that cover your most common scenarios and your known failure modes. That is enough to catch most regressions and to get meaningful pass rates within a CI run that finishes in a few minutes. Do not aim for 100% coverage before shipping; aim for coverage of the scenarios where failure would actually matter.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Should I use an LLM as a judge for my evals?</h3>
+                <p>LLM-as-judge is useful for criteria that are hard to express as assertions, like whether a response is polite or whether it answers the user's intent. But it adds cost and latency to your eval loop, and the judge's own biases can make scores noisy. For tool calls and task completion, deterministic assertions are cheaper and more reliable. Use LLM-as-judge only for the criteria that genuinely need it.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What tools do builders use to run AI agent evals?</h3>
+                <p>DeepEval is a popular open-source Python library that integrates with pytest and provides metrics like faithfulness, answer relevancy, and tool call accuracy out of the box. Langfuse is an open-source observability platform that lets you run evals against logged traces from production. Inspect AI, from the UK AI Safety Institute, is a task-based eval framework suited to agentic workflows. You can also write evals by hand using pytest and assertion functions, which gives you maximum control at the cost of more setup.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I run AI agent evals in CI?</h3>
+                <p>Create a test file that loads your golden set, runs the agent against each input, and asserts on the output or tool calls using pytest. Add that test job to your GitHub Actions or GitLab CI configuration. Set a minimum pass rate (for example, 90%) rather than requiring 100%, because a small fraction of LLM outputs will vary. Track the pass rate over time so you can spot trends before they become incidents.</p>
+            </div>
+        </div>
+
+        <!-- CTA in article -->
+        <h2>Want help setting up evals for your agent?</h2>
+        <p>If you have an agent in production or getting close to shipping and are not sure where to start with evals, I can review your setup and point out the biggest gaps. Book a free 30-minute call.</p>
+        <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/mcp-server-vs-webhook-automation-builders.html" class="related-card">
+                <h3 class="related-card-title">MCP server vs webhook: when the server wins</h3>
+                <p class="related-card-excerpt">I rebuilt an n8n lead webhook as an MCP server and timed both. The decision rule I use to pick between them.</p>
+            </a>
+            <a href="/blog/agentic-ai-enterprise-2027.html" class="related-card">
+                <h3 class="related-card-title">Agentic AI in the Enterprise: A Grounded 2027 Outlook</h3>
+                <p class="related-card-excerpt">What agentic AI actually looks like in production today, and what changes by 2027.</p>
+            </a>
+            <a href="/blog/ai-pilot-to-production-guide.html" class="related-card">
+                <h3 class="related-card-title">AI pilot to production: what actually breaks in the middle</h3>
+                <p class="related-card-excerpt">The gaps between a working demo and a shipped product, and how to close them systematically.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify.html" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a></p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
