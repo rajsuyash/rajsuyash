@@ -721,7 +721,7 @@
 
         <p><strong>Schedule + SplitInBatches:</strong> When a scheduled job pulls hundreds or thousands of records, use the SplitInBatches node to process them in chunks. This prevents memory issues and rate limit errors on downstream APIs.</p>
 
-        <p><strong>Multiple schedules for one workflow:</strong> You cannot add two Schedule Triggers to a single workflow. If you need a workflow to run on multiple unrelated schedules (every weekday at 8 AM and also every Saturday at noon), create two separate workflows that share logic via a sub-workflow call.</p>
+        <p><strong>Multiple schedules for one workflow:</strong> You cannot add two Schedule Triggers to a single workflow. If you need a workflow to run on multiple unrelated schedules (every weekday at 8 AM and also every Saturday at noon), create two separate workflows that share logic via a <a href="/blog/n8n-sub-workflows-modular-design.html">sub-workflow call</a>.</p>
 
         <p>If you are not sure where scheduled automation fits in your overall business picture, our <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> helps you map out which tasks are strong candidates for automation and what the time savings would realistically look like.</p>
 
