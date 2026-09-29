@@ -7,7 +7,7 @@
     <!-- Primary SEO Meta Tags -->
     <title>N8N Slack Integration: Automated Team Notifications</title>
     <meta name="description" content="Create the Slack app, add credentials, and format messages with mrkdwn and Block Kit. 7 workflow patterns plus fixes for the usual errors.">
-    <meta name="keywords" content="n8n slack integration, n8n slack notification, n8n send slack message, n8n slack workflow, automate slack notifications, best AI automation agency for small businesses">
+    <meta name="keywords" content="n8n slack integration, n8n slack notification, n8n send slack message, n8n slack workflow, automate slack notifications">
     <meta name="author" content="Suyash Raj">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://rajsuyash.com/blog/n8n-slack-integration.html">
@@ -55,7 +55,7 @@
                 "name": "Suyash Raj"
             },
             "datePublished": "2026-04-22",
-            "dateModified": "2026-04-22",
+            "dateModified": "2026-09-29",
             "mainEntityOfPage": {
                 "@type": "WebPage",
                 "@id": "https://rajsuyash.com/blog/n8n-slack-integration.html"
@@ -99,7 +99,7 @@
                     "name": "Is N8N Slack integration free?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "The N8N Slack node is included in all N8N plans, including the free community edition. Slack's free plan allows up to 90 days of message history and 10 integrations, which is sufficient for most small business automation workflows. The Slack app you create for N8N counts as one of those integrations."
+                        "text": "The N8N Slack node is included in all N8N plans, including the free community edition. Slack's free plan includes 90 days of message history and up to 10 apps, which is enough for most small business automation workflows. The Slack app you create for n8n counts as one of those 10."
                     }
                 },
                 {
@@ -472,13 +472,17 @@
     <!-- Article Body -->
     <article class="article-body">
 
+        <p>The n8n Slack integration sends automated messages from any n8n workflow to Slack channels or users. You create a Slack app at api.slack.com/apps, add OAuth credentials in n8n, drop in the Slack node, and workflow events start posting as formatted notifications immediately. Setup takes under 10 minutes.</p>
+
         <p>Your team misses things. Not because they aren't paying attention, but because the information they need lives in too many places. A new form submission sits in an email inbox nobody checks. A failed workflow runs silently at 3 AM. A new lead gets entered in your CRM an hour before the sales rep looks at it.</p>
 
-        <p>N8N's Slack integration solves this by turning any workflow event into an instant, formatted team notification. In this tutorial, you'll learn how to set up the Slack node in N8N from scratch, format professional-looking messages with live data, and implement seven automation patterns that teams actually use.</p>
+        <p>Routing those events through Slack puts notifications where your team is already working. In this tutorial, I'll show you exactly how to set up the Slack node in n8n from scratch, format messages with live data, and use seven automation patterns I've built for real workflows.</p>
 
         <div class="definition-block">
-            <p><strong>What this tutorial covers:</strong> Slack OAuth setup in N8N, sending messages to channels and users, formatting with Block Kit, thread replies, 7 ready-to-use workflow patterns, and common troubleshooting fixes.</p>
+            <p><strong>What this tutorial covers:</strong> Slack OAuth setup in n8n, sending messages to channels and users, formatting with Block Kit, thread replies, 7 ready-to-use workflow patterns, and common troubleshooting fixes.</p>
         </div>
+
+        <p><em>Updated September 2026: verified against n8n's Slack node v2.7 (Message Search now uses the Real-time Search API) and Slack's current free plan limits.</em></p>
 
         <h2>Why N8N + Slack Is Worth Setting Up</h2>
 
@@ -486,7 +490,7 @@
 
         <p>The practical result is faster response times. A client who books a discovery call gets a Slack ping to the sales team the moment the booking confirms. A failed N8N workflow fires an alert to the ops channel before anyone notices the downstream problem. A weekly report compiles and posts itself on Friday at 9 AM without anyone having to remember to send it.</p>
 
-        <p>This is the same infrastructure we use at <a href="/consulting.html">rajsuyash.com</a> and the same approach behind the automation system we built for <a href="https://voxdonna.com/case-studies/le-marquier.html">Le Marquier</a>, which reduced manual coordination overhead by 80%. Slack notifications are a small piece of that, but they compound quickly across a team.</p>
+        <p>I use the same pattern in every automation stack I build. A walkthrough of how it fits together is in my <a href="/blog/building-le-marquier-french-voice-agent.html">Le Marquier builder post</a>. Slack notifications were the visibility layer on top of a workflow that handled most coordination automatically. The compounding effect across a team is what makes the 10-minute setup worth it.</p>
 
         <h2>Prerequisites</h2>
 
@@ -506,11 +510,11 @@
             <li>In the left sidebar, go to <strong>OAuth &amp; Permissions</strong>.</li>
             <li>Under <strong>Scopes</strong>, add the following Bot Token Scopes:
                 <ul>
-                    <li><code>chat:write</code> — required to post messages</li>
-                    <li><code>chat:write.public</code> — post to channels without joining them first</li>
-                    <li><code>channels:read</code> — list public channels (used by N8N dropdowns)</li>
-                    <li><code>users:read</code> — look up user info for DMs</li>
-                    <li><code>files:write</code> — if you plan to upload files (optional)</li>
+                    <li><code>chat:write</code>: required to post messages</li>
+                    <li><code>chat:write.public</code>: post to channels without joining them first</li>
+                    <li><code>channels:read</code>: list public channels (used by n8n dropdowns)</li>
+                    <li><code>users:read</code>: look up user info for DMs</li>
+                    <li><code>files:write</code>: needed only if you plan to upload files (optional)</li>
                 </ul>
             </li>
             <li>Scroll up and click <strong>Install to Workspace</strong>. Approve the permissions.</li>
@@ -590,6 +594,8 @@
         </table>
 
         <p>For sending a message, select <strong>Message</strong> as the resource and <strong>Send</strong> as the operation.</p>
+
+        <p><strong>Note (n8n Slack node v2.7+):</strong> Message Search now uses the Real-time Search API instead of the deprecated endpoint, and semantic search is enabled by default for question-style queries. If you use Message Search, it requires a user token with <code>search:read.*</code> scopes; a bot token won't work for this operation.</p>
 
         <h2>Step 4: Configure the Message Node</h2>
 
@@ -755,9 +761,9 @@
             <li>The Slack node delivers the notification</li>
         </ol>
 
-        <p>This architecture is what makes automation durable. The Slack step is just the last mile. The value is in the data pipeline that feeds it.</p>
+        <p>This architecture is what makes automation durable. The Slack step is just the last mile. The value is in the data pipeline that feeds it. For more workflow patterns built around this structure, the <a href="/n8n-automation.html">n8n automation hub</a> is the best place to start.</p>
 
-        <p>When we build automation systems for clients, this kind of real-time visibility layer is one of the first things we implement. It transforms automation from a background process into something the team can see and trust. You can see what that looks like in practice in our <a href="https://voxdonna.com/case-studies/le-marquier.html">Le Marquier case study</a>, where a 98% AI handling rate was only possible because the team had full visibility into what the AI was doing.</p>
+        <p>When I build automation stacks, real-time visibility is one of the first things I wire up. It transforms automation from a background process into something the team can see and trust. I wrote about how this worked in the <a href="/blog/building-le-marquier-french-voice-agent.html">Le Marquier builder post</a>: a 98% AI handling rate was only possible because the team had full visibility into what the agent was doing, and Slack notifications were how that happened.</p>
 
         <p>If you're thinking about what to automate next, the <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> takes 3 minutes and tells you exactly where automation will have the highest impact in your business. And if you want to model the ROI before committing, the <a href="/roi-calculator.html">automation ROI calculator</a> gives you a concrete number.</p>
 
@@ -788,7 +794,7 @@
 
             <div class="faq-item">
                 <h3>Is N8N Slack integration free?</h3>
-                <p>The N8N Slack node is included in all N8N plans, including the free community edition. Slack's free plan allows up to 90 days of message history and 10 integrations, which is sufficient for most small business automation workflows. The Slack app you create for N8N counts as one of those integrations.</p>
+                <p>The N8N Slack node is included in all N8N plans, including the free community edition. Slack's free plan includes 90 days of message history and up to 10 apps, which is enough for most small business automation workflows. The Slack app you create for n8n counts as one of those 10.</p>
             </div>
 
             <div class="faq-item">
