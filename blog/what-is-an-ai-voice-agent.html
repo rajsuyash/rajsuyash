@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>What Is an AI Voice Agent</title>
+    <meta name="description" content="An AI voice agent runs STT, an LLM, and TTS in a real-time loop. Here's how the three-part pipeline works, from VAD timing to latency budget.">
+    <meta name="keywords" content="ai voice agent, what is ai voice agent, voice agent pipeline, stt llm tts, voice agent latency">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/what-is-an-ai-voice-agent.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/what-is-an-ai-voice-agent.html">
+    <meta property="og:title" content="What Is an AI Voice Agent">
+    <meta property="og:description" content="An AI voice agent runs STT, an LLM, and TTS in a real-time loop. Here's how the three-part pipeline works, from VAD timing to latency budget.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj">
+    <meta property="article:published_time" content="2026-10-01T00:00:00Z">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="What Is an AI Voice Agent">
+    <meta name="twitter:description" content="An AI voice agent runs STT, an LLM, and TTS in a real-time loop. Here's how the three-part pipeline works, from VAD timing to latency budget.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260216b">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "What Is an AI Voice Agent",
+        "description": "An AI voice agent runs STT, an LLM, and TTS in a real-time loop. Here's how the three-part pipeline works, from VAD timing to latency budget.",
+        "author": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com/about.html"
+        },
+        "publisher": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj"
+        },
+        "datePublished": "2026-10-01T00:00:00Z",
+        "dateModified": "2026-10-01T00:00:00Z",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/what-is-an-ai-voice-agent.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What does an AI voice agent actually do on a phone call?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "It listens to what the caller says via a speech-to-text model, generates a reply with a language model, and speaks it back with a text-to-speech model. This loop repeats for every turn in the conversation. The full cycle from end-of-speech to first audio syllable takes 200 to 500 milliseconds on a well-configured system."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How is an AI voice agent different from a phone tree or IVR?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "An IVR follows a fixed decision tree and matches exact inputs like key presses or single words. A voice agent handles natural language: the caller can say 'I want to book a table for two on Friday evening' and the agent understands all of it without requiring a specific format. The IVR is deterministic; the voice agent is probabilistic."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is the latency budget for an AI voice agent?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The round trip from end-of-speech to first audio syllable takes 200 to 500 milliseconds on a tuned setup. VAD timeout (200 to 500ms), STT inference (50 to 200ms), LLM time-to-first-token (80 to 400ms), and TTS time-to-first-byte (25 to 100ms) all contribute. Sub-400ms total is achievable with streaming STT, a fast LLM provider, and a modern neural TTS model."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How does an AI voice agent handle interruptions mid-speech?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The voice activity detection monitor runs continuously, even while the agent is speaking. When the caller speaks during agent playback, the VAD detects it and triggers a barge-in: the agent stops its audio output and begins processing the new turn. The implementation challenge is making the agent stop mid-sentence cleanly and respond to the new input without treating the previous interrupted turn as fully resolved."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What are the main failure modes of AI voice agents?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The most common failure modes are: VAD settings that cut off callers mid-sentence or wait too long before processing; STT errors on domain-specific vocabulary or noisy audio; LLM hallucination on factual questions (confirming a slot that does not exist); and tool calls that fail silently without the caller knowing. Testing on realistic noisy audio rather than clean recordings catches most of these before launch."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "What Is an AI Voice Agent", "item": "https://rajsuyash.com/blog/what-is-an-ai-voice-agent.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/about.html" class="nav-link">About</a>
+                <a href="/qualify.html" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">AI Agents</span>
+                <span class="article-date">October 1, 2026</span>
+                <span class="article-read-time">15 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">What Is an AI Voice Agent</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">How the STT, LLM, and TTS pipeline actually works inside a live phone call, and what that means for builders.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <p>An AI voice agent is software that handles a live phone call by running three components in a real-time loop: a speech-to-text model converts what the caller says into text, a language model generates a reply, and a text-to-speech model speaks that reply back. The round trip from the last syllable the caller speaks to the first syllable the agent plays back takes 200 to 500 milliseconds on a well-tuned system.</p>
+
+        <p>That's the answer. The rest of this post explains what's inside each step and why it matters when you're building one.</p>
+
+        <p>I built my first voice agent for a French restaurant, Le Marquier, in 2024. Before I started, I read everything I could find about "what is an AI voice agent." Most of what I found was either a vendor's homepage or a listicle of use cases. Neither told me how the thing actually worked. I had to piece it together from documentation, vendor benchmarks, and a lot of calls that cut off mid-sentence until I fixed the VAD settings.</p>
+
+        <p>The thing I learned is that a voice agent is not a chatbot with a speaker attached. The real-time constraint changes every design decision. Understanding the pipeline is not academic background; it determines which tradeoffs you make and which problems you can diagnose when something goes wrong.</p>
+
+        <p>I've since built voice agents for a jeweller, an SAP order-entry workflow, and several inbound call flows. Each one taught me something different about where the pipeline breaks under load. I'll cover what I've learned in each section below.</p>
+
+        <h2>The three-component pipeline</h2>
+
+        <p>Every AI voice agent runs the same three-part loop, regardless of which platform you use. Here's what happens on each turn of the conversation:</p>
+
+        <h3>1. Speech-to-text</h3>
+
+        <p>The caller's audio arrives as a stream. Before any transcription happens, a voice activity detection algorithm watches the audio for silence. When it detects a pause (typically 200 to 500ms of quiet), it treats that as the end of a turn and sends the accumulated audio to the STT model.</p>
+
+        <p>This is the first place I'd look when a voice agent feels slow: the VAD timeout. A 500ms silence threshold means the agent won't start processing until the caller has been quiet for half a second. That's fine for most business calls. For a fast-paced exchange where callers give short answers, I tune it down to 250 to 300ms. Go too short, though, and the agent starts cutting off callers mid-thought. On Le Marquier, I landed at 350ms after testing with ten real callers who volunteered to try the system before launch.</p>
+
+        <p>Once the audio goes to the STT model, the model returns a text transcript. Streaming STT models (Deepgram Nova-3, AssemblyAI Universal-2, Speechmatics Agent STT) start returning partial transcripts before the full audio is processed. This lets the LLM step start earlier, which matters for total latency. On a non-streaming model, you wait for the complete transcript before sending anything to the LLM, which adds 100 to 200ms of wall-clock time.</p>
+
+        <p>STT accuracy matters more than I expected when I first started building. A word error rate of 5% sounds acceptable until you realize that "book a table for Friday" and "book a table for five" are semantically different and the model will sometimes get it wrong. In noisy environments, WER degrades quickly. The Krisp Voice Isolation benchmark published on 28 September 2026 tested 11 STT configurations on real audio with a second voice in the background, and found that word error rate dropped 73% when voice isolation was applied first. If your callers are often in loud environments, WER on realistic noisy audio (not clean studio recordings) is the metric to optimize.</p>
+
+        <p>Speechmatics launched Agent STT in September 2026 with a stated goal of catching "high-consequence errors, like a wrong digit or missed negation, that derail voice agents." I haven't benchmarked it myself yet, but wrong digits are exactly the failure mode that matters most in booking and order-entry workflows.</p>
+
+        <h3>2. The language model</h3>
+
+        <p>The transcript from the STT step goes into an LLM along with a system prompt and the conversation history. The LLM generates a text reply, usually token by token in a streaming fashion.</p>
+
+        <p>The system prompt is where I spend the most time on any voice agent build. It defines the agent's persona, what it's allowed to do, how it handles common edge cases, and what it should say when it doesn't know the answer. For Le Marquier, I built the system prompt through about twenty iterations. It needed to handle French and English, collect a name and party size, ask about dietary restrictions, confirm a booking time, and do all of it without ever sounding scripted. The prompt that shipped was 847 tokens.</p>
+
+        <p>For voice, I always stream the LLM output. The model starts generating tokens, and I pipe the first complete sentence fragment to the TTS step before the rest of the response is generated. Without this overlap, the caller would wait for the full reply to be written and then spoken. With overlap, the TTS starts playing the first sentence while the LLM is still writing the second one. That's what makes sub-400ms total round-trip latency achievable.</p>
+
+        <p>Time-to-first-token is the LLM metric that matters here, not throughput. A model that starts producing tokens in 100ms is more useful for voice than one that takes 400ms but then generates very quickly. In <a href="/blog/voice-agent-latency-benchmark.html">my latency benchmark</a>, I measured time-to-first-token across several providers with a 500-token system prompt and a short user turn. The numbers ranged from about 80ms to over 400ms depending on the provider and time of day.</p>
+
+        <p>Tool calls fit here too. If the agent needs to look up a booking, check availability, or submit an order, the LLM emits a function call rather than a text response. The orchestration layer intercepts it, runs the function, and feeds the result back into the next LLM turn. The caller hears a brief filler phrase ("Let me check that for you, one moment") while the tool runs. I've found that filler phrases need to sound natural and vary slightly to avoid feeling mechanical. On a workflow that checks availability, I rotate between three filler phrases rather than using the same one every time.</p>
+
+        <p>Getting tool calls right is the hardest part of a complex voice agent. The filler needs to bridge the wait without the caller losing confidence, and the tool call needs to complete within about two seconds. If a database query or external API call takes longer than that, the agent needs a second filler phrase, which starts to feel awkward. I test every tool call under load before launch to get a realistic p95 response time.</p>
+
+        <h3>3. Text-to-speech</h3>
+
+        <p>The LLM's response text goes to a TTS model, which synthesizes audio. For voice agents, the metric I care about is time-to-first-byte: how quickly the TTS model starts producing audio after receiving the first sentence fragment.</p>
+
+        <p>Modern neural TTS has gotten fast. Cartesia Sonic, which I use on most of the agents I build, routinely hits TTFB under 50ms. Inworld shipped Realtime TTS-2 in late September 2026 with a Flash variant at 25ms TTFB. ElevenLabs and Play.ai are both competitive in the 50 to 80ms range. These numbers are fast enough that TTS no longer dominates the latency budget; it used to be the bottleneck and now it's just one contributor.</p>
+
+        <p>Voice quality has also improved dramatically. When I built the Le Marquier agent in 2024, the TTS voices available were noticeably synthetic. Current neural TTS models produce audio that callers frequently don't flag as robotic, provided the conversation flow is natural. The voice quality problem is largely solved; the latency and conversation design problems are what remain.</p>
+
+        <p>One TTS consideration I underestimated early: punctuation matters a lot to phrasing. The LLM generates text without speaker intent; the TTS model interprets commas and periods to determine pauses and stress. A sentence that looks fine in text can sound flat or oddly paced when spoken. I now run every response template through the TTS before deployment and adjust punctuation where the audio sounds wrong.</p>
+
+        <h2>How it differs from IVR, chatbots, and human agents</h2>
+
+        <p>These four technologies serve similar ends but work very differently. Here's what actually separates them:</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Dimension</th>
+                    <th>IVR</th>
+                    <th>Text chatbot</th>
+                    <th>AI voice agent</th>
+                    <th>Human agent</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Input handling</strong></td>
+                    <td>Key presses, fixed words</td>
+                    <td>Typed natural language</td>
+                    <td>Spoken natural language</td>
+                    <td>Spoken natural language</td>
+                </tr>
+                <tr>
+                    <td><strong>Response logic</strong></td>
+                    <td>Decision tree</td>
+                    <td>LLM or scripted</td>
+                    <td>LLM with tools</td>
+                    <td>Human judgment</td>
+                </tr>
+                <tr>
+                    <td><strong>Latency tolerance</strong></td>
+                    <td>Any (deterministic)</td>
+                    <td>Seconds acceptable</td>
+                    <td>200-500ms required</td>
+                    <td>Natural pauses</td>
+                </tr>
+                <tr>
+                    <td><strong>Cost per call</strong></td>
+                    <td>Near zero</td>
+                    <td>Near zero</td>
+                    <td>$0.05-0.20 per minute</td>
+                    <td>$1.50-4.00 per minute</td>
+                </tr>
+                <tr>
+                    <td><strong>Handles open-ended input</strong></td>
+                    <td>No</td>
+                    <td>Yes</td>
+                    <td>Yes</td>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <td><strong>Operates after hours</strong></td>
+                    <td>Yes</td>
+                    <td>Yes</td>
+                    <td>Yes</td>
+                    <td>Expensive or not at all</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>The IVR comparison is the most common question I get from business owners considering a voice agent. IVRs are cheap, reliable, and widely deployed. Their problem is caller drop-off: when the caller says something outside the expected script, the IVR falls through to a "I didn't understand that, please try again" prompt. Callers tolerate one of those. Two or three and they hang up or start pressing zero for a human. A voice agent handles varied phrasing without requiring the caller to learn the menu.</p>
+
+        <p>The text chatbot comparison matters because I've seen people try to port a text chatbot to voice by adding a microphone and a speaker. It doesn't work. A 3-second response time on a text chatbot is unremarkable; people read at different speeds and they're doing other things. A 3-second silence on a phone call reads as a dropped connection. The real-time constraint changes every design decision: the system prompt, the response length, the tool call architecture, the filler phrase strategy. I've learned this the hard way on builds that started as chatbot ports and had to be substantially rearchitected.</p>
+
+        <h2>Conversational state: how the agent tracks what was said</h2>
+
+        <p>The LLM receives three things on each turn: the system prompt, the conversation history, and the latest user transcript. The history is the full conversation so far, formatted as alternating user and assistant turns.</p>
+
+        <p>For a short call (three to five turns), this is trivial. Everything fits in the context window with room to spare and I don't think about it. For a complex workflow with many turns, I have two choices:</p>
+
+        <p><strong>Keep everything in context.</strong> The full conversation history stays in every LLM call. Simple to implement. Token cost grows linearly with call length. Works fine for business calls, which rarely exceed fifteen turns for structured workflows like booking or order collection.</p>
+
+        <p><strong>Track state separately.</strong> I maintain a state object and update it with each turn. The object might look like this for a table booking flow:</p>
+
+        <pre style="background: var(--color-paper-warm); padding: 1rem; overflow-x: auto; font-size: 0.875rem; line-height: 1.6; margin: var(--space-sm) 0;"><code>{
+  "name": null,
+  "party_size": null,
+  "date": null,
+  "time_preference": null,
+  "dietary": [],
+  "confirmed": false
+}</code></pre>
+
+        <p>I inject a summary of the current state into the system prompt rather than the full transcript history. This keeps token count stable regardless of call length and gives me structured output at the end that I can hand off to a booking system or show to a human reviewing the call.</p>
+
+        <p>I use the state-object approach for any workflow where I'm collecting more than five distinct fields or where the call might branch in multiple directions depending on earlier answers. For simpler flows (answer a FAQ, collect a name and number for callback), keeping everything in context is less work and works fine.</p>
+
+        <p>The state object also makes human escalation cleaner. When the agent reaches a situation it can't handle (a request outside its scope, a distressed caller, a complex complaint), it transfers the call to a human agent and passes the state object so the human starts with full context rather than asking the caller to repeat everything.</p>
+
+        <h2>The latency budget</h2>
+
+        <p>Total round-trip time from end-of-speech to first audio syllable is the number I track on every build. Here's where each millisecond goes on a typical configuration:</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Step</th>
+                    <th>Typical range</th>
+                    <th>What drives variance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>VAD timeout</strong></td>
+                    <td>200-500ms</td>
+                    <td>Configured threshold; trade-off between responsiveness and false triggers</td>
+                </tr>
+                <tr>
+                    <td><strong>STT inference</strong></td>
+                    <td>50-200ms</td>
+                    <td>Streaming vs batch, model size, audio length</td>
+                </tr>
+                <tr>
+                    <td><strong>LLM time-to-first-token</strong></td>
+                    <td>80-400ms</td>
+                    <td>Provider, system prompt length, time of day / load</td>
+                </tr>
+                <tr>
+                    <td><strong>TTS time-to-first-byte</strong></td>
+                    <td>25-100ms</td>
+                    <td>Provider, sentence length; most providers now under 80ms</td>
+                </tr>
+                <tr>
+                    <td><strong>Network (telephony)</strong></td>
+                    <td>20-80ms</td>
+                    <td>Provider, region; usually small compared to model inference</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>A conservative configuration hits 900ms to 1.2 seconds total. A well-tuned one hits 350 to 450ms. At 350ms, the agent feels like a fast human. At 1.2 seconds, it feels like a noticeable pause that some callers interpret as network trouble.</p>
+
+        <p>The variable I have the most direct control over is VAD timeout. I start every build at 400ms, then watch recordings for where callers get cut off or where the agent starts speaking over someone mid-sentence. I adjust from there in 50ms increments. In my experience, 300 to 350ms is the sweet spot for most business call types in English. For languages where sentences end more gradually (Hindi, Japanese), I go slightly longer.</p>
+
+        <p>For LLM latency, system prompt length matters more than most builders realize. A 1,500-token system prompt can add 100ms to time-to-first-token compared to a 500-token one, at the same temperature and model. I review system prompts for redundancy before optimizing the rest of the pipeline; cutting a third of the tokens often cuts 50ms. My <a href="/blog/voice-agent-latency-benchmark.html">vendor latency benchmark</a> has the numbers by provider.</p>
+
+        <p>A dev.to guide published on 28 September 2026 covers building sub-400ms voice agents for enterprise telephony in detail, with specific VAD tuning, streaming STT configuration, and turn-level budget breakdown. I'd point any builder targeting sub-400ms at that guide alongside my benchmark.</p>
+
+        <h2>When a voice agent works and when it doesn't</h2>
+
+        <p>I've built enough of these to have a view on where they succeed reliably and where they struggle.</p>
+
+        <p><strong>Voice agents work well when:</strong></p>
+
+        <ul>
+            <li>The call type is repetitive. If 70% of your calls follow one of three paths (book, cancel, FAQ), you have a strong candidate. The LLM handles the variation; the state machine handles the flow.</li>
+            <li>Call volume is high enough that per-call human cost is measurable. A business fielding 50 calls a day that each take five minutes has a human time cost I can calculate and compare against a voice agent's $0.05 to $0.20 per minute.</li>
+            <li>After-hours coverage matters. A voice agent handles a call at 2am without requiring on-call staff. For businesses that lose bookings because nobody picks up after 6pm, this is the clearest ROI case.</li>
+            <li>The caller input is mostly structured. Dates, times, names, party sizes, order items. The more the input looks like filling out a form, the better the agent performs.</li>
+        </ul>
+
+        <p><strong>Voice agents struggle when:</strong></p>
+
+        <ul>
+            <li>Calls are genuinely unpredictable. An agent I built for a B2B sales workflow fell apart on calls where the prospect wanted to discuss contract terms rather than book a demo. The more open-ended the call type, the more the agent needs careful fallback design and a clear handoff path to a human.</li>
+            <li>The caller base has low tolerance for any friction. Older callers in some segments expect warmth and relationship signaling that current TTS can approximate but not deliver authentically. I factor this into the go/no-go assessment for each build.</li>
+            <li>Audio quality is consistently poor. Voice agents degrade faster than humans on noisy lines. STT accuracy drops; VAD fires on background noise instead of speech. If a meaningful share of callers are in vehicles or loud environments, I test on realistic noisy audio before committing to a deployment.</li>
+        </ul>
+
+        <p>One misconception I hear often: that a voice agent needs to handle every call to be worthwhile. It doesn't. An agent that handles 60% of inbound calls and transfers the remaining 40% to a human with a state summary can halve the time a human agent spends on routine calls while handling after-hours volume on its own. The right framing is: what share of calls is this agent well-suited for, and what does that translate to in time saved?</p>
+
+        <h2>Build it or deploy one</h2>
+
+        <p>This post is about what a voice agent is, not which product to buy. But the "build or buy" question comes up in every conversation I have about this, so I'll give my short answer: if you want to understand how voice agents work and build one yourself, the managed platforms (Vapi, Retell, Bland.ai) handle the pipeline orchestration and let you focus on the system prompt, tools, and conversation design. If you want to deploy a voice agent for your business without the build project, there are products built on top of this infrastructure that are ready to configure rather than code.</p>
+
+        <p>My write-up on evaluating AI agents before launch covers how I assess a build before putting it on live calls: <a href="/blog/ai-agent-evals-builders.html">AI Agent Evals for Builders</a>. The short version is: test on realistic noisy audio, test your worst-case tool call latency, and test the barge-in behavior specifically before going live.</p>
+
+        <p>For the broader picture on AI agents (voice agents are a subset of the agent category), the <a href="/ai-agents.html">AI Agents hub</a> has the other posts in this series. And if you want to understand how conversational context and memory actually work inside an agent, I'm covering that in detail in a follow-up post on context engineering.</p>
+
+        <p>If you're looking to deploy an agent for your business rather than build one, <a href="https://voxdonna.com/ai-voice-agents.html">Voxdonna</a> is what I built for that purpose.</p>
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>What does an AI voice agent actually do on a phone call?</h3>
+                <p>It listens to what the caller says (via speech-to-text), generates a reply (via language model), and speaks it back (via text-to-speech). This loop repeats for every turn in the conversation. The full cycle from end-of-speech to first audio syllable takes 200 to 500 milliseconds on a well-configured system.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How is an AI voice agent different from a phone tree or IVR?</h3>
+                <p>An IVR follows a fixed decision tree and matches exact inputs like key presses or single expected words. A voice agent uses a language model and handles natural language: the caller can say "I want to book a table for two on Friday evening" and the agent understands all of it without requiring a specific format. The IVR is deterministic; the voice agent is probabilistic.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What is the latency budget for an AI voice agent?</h3>
+                <p>The round trip from end-of-speech to first audio syllable takes 200 to 500 milliseconds on a tuned setup. VAD timeout (200 to 500ms), STT inference (50 to 200ms), LLM time-to-first-token (80 to 400ms), and TTS time-to-first-byte (25 to 100ms) all contribute. Sub-400ms total is achievable with streaming STT, a fast LLM provider, and a modern neural TTS model.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How does an AI voice agent handle interruptions mid-speech?</h3>
+                <p>The voice activity detection monitor runs continuously, even while the agent is speaking. When the caller speaks during agent playback, the VAD detects it and triggers a barge-in: the agent stops its audio output and begins processing the new turn. The implementation challenge is making the agent stop mid-sentence cleanly and respond to the new input without treating the previous interrupted turn as fully resolved.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What are the main failure modes of AI voice agents?</h3>
+                <p>The most common are: VAD settings that cut off callers mid-sentence or wait too long before processing; STT errors on domain-specific vocabulary or noisy audio; LLM hallucination on factual questions (confirming a slot that doesn't exist); and tool calls that fail silently. Testing on realistic noisy audio rather than clean recordings catches most of these before launch.</p>
+            </div>
+        </div>
+
+        <!-- CTA in article -->
+        <h2>Ready to Get Started?</h2>
+        <p>Book a free 30-minute discovery call. I'll look at your current call volume and show you exactly what a voice agent can handle versus what needs a human.</p>
+        <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/voice-agent-latency-benchmark.html" class="related-card">
+                <h3 class="related-card-title">Voice Agent Latency Benchmark: Vendors and Languages</h3>
+                <p class="related-card-excerpt">Measured STT, LLM, and TTS latency across major providers in English, French, and Hindi.</p>
+            </a>
+            <a href="/blog/ai-agent-evals-builders.html" class="related-card">
+                <h3 class="related-card-title">AI Agent Evals for Builders</h3>
+                <p class="related-card-excerpt">What to measure before a voice agent ships. Covers turn accuracy, tool call reliability, and realistic audio testing.</p>
+            </a>
+            <a href="/blog/building-le-marquier-french-voice-agent.html" class="related-card">
+                <h3 class="related-card-title">Building Le Marquier's French Voice Agent</h3>
+                <p class="related-card-excerpt">Five lessons from building a bilingual restaurant booking agent from scratch, covering prompt design and VAD tuning.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. I'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify.html" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a></p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
