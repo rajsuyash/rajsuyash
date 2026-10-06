@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>OpenClaw vs Hermes Agent (2026): Architecture, Security, Self-Hosting</title>
+    <meta name="description" content="OpenClaw vs Hermes Agent: architecture, memory, MCP, sandboxing, published CVEs, and self-hosting trade-offs for teams picking an open-source AI agent.">
+    <meta name="keywords" content="OpenClaw vs Hermes Agent">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/openclaw-vs-hermes-agent.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/openclaw-vs-hermes-agent.html">
+    <meta property="og:title" content="OpenClaw vs Hermes Agent (2026): Architecture, Security, Self-Hosting">
+    <meta property="og:description" content="Two MIT-licensed, self-hostable AI agents. Real architecture, real CVEs, real first-hand VPS notes — no marketing copy.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj">
+    <meta property="article:published_time" content="2026-10-06">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="OpenClaw vs Hermes Agent (2026): Architecture, Security, Self-Hosting">
+    <meta name="twitter:description" content="Two MIT-licensed, self-hostable AI agents. Real architecture, real CVEs, real first-hand VPS notes — no marketing copy.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260216b">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "OpenClaw vs Hermes Agent (2026): Architecture, Security, Self-Hosting",
+        "description": "OpenClaw vs Hermes Agent: architecture, memory, MCP, sandboxing, published CVEs, and self-hosting trade-offs for teams picking an open-source AI agent.",
+        "author": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com/about.html"
+        },
+        "publisher": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj"
+        },
+        "datePublished": "2026-10-06",
+        "dateModified": "2026-10-06",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/openclaw-vs-hermes-agent.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Is OpenClaw the same project as Clawdbot or Moltbot?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes \u2014 one continuous project, renamed after a January 2026 Anthropic trademark objection to &ldquo;Clawdbot,&rdquo; now governed by the nonprofit OpenClaw Foundation."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is Hermes Agent the same as Claude's \"Hermes\" models?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. This article covers Hermes Agent, Nous Research&rsquo;s open-source agent framework (github.com/NousResearch/hermes-agent) \u2014 not Nous&rsquo;s separate &ldquo;Hermes&rdquo; family of fine-tuned LLMs, which is a model, not an agent."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Are OpenClaw and Hermes Agent free?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Both are MIT-licensed and free to self-host. Your ongoing cost is compute (from roughly $5/month for Hermes, per Nous&rsquo;s own framing) plus whatever model API you connect \u2014 a local model can bring that near $0."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is OpenClaw or Hermes Agent sandboxed by default?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No, not fully, in different ways. OpenClaw runs tools on the host by default unless you configure sandboxing. Hermes&rsquo;s production guidance recommends isolated terminal backends (Docker, Modal, Daytona, Vercel Sandbox) \u2014 but you still have to choose one; it isn&rsquo;t universal across every install path."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Have OpenClaw or Hermes Agent had security vulnerabilities?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, both \u2014 publicly disclosed 2026 CVEs including RCE and auth-bypass issues on each side (see the security section above). Both patch actively; run a current version and read the security docs before exposing a gateway or connecting a channel."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I run either one fully offline, with no cloud model calls?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "OpenClaw, yes directly, via Ollama/LM Studio. Hermes can also point at a local endpoint, but its most turnkey path (Nous Portal) is a hosted aggregator by default, so offline takes a deliberate config choice rather than being the easy path."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Does either one support the Model Context Protocol (MCP)?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, both. Hermes documents &ldquo;full MCP integration&rdquo;; OpenClaw&rsquo;s codebase references an MCP Registry. If MCP depth is decision-critical, verify OpenClaw&rsquo;s current MCP docs directly \u2014 documentation depth here differs between the two."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Which one is better for a VPS-hosted personal assistant?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Either, depending on priorities: OpenClaw for the simplest-to-audit memory and broadest messaging reach; Hermes Agent for a self-improving skill system, natural-language scheduling, and isolation-by-default production guidance. Both are genuinely production-usable self-hosted today."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "OpenClaw vs Hermes Agent: Which Open-Source AI Agent Should You Self-Host?", "item": "https://rajsuyash.com/blog/openclaw-vs-hermes-agent.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Table horizontal-scroll wrapper, so a wide comparison table never
+           overflows the page on mobile; it scrolls inside its own box instead. */
+        .table-scroll {
+            overflow-x: auto;
+            margin: var(--space-md) 0;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table-scroll .comparison-table {
+            margin: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* Mermaid diagrams, pre-rendered to inline SVG at build time (no runtime JS) */
+        .mermaid-diagram {
+            margin: var(--space-md) 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .mermaid-diagram figcaption {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+            margin-top: var(--space-xs);
+            text-align: center;
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/about.html" class="nav-link">About</a>
+                <a href="/qualify.html" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">AI Agents</span>
+                <span class="article-date">October 6, 2026</span>
+                <span class="article-read-time">26 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">OpenClaw vs Hermes Agent (2026): Architecture, Security, Self-Hosting</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">Two MIT-licensed, self-hostable AI agents, two real CVE histories, and very different defaults for sandboxing and memory. A first-hand comparison for anyone about to put one on their own VPS.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <!-- CONTENT GOES HERE -->
+        <p>If you&rsquo;ve decided you want an AI agent that lives on hardware you control — not a hosted product you rent — the field narrows fast. Two projects dominate that specific lane right now: <strong>OpenClaw</strong>, the MIT-licensed, foundation-governed successor to Clawdbot/Moltbot, and <strong>Hermes Agent</strong>, Nous Research&rsquo;s self-improving open-source agent. Both are free, both are self-hostable on a cheap VPS, both connect to Telegram/WhatsApp/Slack/Discord, and both have had real, numbered CVEs in 2026. Neither is a toy.</p>
+<p>This is not a &ldquo;which is more popular&rdquo; piece. It&rsquo;s the comparison I wished existed before I put both of them on my own VPS — what each one actually does with your shell, your model API keys, and your messages, and where each one will bite you if you don&rsquo;t read the security docs first. If you&rsquo;re instead evaluating a hosted, consumer-facing agent product rather than something you self-host, see our separate comparison, <a href="https://rajsuyash.com/blog/meta-muse-vs-openai-dots-vs-grok-bot.html">Meta Muse vs OpenAI Dots vs Grok Bot</a> — this article is specifically about the self-hosted, open-source lane.</p>
+<h2>What each one is, from first principles</h2>
+<h3>OpenClaw: an agent that lives in the channels you already use</h3>
+<p>OpenClaw&rsquo;s history is unusual enough to be relevant: it started life as <strong>Clawdbot</strong>, built by indie developer Peter Steinberger, got a trademark objection from Anthropic in January 2026 over the name&rsquo;s closeness to &ldquo;Claude,&rdquo; briefly became <strong>Moltbot</strong>, and then relaunched as the fully open-source <strong>OpenClaw</strong> — now stewarded by the independent <strong>OpenClaw Foundation</strong>, a 501(c)(3) nonprofit. OpenAI is listed as a donor to the Foundation, not an owner or operator. There is no paid tier, no hosted service, and no token.</p>
+<p>The problem OpenClaw solves: most people&rsquo;s &ldquo;AI agent&rdquo; experience is a chat tab they open and close. OpenClaw is instead a <strong>persistent local process</strong> — a Gateway running on your own machine or VPS — that you reach through the messaging apps you already have open: Discord, iMessage, Slack, Teams, Telegram, WhatsApp, Google Chat, Signal, and 20-plus others, plus native apps for macOS, iOS, Android, Windows, and Linux. State, memory, and credentials stay on your hardware as plain Markdown files. The model backend (Claude, Codex, or a local model via Ollama/LM Studio) is a swappable plugin, not something baked into the core.</p>
+<p>Source: <a href="https://github.com/openclaw/openclaw">github.com/openclaw/openclaw</a>, <a href="https://github.com/SamurAIGPT/awesome-openclaw">awesome-openclaw</a></p>
+<h3>Hermes Agent: an agent that&rsquo;s supposed to get better the longer you run it</h3>
+<p>Hermes Agent is Nous Research&rsquo;s entry in the same self-hosted lane, but with a different center of gravity: instead of positioning itself primarily as &ldquo;an agent in your chat apps,&rdquo; it leads with a <strong>closed learning loop</strong>. The agent is meant to create its own skills from the tasks you give it, improve those skills with repeated use, periodically nudge itself to persist what it&rsquo;s learned, search its own past sessions, and build a standing model of who you are across sessions — rather than starting from a blank context every time.</p>
+<p>The problem it solves: a stateless chat agent forgets everything between sessions and has to be re-taught the same context repeatedly. Hermes runs as a long-lived process — on a $5 VPS up to a GPU cluster or serverless backend — with memory, skills, and scheduled jobs that persist independent of any one conversation.</p>
+<p>Source: <a href="https://github.com/NousResearch/hermes-agent">github.com/NousResearch/hermes-agent</a></p>
+<h2>Core architecture</h2>
+<figure class="mermaid-diagram"><svg role="img" aria-label="OpenClaw architecture: channels and native apps connect to a local Gateway, which routes to a swappable model plugin, Tools/Skills/Plugins, and Markdown memory on local disk." style="width:100%;height:auto;max-width:720px;display:block;margin:0 auto;" id="mermaid-a3-1" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" style="max-width: 620px; background-color: transparent;" viewBox="4 4 620 659.148681640625" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mermaid-a3-1{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;fill:#0d0d0d;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mermaid-a3-1 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mermaid-a3-1 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mermaid-a3-1 .error-icon{fill:#ffffff;}#mermaid-a3-1 .error-text{fill:#000000;stroke:#000000;}#mermaid-a3-1 .edge-thickness-normal{stroke-width:1px;}#mermaid-a3-1 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-a3-1 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-a3-1 .edge-thickness-invisible{stroke-width:0;fill:none;}#mermaid-a3-1 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-a3-1 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-a3-1 .marker{fill:#8a4a2f;stroke:#8a4a2f;}#mermaid-a3-1 .marker.cross{stroke:#8a4a2f;}#mermaid-a3-1 svg{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;}#mermaid-a3-1 p{margin:0;}#mermaid-a3-1 .label{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#0d0d0d;}#mermaid-a3-1 .cluster-label text{fill:#000000;}#mermaid-a3-1 .cluster-label span{color:#000000;}#mermaid-a3-1 .cluster-label span p{background-color:transparent;}#mermaid-a3-1 .label text,#mermaid-a3-1 span{fill:#0d0d0d;color:#0d0d0d;}#mermaid-a3-1 .node rect,#mermaid-a3-1 .node circle,#mermaid-a3-1 .node ellipse,#mermaid-a3-1 .node polygon,#mermaid-a3-1 .node path{fill:#f4efe6;stroke:#2e2a25;stroke-width:1px;}#mermaid-a3-1 .rough-node .label text,#mermaid-a3-1 .node .label text,#mermaid-a3-1 .image-shape .label,#mermaid-a3-1 .icon-shape .label{text-anchor:middle;}#mermaid-a3-1 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mermaid-a3-1 .rough-node .label,#mermaid-a3-1 .node .label,#mermaid-a3-1 .image-shape .label,#mermaid-a3-1 .icon-shape .label{text-align:center;}#mermaid-a3-1 .node.clickable{cursor:pointer;}#mermaid-a3-1 .root .anchor path{fill:#8a4a2f!important;stroke-width:0;stroke:#8a4a2f;}#mermaid-a3-1 .arrowheadPath{fill:#0b0b0b;}#mermaid-a3-1 .edgePaths .path{stroke:#8a4a2f;stroke-width:1px;}#mermaid-a3-1 .flowchart-link{stroke:#8a4a2f;fill:none;}#mermaid-a3-1 .edgeLabel{background-color:#f4efe6;text-align:center;}#mermaid-a3-1 .edgeLabel p{background-color:#f4efe6;}#mermaid-a3-1 .edgeLabel rect{opacity:0.5;background-color:#f4efe6;fill:#f4efe6;}#mermaid-a3-1 .labelBkg{background-color:rgba(244, 239, 230, 0.5);}#mermaid-a3-1 .cluster rect{fill:#f9f6f0;stroke:#2e2a25;stroke-width:1px;}#mermaid-a3-1 .cluster text{fill:#000000;}#mermaid-a3-1 .cluster span{color:#000000;}#mermaid-a3-1 .node .collapsed-indicator{fill:#2e2a25;stroke:none;opacity:0.6;}#mermaid-a3-1 .node .collapsed-separator{stroke:#2e2a25;stroke-width:0.75px;}#mermaid-a3-1 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;background:#ffffff;border:1px solid hsl(0, 0%, 90%);border-radius:2px;pointer-events:none;z-index:100;}#mermaid-a3-1 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#0d0d0d;}#mermaid-a3-1 rect.text{fill:none;stroke-width:0;}#mermaid-a3-1 .icon-shape,#mermaid-a3-1 .image-shape{background-color:#f4efe6;text-align:center;}#mermaid-a3-1 .icon-shape p,#mermaid-a3-1 .image-shape p{background-color:#f4efe6;padding:2px;}#mermaid-a3-1 .icon-shape .label rect,#mermaid-a3-1 .image-shape .label rect{opacity:0.5;background-color:#f4efe6;fill:#f4efe6;}#mermaid-a3-1 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mermaid-a3-1 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mermaid-a3-1 .node .neo-node{stroke:#2e2a25;}#mermaid-a3-1 [data-look="neo"].node rect,#mermaid-a3-1 [data-look="neo"].cluster rect,#mermaid-a3-1 [data-look="neo"].node polygon{stroke:url(#mermaid-a3-1-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a3-1 [data-look="neo"].swimlane.cluster rect{filter:none;}#mermaid-a3-1 [data-look="neo"].node path{stroke:url(#mermaid-a3-1-gradient);stroke-width:1px;}#mermaid-a3-1 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a3-1 [data-look="neo"].node .neo-line path{stroke:#2e2a25;filter:none;}#mermaid-a3-1 [data-look="neo"].node circle{stroke:url(#mermaid-a3-1-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a3-1 [data-look="neo"].node circle .state-start{fill:#000000;}#mermaid-a3-1 [data-look="neo"].icon-shape .icon{fill:url(#mermaid-a3-1-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a3-1 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mermaid-a3-1-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a3-1 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker id="my-svg_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"/></marker><marker id="my-svg_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"/></marker><g class="root"><g class="clusters"><g class="cluster" id="my-svg-OpenClaw" data-look="neo"><rect style="" x="12" y="12" width="604" height="643.1486968994141"/><g class="cluster-label" transform="translate(275.46875, 12)"><foreignObject width="77.0625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel"><p>OpenClaw</p></span></div></foreignObject></g></g></g><g class="edges edgePaths"><path d="M516,231L516,253.92893218813452Q516,261 508.9289321881345,261L353.67106781186544,261Q346.59999999999997,261 346.59999999999997,268.0710678118655L346.59999999999997,287" id="my-svg-L_U1_GW_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 216.07167053222656 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_U1_GW_0" data-points="W3sieCI6NTE2LCJ5IjoyMzF9LHsieCI6NTE2LCJ5IjoyNjF9LHsieCI6MzQ2LjU5OTk5OTk5OTk5OTk3LCJ5IjoyNjF9LHsieCI6MzQ2LjU5OTk5OTk5OTk5OTk3LCJ5IjoyOTF9XQ==" data-look="neo" marker-end="url(#mermaid-a3-1_flowchart-v2-pointEnd-margin)"/><path d="M314,231L314,287" id="my-svg-L_NA1_GW_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 52 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_NA1_GW_0" data-points="W3sieCI6MzE0LCJ5IjoyMzF9LHsieCI6MzE0LCJ5IjoyOTF9XQ==" data-look="neo" marker-end="url(#mermaid-a3-1_flowchart-v2-pointEnd-margin)"/><path d="M314,411L314,439Q314,441 312,441L312,441Q310,441 310,443L310,467" id="my-svg-L_GW_MP_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 54.49300003051758 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_GW_MP_0" data-points="W3sieCI6MzE0LCJ5Ijo0MTF9LHsieCI6MzE0LCJ5Ijo0NDF9LHsieCI6MzEwLCJ5Ijo0NDF9LHsieCI6MzEwLCJ5Ijo0NzF9XQ==" data-look="neo" marker-end="url(#mermaid-a3-1_flowchart-v2-pointEnd-margin)"/><path d="M346.59999999999997,411L346.59999999999997,433.9289321881345Q346.59999999999997,441 353.67106781186544,441L504.9289321881345,441Q512,441 512,448.0710678118655L512,467" id="my-svg-L_GW_TS_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 212.07167053222656 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_GW_TS_0" data-points="W3sieCI6MzQ2LjU5OTk5OTk5OTk5OTk3LCJ5Ijo0MTF9LHsieCI6MzQ2LjU5OTk5OTk5OTk5OTk3LCJ5Ijo0NDF9LHsieCI6NTEyLCJ5Ijo0NDF9LHsieCI6NTEyLCJ5Ijo0NzF9XQ==" data-look="neo" marker-end="url(#mermaid-a3-1_flowchart-v2-pointEnd-margin)"/><path d="M281.4,411L281.4,433.9289321881345Q281.4,441 274.3289321881345,441L119.07106781186548,441Q112,441 112,448.0710678118655L112,467" id="my-svg-L_GW_MEM1_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 216.07171630859375 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_GW_MEM1_0" data-points="W3sieCI6MjgxLjQsInkiOjQxMX0seyJ4IjoyODEuNCwieSI6NDQxfSx7IngiOjExMiwieSI6NDQxfSx7IngiOjExMiwieSI6NDcxfV0=" data-look="neo" marker-end="url(#mermaid-a3-1_flowchart-v2-pointEnd-margin)"/><path d="M111.99999999999999,231L112,253.92893218813452Q112,261 119.07106781186548,261L274.3289321881345,261Q281.4,261 281.4,268.0710678118655L281.4,287" id="my-svg-L_CUI_GW_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 216.0717010498047 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_CUI_GW_0" data-points="W3sieCI6MTExLjk5OTk5OTk5OTk5OTk5LCJ5IjoyMzF9LHsieCI6MTEyLCJ5IjoyNjF9LHsieCI6MjgxLjQsInkiOjI2MX0seyJ4IjoyODEuNCwieSI6MjkxfV0=" data-look="neo" marker-end="url(#mermaid-a3-1_flowchart-v2-pointEnd-margin)"/></g><g class="edgeLabels"/><g class="nodes"><g class="node default" id="my-svg-flowchart-U1-0" data-look="neo" transform="translate(516, 147)"><rect class="basic label-container" style="" x="-76" y="-84" width="152" height="168"/><g class="label" style="" transform="translate(-60, -72)"><rect/><foreignObject width="120" height="144"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Channels: Telegram / WhatsApp / Slack / Discord / 20+</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-GW-1" data-look="neo" transform="translate(314, 351)"><rect class="basic label-container" style="" x="-76" y="-60" width="152" height="120"/><g class="label" style="" transform="translate(-60, -48)"><rect/><foreignObject width="120" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Gateway<br />local control plane</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-NA1-2" data-look="neo" transform="translate(314, 159)"><rect class="basic label-container" style="" x="-76" y="-72" width="152" height="144"/><g class="label" style="" transform="translate(-60, -60)"><rect/><foreignObject width="120" height="120"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Native apps: macOS / iOS / Android / Win / Linux</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-MP-5" data-look="neo" transform="translate(310, 543)"><rect class="basic label-container" style="" x="-76" y="-72" width="152" height="144"/><g class="label" style="" transform="translate(-60, -60)"><rect/><foreignObject width="120" height="120"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Model plugin: Claude / Codex / local Ollama</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-TS-7" data-look="neo" transform="translate(512, 519)"><rect class="basic label-container" style="" x="-76" y="-48" width="152" height="96"/><g class="label" style="" transform="translate(-60, -36)"><rect/><foreignObject width="120" height="72"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Tools / Skills / Plugins</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-MEM1-9" data-look="neo" transform="translate(112, 551.074348449707)"><path d="M0,13.382899628252789 a72,13.382899628252789 0,0,0 144,0 a72,13.382899628252789 0,0,0 -144,0 l0,133.3828996282528 a72,13.382899628252789 0,0,0 144,0 l0,-133.3828996282528" class="basic label-container outer-path" style="" transform="translate(-72, -80.07434944237919)"/><g class="label" style="" transform="translate(-60, -38)"><rect/><foreignObject width="120" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Markdown memory<br />on local disk</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-CUI-10" data-look="neo" transform="translate(112, 195)"><rect class="basic label-container" style="" x="-76" y="-36" width="152" height="72"/><g class="label" style="" transform="translate(-60, -24)"><rect/><foreignObject width="120" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Control UI / CLI / TUI</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="my-svg-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><defs><filter id="my-svg-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><linearGradient id="my-svg-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#2e2a25" stop-opacity="1"/><stop offset="100%" stop-color="hsl(38.5714285714, 0%, 82.9411764706%)" stop-opacity="1"/></linearGradient></svg><figcaption>OpenClaw architecture: channels and native apps connect to a local Gateway, which routes to a swappable model plugin, Tools/Skills/Plugins, and Markdown memory on local disk.</figcaption></figure>
+
+<figure class="mermaid-diagram"><svg role="img" aria-label="Hermes Agent architecture: messaging channels connect to a Gateway process, which routes to a model layer, bundled and self-authored skills, a terminal backend, agent-curated memory, and a built-in cron scheduler." style="width:100%;height:auto;max-width:720px;display:block;margin:0 auto;" id="mermaid-a3-2" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" style="max-width: 1021.22px; background-color: transparent;" viewBox="4 4 1021.21875 739" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mermaid-a3-2{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;fill:#0d0d0d;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mermaid-a3-2 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mermaid-a3-2 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mermaid-a3-2 .error-icon{fill:#ffffff;}#mermaid-a3-2 .error-text{fill:#000000;stroke:#000000;}#mermaid-a3-2 .edge-thickness-normal{stroke-width:1px;}#mermaid-a3-2 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-a3-2 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-a3-2 .edge-thickness-invisible{stroke-width:0;fill:none;}#mermaid-a3-2 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-a3-2 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-a3-2 .marker{fill:#8a4a2f;stroke:#8a4a2f;}#mermaid-a3-2 .marker.cross{stroke:#8a4a2f;}#mermaid-a3-2 svg{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;}#mermaid-a3-2 p{margin:0;}#mermaid-a3-2 .label{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#0d0d0d;}#mermaid-a3-2 .cluster-label text{fill:#000000;}#mermaid-a3-2 .cluster-label span{color:#000000;}#mermaid-a3-2 .cluster-label span p{background-color:transparent;}#mermaid-a3-2 .label text,#mermaid-a3-2 span{fill:#0d0d0d;color:#0d0d0d;}#mermaid-a3-2 .node rect,#mermaid-a3-2 .node circle,#mermaid-a3-2 .node ellipse,#mermaid-a3-2 .node polygon,#mermaid-a3-2 .node path{fill:#f4efe6;stroke:#2e2a25;stroke-width:1px;}#mermaid-a3-2 .rough-node .label text,#mermaid-a3-2 .node .label text,#mermaid-a3-2 .image-shape .label,#mermaid-a3-2 .icon-shape .label{text-anchor:middle;}#mermaid-a3-2 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mermaid-a3-2 .rough-node .label,#mermaid-a3-2 .node .label,#mermaid-a3-2 .image-shape .label,#mermaid-a3-2 .icon-shape .label{text-align:center;}#mermaid-a3-2 .node.clickable{cursor:pointer;}#mermaid-a3-2 .root .anchor path{fill:#8a4a2f!important;stroke-width:0;stroke:#8a4a2f;}#mermaid-a3-2 .arrowheadPath{fill:#0b0b0b;}#mermaid-a3-2 .edgePaths .path{stroke:#8a4a2f;stroke-width:1px;}#mermaid-a3-2 .flowchart-link{stroke:#8a4a2f;fill:none;}#mermaid-a3-2 .edgeLabel{background-color:#f4efe6;text-align:center;}#mermaid-a3-2 .edgeLabel p{background-color:#f4efe6;}#mermaid-a3-2 .edgeLabel rect{opacity:0.5;background-color:#f4efe6;fill:#f4efe6;}#mermaid-a3-2 .labelBkg{background-color:rgba(244, 239, 230, 0.5);}#mermaid-a3-2 .cluster rect{fill:#f9f6f0;stroke:#2e2a25;stroke-width:1px;}#mermaid-a3-2 .cluster text{fill:#000000;}#mermaid-a3-2 .cluster span{color:#000000;}#mermaid-a3-2 .node .collapsed-indicator{fill:#2e2a25;stroke:none;opacity:0.6;}#mermaid-a3-2 .node .collapsed-separator{stroke:#2e2a25;stroke-width:0.75px;}#mermaid-a3-2 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;background:#ffffff;border:1px solid hsl(0, 0%, 90%);border-radius:2px;pointer-events:none;z-index:100;}#mermaid-a3-2 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#0d0d0d;}#mermaid-a3-2 rect.text{fill:none;stroke-width:0;}#mermaid-a3-2 .icon-shape,#mermaid-a3-2 .image-shape{background-color:#f4efe6;text-align:center;}#mermaid-a3-2 .icon-shape p,#mermaid-a3-2 .image-shape p{background-color:#f4efe6;padding:2px;}#mermaid-a3-2 .icon-shape .label rect,#mermaid-a3-2 .image-shape .label rect{opacity:0.5;background-color:#f4efe6;fill:#f4efe6;}#mermaid-a3-2 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mermaid-a3-2 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mermaid-a3-2 .node .neo-node{stroke:#2e2a25;}#mermaid-a3-2 [data-look="neo"].node rect,#mermaid-a3-2 [data-look="neo"].cluster rect,#mermaid-a3-2 [data-look="neo"].node polygon{stroke:url(#mermaid-a3-2-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a3-2 [data-look="neo"].swimlane.cluster rect{filter:none;}#mermaid-a3-2 [data-look="neo"].node path{stroke:url(#mermaid-a3-2-gradient);stroke-width:1px;}#mermaid-a3-2 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a3-2 [data-look="neo"].node .neo-line path{stroke:#2e2a25;filter:none;}#mermaid-a3-2 [data-look="neo"].node circle{stroke:url(#mermaid-a3-2-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a3-2 [data-look="neo"].node circle .state-start{fill:#000000;}#mermaid-a3-2 [data-look="neo"].icon-shape .icon{fill:url(#mermaid-a3-2-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a3-2 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mermaid-a3-2-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a3-2 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker id="my-svg_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"/></marker><marker id="my-svg_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"/></marker><g class="root"><g class="clusters"><g class="cluster" id="my-svg-Hermes" data-look="neo"><rect style="" x="12" y="12" width="1005.21875" height="723"/><g class="cluster-label" transform="translate(456.8125, 12)"><foreignObject width="115.59375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel"><p>Hermes Agent</p></span></div></foreignObject></g></g></g><g class="edges edgePaths"><path d="M513.21875,279L513.21875,299" id="my-svg-L_U2_GW2_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 16 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_U2_GW2_0" data-points="W3sieCI6NTEzLjIxODc1LCJ5IjoyNzl9LHsieCI6NTEzLjIxODc1LCJ5IjozMDN9XQ==" data-look="neo" marker-end="url(#mermaid-a3-2_flowchart-v2-pointEnd-margin)"/><path d="M534.9520833333333,375L534.9520833333333,409.9289321881345Q534.9520833333333,417 542.0231511451989,417L708.1476821881345,417Q715.21875,417 715.21875,424.0710678118655L715.21875,443" id="my-svg-L_GW2_MP2_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 238.93836975097656 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_GW2_MP2_0" data-points="W3sieCI6NTM0Ljk1MjA4MzMzMzMzMzMsInkiOjM3NX0seyJ4Ijo1MzQuOTUyMDgzMzMzMzMzMywieSI6NDE3fSx7IngiOjcxNS4yMTg3NSwieSI6NDE3fSx7IngiOjcxNS4yMTg3NSwieSI6NDQ3fV0=" data-look="neo" marker-end="url(#mermaid-a3-2_flowchart-v2-pointEnd-margin)"/><path d="M556.6854166666667,375L556.6854166666667,397.9289321881345Q556.6854166666667,405 563.7564844785322,405L910.1476821881345,405Q917.21875,405 917.21875,412.0710678118655L917.21875,443" id="my-svg-L_GW2_SK_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 419.2050476074219 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_GW2_SK_0" data-points="W3sieCI6NTU2LjY4NTQxNjY2NjY2NjcsInkiOjM3NX0seyJ4Ijo1NTYuNjg1NDE2NjY2NjY2NywieSI6NDA1fSx7IngiOjkxNy4yMTg3NSwieSI6NDA1fSx7IngiOjkxNy4yMTg3NSwieSI6NDQ3fV0=" data-look="neo" marker-end="url(#mermaid-a3-2_flowchart-v2-pointEnd-margin)"/><path d="M469.7520833333333,375L469.7520833333333,397.9289321881345Q469.7520833333333,405 462.6810155214678,405L119.07106781186546,405Q111.99999999999999,405 111.99999999999999,412.0710678118655L111.99999999999999,443" id="my-svg-L_GW2_TBACK_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 416.4237976074219 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_GW2_TBACK_0" data-points="W3sieCI6NDY5Ljc1MjA4MzMzMzMzMzMsInkiOjM3NX0seyJ4Ijo0NjkuNzUyMDgzMzMzMzMzMywieSI6NDA1fSx7IngiOjExMS45OTk5OTk5OTk5OTk5OSwieSI6NDA1fSx7IngiOjExMS45OTk5OTk5OTk5OTk5OSwieSI6NDQ3fV0=" data-look="neo" marker-end="url(#mermaid-a3-2_flowchart-v2-pointEnd-margin)"/><path d="M491.48541666666665,375L491.48541666666665,409.9289321881345Q491.48541666666665,417 484.4143488548012,417L319.6804428118655,417Q312.609375,417 312.609375,424.0710678118655L312.609375,443" id="my-svg-L_GW2_MEM2_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 237.5477294921875 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_GW2_MEM2_0" data-points="W3sieCI6NDkxLjQ4NTQxNjY2NjY2NjY1LCJ5IjozNzV9LHsieCI6NDkxLjQ4NTQxNjY2NjY2NjY1LCJ5Ijo0MTd9LHsieCI6MzEyLjYwOTM3NSwieSI6NDE3fSx7IngiOjMxMi42MDkzNzUsInkiOjQ0N31d" data-look="neo" marker-end="url(#mermaid-a3-2_flowchart-v2-pointEnd-margin)"/><path d="M513.21875,375L513.21875,443" id="my-svg-L_GW2_CRON_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 64 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_GW2_CRON_0" data-points="W3sieCI6NTEzLjIxODc1LCJ5IjozNzV9LHsieCI6NTEzLjIxODc1LCJ5Ijo0NDd9XQ==" data-look="neo" marker-end="url(#mermaid-a3-2_flowchart-v2-pointEnd-margin)"/></g><g class="edgeLabels"/><g class="nodes"><g class="node default" id="my-svg-flowchart-U2-0" data-look="neo" transform="translate(513.21875, 171)"><rect class="basic label-container" style="" x="-76" y="-108" width="152" height="216"/><g class="label" style="" transform="translate(-60, -96)"><rect/><foreignObject width="120" height="192"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Telegram / Discord / Slack / WhatsApp / Signal / Email / Home Assistant</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-GW2-1" data-look="neo" transform="translate(513.21875, 339)"><rect class="basic label-container" style="" x="-76" y="-36" width="152" height="72"/><g class="label" style="" transform="translate(-60, -24)"><rect/><foreignObject width="120" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Gateway process</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-MP2-3" data-look="neo" transform="translate(715.21875, 543)"><rect class="basic label-container" style="" x="-76" y="-96" width="152" height="192"/><g class="label" style="" transform="translate(-60, -84)"><rect/><foreignObject width="120" height="168"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Model layer: Nous Portal / OpenRouter / Anthropic / OpenAI / custom</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-SK-5" data-look="neo" transform="translate(917.21875, 519)"><rect class="basic label-container" style="" x="-76" y="-72" width="152" height="144"/><g class="label" style="" transform="translate(-60, -60)"><rect/><foreignObject width="120" height="120"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Skills: ~160 bundled + self-authored</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-TBACK-7" data-look="neo" transform="translate(112, 579)"><rect class="basic label-container" style="" x="-76" y="-132" width="152" height="264"/><g class="label" style="" transform="translate(-60, -120)"><rect/><foreignObject width="120" height="240"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Terminal backend:<br />local / Docker / SSH / Modal /<br />Daytona / Vercel Sandbox / Singularity</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-MEM2-9" data-look="neo" transform="translate(312.609375, 539.4012832641602)"><path d="M0,13.603988603988604 a74.609375,13.603988603988604 0,0,0 149.21875,0 a74.609375,13.603988603988604 0,0,0 -149.21875,0 l0,157.6039886039886 a74.609375,13.603988603988604 0,0,0 149.21875,0 l0,-157.6039886039886" class="basic label-container outer-path" style="" transform="translate(-74.609375, -92.40598290598291)"/><g class="label" style="" transform="translate(-62.609375, -50)"><rect/><foreignObject width="125.21875" height="120"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Agent-curated memory<br />FTS5 + LLM summarization</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-CRON-11" data-look="neo" transform="translate(513.21875, 495)"><rect class="basic label-container" style="" x="-76" y="-48" width="152" height="96"/><g class="label" style="" transform="translate(-60, -36)"><rect/><foreignObject width="120" height="72"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Built-in cron scheduler</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="my-svg-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><defs><filter id="my-svg-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><linearGradient id="my-svg-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#2e2a25" stop-opacity="1"/><stop offset="100%" stop-color="hsl(38.5714285714, 0%, 82.9411764706%)" stop-opacity="1"/></linearGradient></svg><figcaption>Hermes Agent architecture: messaging channels connect to a Gateway process, which routes to a model layer, bundled and self-authored skills, a terminal backend, agent-curated memory, and a built-in cron scheduler.</figcaption></figure>
+
+<p>The shape is similar — a gateway process, a swappable model layer, a channel layer, local-first memory — but the emphasis differs in a way that matters operationally: OpenClaw&rsquo;s docs foreground <em>where you reach it from</em> (channels, native apps); Hermes&rsquo;s docs foreground <em>where its commands actually execute</em> (seven named terminal backends, each with a different isolation guarantee).</p>
+<h2>The comparison, point by point</h2>
+<h3>Reasoning and execution loop, browser/computer use, and API surface</h3>
+<p>Both run a conventional observe-reason-act loop: receive a message or trigger, reason with the configured model, call tools, repeat until done, reply. Neither publishes a formal state-machine diagram of that loop, a first-class &ldquo;computer-use&rdquo; API, or a standalone versioned REST API reference distinct from the agent/gateway itself — treat all three as <strong>not publicly documented</strong> for either project beyond what&rsquo;s implied by their general tool-calling and skill systems. If any of the three is a hard requirement, verify directly against current docs rather than relying on this comparison.</p>
+<h3>Model and provider support</h3>
+<p>OpenClaw treats the model as a plugin: Claude, Codex, or local models via Ollama/LM Studio (DeepSeek, Llama, Mistral, and others), swappable without touching the rest of the config. Hermes offers its own hosted aggregator — <strong>Nous Portal</strong>, a subscription giving access to &ldquo;300+ models&rdquo; — alongside direct OpenRouter, OpenAI, Anthropic, and custom-endpoint support, switchable at runtime with <code>/model</code>. If you want one bill covering many models without juggling individual API keys, Hermes&rsquo;s Portal is the more turnkey option; if you want to point an agent at a model you&rsquo;re already paying for elsewhere with zero aggregator in the loop, OpenClaw&rsquo;s plugin model is more direct.</p>
+<h3>Tool use and MCP</h3>
+<p>Both support the <strong>Model Context Protocol</strong>. Hermes documents this plainly as &ldquo;full MCP integration&rdquo; for connecting external MCP servers. OpenClaw&rsquo;s codebase references an <strong>MCP Registry</strong> integration, but a dedicated &ldquo;attach an MCP server&rdquo; walkthrough wasn&rsquo;t located in this research pass — if MCP is your primary reason for choosing one of these, verify the current OpenClaw MCP docs directly before committing, since this is one area where the two projects&rsquo; documentation depth clearly differs.</p>
+<h3>Memory and persistent context</h3>
+<p>This is the sharpest architectural difference. OpenClaw&rsquo;s memory model is deliberately simple and inspectable: plain Markdown files on your disk, nothing more exotic. You can read, edit, or <code>grep</code> your agent&rsquo;s memory with a text editor. Hermes&rsquo;s memory model is more ambitious and more opaque: agent-curated storage (the agent itself decides what&rsquo;s worth keeping), FTS5 full-text search over past sessions, LLM-based summarization for cross-session recall, and — per Nous&rsquo;s own docs — a &ldquo;Honcho dialectic user modeling&rdquo; component for building a standing model of the user. The trade-off is the classic one: OpenClaw&rsquo;s memory is less magical and easier to audit; Hermes&rsquo;s memory is more capable out of the box but harder to fully inspect, and depends on an LLM to decide what to remember.</p>
+<h3>Multi-agent support</h3>
+<p>Hermes documents <strong>isolated subagents for parallel workstreams</strong> as a named capability — spin off a sub-task into its own context rather than serializing everything through one loop. OpenClaw&rsquo;s fetched docs don&rsquo;t make an equivalent named claim; treat multi-agent orchestration as a Hermes-documented feature and <strong>not publicly documented</strong> for OpenClaw as of this research pass.</p>
+<h3>Workflow automation and cron</h3>
+<p>Both ship a built-in scheduler. OpenClaw&rsquo;s docs list &ldquo;cron jobs, hooks, and webhooks&rdquo; as first-class capabilities. Hermes&rsquo;s cron scheduler is explicitly described as natural-language-configurable (&ldquo;daily reports, nightly backups, weekly audits&hellip; running unattended&rdquo;) with delivery to any connected platform.</p>
+<h3>Integrations and channels</h3>
+<p>OpenClaw&rsquo;s channel list is the longer, more exhaustive one in the fetched docs: 20+ messaging platforms plus five native app targets. Hermes&rsquo;s named channel list (CLI, Telegram, Discord, Slack, WhatsApp, Signal, Email, Home Assistant) is shorter but notably includes <strong>Home Assistant</strong>, which OpenClaw&rsquo;s fetched docs don&rsquo;t call out — relevant if home/IoT automation is in scope. For a broader look at how MCP-based tool integration compares to classic webhook automation, see our piece on <a href="https://rajsuyash.com/blog/mcp-server-vs-webhook-automation-builders.html">MCP servers vs. webhook automation</a>.</p>
+<h3>Local vs. cloud execution</h3>
+<p>Both default to local-first execution of the agent process itself. Where they diverge is the <em>model</em> call: OpenClaw can go fully offline with a local model via Ollama/LM Studio; Hermes&rsquo;s most turnkey path (Nous Portal) is a hosted model aggregator, though it supports pointing at local/custom endpoints too. If &ldquo;no outbound call ever leaves this box&rdquo; is a hard requirement, OpenClaw&rsquo;s local-model path is the more direct route to that outcome today.</p>
+<h3>Self-hosting and deployment model</h3>
+<p>Both are built to self-host, and both run on genuinely small hardware. OpenClaw needs Node.js 24.16+ (or 26.1+) and installs via a bash/PowerShell script or <code>npm install -g openclaw@latest</code>; a Docker image is published, with a community-maintained image (<code>coollabsio/openclaw</code>) also available. Hermes needs Python 3.14, Node.js, npm, ripgrep, and FFmpeg, installs via a curl/PowerShell one-liner, and Nous&rsquo;s own docs describe it as running on &ldquo;a $5 VPS, GPU clusters, or serverless infrastructure&rdquo; — with an official hardened Docker image, plus Singularity, Modal, Daytona, and Vercel Sandbox as first-class deployment targets. For more on the general economics of running your own automation stack instead of a SaaS, see <a href="https://rajsuyash.com/blog/n8n-self-host-docker.html">self-hosting on Docker</a> and <a href="https://rajsuyash.com/blog/ai-automation-total-cost-of-ownership.html">AI automation total cost of ownership</a>.</p>
+<h3>Enterprise and on-prem deployment</h3>
+<p>Neither project publishes an enterprise edition, SLA, or dedicated on-prem support contract in the sources retrieved for this piece — both are, as of this research, community open-source projects rather than vendor-backed enterprise products. That&rsquo;s <strong>not publicly documented</strong> as a gap to fill with a sales call; if you need a support contract, you&rsquo;re building your own ops runbook around either one. See our broader take on <a href="https://rajsuyash.com/blog/agentic-ai-enterprise-2027.html">enterprise agentic AI in 2027</a> for how that reality is shaping enterprise buying in this category generally.</p>
+<h3>Data privacy</h3>
+<p>OpenClaw&rsquo;s stated default is the stronger privacy posture on paper: state, memory, and credentials stay on your hardware, and the project phones home for nothing but an optional daily version check (which you can disable). Hermes&rsquo;s privacy posture depends heavily on which model/terminal backend you choose — a fully local model plus a local or Docker terminal backend gets you close to the same posture; Nous Portal plus a cloud terminal backend (Modal/Daytona/Vercel Sandbox) does not. Related reading: <a href="https://rajsuyash.com/blog/ai-automation-security-data-privacy.html">AI automation security and data privacy</a>.</p>
+<h3>Security model and sandboxing</h3>
+<p>Here the two projects make genuinely opposite default choices, and this is worth reading twice before you deploy either one:</p>
+<ul>
+<li><strong>OpenClaw sandboxes nothing by default.</strong> Tools run directly on the host for the main session unless you explicitly configure sandboxing. Unknown DM senders are paired (approved) via <code>openclaw pairing approve</code>, and an exec-approvals allowlist (<code>~/.openclaw/exec-approvals.json</code>) can gate command execution — but OpenClaw&rsquo;s own docs are explicit that this is &ldquo;an operator guardrail to reduce accidental command execution, not a multi-tenant authorization boundary.&rdquo;</li>
+<li><strong>Hermes pushes you toward isolation by default for production.</strong> Its docs name Docker, Modal, Daytona, and Vercel Sandbox as the recommended terminal backends for a production gateway specifically because isolating commands from the host removes the need for manual dangerous-command approval. The official Docker image runs as an unprivileged user (uid 10000) via <code>gosu</code>, not root.</li>
+</ul>
+<p>Neither default is automatically &ldquo;wrong&rdquo; — OpenClaw&rsquo;s host-execution default is faster to set up for a single trusted operator on their own machine; Hermes&rsquo;s isolation-first guidance is the safer default the moment more than one person, or any untrusted input, touches the agent. The mistake is assuming either one is sandboxed just because it&rsquo;s a mature, widely-used open-source project.</p>
+<h3>Human approval mechanisms</h3>
+<p>Same mechanism on both sides — a human-in-the-loop gate before a risky shell command runs — with the same honest caveat from OpenClaw&rsquo;s own docs that applies equally to Hermes&rsquo;s: it&rsquo;s an accident guardrail, not a security boundary against a determined, authenticated bad actor who already has access.</p>
+<h3>Observability and debugging</h3>
+<p>Neither project&rsquo;s fetched docs describe a dedicated tracing/observability product (nothing equivalent to a hosted eval or trace dashboard). Both rely on local logs — in practice, <code>journalctl</code>/systemd logs for whichever one you&rsquo;ve wired into a service manager. <strong>First-hand note:</strong> on a VPS running one of these behind systemd, a service reporting &ldquo;active/running&rdquo; is not proof the agent is actually working — a stale state-migration file once blocked an entire chat channel from starting while systemd reported the unit healthy the whole time; the real signal was only in the service&rsquo;s own journal output. If reliable alerting matters to you, build it around the agent&rsquo;s own logs, not the service manager&rsquo;s status flag. For a parallel discussion of why &ldquo;it&rsquo;s technically running&rdquo; isn&rsquo;t the same as &ldquo;it works,&rdquo; see <a href="https://rajsuyash.com/blog/ai-agent-evals-builders.html">AI agent evals for builders</a>.</p>
+<h3>Developer experience and extensibility</h3>
+<p>Both are developer-first: CLI-driven setup, config files, and a plugin/skill SDK rather than a no-code builder. Hermes&rsquo;s skill system is the more structured of the two on paper — compatible with the open <a href="https://agentskills.io">agentskills.io</a> standard, ~160 bundled skills, a community Skills Hub, and <em>autonomous</em> extensibility (the agent creates and refines its own skills during use, not just loads skills you write). OpenClaw&rsquo;s Tools/Skills/Plugins split plus ClawHub sharing covers similar ground more conventionally: you write a tool/skill/plugin against its SDK and it runs, without the self-authoring layer.</p>
+<h3>Ease of setup</h3>
+<p>Both install with a single script and run on a cheap VPS. Hermes has a slightly longer dependency list on paper (Python 3.14 specifically, Node.js, npm, ripgrep, FFmpeg) versus OpenClaw&rsquo;s single Node.js runtime requirement — in practice this is a rounding error for anyone comfortable with a VPS, but it&rsquo;s a real difference if you&rsquo;re trying to keep a minimal attack surface and dependency count.</p>
+<h3>Reliability for long-running tasks</h3>
+<p>Neither project&rsquo;s fetched docs make a quantified reliability claim (uptime %, MTBF, etc.) — <strong>not publicly documented</strong> for either. The practical failure mode worth knowing about is generic to any self-hosted agent gateway, not specific to either product: a long tool-using turn dies at whichever timeout in your stack is smallest, and an unconfigured watchdog can silently sit below every other timeout you deliberately raised. See the first-hand note under Observability above.</p>
+<h3>Cost structure</h3>
+<p>Both are MIT-licensed and free to run; your real cost is compute plus model API spend. OpenClaw&rsquo;s floor is near-zero if you run a local model. Hermes&rsquo;s floor is the VPS cost (&ldquo;$5 VPS&rdquo; per Nous&rsquo;s own framing) plus whatever model billing you choose — Nous Portal subscription, or your own OpenAI/Anthropic/OpenRouter keys.</p>
+<h3>Major limitations</h3>
+<p>OpenClaw&rsquo;s biggest limitation is the one its own docs state plainly: no sandboxing by default, and an exec-approvals system that is explicitly not a security boundary — you have to actively configure isolation if more than one trusted person touches it. Hermes&rsquo;s biggest limitation is the inverse kind of complexity: more moving parts (seven terminal backends, a more elaborate memory system, a hosted model aggregator) means more surface area to configure correctly, and its own published CVE history (below) includes an injection vulnerability in the memory-scanning code itself — the part of the system specifically meant to keep untrusted content from reaching the model unfiltered.</p>
+<h3>Best use cases</h3>
+<p>Covered in detail in the scenarios section below.</p>
+<h3>Who should avoid each</h3>
+<p>If you want &ldquo;install and forget&rdquo; with no security configuration decisions, avoid both — both require you to actively read and apply the sandboxing/approval docs, not just install and connect a messaging channel. If you specifically need a vendor support contract or a formal enterprise SLA, avoid both as currently published (self-support is the model for both).</p>
+<h2>Comparison table</h2>
+<div class="table-scroll"><table class="comparison-table">
+<thead>
+<tr>
+<th>Capability</th>
+<th>OpenClaw</th>
+<th>Hermes Agent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Primary purpose</td>
+<td>Persistent local agent reachable from your messaging apps</td>
+<td>Self-improving, long-running agent with persistent memory</td>
+</tr>
+<tr>
+<td>Open source</td>
+<td>Yes — MIT</td>
+<td>Yes — MIT</td>
+</tr>
+<tr>
+<td>Local execution</td>
+<td>Yes, local-first by design</td>
+<td>Yes, incl. local terminal backend</td>
+</tr>
+<tr>
+<td>Cloud execution</td>
+<td>Optional (cloud models)</td>
+<td>Optional (Nous Portal, Modal/Daytona/Vercel Sandbox)</td>
+</tr>
+<tr>
+<td>Persistent memory</td>
+<td>Markdown files on local disk</td>
+<td>Agent-curated store + FTS5 search + LLM summarization</td>
+</tr>
+<tr>
+<td>Browser control</td>
+<td>Via tools/skills (not a named standalone feature)</td>
+<td>Via tools/skills (not a named standalone feature)</td>
+</tr>
+<tr>
+<td>Computer control</td>
+<td>Not publicly documented as a distinct feature</td>
+<td>Not publicly documented as a distinct feature</td>
+</tr>
+<tr>
+<td>MCP support</td>
+<td>Yes — MCP Registry referenced in codebase</td>
+<td>Yes — documented &ldquo;full MCP integration&rdquo;</td>
+</tr>
+<tr>
+<td>Multi-agent</td>
+<td>Not publicly documented</td>
+<td>Yes — isolated subagents for parallel workstreams</td>
+</tr>
+<tr>
+<td>API</td>
+<td>Agent/gateway-driven; no standalone API reference located</td>
+<td>Agent/gateway-driven; no standalone API reference located</td>
+</tr>
+<tr>
+<td>Self-hosting</td>
+<td>Yes — Node.js 24.16+/26.1+, installer or npm, Docker image</td>
+<td>Yes — Python 3.14 + Node.js/npm/ripgrep/FFmpeg, installer or Docker/Modal/Daytona/Vercel Sandbox</td>
+</tr>
+<tr>
+<td>Enterprise deployment</td>
+<td>Not publicly documented (community project, no enterprise edition found)</td>
+<td>Not publicly documented (community project, no enterprise edition found)</td>
+</tr>
+<tr>
+<td>Security controls</td>
+<td>Pairing for unknown senders; exec-approvals allowlist; sandboxing off by default</td>
+<td>8-layer security model incl. dangerous-command approval, container isolation, MCP credential filtering</td>
+</tr>
+<tr>
+<td>Integrations</td>
+<td>20+ messaging channels + 5 native app platforms</td>
+<td>CLI, Telegram, Discord, Slack, WhatsApp, Signal, Email, Home Assistant</td>
+</tr>
+<tr>
+<td>Coding ability</td>
+<td>Via Claude/Codex/local-model tool calls</td>
+<td>Via Anthropic/OpenAI/OpenRouter/Portal model tool calls</td>
+</tr>
+<tr>
+<td>Research ability</td>
+<td>Via tools/skills, model-dependent</td>
+<td>Via tools/skills, model-dependent; ~160 bundled skills</td>
+</tr>
+<tr>
+<td>Workflow automation</td>
+<td>Cron jobs, hooks, webhooks</td>
+<td>Built-in natural-language cron scheduler</td>
+</tr>
+<tr>
+<td>Ease of setup</td>
+<td>One runtime (Node.js); single installer</td>
+<td>One more dependency (Python 3.14 + CLI tools); single installer</td>
+</tr>
+<tr>
+<td>Customization</td>
+<td>Tools/Skills/Plugins + SDK + ClawHub</td>
+<td>Skills (agentskills.io-compatible) + Skills Hub + self-authored skills</td>
+</tr>
+<tr>
+<td>Published CVEs (2026)</td>
+<td>Yes — incl. CVE-2026-25253 (RCE, CVSS 8.8), CVE-2026-25593 (RCE), CVE-2026-32922 (privilege escalation, CVSS 9.9)</td>
+<td>Yes — incl. CVE-2026-9366 (injection), CVE-2026-7112 (auth bypass)</td>
+</tr>
+<tr>
+<td>Best suited for</td>
+<td>Operators who want one agent across many chat channels, host-level control, max memory transparency</td>
+<td>Operators who want a self-improving agent with structured skills, cron, and a hosted multi-model option</td>
+</tr>
+</tbody>
+</table></div>
+<h2>Published security track record: neither is &ldquo;the safe one&rdquo;</h2>
+<p>It&rsquo;s tempting to assume one of these two projects is simply &ldquo;the secure one.&rdquo; The documented record doesn&rsquo;t support that story — both have real, publicly disclosed CVEs in 2026, spanning the categories that matter most for an agent with shell and messaging access.</p>
+<p><strong>OpenClaw</strong>, independently confirmed:
+- <a href="https://www.runzero.com/blog/openclaw/">CVE-2026-25253</a> (&ldquo;ClawBleed,&rdquo; CVSS 8.8) — one-click RCE via auth-token exfiltration over WebSocket, affecting versions before 2026.1.29. Also covered by the Belgian federal CERT (<a href="https://ccb.belgium.be/advisories/warning-critical-vulnerability-openclaw-allows-1-click-remote-code-execution-when">ccb.belgium.be</a>) and <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-25253">NVD</a>.
+- <a href="https://github.com/advisories/GHSA-g55j-c2v4-pjcg">CVE-2026-25593</a> — unauthenticated local RCE via the Gateway WebSocket&rsquo;s <code>config.apply</code>, which could set an unsafe <code>cliPath</code> later abused for command injection. Also in <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-25593">NVD</a>.
+- <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-32922">CVE-2026-32922</a> — a CVSS 9.9 privilege-escalation vulnerability in device-pairing token rotation (<code>device.token.rotate</code>), affecting OpenClaw before 2026.3.11. This one is in NVD: a paired, lower-privilege device can escalate to full control by abusing the rotate endpoint. Patch to 2026.3.11 or later.</p>
+<p><strong>Hermes Agent</strong>, independently confirmed:
+- <a href="https://github.com/advisories/GHSA-pgp4-xr4j-h5cg">CVE-2026-9366</a> — an injection vulnerability in <code>agent/prompt_builder.py</code>&rsquo;s context-scanning code, fixed in 0.15.0. Also in <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-9366">NVD</a>.
+- <a href="https://www.sentinelone.com/vulnerability-database/cve-2026-7112/">CVE-2026-7112</a> — an authentication bypass in the API server&rsquo;s key-check handler, affecting v0.8.0. Also in <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-7112">NVD</a>.
+- Additional reported CVEs cover injection in the memory tool, uncontrolled resource consumption in a webhook handler, and a sandbox-related issue in code execution — all named against <code>NousResearch/hermes-agent</code> specifically, ruling out confusion with an unrelated package of the same name.</p>
+<p>Both projects give an agent broad access to your shell, messages, and model API keys by design, and both attract real security research. A clean CVE history on either side would be the surprise. The practical conclusion isn&rsquo;t &ldquo;avoid both&rdquo; — it&rsquo;s &ldquo;patch promptly, sandbox by default, and don&rsquo;t expose the gateway to the open internet without reading the exposure-runbook docs.&rdquo;</p>
+<h2>Real-world scenarios: which one, and why</h2>
+<p><strong>Personal AI assistant.</strong> Either works; OpenClaw&rsquo;s broader native-app and channel list (20+ platforms, five native OS targets) gives it a slight edge if you want the same agent reachable from everything you already use.</p>
+<p><strong>VPS-hosted agents (the author runs both this way).</strong> Hermes&rsquo;s explicit &ldquo;$5 VPS, GPU cluster, or serverless&rdquo; framing and first-class Modal/Daytona/Vercel Sandbox backends make it marginally more &ldquo;designed for&rdquo; a remote server from day one. OpenClaw runs equally well on a VPS, but its docs frame the default use case more around a personal machine you&rsquo;re sitting in front of — sandboxing and remote-exposure hardening are something you add, not something that ships configured.</p>
+<p><strong>Telegram/WhatsApp chat agents.</strong> Both are strong here; Hermes additionally names Signal and Home Assistant, which matters if your chat surface extends into home automation. Pick based on which messaging platform&rsquo;s connector you trust more after reading its specific setup docs — not a general preference, since connector quality varies per channel in both projects.</p>
+<p><strong>Cron/scheduled jobs.</strong> Both ship built-in schedulers. Hermes&rsquo;s natural-language cron framing is more approachable for non-technical schedule authoring; OpenClaw&rsquo;s &ldquo;cron jobs, hooks, and webhooks&rdquo; framing is more conventional/ops-native if you&rsquo;re already comfortable with cron syntax.</p>
+<p><strong>Coding.</strong> Both are entirely dependent on which model you point them at (Claude, Codex, GPT, or a local model) — neither project&rsquo;s own coding ability is meaningfully differentiated from the other at the agent-framework layer. The differentiator is tool/terminal safety while coding: Hermes&rsquo;s isolated terminal backends are the safer default for letting an agent run and iterate on code without touching your real host.</p>
+<p><strong>Research.</strong> Hermes&rsquo;s bundled ~160 skills include dedicated research skills (arXiv, web search) out of the box; OpenClaw achieves the same through its own Tools/Skills/Plugins ecosystem, but with less of a pre-built library documented in the sources retrieved here.</p>
+<p><strong>Enterprise/on-prem.</strong> Neither has a formal enterprise edition as of this research. Both are workable on-prem if your team is comfortable owning the ops burden yourself — see our take on <a href="https://rajsuyash.com/blog/ai-integration-legacy-systems.html">AI integration with legacy systems</a> and <a href="https://rajsuyash.com/blog/ai-automation-governance-policy-smb.html">AI automation governance for SMBs</a> for the broader considerations that apply regardless of which agent framework you pick.</p>
+<p><strong>Privacy-sensitive industries.</strong> OpenClaw&rsquo;s local-first, Markdown-on-disk memory and local-model path give it the more direct route to &ldquo;nothing leaves this box.&rdquo; Hermes can match that with a local model and a local/Docker terminal backend, but its most turnkey path (Nous Portal) is a hosted aggregator by default — if privacy is the binding constraint, you&rsquo;ll spend more time configuring Hermes away from its easiest path than configuring OpenClaw toward its easiest path.</p>
+<h2>Architectural trade-offs, in one place</h2>
+<p>Pulling the thread through everything above: this is a self-hosted-vs-self-hosted comparison, not hosted-vs-self-hosted (that&rsquo;s <a href="https://rajsuyash.com/blog/meta-muse-vs-openai-dots-vs-grok-bot.html">Meta Muse vs OpenAI Dots vs Grok Bot</a>), so the usual hosted-agent trade-offs — losing control of your data, being stuck on someone else&rsquo;s uptime — don&rsquo;t apply to either side here. What <em>does</em> differ is where each project puts the controls. Context and memory management is OpenClaw&rsquo;s simple, auditable Markdown files versus Hermes&rsquo;s more capable but more opaque agent-curated/LLM-summarized store. Tool execution and permissions, and sandboxing, are the sharpest divide: host-execution-by-default-with-an-accident-guardrail (OpenClaw) versus isolation-recommended-for-production (Hermes) — pick based on your actual trust model, not on which framing sounds safer. Orchestration is asymmetric: Hermes documents isolated subagents, OpenClaw doesn&rsquo;t make an equivalent claim in the sources reviewed. Failure recovery on both sides is standard process supervision (systemd/Docker restart policies) rather than anything agent-specific — that part is on you either way, and reliability is bounded by the timeout-layering trap described above for both. Vendor lock-in is genuinely low for both — MIT license, no proprietary data format, swappable model layer — with the only real stickiness being time invested in one project&rsquo;s specific skill format (ClawHub-style vs. agentskills.io-compatible), which is inconvenient to port, not a hard lock-in.</p>
+<h2>Which one should you choose?</h2>
+<p><strong>Choose OpenClaw if</strong> you want the simplest possible memory model to audit (plain Markdown files), the broadest channel/native-app reach, a fully offline local-model path, and you&rsquo;re comfortable actively configuring sandboxing yourself rather than getting it by default.</p>
+<p><strong>Choose Hermes Agent if</strong> you want a more structured, self-improving skill system out of the box, isolated terminal backends that make &ldquo;safe by default&rdquo; the easier path for production, built-in natural-language cron, and you&rsquo;re fine with Python being part of your dependency stack.</p>
+<p><strong>Neither is right if</strong> you need a vendor support contract, a formal enterprise SLA, or an agent you can deploy without reading any security documentation at all — both require you to actively engage with sandboxing/approval configuration, and neither publishes an enterprise edition as of this research.</p>
+<figure class="mermaid-diagram"><svg role="img" aria-label="Decision tree for choosing between OpenClaw and Hermes Agent based on support needs, privacy requirements, number of users, and desired skill/scheduling features." style="width:100%;height:auto;max-width:720px;display:block;margin:0 auto;" id="mermaid-a3-3" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" style="max-width: 637.333px; background-color: transparent;" viewBox="4 4 637.3333740234375 2008" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mermaid-a3-3{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;fill:#0d0d0d;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mermaid-a3-3 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mermaid-a3-3 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mermaid-a3-3 .error-icon{fill:#ffffff;}#mermaid-a3-3 .error-text{fill:#000000;stroke:#000000;}#mermaid-a3-3 .edge-thickness-normal{stroke-width:1px;}#mermaid-a3-3 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-a3-3 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-a3-3 .edge-thickness-invisible{stroke-width:0;fill:none;}#mermaid-a3-3 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-a3-3 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-a3-3 .marker{fill:#8a4a2f;stroke:#8a4a2f;}#mermaid-a3-3 .marker.cross{stroke:#8a4a2f;}#mermaid-a3-3 svg{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;}#mermaid-a3-3 p{margin:0;}#mermaid-a3-3 .label{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#0d0d0d;}#mermaid-a3-3 .cluster-label text{fill:#000000;}#mermaid-a3-3 .cluster-label span{color:#000000;}#mermaid-a3-3 .cluster-label span p{background-color:transparent;}#mermaid-a3-3 .label text,#mermaid-a3-3 span{fill:#0d0d0d;color:#0d0d0d;}#mermaid-a3-3 .node rect,#mermaid-a3-3 .node circle,#mermaid-a3-3 .node ellipse,#mermaid-a3-3 .node polygon,#mermaid-a3-3 .node path{fill:#f4efe6;stroke:#2e2a25;stroke-width:1px;}#mermaid-a3-3 .rough-node .label text,#mermaid-a3-3 .node .label text,#mermaid-a3-3 .image-shape .label,#mermaid-a3-3 .icon-shape .label{text-anchor:middle;}#mermaid-a3-3 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mermaid-a3-3 .rough-node .label,#mermaid-a3-3 .node .label,#mermaid-a3-3 .image-shape .label,#mermaid-a3-3 .icon-shape .label{text-align:center;}#mermaid-a3-3 .node.clickable{cursor:pointer;}#mermaid-a3-3 .root .anchor path{fill:#8a4a2f!important;stroke-width:0;stroke:#8a4a2f;}#mermaid-a3-3 .arrowheadPath{fill:#0b0b0b;}#mermaid-a3-3 .edgePaths .path{stroke:#8a4a2f;stroke-width:1px;}#mermaid-a3-3 .flowchart-link{stroke:#8a4a2f;fill:none;}#mermaid-a3-3 .edgeLabel{background-color:#f4efe6;text-align:center;}#mermaid-a3-3 .edgeLabel p{background-color:#f4efe6;}#mermaid-a3-3 .edgeLabel rect{opacity:0.5;background-color:#f4efe6;fill:#f4efe6;}#mermaid-a3-3 .labelBkg{background-color:rgba(244, 239, 230, 0.5);}#mermaid-a3-3 .cluster rect{fill:#f9f6f0;stroke:#2e2a25;stroke-width:1px;}#mermaid-a3-3 .cluster text{fill:#000000;}#mermaid-a3-3 .cluster span{color:#000000;}#mermaid-a3-3 .node .collapsed-indicator{fill:#2e2a25;stroke:none;opacity:0.6;}#mermaid-a3-3 .node .collapsed-separator{stroke:#2e2a25;stroke-width:0.75px;}#mermaid-a3-3 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;background:#ffffff;border:1px solid hsl(0, 0%, 90%);border-radius:2px;pointer-events:none;z-index:100;}#mermaid-a3-3 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#0d0d0d;}#mermaid-a3-3 rect.text{fill:none;stroke-width:0;}#mermaid-a3-3 .icon-shape,#mermaid-a3-3 .image-shape{background-color:#f4efe6;text-align:center;}#mermaid-a3-3 .icon-shape p,#mermaid-a3-3 .image-shape p{background-color:#f4efe6;padding:2px;}#mermaid-a3-3 .icon-shape .label rect,#mermaid-a3-3 .image-shape .label rect{opacity:0.5;background-color:#f4efe6;fill:#f4efe6;}#mermaid-a3-3 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mermaid-a3-3 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mermaid-a3-3 .node .neo-node{stroke:#2e2a25;}#mermaid-a3-3 [data-look="neo"].node rect,#mermaid-a3-3 [data-look="neo"].cluster rect,#mermaid-a3-3 [data-look="neo"].node polygon{stroke:url(#mermaid-a3-3-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a3-3 [data-look="neo"].swimlane.cluster rect{filter:none;}#mermaid-a3-3 [data-look="neo"].node path{stroke:url(#mermaid-a3-3-gradient);stroke-width:1px;}#mermaid-a3-3 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a3-3 [data-look="neo"].node .neo-line path{stroke:#2e2a25;filter:none;}#mermaid-a3-3 [data-look="neo"].node circle{stroke:url(#mermaid-a3-3-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a3-3 [data-look="neo"].node circle .state-start{fill:#000000;}#mermaid-a3-3 [data-look="neo"].icon-shape .icon{fill:url(#mermaid-a3-3-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a3-3 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mermaid-a3-3-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a3-3 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker id="my-svg_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"/></marker><marker id="my-svg_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"/></marker><g class="root"><g class="clusters"/><g class="edges edgePaths"><path d="M213.49999999999997,132L213.49999999999997,168" id="my-svg-L_A_B_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 32 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_A_B_0" data-points="W3sieCI6MjEzLjQ5OTk5OTk5OTk5OTk3LCJ5IjoxMzJ9LHsieCI6MjEzLjQ5OTk5OTk5OTk5OTk3LCJ5IjoxNzJ9XQ==" data-look="neo" marker-end="url(#mermaid-a3-3_flowchart-v2-pointEnd-margin)"/><path d="M171.83333333333331,400.33327770233154L171.83333333333331,442L171.83333333333331,454.9289321881345Q171.83333333333331,462 164.76226552146784,462L95.07106781186545,462Q87.99999999999997,462 87.99999999999997,469.0710678118655L88,542" id="my-svg-L_B_N_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 216.17176818847656 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_B_N_0" data-points="W3sieCI6MTcxLjgzMzMzMzMzMzMzMzMxLCJ5Ijo0MDAuMzMzMjc3NzAyMzMxNTR9LHsieCI6MTcxLjgzMzMzMzMzMzMzMzMxLCJ5Ijo0NDJ9LHsieCI6MTcxLjgzMzMzMzMzMzMzMzMxLCJ5Ijo0NjJ9LHsieCI6ODcuOTk5OTk5OTk5OTk5OTcsInkiOjQ2Mn0seyJ4Ijo4OCwieSI6NTQ2fV0=" data-look="neo" marker-end="url(#mermaid-a3-3_flowchart-v2-pointEnd-margin)"/><path d="M255.16666666666666,400.33327770233154L255.16666666666666,442L255.16666666666666,454.9289321881345Q255.16666666666666,462 262.23773447853216,462L331.9289321881345,462Q339,462 339,469.0710678118655L339,542" id="my-svg-L_B_C_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 216.1717529296875 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_B_C_0" data-points="W3sieCI6MjU1LjE2NjY2NjY2NjY2NjY2LCJ5Ijo0MDAuMzMzMjc3NzAyMzMxNTR9LHsieCI6MjU1LjE2NjY2NjY2NjY2NjY2LCJ5Ijo0NDJ9LHsieCI6MjU1LjE2NjY2NjY2NjY2NjY2LCJ5Ijo0NjJ9LHsieCI6MzM5LCJ5Ijo0NjJ9LHsieCI6MzM5LCJ5Ijo1NDZ9XQ==" data-look="neo" marker-end="url(#mermaid-a3-3_flowchart-v2-pointEnd-margin)"/><path d="M297.3333333333333,774.3332777023315L297.3333333333333,816L297.3333333333333,828.9289321881345Q297.3333333333333,836 290.26226552146784,836L148.1544011451988,836Q141.08333333333331,836 141.08333333333331,843.0710678118655L141.08333333333331,868L141.08333333333331,1079L141.08333333333331,1537L141.08333333333331,1772L141.08333333333331,1808.9289321881345Q141.08333333333331,1816 148.1544011451988,1816L186.07997385480118,1816Q193.15104166666666,1816 193.15104166666666,1823.0710678118655L193.15104166666666,1832" id="my-svg-L_C_D_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 1251.3280029296875 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_C_D_0" data-points="W3sieCI6Mjk3LjMzMzMzMzMzMzMzMzMsInkiOjc3NC4zMzMyNzc3MDIzMzE1fSx7IngiOjI5Ny4zMzMzMzMzMzMzMzMzLCJ5Ijo4MTZ9LHsieCI6Mjk3LjMzMzMzMzMzMzMzMzMsInkiOjgzNn0seyJ4IjoxNDEuMDgzMzMzMzMzMzMzMzEsInkiOjgzNn0seyJ4IjoxNDEuMDgzMzMzMzMzMzMzMzEsInkiOjg2OH0seyJ4IjoxNDEuMDgzMzMzMzMzMzMzMzEsInkiOjEwNzl9LHsieCI6MTQxLjA4MzMzMzMzMzMzMzMxLCJ5IjoxNTM3fSx7IngiOjE0MS4wODMzMzMzMzMzMzMzMSwieSI6MTc3Mn0seyJ4IjoxNDEuMDgzMzMzMzMzMzMzMzEsInkiOjE4MTZ9LHsieCI6MTkzLjE1MTA0MTY2NjY2NjY2LCJ5IjoxODE2fSx7IngiOjE5My4xNTEwNDE2NjY2NjY2NiwieSI6MTgzNn1d" data-look="neo" marker-end="url(#mermaid-a3-3_flowchart-v2-pointEnd-margin)"/><path d="M380.66666666666663,774.3332777023315L380.66666666666663,816L380.66666666666663,828.9289321881345Q380.66666666666663,836 387.7377344785321,836L466.7622655214679,836Q473.83333333333337,836 473.83333333333337,843.0710678118655L473.83333333333337,916" id="my-svg-L_C_E_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 225.50514221191406 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_C_E_0" data-points="W3sieCI6MzgwLjY2NjY2NjY2NjY2NjYzLCJ5Ijo3NzQuMzMzMjc3NzAyMzMxNX0seyJ4IjozODAuNjY2NjY2NjY2NjY2NjMsInkiOjgxNn0seyJ4IjozODAuNjY2NjY2NjY2NjY2NjMsInkiOjgzNn0seyJ4Ijo0NzMuODMzMzMzMzMzMzMzMzcsInkiOjgzNn0seyJ4Ijo0NzMuODMzMzMzMzMzMzMzMzcsInkiOjkyMH1d" data-look="neo" marker-end="url(#mermaid-a3-3_flowchart-v2-pointEnd-margin)"/><path d="M523.5,1188.3332738876343L523.5,1238L523.5,1250.9289321881345Q523.5,1258 530.5710678118655,1258L579.512265521468,1258Q586.5833333333334,1258 586.5833333333334,1265.0710678118655L586.5833333333334,1302L586.5833333333334,1772L586.5833333333334,1808.9289321881345Q586.5833333333334,1816 579.512265521468,1816L538.8366928118655,1816Q531.765625,1816 531.765625,1823.0710678118655L531.765625,1832" id="my-svg-L_E_F_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 746.9113159179688 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_E_F_0" data-points="W3sieCI6NTIzLjUsInkiOjExODguMzMzMjczODg3NjM0M30seyJ4Ijo1MjMuNSwieSI6MTIzOH0seyJ4Ijo1MjMuNSwieSI6MTI1OH0seyJ4Ijo1ODYuNTgzMzMzMzMzMzMzNCwieSI6MTI1OH0seyJ4Ijo1ODYuNTgzMzMzMzMzMzMzNCwieSI6MTMwMn0seyJ4Ijo1ODYuNTgzMzMzMzMzMzMzNCwieSI6MTc3Mn0seyJ4Ijo1ODYuNTgzMzMzMzMzMzMzNCwieSI6MTgxNn0seyJ4Ijo1MzEuNzY1NjI1LCJ5IjoxODE2fSx7IngiOjUzMS43NjU2MjUsInkiOjE4MzZ9XQ==" data-look="neo" marker-end="url(#mermaid-a3-3_flowchart-v2-pointEnd-margin)"/><path d="M424.16666666666663,1188.3332738876343L424.16666666666663,1238L424.16666666666663,1250.9289321881345Q424.16666666666663,1258 417.09559885480115,1258L368.15440114519885,1258Q361.08333333333337,1258 361.08333333333337,1265.0710678118655L361.08333333333337,1362" id="my-svg-L_E_G_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 227.4217987060547 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_E_G_0" data-points="W3sieCI6NDI0LjE2NjY2NjY2NjY2NjYzLCJ5IjoxMTg4LjMzMzI3Mzg4NzYzNDN9LHsieCI6NDI0LjE2NjY2NjY2NjY2NjYzLCJ5IjoxMjM4fSx7IngiOjQyNC4xNjY2NjY2NjY2NjY2MywieSI6MTI1OH0seyJ4IjozNjEuMDgzMzMzMzMzMzMzMzcsInkiOjEyNTh9LHsieCI6MzYxLjA4MzMzMzMzMzMzMzM3LCJ5IjoxMzY2fV0=" data-look="neo" marker-end="url(#mermaid-a3-3_flowchart-v2-pointEnd-margin)"/><path d="M414.75,1654.3332118988037L414.75,1708L414.75,1723.4505208333333Q414.75,1728 419.29947916666663,1728L419.29947916666663,1728Q423.8489583333333,1728 423.8489583333333,1732.5494791666667L423.8489583333333,1808.9289321881345Q423.8489583333333,1816 430.9200261451988,1816L480.6945571881345,1816Q487.765625,1816 487.765625,1823.0710678118655L487.765625,1832" id="my-svg-L_G_F_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 237.92640686035156 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_G_F_0" data-points="W3sieCI6NDE0Ljc1LCJ5IjoxNjU0LjMzMzIxMTg5ODgwMzd9LHsieCI6NDE0Ljc1LCJ5IjoxNzA4fSx7IngiOjQxNC43NSwieSI6MTcyOH0seyJ4Ijo0MjMuODQ4OTU4MzMzMzMzMywieSI6MTcyOH0seyJ4Ijo0MjMuODQ4OTU4MzMzMzMzMywieSI6MTgxNn0seyJ4Ijo0ODcuNzY1NjI1LCJ5IjoxODE2fSx7IngiOjQ4Ny43NjU2MjUsInkiOjE4MzZ9XQ==" data-look="neo" marker-end="url(#mermaid-a3-3_flowchart-v2-pointEnd-margin)"/><path d="M307.41666666666663,1654.3332118988037L307.41666666666663,1708L307.41666666666663,1723.4505208333333Q307.41666666666663,1728 302.8671875,1728L302.8671875,1728Q298.3177083333333,1728 298.3177083333333,1732.5494791666667L298.3177083333333,1808.9289321881345Q298.3177083333333,1816 291.24664052146784,1816L244.22210947853213,1816Q237.15104166666666,1816 237.15104166666666,1823.0710678118655L237.15104166666666,1832" id="my-svg-L_G_D_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 235.1763916015625 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_G_D_0" data-points="W3sieCI6MzA3LjQxNjY2NjY2NjY2NjYzLCJ5IjoxNjU0LjMzMzIxMTg5ODgwMzd9LHsieCI6MzA3LjQxNjY2NjY2NjY2NjYzLCJ5IjoxNzA4fSx7IngiOjMwNy40MTY2NjY2NjY2NjY2MywieSI6MTcyOH0seyJ4IjoyOTguMzE3NzA4MzMzMzMzMywieSI6MTcyOH0seyJ4IjoyOTguMzE3NzA4MzMzMzMzMywieSI6MTgxNn0seyJ4IjoyMzcuMTUxMDQxNjY2NjY2NjYsInkiOjE4MTZ9LHsieCI6MjM3LjE1MTA0MTY2NjY2NjY2LCJ5IjoxODM2fV0=" data-look="neo" marker-end="url(#mermaid-a3-3_flowchart-v2-pointEnd-margin)"/></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(87.95312499999997, 494)"><g class="label" data-id="L_B_N_0" transform="translate(-14.453125, -12)"><foreignObject width="28.90625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>Yes</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(338.6328125, 494)"><g class="label" data-id="L_B_C_0" transform="translate(-9.6328125, -12)"><foreignObject width="19.265625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>No</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(141.08333333333331, 1302)"><g class="label" data-id="L_C_D_0" transform="translate(-100, -24)"><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel"><p>Yes, hard requirement</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(473.36458333333337, 868)"><g class="label" data-id="L_C_E_0" transform="translate(-38.53125, -12)"><foreignObject width="77.0625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>Flexible</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(586.5364583333334, 1537)"><g class="label" data-id="L_E_F_0" transform="translate(-14.453125, -12)"><foreignObject width="28.90625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>Yes</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(361.0833333333333, 1302)"><g class="label" data-id="L_E_G_0" transform="translate(-100, -24)"><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel"><p>No, single trusted operator</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(423.8020833333333, 1772)"><g class="label" data-id="L_G_F_0" transform="translate(-14.453125, -12)"><foreignObject width="28.90625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>Yes</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(297.8333333333333, 1772)"><g class="label" data-id="L_G_D_0" transform="translate(-91.515625, -24)"><foreignObject width="183.03125" height="48"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>No, prefer simplest<br />auditable memory</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default" id="my-svg-flowchart-A-0" data-look="neo" transform="translate(213.49999999999997, 72)"><rect class="basic label-container" style="" x="-76" y="-60" width="152" height="120"/><g class="label" style="" transform="translate(-60, -48)"><rect/><foreignObject width="120" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Start: choosing a self-hosted agent</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-B-1" data-look="neo" transform="translate(213.49999999999997, 307)"><polygon points="135,0 270,-135 135,-270 0,-135" class="label-container" transform="translate(-134.5, 135)"/><g class="label" style="" transform="translate(-60, -60)"><rect/><foreignObject width="120" height="120"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Need a vendor support<br />contract or SLA?</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-N-3" data-look="neo" transform="translate(88, 618)"><rect class="basic label-container" style="" x="-76" y="-72" width="152" height="144"/><g class="label" style="" transform="translate(-60, -60)"><rect/><foreignObject width="120" height="120"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Neither - look at a hosted product instead</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-C-5" data-look="neo" transform="translate(339, 681)"><polygon points="135,0 270,-135 135,-270 0,-135" class="label-container" transform="translate(-134.5, 135)"/><g class="label" style="" transform="translate(-60, -60)"><rect/><foreignObject width="120" height="120"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Privacy priority:<br />fully offline / local model?</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-D-7" data-look="neo" transform="translate(215.15104166666666, 1908)"><rect class="basic label-container" style="" x="-76" y="-72" width="152" height="144"/><g class="label" style="" transform="translate(-60, -60)"><rect/><foreignObject width="120" height="120"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>OpenClaw<br />local-first memory + local model path</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-E-9" data-look="neo" transform="translate(473.83333333333337, 1079)"><polygon points="159,0 318,-159 159,-318 0,-159" class="label-container" transform="translate(-158.5, 159)"/><g class="label" style="" transform="translate(-60, -84)"><rect/><foreignObject width="120" height="168"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>More than one person<br />or untrusted input will<br />reach this agent?</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-F-11" data-look="neo" transform="translate(509.765625, 1920)"><rect class="basic label-container" style="" x="-76" y="-84" width="152" height="168"/><g class="label" style="" transform="translate(-60, -72)"><rect/><foreignObject width="120" height="144"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Hermes Agent<br />isolated terminal backends<br />by default guidance</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-G-13" data-look="neo" transform="translate(361.0833333333333, 1537)"><polygon points="171,0 342,-171 171,-342 0,-171" class="label-container" transform="translate(-170.5, 171)"/><g class="label" style="" transform="translate(-60, -96)"><rect/><foreignObject width="120" height="192"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Want built-in<br />self-improving skills<br />+ natural-language cron?</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="my-svg-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><defs><filter id="my-svg-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><linearGradient id="my-svg-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#2e2a25" stop-opacity="1"/><stop offset="100%" stop-color="hsl(38.5714285714, 0%, 82.9411764706%)" stop-opacity="1"/></linearGradient></svg><figcaption>Decision tree for choosing between OpenClaw and Hermes Agent based on support needs, privacy requirements, number of users, and desired skill/scheduling features.</figcaption></figure>
+
+<h2>Sources / Further Reading</h2>
+<ul>
+<li><a href="https://github.com/openclaw/openclaw">OpenClaw — GitHub repository</a> (primary source: README, architecture, license, governance)</li>
+<li><a href="https://github.com/openclaw/openclaw/releases">OpenClaw — releases</a></li>
+<li><a href="https://github.com/openclaw/openclaw/blob/main/docs/index.md">OpenClaw — docs index</a></li>
+<li><a href="https://docs.openclaw.ai/tools/exec-approvals">OpenClaw — exec approvals docs</a></li>
+<li><a href="https://github.com/SamurAIGPT/awesome-openclaw">awesome-openclaw — curated resource list</a></li>
+<li><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent — GitHub repository</a> (primary source: README, architecture, license)</li>
+<li><a href="https://github.com/NousResearch/hermes-agent/releases">Hermes Agent — releases</a></li>
+<li><a href="https://hermes-agent.nousresearch.com/docs/user-guide/security">Hermes Agent — security docs</a></li>
+<li><a href="https://www.runzero.com/blog/openclaw/">CVE-2026-25253 — runZero analysis</a> · <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-25253">NVD record</a></li>
+<li><a href="https://ccb.belgium.be/advisories/warning-critical-vulnerability-openclaw-allows-1-click-remote-code-execution-when">CVE-2026-25253 — Belgian CCB official advisory</a></li>
+<li><a href="https://github.com/advisories/GHSA-g55j-c2v4-pjcg">CVE-2026-25593 — GitHub Advisory Database</a> · <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-25593">NVD record</a></li>
+<li><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-32922">CVE-2026-32922 — NVD record</a> (OpenClaw device-pairing token-rotation privilege escalation, CVSS 9.9)</li>
+<li><a href="https://github.com/advisories/GHSA-pgp4-xr4j-h5cg">CVE-2026-9366 — GitHub Advisory Database</a> · <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-9366">NVD record</a></li>
+<li><a href="https://www.sentinelone.com/vulnerability-database/cve-2026-7112/">CVE-2026-7112 — SentinelOne Vulnerability Database</a> · <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-7112">NVD record</a></li>
+<li><a href="https://www.cnbc.com/2026/02/02/openclaw-open-source-ai-agent-rise-controversy-clawdbot-moltbot-moltbook.html">CNBC — &ldquo;From Clawdbot to Moltbot to OpenClaw&rdquo;</a></li>
+</ul>
+<p><em>Related on this site:</em> <a href="https://rajsuyash.com/blog/meta-muse-vs-openai-dots-vs-grok-bot.html">Meta Muse vs OpenAI Dots vs Grok Bot</a> (hosted consumer agents compared) · <a href="https://rajsuyash.com/blog/jev-typesafe-architecture-use-cases-guide.html">JEV: Architecture, Use Cases and Limitations</a> (JEV architecture guide) · <a href="https://rajsuyash.com/blog/ai-agent-evals-builders.html">AI agent evals for builders</a> · <a href="https://rajsuyash.com/blog/mcp-server-vs-webhook-automation-builders.html">MCP servers vs. webhook automation</a> · <a href="https://rajsuyash.com/blog/ai-automation-build-vs-buy-vs-outsource.html">AI automation build vs. buy vs. outsource</a></p>
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>Is OpenClaw the same project as Clawdbot or Moltbot?</h3>
+                <p>Yes — one continuous project, renamed after a January 2026 Anthropic trademark objection to &ldquo;Clawdbot,&rdquo; now governed by the nonprofit OpenClaw Foundation.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is Hermes Agent the same as Claude&#x27;s &quot;Hermes&quot; models?</h3>
+                <p>No. This article covers <strong>Hermes Agent</strong>, Nous Research&rsquo;s open-source agent framework (github.com/NousResearch/hermes-agent) — not Nous&rsquo;s separate &ldquo;Hermes&rdquo; family of fine-tuned LLMs, which is a model, not an agent.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Are OpenClaw and Hermes Agent free?</h3>
+                <p>Both are MIT-licensed and free to self-host. Your ongoing cost is compute (from roughly $5/month for Hermes, per Nous&rsquo;s own framing) plus whatever model API you connect — a local model can bring that near $0.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is OpenClaw or Hermes Agent sandboxed by default?</h3>
+                <p>No, not fully, in different ways. OpenClaw runs tools on the host by default unless you configure sandboxing. Hermes&rsquo;s production guidance recommends isolated terminal backends (Docker, Modal, Daytona, Vercel Sandbox) — but you still have to choose one; it isn&rsquo;t universal across every install path.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Have OpenClaw or Hermes Agent had security vulnerabilities?</h3>
+                <p>Yes, both — publicly disclosed 2026 CVEs including RCE and auth-bypass issues on each side (see the security section above). Both patch actively; run a current version and read the security docs before exposing a gateway or connecting a channel.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I run either one fully offline, with no cloud model calls?</h3>
+                <p>OpenClaw, yes directly, via Ollama/LM Studio. Hermes can also point at a local endpoint, but its most turnkey path (Nous Portal) is a hosted aggregator by default, so offline takes a deliberate config choice rather than being the easy path.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Does either one support the Model Context Protocol (MCP)?</h3>
+                <p>Yes, both. Hermes documents &ldquo;full MCP integration&rdquo;; OpenClaw&rsquo;s codebase references an MCP Registry. If MCP depth is decision-critical, verify OpenClaw&rsquo;s current MCP docs directly — documentation depth here differs between the two.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Which one is better for a VPS-hosted personal assistant?</h3>
+                <p>Either, depending on priorities: OpenClaw for the simplest-to-audit memory and broadest messaging reach; Hermes Agent for a self-improving skill system, natural-language scheduling, and isolation-by-default production guidance. Both are genuinely production-usable self-hosted today.</p>
+            </div>
+        </div>
+        <!-- CTA in article -->
+        <h2>Ready to Get Started?</h2>
+        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
+        <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/meta-muse-vs-openai-dots-vs-grok-bot.html" class="related-card">
+                <h3 class="related-card-title">Meta Muse vs OpenAI Dots vs Grok Bot: Which Always-On AI Agent Should You Actually Use?</h3>
+                <p class="related-card-excerpt">The hosted, consumer-facing alternative if you don&#x27;t want to self-host at all.</p>
+            </a>
+            <a href="/blog/jev-typesafe-architecture-use-cases-guide.html" class="related-card">
+                <h3 class="related-card-title">JEV: Architecture, Use Cases, Limitations and When You Should Use It</h3>
+                <p class="related-card-excerpt">A bounded decision primitive you can call from inside either agent above.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify.html" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a></p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
