@@ -107,7 +107,7 @@
                 "name": "Can an MCP server call my existing n8n workflow?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Yes, and that is the cheapest migration path. The tool function body can be a single HTTP POST to the n8n production webhook URL you already run. You keep the workflow, the credentials and the execution history in n8n, and the MCP server becomes a typed, discoverable front door for a model. I would start there before rewriting any workflow logic in Python."
+                    "text": "Yes, and that is the cheapest migration path. The tool function body can be a single HTTP POST to the n8n production webhook URL you already run. You keep the workflow, the credentials and the execution history in n8n, and the MCP server becomes <a href="/blog/jev-typesafe-architecture-use-cases-guide.html" title="JEV: a typed, calibrated decision primitive">a typed, discoverable front door for a model</a>. I would start there before rewriting any workflow logic in Python."
                 }
             },
             {
@@ -881,7 +881,7 @@ Tool 'lookup_company' rejected arguments: ['domain']</code></pre>
         <h2>The rule I use now</h2>
 
         <div class="definition-block">
-            <p><strong>If the caller already knows which operation it wants, use a webhook. If the caller has to choose, use an MCP server. If the caller is a model and the operation writes to something you care about, use an MCP server and declare the schemas on both sides.</strong></p>
+            <p><strong>If the caller already knows which operation it wants, use a webhook. If the caller has to choose, <a href="/blog/meta-muse-vs-openai-dots-vs-grok-bot.html" title="Meta Muse vs OpenAI Dots vs Grok Bot: MCP support compared">use an MCP server.</a> If the caller is a model and the operation writes to something you care about, <a href="/blog/openclaw-vs-hermes-agent.html" title="OpenClaw vs Hermes Agent: both document MCP support">use an MCP server and declare the schemas on both sides.</a></strong></p>
         </div>
 
         <p>That is it. It is not about speed, because the speed difference here was four tenths of a millisecond and it went the wrong way for the newer protocol. It is about whether discovery and typing are doing work for you, or whether you are paying for a menu that nobody reads.</p>

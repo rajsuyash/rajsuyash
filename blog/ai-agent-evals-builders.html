@@ -507,7 +507,7 @@
 
         <ul>
             <li><strong>Level 1: Assertions.</strong> Deterministic checks on tool calls, output format, and specific facts. These run fast, cost almost nothing, and catch the most common failures. I run these on every code and prompt change.</li>
-            <li><strong>Level 2: Human or LLM review on traces.</strong> You log every agent run, then score a sample for quality, tone, and correctness. More expensive, slower, but it catches the subtler failures that assertions miss. I run these on a weekly cadence or after a major prompt rewrite.</li>
+            <li><strong>Level 2: Human or LLM review on traces.</strong> <a href="/blog/meta-muse-vs-openai-dots-vs-grok-bot.html" title="Reliability for long-running always-on agents, compared">You log every agent run, then score a sample for quality, tone, and correctness.</a> More expensive, slower, but it catches the subtler failures that assertions miss. I run these on a weekly cadence or after a major prompt rewrite.</li>
             <li><strong>Level 3: A/B or large-scale evaluation.</strong> You run two versions of the agent against the same user base and measure real outcomes. This is the most reliable signal but requires production traffic. I only do this once an agent is already earning enough usage to split.</li>
         </ul>
 
@@ -557,7 +557,7 @@ def check_tool_call(actual: dict, expected: dict) -> bool:
 
         <p>This is the hardest metric to check with pure assertions because it requires semantic understanding. I use an LLM-as-judge here: I pass the agent's response and its context to a judge model and ask it to identify claims in the response that have no support in the context. I then compute (unsupported claims) / (total factual claims).</p>
 
-        <p>DeepEval has a <code>FaithfulnessMetric</code> that does this automatically against a set of "retrieval context" strings. The score it returns is 0 to 1, where 1 means every claim is supported. I use it directly for RAG agents:</p>
+        <p>DeepEval has a <code>FaithfulnessMetric</code> that does this automatically against a set of "retrieval context" strings. <a href="/blog/jev-typesafe-architecture-use-cases-guide.html" title="JEV returns a calibrated 0-1 probability with every answer">The score it returns is 0 to 1, where 1 means every claim is supported.</a> I use it directly for RAG agents:</p>
 
         <pre><code># requires: pip install deepeval
 from deepeval.metrics import FaithfulnessMetric
