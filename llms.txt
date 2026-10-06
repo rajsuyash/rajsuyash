@@ -1,0 +1,19 @@
+# rajsuyash.com
+
+Suyash Raj is an AI automation consultant and AI voice-agent expert, based in Paris, and the
+founder of Voxdonna AI and AiSewak. This site publishes n8n and AI-agent tutorials alongside his
+consulting practice.
+
+## Key pages
+- About: https://rajsuyash.com/about.html — who Suyash Raj is, what he builds, companies founded
+- Consulting: https://rajsuyash.com/consulting.html — automation architecture and AI-agent readiness advisory
+- Case studies: https://rajsuyash.com/case-studies.html — client results (Le Marquier, Usha Martin)
+- n8n Automation Guides: https://rajsuyash.com/n8n-automation.html
+- AI Agents: https://rajsuyash.com/ai-agents.html
+- Blog: https://rajsuyash.com/blog/
+- FAQ: https://rajsuyash.com/faq.html
+- Contact: grow@rajsuyash.com
+
+## Companies founded
+- Voxdonna AI (https://voxdonna.com) — AI voice and WhatsApp agents for enterprises.
+- AiSewak (https://aisewak.com) — AI voice agents for Indian government and citizen services.
