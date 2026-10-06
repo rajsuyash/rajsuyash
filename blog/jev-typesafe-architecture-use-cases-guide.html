@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>JEV (TypeSafe Jev) Guide: Architecture, Use Cases, Limits</title>
+    <meta name="description" content="What JEV (TypeSafe AI&#x27;s Jev) actually is, how its architecture works, 13 real use cases, its limitations, and when to use it instead of an agent framework.">
+    <meta name="keywords" content="JEV AI agent">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/jev-typesafe-architecture-use-cases-guide.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/jev-typesafe-architecture-use-cases-guide.html">
+    <meta property="og:title" content="JEV (TypeSafe Jev) Guide: Architecture, Use Cases, Limits">
+    <meta property="og:description" content="Everything verifiable about JEV (TypeSafe&#x27;s Jev) — architecture, the Choice/Noul/Score primitives, 13 use cases, security, limitations, and when it&#x27;s the right tool.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj">
+    <meta property="article:published_time" content="2026-10-06">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="JEV (TypeSafe Jev) Guide: Architecture, Use Cases, Limits">
+    <meta name="twitter:description" content="Everything verifiable about JEV (TypeSafe&#x27;s Jev) — architecture, the Choice/Noul/Score primitives, 13 use cases, security, limitations, and when it&#x27;s the right tool.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260216b">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "JEV (TypeSafe Jev) Guide: Architecture, Use Cases, Limits",
+        "description": "What JEV (TypeSafe AI's Jev) actually is, how its architecture works, 13 real use cases, its limitations, and when to use it instead of an agent framework.",
+        "author": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com/about.html"
+        },
+        "publisher": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj"
+        },
+        "datePublished": "2026-10-06",
+        "dateModified": "2026-10-06",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/jev-typesafe-architecture-use-cases-guide.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What is JEV in AI agents?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "JEV (properly &ldquo;Jev&rdquo;) is TypeSafe AI&rsquo;s &ldquo;System One model&rdquo; \u2014 a non-generative model that turns text/JSON input and a set of typed questions into typed answers with calibrated probabilities, for use inside software and agents, not as a standalone agent itself."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is JEV the same as Jev AI (jev-ai.org)?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. Jev AI is an independent community app for sharing Jev &ldquo;playbooks&rdquo;; its own README states it is not the official product site for the underlying Jev model. The official product is TypeSafe&rsquo;s Jev at typesafe.ai / docs.typesafe.ai."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can you self-host Jev?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. TypeSafe&rsquo;s Jev is API-only with no downloadable weights or on-prem build documented anywhere. (Don&rsquo;t confuse it with the unrelated, genuinely self-hostable open-source model AgentJev-0.6B, which benchmarks against Jev but isn&rsquo;t Jev.)"
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Does TypeSafe's Jev have an official MCP server?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Not as of this research. Several third-party/community MCP servers exist (jev-mcp, typesafe-mcp, decisions-judge-mcp, jev-shield) that bridge Jev&rsquo;s API into MCP clients like Claude Code and Cursor."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How much does Jev cost?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "$0.042 per million input tokens ($42 per billion); output tokens are free. No self-serve enterprise pricing tier is published \u2014 enterprise customers are directed to contact sales."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is Jev an agent framework like LangGraph or CrewAI?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. It has no agent loop, no built-in memory, and no native tool calling. It&rsquo;s a decision primitive you&rsquo;d call from inside a framework like LangGraph, CrewAI, Hermes, OpenClaw, or an Agents SDK build, not a replacement for any of them."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How does Jev handle uncertain answers?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "It returns a calibrated probability/confidence with every answer, and TypeSafe recommends a three-tier policy: act automatically above a high threshold, confirm or flag for review in a medium band, and escalate to a human or fallback system below a low threshold \u2014 with the threshold itself scaled to how costly a wrong decision would be."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What are Jev's main limitations today?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Text-only input (no image/audio/video), no memory, no self-hosting, no official MCP server, model aliases that can drift behavior without a code change, no published compliance certifications, and rate limits still described as actively changing."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "JEV: Architecture, Use Cases, Limitations and When You Should Use It", "item": "https://rajsuyash.com/blog/jev-typesafe-architecture-use-cases-guide.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Table horizontal-scroll wrapper, so a wide comparison table never
+           overflows the page on mobile; it scrolls inside its own box instead. */
+        .table-scroll {
+            overflow-x: auto;
+            margin: var(--space-md) 0;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table-scroll .comparison-table {
+            margin: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* Mermaid diagrams, pre-rendered to inline SVG at build time (no runtime JS) */
+        .mermaid-diagram {
+            margin: var(--space-md) 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .mermaid-diagram figcaption {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+            margin-top: var(--space-xs);
+            text-align: center;
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/about.html" class="nav-link">About</a>
+                <a href="/qualify.html" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">AI Agents</span>
+                <span class="article-date">October 6, 2026</span>
+                <span class="article-read-time">29 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">JEV (TypeSafe Jev) Guide: Architecture, Use Cases, Limits</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">Jev isn&#x27;t an agent framework, and treating it like one is the fastest way to misuse it. What TypeSafe&#x27;s System One model actually does, where it fits next to LangGraph and CrewAI, and when it earns a place in your stack.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <!-- CONTENT GOES HERE -->
+        <p>If you&rsquo;ve searched &ldquo;JEV AI agent&rdquo; recently, you&rsquo;ve probably landed on three different things without realizing it. This guide is about <strong>Jev, the first &ldquo;System One model&rdquo; from TypeSafe AI</strong> — the one with real docs, a real API, and a real funding history. It is <em>not</em> about <a href="https://github.com/jev-ai">jev-ai.org</a>, an independent community app for sharing &ldquo;Jev playbooks&rdquo; whose own README says plainly it &ldquo;is not the official product site for the underlying Jev model.&rdquo; And it&rsquo;s not about <a href="https://github.com/malevrigns/agent-jev">AgentJev-0.6B</a>, an unrelated, fully open-source, self-hostable 0.6B decision model that happens to benchmark itself against TypeSafe&rsquo;s Jev. Three names, one letter of difference, three different things to build on. We&rsquo;re covering the real one.</p>
+<p>If you came here expecting a comparison against <a href="/ai-agents.html">custom AI agent development</a> platforms like Claude Code or OpenClaw: that&rsquo;s not quite the right lens, and the first section explains why.</p>
+<h2>The one-paragraph verdict</h2>
+<p>Jev is not an agent framework. It doesn&rsquo;t run a loop, hold memory, call tools, or orchestrate anything. It&rsquo;s a <strong>decision primitive</strong>: you send it some text and a set of typed questions with a fixed answer space, and it sends back typed answers with calibrated probabilities — in one pass, in well under a second, for a fraction of a cent. Think of it less as &ldquo;an alternative to LangGraph&rdquo; and more as &ldquo;a faster, cheaper, more honest <code>if/switch</code> statement for the cases where the condition is semantic, not literal.&rdquo; Keep that frame and the rest of this guide will make sense; lose it and you&rsquo;ll keep asking questions Jev&rsquo;s docs never answer, like &ldquo;does it have memory&rdquo; (no) or &ldquo;can I self-host it&rdquo; (no).</p>
+<h2>1–3. What JEV is, why it exists, the problem it solves</h2>
+<p>TypeSafe AI&rsquo;s own framing is refreshingly specific: <em>&ldquo;Large language models (LLMs) are designed to produce text for humans to read. When you need a model to make a judgment that your code will consume, that creates a mismatch.&rdquo;</em> Normal LLM-in-the-loop code pays for this mismatch constantly — you ask a chat model to classify a support ticket, it replies with a sentence, you regex or JSON-parse that sentence, and occasionally it hallucinates a category that was never in your list, wraps the answer in markdown, or refuses outright.</p>
+<p>Jev&rsquo;s answer is to remove the text-generation step entirely for this class of problem. You define the possible answers up front (a <code>Choice</code>&rsquo;s options, a <code>Noul</code>&rsquo;s yes/no, a <code>Score</code>&rsquo;s rubric levels); the model picks among exactly those, with a probability. It&rsquo;s the same instinct behind the <a href="/blog/ai-automation-vs-rpa.html">RPA-vs-AI-automation</a> distinction this site has made before, pushed one step further: rules are too brittle for semantic judgment, but a full generative model is often more power (and more failure surface) than a bounded decision needs. Jev sits in between.</p>
+<p>TypeSafe AI itself is a young company — founded in 2024, came out of stealth on September 15, 2026 with Jev in early access alongside a $40M seed round led by DCVC. That timeline matters for the maturity-risk section near the end.</p>
+<h2>4–5. How the architecture works, and the core components</h2>
+<p>A System One model call is one HTTP request with two inputs and one output shape:</p>
+<figure class="mermaid-diagram"><svg role="img" aria-label="A Jev System One model call: your code sends state and typed questions to POST /v1/systemone, gets back typed answers with probabilities, then routes to automatic action, human confirmation, or escalation based on confidence." style="width:100%;height:auto;max-width:720px;display:block;margin:0 auto;" id="mermaid-a2-1" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" style="max-width: 625.234px; background-color: transparent;" viewBox="4 4 625.234375 623.6666870117188" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mermaid-a2-1{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;fill:#0d0d0d;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mermaid-a2-1 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mermaid-a2-1 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mermaid-a2-1 .error-icon{fill:#ffffff;}#mermaid-a2-1 .error-text{fill:#000000;stroke:#000000;}#mermaid-a2-1 .edge-thickness-normal{stroke-width:1px;}#mermaid-a2-1 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-a2-1 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-a2-1 .edge-thickness-invisible{stroke-width:0;fill:none;}#mermaid-a2-1 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-a2-1 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-a2-1 .marker{fill:#8a4a2f;stroke:#8a4a2f;}#mermaid-a2-1 .marker.cross{stroke:#8a4a2f;}#mermaid-a2-1 svg{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;}#mermaid-a2-1 p{margin:0;}#mermaid-a2-1 .label{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#0d0d0d;}#mermaid-a2-1 .cluster-label text{fill:#000000;}#mermaid-a2-1 .cluster-label span{color:#000000;}#mermaid-a2-1 .cluster-label span p{background-color:transparent;}#mermaid-a2-1 .label text,#mermaid-a2-1 span{fill:#0d0d0d;color:#0d0d0d;}#mermaid-a2-1 .node rect,#mermaid-a2-1 .node circle,#mermaid-a2-1 .node ellipse,#mermaid-a2-1 .node polygon,#mermaid-a2-1 .node path{fill:#f4efe6;stroke:#2e2a25;stroke-width:1px;}#mermaid-a2-1 .rough-node .label text,#mermaid-a2-1 .node .label text,#mermaid-a2-1 .image-shape .label,#mermaid-a2-1 .icon-shape .label{text-anchor:middle;}#mermaid-a2-1 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mermaid-a2-1 .rough-node .label,#mermaid-a2-1 .node .label,#mermaid-a2-1 .image-shape .label,#mermaid-a2-1 .icon-shape .label{text-align:center;}#mermaid-a2-1 .node.clickable{cursor:pointer;}#mermaid-a2-1 .root .anchor path{fill:#8a4a2f!important;stroke-width:0;stroke:#8a4a2f;}#mermaid-a2-1 .arrowheadPath{fill:#0b0b0b;}#mermaid-a2-1 .edgePaths .path{stroke:#8a4a2f;stroke-width:1px;}#mermaid-a2-1 .flowchart-link{stroke:#8a4a2f;fill:none;}#mermaid-a2-1 .edgeLabel{background-color:#f4efe6;text-align:center;}#mermaid-a2-1 .edgeLabel p{background-color:#f4efe6;}#mermaid-a2-1 .edgeLabel rect{opacity:0.5;background-color:#f4efe6;fill:#f4efe6;}#mermaid-a2-1 .labelBkg{background-color:rgba(244, 239, 230, 0.5);}#mermaid-a2-1 .cluster rect{fill:#f9f6f0;stroke:#2e2a25;stroke-width:1px;}#mermaid-a2-1 .cluster text{fill:#000000;}#mermaid-a2-1 .cluster span{color:#000000;}#mermaid-a2-1 .node .collapsed-indicator{fill:#2e2a25;stroke:none;opacity:0.6;}#mermaid-a2-1 .node .collapsed-separator{stroke:#2e2a25;stroke-width:0.75px;}#mermaid-a2-1 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;background:#ffffff;border:1px solid hsl(0, 0%, 90%);border-radius:2px;pointer-events:none;z-index:100;}#mermaid-a2-1 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#0d0d0d;}#mermaid-a2-1 rect.text{fill:none;stroke-width:0;}#mermaid-a2-1 .icon-shape,#mermaid-a2-1 .image-shape{background-color:#f4efe6;text-align:center;}#mermaid-a2-1 .icon-shape p,#mermaid-a2-1 .image-shape p{background-color:#f4efe6;padding:2px;}#mermaid-a2-1 .icon-shape .label rect,#mermaid-a2-1 .image-shape .label rect{opacity:0.5;background-color:#f4efe6;fill:#f4efe6;}#mermaid-a2-1 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mermaid-a2-1 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mermaid-a2-1 .node .neo-node{stroke:#2e2a25;}#mermaid-a2-1 [data-look="neo"].node rect,#mermaid-a2-1 [data-look="neo"].cluster rect,#mermaid-a2-1 [data-look="neo"].node polygon{stroke:url(#mermaid-a2-1-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a2-1 [data-look="neo"].swimlane.cluster rect{filter:none;}#mermaid-a2-1 [data-look="neo"].node path{stroke:url(#mermaid-a2-1-gradient);stroke-width:1px;}#mermaid-a2-1 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a2-1 [data-look="neo"].node .neo-line path{stroke:#2e2a25;filter:none;}#mermaid-a2-1 [data-look="neo"].node circle{stroke:url(#mermaid-a2-1-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a2-1 [data-look="neo"].node circle .state-start{fill:#000000;}#mermaid-a2-1 [data-look="neo"].icon-shape .icon{fill:url(#mermaid-a2-1-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a2-1 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mermaid-a2-1-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a2-1 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker id="my-svg_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"/></marker><marker id="my-svg_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"/></marker><g class="root"><g class="clusters"/><g class="edges edgePaths"><path d="M164,278.3333333333333L176.92893218813452,278.3333333333333Q184,278.3333333333333 184,271.26226552146784L184,67.57106781186548Q184,60.5 191.07106781186548,60.5L436.9289321881345,60.5Q444,60.5 444,67.57106781186548L444,91.26226552146787Q444,98.33333333333334 451.0710678118655,98.33333333333334L460,98.33333333333334" id="my-svg-L_A_B_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 537.0101318359375 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_A_B_0" data-points="W3sieCI6MTY0LCJ5IjoyNzguMzMzMzMzMzMzMzMzM30seyJ4IjoxODQsInkiOjI3OC4zMzMzMzMzMzMzMzMzfSx7IngiOjE4NCwieSI6NjAuNX0seyJ4Ijo0NDQsInkiOjYwLjV9LHsieCI6NDQ0LCJ5Ijo5OC4zMzMzMzMzMzMzMzMzNH0seyJ4Ijo0NjQsInkiOjk4LjMzMzMzMzMzMzMzMzM0fV0=" data-look="neo" marker-end="url(#mermaid-a2-1_flowchart-v2-pointEnd-margin)"/><path d="M464,139.66666666666669L451.0710678118655,139.66666666666669Q444,139.66666666666669 444,146.73773447853216L444,170.42893218813452Q444,177.5 436.9289321881345,177.5L211.07106781186548,177.5Q204,177.5 204,184.57106781186548L204,275.9289321881345Q204,283 196.92893218813452,283L168,283" id="my-svg-L_B_A_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 424.6767883300781 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_B_A_0" data-points="W3sieCI6NDY0LCJ5IjoxMzkuNjY2NjY2NjY2NjY2Njl9LHsieCI6NDQ0LCJ5IjoxMzkuNjY2NjY2NjY2NjY2Njl9LHsieCI6NDQ0LCJ5IjoxNzcuNX0seyJ4IjoyMDQsInkiOjE3Ny41fSx7IngiOjIwNCwieSI6MjgzfSx7IngiOjE2NCwieSI6MjgzfV0=" data-look="neo" marker-end="url(#mermaid-a2-1_flowchart-v2-pointEnd-margin)"/><path d="M164,287.66666666666663L460,287.66666666666663" id="my-svg-L_A_C_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 292 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_A_C_0" data-points="W3sieCI6MTY0LCJ5IjoyODcuNjY2NjY2NjY2NjY2NjN9LHsieCI6NDY0LCJ5IjoyODcuNjY2NjY2NjY2NjY2NjN9XQ==" data-look="neo" marker-end="url(#mermaid-a2-1_flowchart-v2-pointEnd-margin)"/><path d="M164,292.3333333333333L196.92893218813452,292.3333333333333Q204,292.3333333333333 204,299.4044011451988L204,404.59559885480115Q204,411.66666666666663 211.07106781186548,411.66666666666663L460,411.66666666666663" id="my-svg-L_A_D_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 406.00506591796875 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_A_D_0" data-points="W3sieCI6MTY0LCJ5IjoyOTIuMzMzMzMzMzMzMzMzM30seyJ4IjoyMDQsInkiOjI5Mi4zMzMzMzMzMzMzMzMzfSx7IngiOjIwNCwieSI6NDExLjY2NjY2NjY2NjY2NjYzfSx7IngiOjQ2NCwieSI6NDExLjY2NjY2NjY2NjY2NjYzfV0=" data-look="neo" marker-end="url(#mermaid-a2-1_flowchart-v2-pointEnd-margin)"/><path d="M164,297L176.92893218813452,297Q184,297 184,304.0710678118655L184,552.5955988548012Q184,559.6666666666666 191.07106781186548,559.6666666666666L460,559.6666666666666" id="my-svg-L_A_E_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 549.33837890625 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_A_E_0" data-points="W3sieCI6MTY0LCJ5IjoyOTd9LHsieCI6MTg0LCJ5IjoyOTd9LHsieCI6MTg0LCJ5Ijo1NTkuNjY2NjY2NjY2NjY2Nn0seyJ4Ijo0NjQsInkiOjU1OS42NjY2NjY2NjY2NjY2fV0=" data-look="neo" marker-end="url(#mermaid-a2-1_flowchart-v2-pointEnd-margin)"/></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(324, 60)"><g class="label" data-id="L_A_B_0" transform="translate(-100, -48)"><foreignObject width="200" height="96"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel"><p>state (text/JSON/array)<br />+ questions (typed, fixed answer space)</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(324, 177)"><g class="label" data-id="L_B_A_0" transform="translate(-100, -48)"><foreignObject width="200" height="96"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel"><p>answers: { id → typed value + probability }<br />+ usage (tokens)</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(324, 287.1666666666667)"><g class="label" data-id="L_A_C_0" transform="translate(-100, -24)"><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel"><p>confidence ≥ high threshold</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(324, 411.16666666666663)"><g class="label" data-id="L_A_D_0" transform="translate(-100, -24)"><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel"><p>confidence in medium band</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(324, 559.1666666666666)"><g class="label" data-id="L_A_E_0" transform="translate(-100, -24)"><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel"><p>confidence ≤ low threshold</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default" id="my-svg-flowchart-A-0" data-look="neo" transform="translate(88, 287.6666666666667)"><rect class="basic label-container" style="" x="-76" y="-24" width="152" height="48"/><g class="label" style="" transform="translate(-60, -12)"><rect/><foreignObject width="120" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: nowrap; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Your code</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-B-1" data-look="neo" transform="translate(542.609375, 119.00000000000003)"><rect class="basic label-container" style="" x="-78.609375" y="-72" width="157.21875" height="144"/><g class="label" style="" transform="translate(-62.609375, -60)"><rect/><foreignObject width="125.21875" height="120"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>POST /v1/systemone<br />(Jev — System One model)</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-C-5" data-look="neo" transform="translate(542.6171875, 287.6666666666667)"><rect class="basic label-container" style="" x="-78.6171875" y="-36" width="157.234375" height="72"/><g class="label" style="" transform="translate(-62.6171875, -24)"><rect/><foreignObject width="125.234375" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Act automatically</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-D-7" data-look="neo" transform="translate(540, 411.66666666666663)"><rect class="basic label-container" style="" x="-76" y="-48" width="152" height="96"/><g class="label" style="" transform="translate(-60, -36)"><rect/><foreignObject width="120" height="72"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Confirm / flag for review</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-E-9" data-look="neo" transform="translate(540, 559.6666666666666)"><rect class="basic label-container" style="" x="-76" y="-60" width="152" height="120"/><g class="label" style="" transform="translate(-60, -48)"><rect/><foreignObject width="120" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Escalate to human / fallback system</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="my-svg-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><defs><filter id="my-svg-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><linearGradient id="my-svg-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#2e2a25" stop-opacity="1"/><stop offset="100%" stop-color="hsl(38.5714285714, 0%, 82.9411764706%)" stop-opacity="1"/></linearGradient></svg><figcaption>A Jev System One model call: your code sends state and typed questions to POST /v1/systemone, gets back typed answers with probabilities, then routes to automatic action, human confirmation, or escalation based on confidence.</figcaption></figure>
+
+<p>Every question in a request is answered <strong>in one parallel pass</strong> — the model can&rsquo;t use one answer to inform another within the same call, so a second request is only needed when an earlier answer determines what to even ask next. There are exactly three question types:</p>
+<div class="table-scroll"><table class="comparison-table">
+<thead>
+<tr>
+<th>Primitive</th>
+<th>What it answers</th>
+<th>Returns</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Choice</strong></td>
+<td>&ldquo;Which of these options?&rdquo;</td>
+<td>the chosen option + a probability distribution over <em>all</em> options + confidence</td>
+<td><code>tone: calm / frustrated / angry</code></td>
+</tr>
+<tr>
+<td><strong>Noul</strong></td>
+<td>&ldquo;Is this true?&rdquo;</td>
+<td>probability of &ldquo;yes,&rdquo; 0–1, no separate confidence field</td>
+<td><code>billing: is this about billing?</code></td>
+</tr>
+<tr>
+<td><strong>Score</strong></td>
+<td>&ldquo;Where on this rubric?&rdquo;</td>
+<td>a probability-weighted position on 2–10 ordered levels + confidence</td>
+<td><code>urgency: can wait / this week / today</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Because the model never emits free text, TypeSafe&rsquo;s claim is that it structurally &ldquo;cannot produce a type error or a hallucinated value&rdquo; — the possible outputs are fixed before the call runs. That&rsquo;s a real architectural property, not a guarantee the <em>chosen</em> answer is correct; a Choice can still confidently pick the wrong option. That gap is exactly what confidence scoring is for (§13).</p>
+<h2>6–7. Installation, deployment model, and supported models</h2>
+<p>There&rsquo;s no install in the traditional sense — Jev is a hosted API, called directly or through an SDK:</p>
+<pre><code class="language-bash">pip install typesafe-sdk        # Python
+npm install @typesafe-ai/sdk    # Node 20+
+</code></pre>
+<pre><code class="language-python">from typesafe_sdk import TypeSafeClient, Choice, Noul, Score
+
+with TypeSafeClient() as client:  # reads TYPESAFE_API_KEY from env
+    response = client.system_one(
+        state={&quot;document&quot;: &quot;I was charged twice. Please fix this ASAP.&quot;},
+        questions={
+            &quot;billing&quot;: Noul(instructions=&quot;Is this ticket about billing?&quot;),
+            &quot;tone&quot;: Choice(instructions=&quot;What is the customer's tone?&quot;,
+                            criteria={&quot;calm&quot;: None, &quot;frustrated&quot;: None, &quot;angry&quot;: None}),
+            &quot;urgency&quot;: Score(instructions=&quot;How urgent is this ticket?&quot;,
+                              criteria=[&quot;can wait&quot;, &quot;this week&quot;, &quot;today&quot;]),
+        },
+    )
+</code></pre>
+<p>The current production model is <code>jev-1.13.0</code>. Two aliases, <code>jev-latest</code> and <code>jev-preview</code>, both currently point to it — but TypeSafe&rsquo;s own docs warn that aliases &ldquo;move when new releases ship, potentially changing results without code changes,&rdquo; and recommend pinning the versioned ID once you&rsquo;ve tuned confidence thresholds against a specific model&rsquo;s behavior. That&rsquo;s a detail most teams will only learn the hard way if they don&rsquo;t read it here first.</p>
+<h2>8–11. Tool integrations, memory, MCP support, and the API</h2>
+<p><strong>Tool integrations and MCP:</strong> TypeSafe does not ship an official MCP server. What exists is a real, if scattered, community ecosystem that calls Jev&rsquo;s API and exposes it as tools inside other agents — <code>jev-mcp</code> (at least two independent implementations), <code>typesafe-mcp</code>/<code>system-one-connector</code> (a Go single-binary MCP server for Claude Desktop), <code>decisions-judge-mcp</code>, and <code>jev-shield</code> (a &ldquo;semantic MCP firewall&rdquo; that screens tool calls through a Jev judgment before they execute). If you want Jev inside Claude Code, Cursor, or Codex, this is the honest comparison point to <a href="/blog/mcp-server-vs-webhook-automation-builders.html">MCP server vs. webhook automation</a>: you&rsquo;re choosing a third-party bridge, not a first-party integration.</p>
+<p><strong>Memory:</strong> there isn&rsquo;t any. Every <code>/v1/systemone</code> call is stateless — you send the full <code>state</code> every time. No session, no conversation history, no persistent store. If your use case needs memory, that&rsquo;s your application&rsquo;s job, not Jev&rsquo;s — a real difference from frameworks like Hermes or OpenClaw, which build persistent memory in by default (more on that below).</p>
+<p><strong>The API itself</strong>, verified directly against the docs:
+- <code>POST https://api.typesafe.ai/v1/systemone</code>, <code>Authorization: Bearer &lt;key&gt;</code>
+- Request: <code>state</code>, <code>model</code> (e.g. <code>"jev-latest"</code>), <code>questions</code>
+- Response: <code>model</code>, <code>answers</code> (keyed to your question IDs), <code>usage</code> (token counts)
+- Errors: <code>401</code> bad key, <code>422</code> malformed request, <code>429</code> rate limited, <code>529</code> overloaded; SDKs retry with backoff automatically
+- Rate limits (published, &ldquo;subject to change&rdquo;): 100,000 tokens/sec, 80 requests/sec</p>
+<h2>12–13. Security and permissions</h2>
+<p>TypeSafe publishes a privacy policy, a data-processing addendum, a master customer agreement, acceptable-use policy, and a Trust Center. The commitments stated there: no training on customer data, no selling/sharing of personal data under CCPA definitions, and <strong>zero data retention (ZDR) available for enterprise customers on request</strong>. What&rsquo;s <em>not</em> there, as far as this research found: any SOC 2, ISO 27001, HIPAA, or comparable third-party certification. If your procurement checklist needs one, that&rsquo;s currently a &ldquo;not publicly documented&rdquo; — worth confirming directly with sales before you commit, which is the same advice this site gives in <a href="/blog/ai-automation-security-data-privacy.html">how to evaluate an AI vendor&rsquo;s data-privacy claims</a>.</p>
+<p>One correction worth flagging because it&rsquo;s an easy mix-up: you&rsquo;ll find pages claiming Jev&rsquo;s &ldquo;self-hosted build includes SSO, RBAC, and SCIM.&rdquo; That claim describes a <em>third-party MCP wrapper&rsquo;s own deployment option</em>, not a TypeSafe enterprise tier — TypeSafe&rsquo;s own enterprise security story is ZDR plus the legal documents above, nothing more granular published.</p>
+<p><strong>Permissions</strong> work the same way memory does: there&rsquo;s no RBAC on the API itself. TypeSafe&rsquo;s actual permission model is confidence-based, and it&rsquo;s the most genuinely useful idea in the whole product. Three tiers, straight from their docs: at high confidence, act automatically; at medium confidence, confirm with a user or flag for review; at low confidence, escalate to a human or fall back to another system. Crucially, the threshold isn&rsquo;t fixed — TypeSafe&rsquo;s own guidance is that it should scale with the cost of being wrong (a read-only lookup can act at low confidence; a destructive action should require 0.9+ or an explicit human confirmation). That&rsquo;s a cleaner mental model for human-in-the-loop gating than most agent frameworks ship with, and it maps directly onto <a href="/blog/ai-automation-governance-policy-smb.html">building an approval policy around AI decisions</a>.</p>
+<h2>14–15. Self-hosting and scalability</h2>
+<p>Jev cannot be self-hosted. No downloadable weights, no on-prem build, nothing in the docs or terms suggesting otherwise — confirmed by the absence on TypeSafe&rsquo;s own pages and independent third-party write-ups reaching the same conclusion. (Don&rsquo;t confuse this with AgentJev-0.6B, the unrelated open-weight model mentioned up top — that one you genuinely can self-host, but it isn&rsquo;t Jev.) If you&rsquo;re already running <a href="/blog/n8n-self-host-docker.html">self-hosted n8n on Docker</a> for data-residency reasons, Jev&rsquo;s hosted-only model is a real constraint to weigh, not a detail to skip past.</p>
+<p>Scalability, for the hosted service, is whatever TypeSafe&rsquo;s published limits allow: 100K tokens/sec and 80 requests/sec by default, explicitly described as &ldquo;adjusting dynamically&rdquo; under demand, with higher tiers presumably available by contacting sales — no specific enterprise-tier numbers are published.</p>
+<h2>16–17. Observability and enterprise readiness</h2>
+<p>Observability is thin: each response includes <code>usage</code> (input/output token counts), and that&rsquo;s the extent of what&rsquo;s documented — no tracing dashboard, no request-log UI, no built-in eval harness. If this matters to you, it&rsquo;s worth reading <a href="/blog/ai-agent-evals-builders.html">what to measure before you ship an agent</a> and building your own logging around every <code>/v1/systemone</code> call, because TypeSafe isn&rsquo;t giving you one.</p>
+<p>Enterprise readiness is best read through the company&rsquo;s age, not its marketing copy: seed-stage (closed September 2026), product in early access, legal/privacy infrastructure in place, no public security certifications found, rate limits still described as actively changing. None of that is disqualifying — plenty of production systems run on seed-stage vendors — but it belongs in the same conversation as <a href="/blog/enterprise-ai-budget-spending-2026.html">enterprise AI budget planning</a>: budget for vendor risk, not just token cost.</p>
+<h2>18. Limitations, summarized</h2>
+<p>Text-only input (no image/audio/video yet); no memory; no self-hosting; no official MCP server; stateless by design; model aliases that can silently drift; rate limits still being tuned; no published compliance certifications; and — the one that matters most for scoping a project correctly — <strong>it is not an agent</strong>. It doesn&rsquo;t plan, it doesn&rsquo;t call tools, it doesn&rsquo;t hold a conversation. It answers bounded questions about data you hand it, nothing more, nothing less.</p>
+<h2>Where JEV fits inside a real agent</h2>
+<figure class="mermaid-diagram"><svg role="img" aria-label="Where Jev fits in an agent architecture: the application calls a reasoning LLM, Jev for bounded decisions, and a tool layer (MCP servers, APIs, browser, database), with its own memory store and human approval for high-stakes branches." style="width:100%;height:auto;max-width:720px;display:block;margin:0 auto;" id="mermaid-a2-2" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" style="max-width: 985px; background-color: transparent;" viewBox="4 4 985 704" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mermaid-a2-2{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;fill:#0d0d0d;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mermaid-a2-2 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mermaid-a2-2 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mermaid-a2-2 .error-icon{fill:#ffffff;}#mermaid-a2-2 .error-text{fill:#000000;stroke:#000000;}#mermaid-a2-2 .edge-thickness-normal{stroke-width:1px;}#mermaid-a2-2 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-a2-2 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-a2-2 .edge-thickness-invisible{stroke-width:0;fill:none;}#mermaid-a2-2 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-a2-2 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-a2-2 .marker{fill:#8a4a2f;stroke:#8a4a2f;}#mermaid-a2-2 .marker.cross{stroke:#8a4a2f;}#mermaid-a2-2 svg{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;}#mermaid-a2-2 p{margin:0;}#mermaid-a2-2 .label{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#0d0d0d;}#mermaid-a2-2 .cluster-label text{fill:#000000;}#mermaid-a2-2 .cluster-label span{color:#000000;}#mermaid-a2-2 .cluster-label span p{background-color:transparent;}#mermaid-a2-2 .label text,#mermaid-a2-2 span{fill:#0d0d0d;color:#0d0d0d;}#mermaid-a2-2 .node rect,#mermaid-a2-2 .node circle,#mermaid-a2-2 .node ellipse,#mermaid-a2-2 .node polygon,#mermaid-a2-2 .node path{fill:#f4efe6;stroke:#2e2a25;stroke-width:1px;}#mermaid-a2-2 .rough-node .label text,#mermaid-a2-2 .node .label text,#mermaid-a2-2 .image-shape .label,#mermaid-a2-2 .icon-shape .label{text-anchor:middle;}#mermaid-a2-2 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mermaid-a2-2 .rough-node .label,#mermaid-a2-2 .node .label,#mermaid-a2-2 .image-shape .label,#mermaid-a2-2 .icon-shape .label{text-align:center;}#mermaid-a2-2 .node.clickable{cursor:pointer;}#mermaid-a2-2 .root .anchor path{fill:#8a4a2f!important;stroke-width:0;stroke:#8a4a2f;}#mermaid-a2-2 .arrowheadPath{fill:#0b0b0b;}#mermaid-a2-2 .edgePaths .path{stroke:#8a4a2f;stroke-width:1px;}#mermaid-a2-2 .flowchart-link{stroke:#8a4a2f;fill:none;}#mermaid-a2-2 .edgeLabel{background-color:#f4efe6;text-align:center;}#mermaid-a2-2 .edgeLabel p{background-color:#f4efe6;}#mermaid-a2-2 .edgeLabel rect{opacity:0.5;background-color:#f4efe6;fill:#f4efe6;}#mermaid-a2-2 .labelBkg{background-color:rgba(244, 239, 230, 0.5);}#mermaid-a2-2 .cluster rect{fill:#f9f6f0;stroke:#2e2a25;stroke-width:1px;}#mermaid-a2-2 .cluster text{fill:#000000;}#mermaid-a2-2 .cluster span{color:#000000;}#mermaid-a2-2 .node .collapsed-indicator{fill:#2e2a25;stroke:none;opacity:0.6;}#mermaid-a2-2 .node .collapsed-separator{stroke:#2e2a25;stroke-width:0.75px;}#mermaid-a2-2 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;background:#ffffff;border:1px solid hsl(0, 0%, 90%);border-radius:2px;pointer-events:none;z-index:100;}#mermaid-a2-2 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#0d0d0d;}#mermaid-a2-2 rect.text{fill:none;stroke-width:0;}#mermaid-a2-2 .icon-shape,#mermaid-a2-2 .image-shape{background-color:#f4efe6;text-align:center;}#mermaid-a2-2 .icon-shape p,#mermaid-a2-2 .image-shape p{background-color:#f4efe6;padding:2px;}#mermaid-a2-2 .icon-shape .label rect,#mermaid-a2-2 .image-shape .label rect{opacity:0.5;background-color:#f4efe6;fill:#f4efe6;}#mermaid-a2-2 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mermaid-a2-2 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mermaid-a2-2 .node .neo-node{stroke:#2e2a25;}#mermaid-a2-2 [data-look="neo"].node rect,#mermaid-a2-2 [data-look="neo"].cluster rect,#mermaid-a2-2 [data-look="neo"].node polygon{stroke:url(#mermaid-a2-2-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a2-2 [data-look="neo"].swimlane.cluster rect{filter:none;}#mermaid-a2-2 [data-look="neo"].node path{stroke:url(#mermaid-a2-2-gradient);stroke-width:1px;}#mermaid-a2-2 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a2-2 [data-look="neo"].node .neo-line path{stroke:#2e2a25;filter:none;}#mermaid-a2-2 [data-look="neo"].node circle{stroke:url(#mermaid-a2-2-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a2-2 [data-look="neo"].node circle .state-start{fill:#000000;}#mermaid-a2-2 [data-look="neo"].icon-shape .icon{fill:url(#mermaid-a2-2-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a2-2 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mermaid-a2-2-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a2-2 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker id="my-svg_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"/></marker><marker id="my-svg_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"/></marker><g class="root"><g class="clusters"/><g class="edges edgePaths"><path d="M413,60L413,96" id="my-svg-L_U_App_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 32 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_U_App_0" data-points="W3sieCI6NDEzLCJ5Ijo2MH0seyJ4Ijo0MTMsInkiOjEwMH1d" data-look="neo" marker-end="url(#mermaid-a2-2_flowchart-v2-pointEnd-margin)"/><path d="M365.85714285714283,220L365.85714285714283,232.92893218813452Q365.85714285714283,240 358.78607504527736,240L95.07106781186548,240Q88,240 88,247.07106781186548L88,296" id="my-svg-L_App_LLM_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 344.5288391113281 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_App_LLM_0" data-points="W3sieCI6MzY1Ljg1NzE0Mjg1NzE0MjgzLCJ5IjoyMjB9LHsieCI6MzY1Ljg1NzE0Mjg1NzE0MjgzLCJ5IjoyNDB9LHsieCI6ODgsInkiOjI0MH0seyJ4Ijo4OCwieSI6MzAwfV0=" data-look="neo" marker-end="url(#mermaid-a2-2_flowchart-v2-pointEnd-margin)"/><path d="M384.7142857142857,220L384.7142857142857,252.92893218813452Q384.7142857142857,260 377.64321790242025,260L191.07106781186548,260Q184,260 184,267.0710678118655L184,396L184,504.9289321881345Q184,512 191.07106781186548,512L215.42893218813452,512Q222.5,512 222.5,519.0710678118655L222.5,528" id="my-svg-L_App_Jev_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 532.5576782226562 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_App_Jev_0" data-points="W3sieCI6Mzg0LjcxNDI4NTcxNDI4NTcsInkiOjIyMH0seyJ4IjozODQuNzE0Mjg1NzE0Mjg1NywieSI6MjYwfSx7IngiOjE4NCwieSI6MjYwfSx7IngiOjE4NCwieSI6Mzk2fSx7IngiOjE4NCwieSI6NTEyfSx7IngiOjIyMi41LCJ5Ijo1MTJ9LHsieCI6MjIyLjUsInkiOjUzMn1d" data-look="neo" marker-end="url(#mermaid-a2-2_flowchart-v2-pointEnd-margin)"/><path d="M422.42857142857144,220L422.42857142857144,272.9289321881345Q422.42857142857144,280 429.4996392404369,280L513.9289321881345,280Q521,280 521,287.0710678118655L521,296" id="my-svg-L_App_Tools_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 165.24317932128906 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_App_Tools_0" data-points="W3sieCI6NDIyLjQyODU3MTQyODU3MTQ0LCJ5IjoyMjB9LHsieCI6NDIyLjQyODU3MTQyODU3MTQ0LCJ5IjoyODB9LHsieCI6NTIxLCJ5IjoyODB9LHsieCI6NTIxLCJ5IjozMDB9XQ==" data-look="neo" marker-end="url(#mermaid-a2-2_flowchart-v2-pointEnd-margin)"/><path d="M266.5,532L266.5,519.0710678118655Q266.5,512 273.5710678118655,512L297.9289321881345,512Q305,512 305,504.9289321881345L305,287.0710678118655Q305,280 312.0710678118655,280L396.5003607595631,280Q403.57142857142856,280 403.57142857142856,272.9289321881345L403.57142857142856,224" id="my-svg-L_Jev_App_0" class="edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Jev_App_0" data-points="W3sieCI6MjY2LjUsInkiOjUzMn0seyJ4IjoyNjYuNSwieSI6NTEyfSx7IngiOjMwNSwieSI6NTEyfSx7IngiOjMwNSwieSI6MjgwfSx7IngiOjQwMy41NzE0Mjg1NzE0Mjg1NiwieSI6MjgwfSx7IngiOjQwMy41NzE0Mjg1NzE0Mjg1NiwieSI6MjIwfV0=" data-look="neo" marker-end="url(#mermaid-a2-2_flowchart-v2-pointEnd-margin)"/><path d="M441.2857142857143,220L441.2857142857143,252.92893218813452Q441.2857142857143,260 448.35678209757975,260L705.9289321881345,260Q713,260 713,267.0710678118655L713,296" id="my-svg-L_App_Mem_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 338.38604736328125 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_App_Mem_0" data-points="W3sieCI6NDQxLjI4NTcxNDI4NTcxNDMsInkiOjIyMH0seyJ4Ijo0NDEuMjg1NzE0Mjg1NzE0MywieSI6MjYwfSx7IngiOjcxMywieSI6MjYwfSx7IngiOjcxMywieSI6MzAwfV0=" data-look="neo" marker-end="url(#mermaid-a2-2_flowchart-v2-pointEnd-margin)"/><path d="M460.14285714285717,220L460.14285714285717,232.92893218813452Q460.14285714285717,240 467.21392495472264,240L897.9289321881345,240Q905,240 905,247.07106781186548L905,296" id="my-svg-L_App_HA_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 511.52886962890625 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_App_HA_0" data-points="W3sieCI6NDYwLjE0Mjg1NzE0Mjg1NzE3LCJ5IjoyMjB9LHsieCI6NDYwLjE0Mjg1NzE0Mjg1NzE3LCJ5IjoyNDB9LHsieCI6OTA1LCJ5IjoyNDB9LHsieCI6OTA1LCJ5IjozMDB9XQ==" data-look="neo" marker-end="url(#mermaid-a2-2_flowchart-v2-pointEnd-margin)"/></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(305, 396)"><g class="label" data-id="L_Jev_App_0" transform="translate(-100, -24)"><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel"><p>confidence-gated branch</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default" id="my-svg-flowchart-U-0" data-look="neo" transform="translate(413, 36)"><rect class="basic label-container" style="" x="-76" y="-24" width="152" height="48"/><g class="label" style="" transform="translate(-60, -12)"><rect/><foreignObject width="120" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: nowrap; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>User request</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-App-1" data-look="neo" transform="translate(413, 160)"><rect class="basic label-container" style="" x="-76" y="-60" width="152" height="120"/><g class="label" style="" transform="translate(-60, -48)"><rect/><foreignObject width="120" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Your application / agent runtime</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-LLM-3" data-look="neo" transform="translate(88, 372)"><rect class="basic label-container" style="" x="-76" y="-72" width="152" height="144"/><g class="label" style="" transform="translate(-60, -60)"><rect/><foreignObject width="120" height="120"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Reasoning LLM<br />(plans, writes, converses)</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Jev-5" data-look="neo" transform="translate(244.5, 616)"><rect class="basic label-container" style="" x="-76" y="-84" width="152" height="168"/><g class="label" style="" transform="translate(-60, -72)"><rect/><foreignObject width="120" height="144"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Jev<br />(bounded decisions:<br />route / score / verify)</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Tools-7" data-look="neo" transform="translate(521, 384)"><rect class="basic label-container" style="" x="-76" y="-84" width="152" height="168"/><g class="label" style="" transform="translate(-60, -72)"><rect/><foreignObject width="120" height="144"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Tool layer: MCP servers, APIs,<br />browser, database</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Mem-11" data-look="neo" transform="translate(713, 360)"><rect class="basic label-container" style="" x="-76" y="-60" width="152" height="120"/><g class="label" style="" transform="translate(-60, -48)"><rect/><foreignObject width="120" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Memory store<br />(the app's own, not Jev's)</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-HA-13" data-look="neo" transform="translate(905, 396)"><rect class="basic label-container" style="" x="-76" y="-96" width="152" height="192"/><g class="label" style="" transform="translate(-60, -84)"><rect/><foreignObject width="120" height="168"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Human approval<br />(for low-confidence / high-stakes branches)</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="my-svg-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><defs><filter id="my-svg-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><linearGradient id="my-svg-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#2e2a25" stop-opacity="1"/><stop offset="100%" stop-color="hsl(38.5714285714, 0%, 82.9411764706%)" stop-opacity="1"/></linearGradient></svg><figcaption>Where Jev fits in an agent architecture: the application calls a reasoning LLM, Jev for bounded decisions, and a tool layer (MCP servers, APIs, browser, database), with its own memory store and human approval for high-stakes branches.</figcaption></figure>
+
+<p>This is the composition pattern behind every real-world Jev integration found in this research: it&rsquo;s a node <em>inside</em> a larger system that someone else owns, never the system itself.</p>
+<h2>Best use cases</h2>
+<p>Each section below is labeled by its grounding: <strong>[official]</strong> means TypeSafe&rsquo;s own use-case map covers it directly; <strong>[community]</strong> means it&rsquo;s a documented third-party project built on Jev; <strong>[composed]</strong> means it&rsquo;s a reasonable architecture you&rsquo;d build using Jev as one piece, not something TypeSafe itself ships or documents as a named category; <strong>[author&rsquo;s pilot]</strong> draws on the writer&rsquo;s own small-scale usage.</p>
+<h3>Personal agents — [composed]</h3>
+<p><strong>Problem:</strong> A personal assistant (email triage, calendar requests, task capture) drowns in borderline decisions — is this urgent, is this actually a task, which project does this belong to — long before it needs to write anything.
+<strong>Why JEV fits:</strong> These are all bounded, repeated, narrow-answer-set judgments — exactly Jev&rsquo;s sweet spot — running at a volume where paying full LLM-reasoning cost on every item is wasteful.
+<strong>Suggested architecture:</strong> Inbound item → Jev (<code>Choice</code> over project/category, <code>Noul</code> for &ldquo;is this actionable,&rdquo; <code>Score</code> for urgency) → confidence-gated routing → only genuinely ambiguous or high-stakes items reach a reasoning LLM or the human.
+<strong>Example workflow:</strong> This is close to the author&rsquo;s own compiler front-stage pilot below, generalized to a personal inbox rather than a dev-log compiler.
+<strong>Limitations:</strong> No memory of past decisions across calls — your app has to track &ldquo;I already classified this one&rdquo; and feed Jev the right state each time.</p>
+<h3>Enterprise assistants — [official-adjacent]</h3>
+<p><strong>Problem:</strong> An internal assistant fielding thousands of employee requests (IT tickets, HR questions, expense queries) needs consistent, auditable triage before any generative step.
+<strong>Why JEV fits:</strong> TypeSafe&rsquo;s own use-case map names recruiting (candidate-vs-criteria matching) and customer support (ticket classification, issue extraction, churn-risk detection) directly; internal enterprise assistants are the same shape pointed inward.
+<strong>Suggested architecture:</strong> Request → Jev classifies department/urgency/sensitivity → deterministic routing to the right queue or knowledge base → LLM drafts a response only after routing is settled → confidence-gated human review for anything below the department&rsquo;s risk threshold.
+<strong>Example workflow:</strong> Employee message → <code>Choice</code> (IT/HR/Finance/Facilities) + <code>Score</code> (urgency) + <code>Noul</code> (contains sensitive PII) → route, and only escalate to a human reviewer when the PII Noul fires or urgency hits &ldquo;today.&rdquo;
+<strong>Limitations:</strong> No enterprise RBAC in the API itself — the department-routing logic and audit trail are entirely your code&rsquo;s responsibility, and no compliance certification exists yet if that routing touches regulated data.</p>
+<h3>AI engineering agents — [community]</h3>
+<p><strong>Problem:</strong> Coding agents burn tokens and time re-reasoning about things that are really just classification: is this diff safe to auto-apply, which model is cheap enough for this subtask, is this tool call still relevant to the current goal.
+<strong>Why JEV fits:</strong> This is the single best-documented community category. Real, named projects: <code>jev-router</code> picks the cheapest sufficient model for a Claude Code request; <code>fast-jev-compaction</code> replaces LLM-generated context summaries with Jev scoring of tool calls; <code>foreman</code> uses Jev decisions to keep a long-running coding agent on task; <code>jev-review</code> runs a staged code-review workflow.
+<strong>Suggested architecture:</strong> Coding agent&rsquo;s tool-call loop → before each expensive LLM call, ask Jev a cheap <code>Choice</code>/<code>Score</code> (&ldquo;does this subtask need the frontier model, or will the cheap one do?&rdquo; / &ldquo;is this tool call still relevant to the stated goal?&rdquo;) → route accordingly.
+<strong>Example workflow:</strong> This mirrors the owner&rsquo;s own skill-picker build: 444 candidate skills split into 6 groups of 80 (Jev&rsquo;s <code>Choice</code> caps at 255 options), a <code>Choice</code> per group, then a final <code>Choice</code> among the group winners — not open-ended reasoning about which skill fits, a bounded pick.
+<strong>Limitations:</strong> These are all third-party, unmaintained-by-TypeSafe repos — evaluate them like any other dependency, not like an official SDK.</p>
+<h3>Research — [official]</h3>
+<p><strong>Problem:</strong> Literature review and evidence work (screening papers, labeling transcripts, verifying citations) is mostly &ldquo;does this match these criteria,&rdquo; repeated thousands of times.
+<strong>Why JEV fits:</strong> Named directly in TypeSafe&rsquo;s use-case map: &ldquo;screen papers, label transcripts, verify citations, identify entities.&rdquo;
+<strong>Suggested architecture:</strong> Candidate document/passage → Jev <code>Noul</code>/<code>Choice</code> against inclusion criteria → only passages that pass go to a reasoning model for synthesis or to a human for final judgment.
+<strong>Example workflow:</strong> 2,000-paper corpus → <code>Noul</code> (&ldquo;does this paper report an RCT?&rdquo;) at low cost per paper → the ~200 that pass go to a slower, more expensive synthesis step.
+<strong>Limitations:</strong> Jev can&rsquo;t read PDFs or figures (text-only state today); someone still has to extract clean text first.</p>
+<h3>Customer support — [official]</h3>
+<p><strong>Problem:</strong> Ticket triage, issue extraction, churn-risk flagging, and verifying that a drafted response actually answers the question — all bounded judgments that currently eat generative-model budget for no reason.
+<strong>Why JEV fits:</strong> Named directly in TypeSafe&rsquo;s use-case map, with the same four examples given there: classify, extract, detect churn risk, verify responses.
+<strong>Suggested architecture:</strong> Ticket → Jev (<code>Choice</code> category, <code>Score</code> urgency, <code>Noul</code> churn-risk) in one parallel pass → route to the right queue → an LLM drafts a reply → a second Jev <code>Noul</code> (&ldquo;does this reply actually address the stated issue?&rdquo;) gates the send.
+<strong>Example workflow:</strong> Exactly the request/response shape shown in TypeSafe&rsquo;s own SDK example (billing/tone/urgency on a single ticket).
+<strong>Limitations:</strong> Verifying a drafted reply with Jev checks a narrow, stated condition — it isn&rsquo;t a substitute for a real quality-eval pipeline (see <a href="/blog/ai-agent-evals-builders.html">what to measure before you ship an agent</a>).</p>
+<h3>Sales automation — [official]</h3>
+<p><strong>Problem:</strong> Lead scoring and company-fit evaluation at outbound volume, where a generative model per lead is both slow and expensive.
+<strong>Why JEV fits:</strong> Named directly: &ldquo;lead generation: score company fit and detect purchase intent.&rdquo;
+<strong>Suggested architecture:</strong> Enriched lead data → Jev <code>Score</code> (fit) + <code>Noul</code> (buying-intent signal present) → only leads above threshold reach a human SDR or a generative outreach-drafting step.
+<strong>Example workflow:</strong> Firmographic + signal data as <code>state</code> → <code>Score</code> against an ICP rubric → top decile routed to outreach.
+<strong>Limitations:</strong> Scoring quality is bounded by what&rsquo;s in <code>state</code> — garbage firmographic data in, garbage score out; Jev doesn&rsquo;t enrich data itself.</p>
+<h3>Internal knowledge systems — [official-adjacent]</h3>
+<p><strong>Problem:</strong> Knowledge graphs and internal wikis decay because nobody has time to check whether a new document contradicts an existing entry or which entity it actually refers to.
+<strong>Why JEV fits:</strong> TypeSafe names &ldquo;knowledge graphs: annotate relationships, detect contradictions, verify entities&rdquo; directly.
+<strong>Suggested architecture:</strong> New document → Jev <code>Noul</code> per existing related-entity candidate (&ldquo;does this contradict entity X?&rdquo;) → flagged contradictions go to a human curator; clean annotations merge automatically.
+<strong>Example workflow:</strong> Candidate entity pairs pulled by a retrieval step → Jev judges relationship type via <code>Choice</code> → graph updates only on high-confidence answers.
+<strong>Limitations:</strong> Candidate generation (finding <em>which</em> entities to check against) is still your retrieval system&rsquo;s job — Jev only judges pairs/documents it&rsquo;s shown.</p>
+<h3>Data analysis — [official-adjacent]</h3>
+<p><strong>Problem:</strong> Turning free-text fields (survey responses, call notes, reviews) into structured features for downstream analysis or ML, without hand-labeling thousands of rows.
+<strong>Why JEV fits:</strong> &ldquo;Feature extraction: convert natural-language data into probabilistic features for ML models&rdquo; is a named category, as is big-data processing more broadly.
+<strong>Suggested architecture:</strong> Row of free text → one or more Jev <code>Score</code>/<code>Choice</code> questions per feature → write probability-weighted features back into the dataset → standard ML/BI tooling downstream.
+<strong>Example workflow:</strong> Customer-review text → <code>Score</code> (sentiment, 2–5 levels) + <code>Choice</code> (topic) as two new structured columns, computed at scale.
+<strong>Limitations:</strong> Rate limits (100K tok/sec, 80 req/sec by default) cap how fast you can batch this; large one-off backfills may need to be paced or you&rsquo;ll hit <code>429</code>.</p>
+<h3>Workflow automation — [composed]</h3>
+<p><strong>Problem:</strong> No-code/low-code automations (the kind built in n8n) frequently need one semantic branch point — &ldquo;which of these five paths does this input belong on&rdquo; — surrounded by entirely deterministic steps.
+<strong>Why JEV fits:</strong> It&rsquo;s a cheap, fast node you can drop into an otherwise-deterministic pipeline instead of reaching for a full LLM call at every branch.
+<strong>Suggested architecture:</strong> n8n (or similar) HTTP Request node → Jev <code>/v1/systemone</code> → branch node reads the returned <code>Choice</code>/<code>Noul</code> to pick the downstream path.
+<strong>Example workflow:</strong> This is directly comparable to the trade-off described in <a href="/blog/mcp-server-vs-webhook-automation-builders.html">MCP server vs. webhook: when the server wins</a> — if the workflow already knows which branch it wants, a plain webhook/HTTP step is simpler than paying for a judgment call at all; Jev earns its place only when the branch genuinely depends on unstructured input.
+<strong>Limitations:</strong> Not a native n8n node — it&rsquo;s a generic HTTP Request call you wire up yourself; no visual-builder integration exists today.</p>
+<h3>DevOps — [composed, with one academic citation]</h3>
+<p><strong>Problem:</strong> Alert fatigue and false-positive triage — deciding whether a finding, an anomaly, or a severity rating is real before paging a human or an expensive remediation agent.
+<strong>Why JEV fits:</strong> A 2026 arXiv paper on autonomous penetration-testing harnesses uses exactly this pattern: Jev as a non-generative &ldquo;System One&rdquo; decision layer for finding adjudication, severity recalibration, agent pruning, and confirmation loops, specifically to avoid using the same generative model for both finding issues and validating them.
+<strong>Suggested architecture:</strong> Monitoring/scanning tool output → Jev judges severity/validity/relevance → only validated, appropriately-scored findings page a human or trigger remediation.
+<strong>Example workflow:</strong> Security scanner&rsquo;s raw finding → <code>Score</code> (true severity, re-calibrated) + <code>Noul</code> (likely false positive) → suppress low-severity/likely-false-positive noise before it reaches an on-call engineer.
+<strong>Limitations:</strong> This pattern is documented in an academic paper, not a TypeSafe product page — treat it as a credible architecture proposal to adapt, not an off-the-shelf DevOps integration.</p>
+<h3>Browser automation — [community]</h3>
+<p><strong>Problem:</strong> Browser agents waste cycles asking a full multimodal/reasoning model &ldquo;which element do I click&rdquo; on every single step.
+<strong>Why JEV fits:</strong> Community projects already do this on accessibility trees rather than screenshots: <code>jev-android</code> (Kotlin SDK for UI automation via the Android accessibility tree) and <code>jev-mobile</code> (System One decisions per accessibility-tree step via ADB, explicitly &ldquo;no screenshots needed&rdquo;).
+<strong>Suggested architecture:</strong> Page/app state exposed as an accessibility tree or DOM snapshot → Jev <code>Choice</code> over the candidate interactive elements → execute the chosen action; fall back to a full vision-reasoning model only when Jev&rsquo;s confidence is low.
+<strong>Example workflow:</strong> Mirrors the two community projects above directly — this is not a TypeSafe-documented use case, it&rsquo;s something builders assembled because the primitive fit.
+<strong>Limitations:</strong> Jev is text-only — it can judge a textual/structural representation of a page (accessibility tree, DOM, extracted labels), not raw pixels. No native browser-control layer exists; you still need your own browser-automation tool underneath (e.g. the kind covered in this site&rsquo;s own browser-automation coverage).</p>
+<h3>Coding — [community]</h3>
+<p><strong>Problem:</strong> Reviewing diffs, deciding what&rsquo;s safe to auto-merge, and routing coding subtasks to the cheapest adequate model are classification problems wearing a coding costume.
+<strong>Why JEV fits:</strong> Same community cluster as &ldquo;AI engineering agents&rdquo; above — <code>jev-review</code> (staged code review with a local dashboard) and <code>jev-router</code> (routes Claude Code to the cheapest suitable model) are both built specifically for this.
+<strong>Suggested architecture:</strong> Diff/PR → Jev <code>Score</code> (risk) + <code>Choice</code> (which reviewer path: auto-merge / lint-only / human review) → gate the merge on the result.
+<strong>Example workflow:</strong> Same compaction idea as <code>fast-jev-compaction</code>: instead of generating a prose summary of tool calls for a coding agent&rsquo;s context window, score their relevance with Jev and keep only what&rsquo;s load-bearing.
+<strong>Limitations:</strong> None of this is an official TypeSafe product; you&rsquo;re adopting someone else&rsquo;s glue code, and it needs the same review you&rsquo;d give any third-party dependency touching your CI pipeline.</p>
+<h3>Long-running autonomous jobs — [composed]</h3>
+<p><strong>Problem:</strong> The longer an autonomous agent runs unsupervised, the more it drifts — loses track of the original goal, repeats work, or keeps &ldquo;confirming&rdquo; things that don&rsquo;t need reconfirming.
+<strong>Why JEV fits:</strong> <code>foreman</code> (the community agent-supervisor project cited above) and the arXiv pentest paper&rsquo;s &ldquo;agent pruning&rdquo; and &ldquo;confirmation loop&rdquo; decision points are both direct answers to drift and redundant-checking, using fast bounded judgments instead of asking the expensive reasoning model to re-evaluate its own state.
+<strong>Suggested architecture:</strong> Agent loop → periodic Jev <code>Noul</code> (&ldquo;is this action still aligned with the original goal?&rdquo;) + <code>Score</code> (&ldquo;how much new information did this step actually produce?&rdquo;) → low-information or off-goal steps get pruned before they consume another full reasoning-model turn.
+<strong>Example workflow:</strong> A coding agent mid-task checks in with Jev every N tool calls rather than re-reasoning from scratch about whether it&rsquo;s still on track.
+<strong>Limitations:</strong> Jev has no memory of its own, so &ldquo;the original goal&rdquo; has to be re-supplied as <code>state</code> on every check — the long-running context management is entirely the host agent&rsquo;s responsibility, not something Jev provides.</p>
+<h2>Competitive context</h2>
+<p>None of the following compete with Jev directly — they&rsquo;re orchestration layers, and Jev is a primitive you&rsquo;d call from inside one. Worth naming anyway, because &ldquo;should I use JEV instead of X&rdquo; is the wrong question for every X below; &ldquo;could JEV make X&rsquo;s decisions cheaper&rdquo; is the right one. For a full head-to-head of the two self-hosted options named first below, see our separate <a href="https://rajsuyash.com/blog/openclaw-vs-hermes-agent.html">OpenClaw vs Hermes Agent</a> comparison; if you&rsquo;re instead weighing a hosted, consumer-facing &ldquo;always-on&rdquo; agent rather than something you self-host or orchestrate yourself, that&rsquo;s a different category covered in <a href="https://rajsuyash.com/blog/meta-muse-vs-openai-dots-vs-grok-bot.html">Meta Muse vs OpenAI Dots vs Grok Bot</a>.</p>
+<ul>
+<li><strong>Hermes Agent</strong> — open-source (MIT), built by Nous Research, released February 2026. Runs on your own server, keeps a persistent three-layer memory, builds its own skills over time, and reaches you over Telegram/Discord/Slack/desktop. Owns everything Jev doesn&rsquo;t: the loop, memory, and tool orchestration. You&rsquo;d embed Jev <em>inside</em> a Hermes skill for a bounded decision, not replace Hermes with it.</li>
+<li><strong>OpenClaw</strong> — open-source (MIT), self-hosted, local-first agent runtime created by Peter Steinberger (PSPDFKit founder), now stewarded by the OpenClaw Foundation. Sandboxed skill execution, persistent memory, entirely on your own hardware. Same relationship to Jev as Hermes: orchestration layer that could call Jev for a narrow judgment, never a substitute for it.</li>
+<li><strong>Claude Code</strong> — the coding agent used to research and draft this article. A full agent harness with its own tool-use loop, memory, and MCP support; several of the community projects above (<code>jev-router</code>, <code>fast-jev-compaction</code>, <code>jev-mcp</code>) exist specifically to plug Jev into it.</li>
+<li><strong>OpenAI&rsquo;s agent tooling (AgentKit / Agents SDK)</strong> — OpenAI&rsquo;s current recommended code-first framework for building agents (Agents SDK, GA since March 2026, successor to Swarm), bundled with the Responses API and ChatKit. Same category as LangGraph/CrewAI below: it owns the agent loop, tool calling, and handoffs. A <code>Choice</code>/<code>Score</code> call to Jev is a plausible node inside an Agents SDK workflow, not a replacement for it.</li>
+<li><strong>n8n</strong> — low-code automation with native MCP support and 1,000+ integrations. The natural home for the <a href="/blog/n8n-self-host-docker.html">workflow automation</a> use case above: Jev as one HTTP node in an otherwise-visual pipeline.</li>
+<li><strong>LangGraph</strong> — graph-based, stateful agent orchestration, the common choice for complex branching workflows with human-approval checkpoints. Jev is a plausible node at a branch point; LangGraph still owns the graph, the state, and the checkpointing.</li>
+<li><strong>CrewAI</strong> — role-based multi-agent orchestration, generally the faster path to a simple team of agents. Same relationship as the others.</li>
+</ul>
+<div class="table-scroll"><table class="comparison-table">
+<thead>
+<tr>
+<th>Capability</th>
+<th>Jev (TypeSafe)</th>
+<th>A typical orchestration framework (Hermes / OpenClaw / LangGraph / CrewAI / n8n)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Owns the agent loop</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Built-in memory</td>
+<td>No (stateless)</td>
+<td>Usually yes</td>
+</tr>
+<tr>
+<td>Native tool calling / MCP</td>
+<td>No official MCP (third-party only)</td>
+<td>Often yes natively</td>
+</tr>
+<tr>
+<td>Generates text/code</td>
+<td>No, by design</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Typed, calibrated decisions as a first-class primitive</td>
+<td>Yes</td>
+<td>Not usually; often bolted on via prompting</td>
+</tr>
+<tr>
+<td>Self-hostable</td>
+<td>No</td>
+<td>Often (Hermes, OpenClaw, n8n, LangGraph, CrewAI all can be)</td>
+</tr>
+<tr>
+<td>Pricing model</td>
+<td>Pay per input token, output free</td>
+<td>Varies; several are free/open-source frameworks (you still pay the underlying LLM)</td>
+</tr>
+</tbody>
+</table></div>
+<h2>When I would use JEV</h2>
+<p><strong>Where it&rsquo;s an excellent choice:</strong> any point in a system you already control where you&rsquo;re making the same <em>kind</em> of bounded, repeated, semantic decision at volume — routing, triage, scoring, extraction, a guardrail check, or a confidence-gated branch — and you&rsquo;d otherwise be paying full generative-model cost and latency, or hand-writing brittle regex/rules, to get there. The strongest evidence for this in this guide isn&rsquo;t TypeSafe&rsquo;s own marketing, it&rsquo;s the sheer number of independent community projects (coding routers, code review, browser automation on accessibility trees, agent supervisors) that converged on the same pattern without being told to.</p>
+<p><strong>Where another architecture is better:</strong> anything open-ended — chat, code generation, multi-step reasoning, planning. Anything that needs memory, tool orchestration, or a UI, which is to say an actual agent — reach for Hermes, OpenClaw, Claude Code, an Agents SDK build, LangGraph, or CrewAI, and consider calling Jev <em>from</em> one of those for the narrow decisions inside it. And anything that must run fully air-gapped or self-hosted today — Jev simply can&rsquo;t, full stop.</p>
+<p><strong>Enterprise deployment considerations:</strong> the ZDR-on-request-plus-legal-docs story may satisfy some procurement processes and not others; there&rsquo;s no public SOC 2/ISO/HIPAA certification to point to as of this research, so budget time for a direct conversation with TypeSafe&rsquo;s sales team rather than assuming self-serve compliance. See <a href="/blog/enterprise-ai-budget-spending-2026.html">enterprise AI budget planning</a> for the broader framing of vendor risk vs. token cost.</p>
+<p><strong>Maturity risks:</strong> a seed-stage company (closed its round in September 2026), a product still in early access, rate limits explicitly described as still being tuned, and model aliases that can shift behavior under you if you don&rsquo;t pin a version. None of this is unusual for a six-month-old product category — but it&rsquo;s a different risk profile than adopting an established open-source framework with 95K+ or 340K+ GitHub stars (Hermes, OpenClaw respectively).</p>
+<p><strong>Operational complexity:</strong> low per-call — it really is &ldquo;make an API call, read a probability back.&rdquo; The complexity that remains lives entirely in your own confidence-threshold policy: what counts as &ldquo;high enough to auto-act,&rdquo; what triggers a human, and how you re-validate that policy as the model version changes. That&rsquo;s exactly what the author&rsquo;s own small pilot surfaced in practice — not the model being wrong, but a downstream bug (a quarantine rule that had been silently discarding six of nine nights of output) that the pilot&rsquo;s disagreement cases happened to expose. On a 40-event sample, every answer at ≥0.9 confidence agreed with the deterministic reference map (14/14); every disagreement was at ≤0.51 confidence, and half of those turned out to be errors in the reference map, not the model. That&rsquo;s a small, self-reported pilot, not a TypeSafe benchmark — but it&rsquo;s the one number in this guide nobody else can cite, because it&rsquo;s the author&rsquo;s own.</p>
+<h2>Sources / Further Reading</h2>
+<ul>
+<li>TypeSafe AI, <a href="https://docs.typesafe.ai/concepts/system-one">&ldquo;System One&rdquo; and Jev overview</a></li>
+<li>TypeSafe AI, <a href="https://docs.typesafe.ai/api">HTTP API reference</a></li>
+<li>TypeSafe AI, <a href="https://docs.typesafe.ai/models">Models reference (jev-1.13.0, aliases, rate limits)</a></li>
+<li>TypeSafe AI, <a href="https://docs.typesafe.ai/confidence">Confidence guidance</a></li>
+<li>TypeSafe AI, <a href="https://docs.typesafe.ai/sdk/python">Python SDK</a> / <a href="https://docs.typesafe.ai/sdk/javascript">JavaScript SDK</a></li>
+<li>TypeSafe AI, <a href="https://docs.typesafe.ai/concepts/use-case-map">Use-case map</a></li>
+<li>TypeSafe AI, <a href="https://typesafe.ai/">homepage</a> and <a href="https://docs.typesafe.ai/introduction">introduction</a></li>
+<li><code>jev-ai</code> org README — <a href="https://github.com/jev-ai">independent-app disclaimer</a></li>
+<li><a href="https://github.com/malevrigns/agent-jev">AgentJev-0.6B</a> — unrelated open-source alternative</li>
+<li><a href="https://github.com/hellogumbo/awesome-jev">awesome-jev community directory</a></li>
+<li>Barbosa, J.A.S., <a href="https://arxiv.org/abs/2609.28940">&ldquo;Calibrated Decision Models for Autonomous Penetration-Testing Harnesses: JEV and Laya as System One Decision Layers for LLM-Driven Pentest Agents&rdquo;</a>, arXiv:2609.28940</li>
+</ul>
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>What is JEV in AI agents?</h3>
+                <p>JEV (properly &ldquo;Jev&rdquo;) is TypeSafe AI&rsquo;s &ldquo;System One model&rdquo; — a non-generative model that turns text/JSON input and a set of typed questions into typed answers with calibrated probabilities, for use inside software and agents, not as a standalone agent itself.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is JEV the same as Jev AI (jev-ai.org)?</h3>
+                <p>No. Jev AI is an independent community app for sharing Jev &ldquo;playbooks&rdquo;; its own README states it is not the official product site for the underlying Jev model. The official product is TypeSafe&rsquo;s Jev at typesafe.ai / docs.typesafe.ai.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can you self-host Jev?</h3>
+                <p>No. TypeSafe&rsquo;s Jev is API-only with no downloadable weights or on-prem build documented anywhere. (Don&rsquo;t confuse it with the unrelated, genuinely self-hostable open-source model AgentJev-0.6B, which benchmarks against Jev but isn&rsquo;t Jev.)</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Does TypeSafe&#x27;s Jev have an official MCP server?</h3>
+                <p>Not as of this research. Several third-party/community MCP servers exist (<code>jev-mcp</code>, <code>typesafe-mcp</code>, <code>decisions-judge-mcp</code>, <code>jev-shield</code>) that bridge Jev&rsquo;s API into MCP clients like Claude Code and Cursor.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How much does Jev cost?</h3>
+                <p>$0.042 per million input tokens ($42 per billion); output tokens are free. No self-serve enterprise pricing tier is published — enterprise customers are directed to contact sales.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is Jev an agent framework like LangGraph or CrewAI?</h3>
+                <p>No. It has no agent loop, no built-in memory, and no native tool calling. It&rsquo;s a decision primitive you&rsquo;d call from inside a framework like LangGraph, CrewAI, Hermes, OpenClaw, or an Agents SDK build, not a replacement for any of them.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How does Jev handle uncertain answers?</h3>
+                <p>It returns a calibrated probability/confidence with every answer, and TypeSafe recommends a three-tier policy: act automatically above a high threshold, confirm or flag for review in a medium band, and escalate to a human or fallback system below a low threshold — with the threshold itself scaled to how costly a wrong decision would be.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What are Jev&#x27;s main limitations today?</h3>
+                <p>Text-only input (no image/audio/video), no memory, no self-hosting, no official MCP server, model aliases that can drift behavior without a code change, no published compliance certifications, and rate limits still described as actively changing.</p>
+            </div>
+        </div>
+        <!-- CTA in article -->
+        <h2>Ready to Get Started?</h2>
+        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
+        <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/openclaw-vs-hermes-agent.html" class="related-card">
+                <h3 class="related-card-title">OpenClaw vs Hermes Agent: Which Open-Source AI Agent Should You Self-Host?</h3>
+                <p class="related-card-excerpt">The self-hosted orchestration layer you&#x27;d actually call Jev from.</p>
+            </a>
+            <a href="/blog/meta-muse-vs-openai-dots-vs-grok-bot.html" class="related-card">
+                <h3 class="related-card-title">Meta Muse vs OpenAI Dots vs Grok Bot: Which Always-On AI Agent Should You Actually Use?</h3>
+                <p class="related-card-excerpt">The hosted, consumer-facing always-on agent category, a different lane from Jev entirely.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify.html" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a></p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
