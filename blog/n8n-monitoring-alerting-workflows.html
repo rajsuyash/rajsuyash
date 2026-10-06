@@ -565,7 +565,7 @@
 
         <p>Monitoring and <a href="/blog/n8n-error-handling-best-practices.html">N8N error handling</a> work together. Good retry logic reduces the number of real failures that need to alert; good monitoring catches the ones retries could not fix.</p>
 
-        <p>For transient failures like a brief API timeout, configure N8N node retry settings (available on most nodes) to retry 2 to 3 times with exponential backoff: wait 30 seconds, then 90 seconds, then 270 seconds before giving up. This handles the majority of temporary network issues without generating false alerts.</p>
+        <p>For transient failures like a brief API timeout, configure N8N node retry settings (available on most nodes) to retry 2 to 3 times with exponential backoff: wait 30 seconds, then 90 seconds, then 270 seconds before giving up. This handles the majority of temporary network issues without generating false alerts. For the specific case of an external API's own rate limit rather than a generic timeout, <a href="/blog/n8n-retries-rate-limits-queue-mode.html">retries, rate limits and queue mode</a> covers the exact settings and includes a workflow JSON I validated against a simulated rate-limited endpoint.</p>
 
         <p>Only send the alert after retries are exhausted. If every transient 500 error generates a Slack message, your team will start ignoring the channel within a week. Keep alerts meaningful by only firing them for genuine failures that require human attention.</p>
 
