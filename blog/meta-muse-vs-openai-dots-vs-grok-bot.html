@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>Meta Muse vs OpenAI Dots vs Grok Bot: CTO Comparison</title>
+    <meta name="description" content="Meta Muse, OpenAI Dots and xAI&#x27;s Grok Bot compared for CTOs: architecture, MCP, memory, self-hosting, security and 14 real deployment scenarios.">
+    <meta name="keywords" content="Meta Muse vs OpenAI Dots vs Grok Bot">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/meta-muse-vs-openai-dots-vs-grok-bot.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/meta-muse-vs-openai-dots-vs-grok-bot.html">
+    <meta property="og:title" content="Meta Muse vs OpenAI Dots vs Grok Bot: CTO Comparison">
+    <meta property="og:description" content="Three 2026 &#x27;always-on&#x27; agents, one honest technical comparison: architecture, MCP, memory, security, self-hosting, and which to pick for 14 real scenarios.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj">
+    <meta property="article:published_time" content="2026-10-06">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Meta Muse vs OpenAI Dots vs Grok Bot: CTO Comparison">
+    <meta name="twitter:description" content="Three 2026 &#x27;always-on&#x27; agents, one honest technical comparison: architecture, MCP, memory, security, self-hosting, and which to pick for 14 real scenarios.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260216b">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Meta Muse vs OpenAI Dots vs Grok Bot: CTO Comparison",
+        "description": "Meta Muse, OpenAI Dots and xAI's Grok Bot compared for CTOs: architecture, MCP, memory, self-hosting, security and 14 real deployment scenarios.",
+        "author": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com/about.html"
+        },
+        "publisher": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj"
+        },
+        "datePublished": "2026-10-06",
+        "dateModified": "2026-10-06",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/meta-muse-vs-openai-dots-vs-grok-bot.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Is \"Clawbot\" the same as Grok Bot?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No official product is named &ldquo;Clawbot.&rdquo; If you&rsquo;re looking for xAI&rsquo;s always-on agent, the correct name is Grok Bot \u2014 used throughout this article."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I self-host Meta Muse, OpenAI Dots, or Grok Bot?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. All three are closed, vendor-hosted cloud products with no self-hosting option as of this writing. If self-hosting is a requirement, see our companion comparison of open-source alternatives, OpenClaw vs Hermes Agent."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Which one supports MCP (Model Context Protocol)?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Grok Bot documents MCP support directly (local servers need a public URL or tunnel). OpenAI&rsquo;s platform supports remote MCP and a Secure MCP Tunnel, but this isn&rsquo;t confirmed as a dots-specific surface. Meta&rsquo;s consumer Muse app has no documented MCP support; MCP appears only in Meta&rsquo;s separate developer-facing Muse Spark API."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is Meta Muse, OpenAI Dots, or Grok Bot ready for enterprise production use?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Grok Bot and Dots both have enterprise tiers with access/governance controls; Muse has a nascent small-business and enterprise push. None has a long track record \u2014 independent early-access reporting on all three describes reliability as unproven for long-running, unattended work. Pilot before you commit a workflow to any of them."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What does each one cost?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Muse: free tier plus $20/mo or $100/mo consumer tiers. Dots: included with ChatGPT Pro ($100\u2013$500/mo) or Business Premium ($125/user/mo), with extra-dot pricing not yet published. Grok Bot: roughly $200/mo standalone, or bundled into SuperGrok Heavy ($300/mo) or Cursor plans, with a custom-priced Enterprise tier."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Which is best for a CTO who wants to connect Gmail, Drive, Slack, a CRM and internal APIs?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Dots has the widest existing connector reach (4,000+ apps via ChatGPT&rsquo;s ecosystem) and is the most &ldquo;already integrated&rdquo; option. Grok Bot covers the core productivity stack (Gmail, Drive, Teams, SharePoint, Salesforce) plus MCP for anything custom. Muse&rsquo;s integrations skew toward consumer/commerce apps, not internal enterprise tooling."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is any of these safe for privacy-sensitive industries (health, finance, legal)?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Treat all three as unverified for regulated data until you&rsquo;ve done your own legal/compliance review. None has a confirmed, product-specific SOC 2 or HIPAA attestation at the time of writing \u2014 see the fact-check notes behind this article for exactly what is and isn&rsquo;t documented."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "Meta Muse vs OpenAI Dots vs Grok Bot: Which Always-On AI Agent Should You Actually Use?", "item": "https://rajsuyash.com/blog/meta-muse-vs-openai-dots-vs-grok-bot.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Table horizontal-scroll wrapper, so a wide comparison table never
+           overflows the page on mobile; it scrolls inside its own box instead. */
+        .table-scroll {
+            overflow-x: auto;
+            margin: var(--space-md) 0;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table-scroll .comparison-table {
+            margin: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* Mermaid diagrams, pre-rendered to inline SVG at build time (no runtime JS) */
+        .mermaid-diagram {
+            margin: var(--space-md) 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .mermaid-diagram figcaption {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+            margin-top: var(--space-xs);
+            text-align: center;
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/about.html" class="nav-link">About</a>
+                <a href="/qualify.html" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">AI Agents</span>
+                <span class="article-date">October 6, 2026</span>
+                <span class="article-read-time">26 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">Meta Muse vs OpenAI Dots vs Grok Bot: CTO Comparison</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">Meta, OpenAI, and xAI all shipped an always-on agent within three weeks of each other. Here&#x27;s what each one actually does, where the names get confused, and which one, if any, fits your stack.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <!-- CONTENT GOES HERE -->
+        <p>Three of the biggest AI companies on earth shipped the same idea within three weeks of each other in September 2026: an agent that doesn&rsquo;t wait for your next message. Meta shipped <strong>Muse</strong> on September 8. xAI had already shipped <strong>Grok Bot</strong> on August 11. OpenAI shipped <strong>dots</strong> on September 29. All three pitch themselves as &ldquo;always-on&rdquo; — an agent with its own computer, its own browser, and a standing mandate to keep working after you close the tab.</p>
+<p>If you searched for &ldquo;Clawbot&rdquo; to find the third one: there&rsquo;s no product by that name. The agent in question is xAI&rsquo;s <strong>Grok Bot</strong> — a different thing from the base Grok chatbot and from xAI&rsquo;s separate coding CLI, Grok Build. We&rsquo;ll untangle all of that below, because getting the names right turns out to matter for understanding what each product is actually for.</p>
+<p>This is a CTO-to-CTO comparison, not a feature tour. We pulled every claim here from vendor docs, vendor blogs, and (where vendors are silent) cross-checked independent reporting — and we say &ldquo;not publicly documented&rdquo; a lot, because that&rsquo;s the honest answer for a lot of rows in the table below. If you&rsquo;re deciding whether to pilot one of these inside your stack this quarter, this is the comparison to read first.</p>
+<h2>Get the names right first</h2>
+<ul>
+<li><strong>Muse</strong> is Meta&rsquo;s product name; &ldquo;Meta Muse&rdquo; (as commonly searched) is accurate shorthand. It runs on a Meta-built model family called Muse Spark, not Llama.</li>
+<li><strong>dots</strong> is OpenAI&rsquo;s product name, styled lowercase on OpenAI&rsquo;s own announcement page; most coverage capitalizes it as &ldquo;Dots.&rdquo; It runs on GPT-6 Astra. It is a ChatGPT feature, not a new API product — there is no dots API or SDK.</li>
+<li><strong>Grok Bot</strong> is xAI&rsquo;s product. It is distinct from <strong>Grok Build</strong> (xAI&rsquo;s terminal coding-agent CLI) and from the everyday <strong>Grok</strong> chatbot. Grok Bot is the one that gets a persistent cloud computer; Grok Build is the one that lives in your terminal and writes code.</li>
+</ul>
+<h2>What each one actually is, from first principles</h2>
+<h3>Muse: a personal agent for errands, wrapped in Meta&rsquo;s app ecosystem</h3>
+<p>Muse is built for one job: take a task off a consumer&rsquo;s or small business&rsquo;s plate — book the tennis lesson, fill out the school permission slip, reorder the thing from the recipe reel you saved — without you babysitting a chat window. It runs asynchronously on a &ldquo;Muse Secure VM&rdquo; inside Meta&rsquo;s cloud, continuing in the background after you close the app. The model underneath, <strong>Muse Spark</strong>, is a natively multimodal reasoning model with tiered modes — Instant, Thinking, and a &ldquo;Contemplating&rdquo; mode that runs multiple sub-agents in parallel for harder jobs.</p>
+<figure class="mermaid-diagram"><svg role="img" aria-label="Meta Muse architecture: Muse app, Muse Secure VM, Muse Spark model, credential vault, built-in browser, and commerce connectors." style="width:100%;height:auto;max-width:720px;display:block;margin:0 auto;" id="mermaid-a1-1" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" style="max-width: 1174.61px; background-color: transparent;" viewBox="4 4 1174.609375 592" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mermaid-a1-1{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;fill:#0d0d0d;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mermaid-a1-1 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mermaid-a1-1 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mermaid-a1-1 .error-icon{fill:#ffffff;}#mermaid-a1-1 .error-text{fill:#000000;stroke:#000000;}#mermaid-a1-1 .edge-thickness-normal{stroke-width:1px;}#mermaid-a1-1 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-a1-1 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-a1-1 .edge-thickness-invisible{stroke-width:0;fill:none;}#mermaid-a1-1 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-a1-1 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-a1-1 .marker{fill:#8a4a2f;stroke:#8a4a2f;}#mermaid-a1-1 .marker.cross{stroke:#8a4a2f;}#mermaid-a1-1 svg{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;}#mermaid-a1-1 p{margin:0;}#mermaid-a1-1 .label{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#0d0d0d;}#mermaid-a1-1 .cluster-label text{fill:#000000;}#mermaid-a1-1 .cluster-label span{color:#000000;}#mermaid-a1-1 .cluster-label span p{background-color:transparent;}#mermaid-a1-1 .label text,#mermaid-a1-1 span{fill:#0d0d0d;color:#0d0d0d;}#mermaid-a1-1 .node rect,#mermaid-a1-1 .node circle,#mermaid-a1-1 .node ellipse,#mermaid-a1-1 .node polygon,#mermaid-a1-1 .node path{fill:#f4efe6;stroke:#2e2a25;stroke-width:1px;}#mermaid-a1-1 .rough-node .label text,#mermaid-a1-1 .node .label text,#mermaid-a1-1 .image-shape .label,#mermaid-a1-1 .icon-shape .label{text-anchor:middle;}#mermaid-a1-1 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mermaid-a1-1 .rough-node .label,#mermaid-a1-1 .node .label,#mermaid-a1-1 .image-shape .label,#mermaid-a1-1 .icon-shape .label{text-align:center;}#mermaid-a1-1 .node.clickable{cursor:pointer;}#mermaid-a1-1 .root .anchor path{fill:#8a4a2f!important;stroke-width:0;stroke:#8a4a2f;}#mermaid-a1-1 .arrowheadPath{fill:#0b0b0b;}#mermaid-a1-1 .edgePaths .path{stroke:#8a4a2f;stroke-width:1px;}#mermaid-a1-1 .flowchart-link{stroke:#8a4a2f;fill:none;}#mermaid-a1-1 .edgeLabel{background-color:#f4efe6;text-align:center;}#mermaid-a1-1 .edgeLabel p{background-color:#f4efe6;}#mermaid-a1-1 .edgeLabel rect{opacity:0.5;background-color:#f4efe6;fill:#f4efe6;}#mermaid-a1-1 .labelBkg{background-color:rgba(244, 239, 230, 0.5);}#mermaid-a1-1 .cluster rect{fill:#f9f6f0;stroke:#2e2a25;stroke-width:1px;}#mermaid-a1-1 .cluster text{fill:#000000;}#mermaid-a1-1 .cluster span{color:#000000;}#mermaid-a1-1 .node .collapsed-indicator{fill:#2e2a25;stroke:none;opacity:0.6;}#mermaid-a1-1 .node .collapsed-separator{stroke:#2e2a25;stroke-width:0.75px;}#mermaid-a1-1 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;background:#ffffff;border:1px solid hsl(0, 0%, 90%);border-radius:2px;pointer-events:none;z-index:100;}#mermaid-a1-1 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#0d0d0d;}#mermaid-a1-1 rect.text{fill:none;stroke-width:0;}#mermaid-a1-1 .icon-shape,#mermaid-a1-1 .image-shape{background-color:#f4efe6;text-align:center;}#mermaid-a1-1 .icon-shape p,#mermaid-a1-1 .image-shape p{background-color:#f4efe6;padding:2px;}#mermaid-a1-1 .icon-shape .label rect,#mermaid-a1-1 .image-shape .label rect{opacity:0.5;background-color:#f4efe6;fill:#f4efe6;}#mermaid-a1-1 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mermaid-a1-1 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mermaid-a1-1 .node .neo-node{stroke:#2e2a25;}#mermaid-a1-1 [data-look="neo"].node rect,#mermaid-a1-1 [data-look="neo"].cluster rect,#mermaid-a1-1 [data-look="neo"].node polygon{stroke:url(#mermaid-a1-1-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-1 [data-look="neo"].swimlane.cluster rect{filter:none;}#mermaid-a1-1 [data-look="neo"].node path{stroke:url(#mermaid-a1-1-gradient);stroke-width:1px;}#mermaid-a1-1 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-1 [data-look="neo"].node .neo-line path{stroke:#2e2a25;filter:none;}#mermaid-a1-1 [data-look="neo"].node circle{stroke:url(#mermaid-a1-1-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-1 [data-look="neo"].node circle .state-start{fill:#000000;}#mermaid-a1-1 [data-look="neo"].icon-shape .icon{fill:url(#mermaid-a1-1-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-1 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mermaid-a1-1-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-1 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker id="my-svg_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"/></marker><marker id="my-svg_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"/></marker><g class="root"><g class="clusters"/><g class="edges edgePaths"><path d="M164,270L200,270" id="my-svg-L_U_M_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 32 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_U_M_0" data-points="W3sieCI6MTY0LCJ5IjoyNzB9LHsieCI6MjA0LCJ5IjoyNzB9XQ==" data-look="neo" marker-end="url(#mermaid-a1-1_flowchart-v2-pointEnd-margin)"/><path d="M356,270L392,270" id="my-svg-L_M_VM_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 32 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_M_VM_0" data-points="W3sieCI6MzU2LCJ5IjoyNzB9LHsieCI6Mzk2LCJ5IjoyNzB9XQ==" data-look="neo" marker-end="url(#mermaid-a1-1_flowchart-v2-pointEnd-margin)"/><path d="M548,240L560.9289321881345,240Q568,240 568,232.92893218813452L568,55.071067811865476Q568,48 575.0710678118655,48L606.609375,48" id="my-svg-L_VM_Spark_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 241.28109741210938 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_VM_Spark_0" data-points="W3sieCI6NTQ4LCJ5IjoyNDB9LHsieCI6NTY4LCJ5IjoyNDB9LHsieCI6NTY4LCJ5Ijo0OH0seyJ4Ijo2MTAuNjA5Mzc1LCJ5Ijo0OH1d" data-look="neo" marker-end="url(#mermaid-a1-1_flowchart-v2-pointEnd-margin)"/><path d="M548,260L580.9289321881345,260Q588,260 588,252.92893218813452L588,203.07106781186548Q588,196 595.0710678118655,196L604,196" id="my-svg-L_VM_Vault_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 110.67172241210938 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_VM_Vault_0" data-points="W3sieCI6NTQ4LCJ5IjoyNjB9LHsieCI6NTg4LCJ5IjoyNjB9LHsieCI6NTg4LCJ5IjoxOTZ9LHsieCI6NjA4LCJ5IjoxOTZ9XQ==" data-look="neo" marker-end="url(#mermaid-a1-1_flowchart-v2-pointEnd-margin)"/><path d="M548,280L580.9289321881345,280Q588,280 588,287.0710678118655L588,336.9289321881345Q588,344 595.0710678118655,344L604,344" id="my-svg-L_VM_Browser_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 110.67169952392578 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_VM_Browser_0" data-points="W3sieCI6NTQ4LCJ5IjoyODB9LHsieCI6NTg4LCJ5IjoyODB9LHsieCI6NTg4LCJ5IjozNDR9LHsieCI6NjA4LCJ5IjozNDR9XQ==" data-look="neo" marker-end="url(#mermaid-a1-1_flowchart-v2-pointEnd-margin)"/><path d="M548,300L560.9289321881345,300Q568,300 568,307.0710678118655L568,496.9289321881345Q568,504 575.0710678118655,504L604,504" id="my-svg-L_VM_Conn_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 250.67169189453125 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_VM_Conn_0" data-points="W3sieCI6NTQ4LCJ5IjozMDB9LHsieCI6NTY4LCJ5IjozMDB9LHsieCI6NTY4LCJ5Ijo1MDR9LHsieCI6NjA4LCJ5Ijo1MDR9XQ==" data-look="neo" marker-end="url(#mermaid-a1-1_flowchart-v2-pointEnd-margin)"/><path d="M762.609375,48L1014.609375,48" id="my-svg-L_Spark_Sub_0" class="edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Spark_Sub_0" data-points="W3sieCI6NzYyLjYwOTM3NSwieSI6NDh9LHsieCI6MTAxOC42MDkzNzUsInkiOjQ4fV0=" data-look="neo" marker-end="url(#mermaid-a1-1_flowchart-v2-pointEnd-margin)"/></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(891.9140625, 47.5)"><g class="label" data-id="L_Spark_Sub_0" transform="translate(-86.6953125, -12)"><foreignObject width="173.390625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>Contemplating mode</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default" id="my-svg-flowchart-U-0" data-look="neo" transform="translate(88, 270)"><rect class="basic label-container" style="" x="-76" y="-48" width="152" height="96"/><g class="label" style="" transform="translate(-60, -36)"><rect/><foreignObject width="120" height="72"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>User — iOS / Android / Web</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-M-1" data-look="neo" transform="translate(280, 270)"><rect class="basic label-container" style="" x="-76" y="-24" width="152" height="48"/><g class="label" style="" transform="translate(-60, -12)"><rect/><foreignObject width="120" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: nowrap; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Muse app</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-VM-3" data-look="neo" transform="translate(472, 270)"><rect class="basic label-container" style="" x="-76" y="-60" width="152" height="120"/><g class="label" style="" transform="translate(-60, -48)"><rect/><foreignObject width="120" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Muse Secure VM (per-user, isolated)</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Spark-5" data-look="neo" transform="translate(686.609375, 48)"><rect class="basic label-container" style="" x="-76" y="-36" width="152" height="72"/><g class="label" style="" transform="translate(-60, -24)"><rect/><foreignObject width="120" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Muse Spark model</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Vault-7" data-look="neo" transform="translate(684, 196)"><rect class="basic label-container" style="" x="-76" y="-72" width="152" height="144"/><g class="label" style="" transform="translate(-60, -60)"><rect/><foreignObject width="120" height="120"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Credential vault — passwords hidden from model</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Browser-9" data-look="neo" transform="translate(684, 344)"><rect class="basic label-container" style="" x="-76" y="-36" width="152" height="72"/><g class="label" style="" transform="translate(-60, -24)"><rect/><foreignObject width="120" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Built-in browser</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Conn-11" data-look="neo" transform="translate(686.609375, 504)"><rect class="basic label-container" style="" x="-78.609375" y="-84" width="157.21875" height="168"/><g class="label" style="" transform="translate(-62.609375, -72)"><rect/><foreignObject width="125.21875" height="144"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Connectors: Shopify, Stripe, Slack, Dropbox, QuickBooks...</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Sub-13" data-look="neo" transform="translate(1094.609375, 48)"><rect class="basic label-container" style="" x="-76" y="-36" width="152" height="72"/><g class="label" style="" transform="translate(-60, -24)"><rect/><foreignObject width="120" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Parallel sub-agents</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="my-svg-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><defs><filter id="my-svg-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><linearGradient id="my-svg-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#2e2a25" stop-opacity="1"/><stop offset="100%" stop-color="hsl(38.5714285714, 0%, 82.9411764706%)" stop-opacity="1"/></linearGradient></svg><figcaption>Meta Muse architecture: Muse app, Muse Secure VM, Muse Spark model, credential vault, built-in browser, and commerce connectors.</figcaption></figure>
+
+<p>Meta&rsquo;s security story leans on that credential vault (the model never sees your passwords) and Stripe-issued single-use virtual cards for purchases, with explicit human approval required before money moves. A fully encrypted &ldquo;Muse Confidential VM,&rdquo; where even Meta can&rsquo;t see the contents, has been announced but has no shipping date.</p>
+<h3>dots: an always-on delegate that lives where your team already works</h3>
+<p>OpenAI&rsquo;s framing for dots is pointed: not a chatbot, a standing employee. You give a dot a goal, connect the apps it needs, set what it&rsquo;s allowed to do unsupervised, and it works in the background on its own cloud computer — with its own browser — until it has something to show you or needs a decision. Because it inherits ChatGPT&rsquo;s existing connector ecosystem, a dot can reach into 4,000+ already-integrated apps (Slack, Google Drive, Salesforce, and so on) on day one, and you can message it from ChatGPT, Slack, or Teams.</p>
+<figure class="mermaid-diagram"><svg role="img" aria-label="OpenAI Dots architecture: a dot in ChatGPT/Slack/Teams, running on an OpenAI cloud computer with GPT-6 Astra, a cloud browser, remote MCP servers, and 4,000+ connected apps." style="width:100%;height:auto;max-width:720px;display:block;margin:0 auto;" id="mermaid-a1-2" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" style="max-width: 1004px; background-color: transparent;" viewBox="4 4 1004 472" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mermaid-a1-2{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;fill:#0d0d0d;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mermaid-a1-2 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mermaid-a1-2 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mermaid-a1-2 .error-icon{fill:#ffffff;}#mermaid-a1-2 .error-text{fill:#000000;stroke:#000000;}#mermaid-a1-2 .edge-thickness-normal{stroke-width:1px;}#mermaid-a1-2 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-a1-2 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-a1-2 .edge-thickness-invisible{stroke-width:0;fill:none;}#mermaid-a1-2 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-a1-2 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-a1-2 .marker{fill:#8a4a2f;stroke:#8a4a2f;}#mermaid-a1-2 .marker.cross{stroke:#8a4a2f;}#mermaid-a1-2 svg{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;}#mermaid-a1-2 p{margin:0;}#mermaid-a1-2 .label{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#0d0d0d;}#mermaid-a1-2 .cluster-label text{fill:#000000;}#mermaid-a1-2 .cluster-label span{color:#000000;}#mermaid-a1-2 .cluster-label span p{background-color:transparent;}#mermaid-a1-2 .label text,#mermaid-a1-2 span{fill:#0d0d0d;color:#0d0d0d;}#mermaid-a1-2 .node rect,#mermaid-a1-2 .node circle,#mermaid-a1-2 .node ellipse,#mermaid-a1-2 .node polygon,#mermaid-a1-2 .node path{fill:#f4efe6;stroke:#2e2a25;stroke-width:1px;}#mermaid-a1-2 .rough-node .label text,#mermaid-a1-2 .node .label text,#mermaid-a1-2 .image-shape .label,#mermaid-a1-2 .icon-shape .label{text-anchor:middle;}#mermaid-a1-2 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mermaid-a1-2 .rough-node .label,#mermaid-a1-2 .node .label,#mermaid-a1-2 .image-shape .label,#mermaid-a1-2 .icon-shape .label{text-align:center;}#mermaid-a1-2 .node.clickable{cursor:pointer;}#mermaid-a1-2 .root .anchor path{fill:#8a4a2f!important;stroke-width:0;stroke:#8a4a2f;}#mermaid-a1-2 .arrowheadPath{fill:#0b0b0b;}#mermaid-a1-2 .edgePaths .path{stroke:#8a4a2f;stroke-width:1px;}#mermaid-a1-2 .flowchart-link{stroke:#8a4a2f;fill:none;}#mermaid-a1-2 .edgeLabel{background-color:#f4efe6;text-align:center;}#mermaid-a1-2 .edgeLabel p{background-color:#f4efe6;}#mermaid-a1-2 .edgeLabel rect{opacity:0.5;background-color:#f4efe6;fill:#f4efe6;}#mermaid-a1-2 .labelBkg{background-color:rgba(244, 239, 230, 0.5);}#mermaid-a1-2 .cluster rect{fill:#f9f6f0;stroke:#2e2a25;stroke-width:1px;}#mermaid-a1-2 .cluster text{fill:#000000;}#mermaid-a1-2 .cluster span{color:#000000;}#mermaid-a1-2 .node .collapsed-indicator{fill:#2e2a25;stroke:none;opacity:0.6;}#mermaid-a1-2 .node .collapsed-separator{stroke:#2e2a25;stroke-width:0.75px;}#mermaid-a1-2 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;background:#ffffff;border:1px solid hsl(0, 0%, 90%);border-radius:2px;pointer-events:none;z-index:100;}#mermaid-a1-2 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#0d0d0d;}#mermaid-a1-2 rect.text{fill:none;stroke-width:0;}#mermaid-a1-2 .icon-shape,#mermaid-a1-2 .image-shape{background-color:#f4efe6;text-align:center;}#mermaid-a1-2 .icon-shape p,#mermaid-a1-2 .image-shape p{background-color:#f4efe6;padding:2px;}#mermaid-a1-2 .icon-shape .label rect,#mermaid-a1-2 .image-shape .label rect{opacity:0.5;background-color:#f4efe6;fill:#f4efe6;}#mermaid-a1-2 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mermaid-a1-2 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mermaid-a1-2 .node .neo-node{stroke:#2e2a25;}#mermaid-a1-2 [data-look="neo"].node rect,#mermaid-a1-2 [data-look="neo"].cluster rect,#mermaid-a1-2 [data-look="neo"].node polygon{stroke:url(#mermaid-a1-2-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-2 [data-look="neo"].swimlane.cluster rect{filter:none;}#mermaid-a1-2 [data-look="neo"].node path{stroke:url(#mermaid-a1-2-gradient);stroke-width:1px;}#mermaid-a1-2 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-2 [data-look="neo"].node .neo-line path{stroke:#2e2a25;filter:none;}#mermaid-a1-2 [data-look="neo"].node circle{stroke:url(#mermaid-a1-2-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-2 [data-look="neo"].node circle .state-start{fill:#000000;}#mermaid-a1-2 [data-look="neo"].icon-shape .icon{fill:url(#mermaid-a1-2-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-2 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mermaid-a1-2-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-2 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker id="my-svg_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"/></marker><marker id="my-svg_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"/></marker><g class="root"><g class="clusters"/><g class="edges edgePaths"><path d="M164,187.33333333333334L304,187.33333333333334L418,187.33333333333334Q424,187.33333333333334 424,193.33333333333334L424,193.33333333333334Q424,199.33333333333334 430,199.33333333333334L440,199.33333333333334" id="my-svg-L_U_D_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 279.4788513183594 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_U_D_0" data-points="W3sieCI6MTY0LCJ5IjoxODcuMzMzMzMzMzMzMzMzMzR9LHsieCI6MzA0LCJ5IjoxODcuMzMzMzMzMzMzMzMzMzR9LHsieCI6NDI0LCJ5IjoxODcuMzMzMzMzMzMzMzMzMzR9LHsieCI6NDI0LCJ5IjoxOTkuMzMzMzMzMzMzMzMzMzR9LHsieCI6NDQ0LCJ5IjoxOTkuMzMzMzMzMzMzMzMzMzR9XQ==" data-look="neo" marker-end="url(#mermaid-a1-2_flowchart-v2-pointEnd-margin)"/><path d="M596,204L632,204" id="my-svg-L_D_Cloud_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 32 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_D_Cloud_0" data-points="W3sieCI6NTk2LCJ5IjoyMDR9LHsieCI6NjM2LCJ5IjoyMDR9XQ==" data-look="neo" marker-end="url(#mermaid-a1-2_flowchart-v2-pointEnd-margin)"/><path d="M788,181.2L800.9289321881345,181.2Q808,181.2 808,174.1289321881345L808,43.071067811865476Q808,36 815.0710678118655,36L844,36" id="my-svg-L_Cloud_Astra_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 191.87171936035156 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Cloud_Astra_0" data-points="W3sieCI6Nzg4LCJ5IjoxODEuMn0seyJ4Ijo4MDgsInkiOjE4MS4yfSx7IngiOjgwOCwieSI6MzZ9LHsieCI6ODQ4LCJ5IjozNn1d" data-look="neo" marker-end="url(#mermaid-a1-2_flowchart-v2-pointEnd-margin)"/><path d="M788,196.4L820.9289321881345,196.4Q828,196.4 828,189.32893218813453L828,143.07106781186548Q828,136 835.0710678118655,136L844,136" id="my-svg-L_Cloud_Browser2_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 107.07171630859375 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Cloud_Browser2_0" data-points="W3sieCI6Nzg4LCJ5IjoxOTYuNH0seyJ4Ijo4MjgsInkiOjE5Ni40fSx7IngiOjgyOCwieSI6MTM2fSx7IngiOjg0OCwieSI6MTM2fV0=" data-look="neo" marker-end="url(#mermaid-a1-2_flowchart-v2-pointEnd-margin)"/><path d="M788,211.6L820.9289321881345,211.6Q828,211.6 828,218.67106781186547L828,264.9289321881345Q828,272 835.0710678118655,272L844,272" id="my-svg-L_Cloud_MCP_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 107.07170867919922 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Cloud_MCP_0" data-points="W3sieCI6Nzg4LCJ5IjoyMTEuNn0seyJ4Ijo4MjgsInkiOjIxMS42fSx7IngiOjgyOCwieSI6MjcyfSx7IngiOjg0OCwieSI6MjcyfV0=" data-look="neo" marker-end="url(#mermaid-a1-2_flowchart-v2-pointEnd-margin)"/><path d="M788,226.8L800.9289321881345,226.8Q808,226.8 808,233.8710678118655L808,412.9289321881345Q808,420 815.0710678118655,420L844,420" id="my-svg-L_Cloud_Apps_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 239.8717041015625 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Cloud_Apps_0" data-points="W3sieCI6Nzg4LCJ5IjoyMjYuOH0seyJ4Ijo4MDgsInkiOjIyNi44fSx7IngiOjgwOCwieSI6NDIwfSx7IngiOjg0OCwieSI6NDIwfV0=" data-look="neo" marker-end="url(#mermaid-a1-2_flowchart-v2-pointEnd-margin)"/><path d="M444,208.66666666666669L430,208.66666666666669Q424,208.66666666666669 424,214.66666666666669L424,214.66666666666669Q424,220.66666666666669 418,220.66666666666669L168,220.66666666666669" id="my-svg-L_D_U_0" class="edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_D_U_0" data-points="W3sieCI6NDQ0LCJ5IjoyMDguNjY2NjY2NjY2NjY2Njl9LHsieCI6NDI0LCJ5IjoyMDguNjY2NjY2NjY2NjY2Njl9LHsieCI6NDI0LCJ5IjoyMjAuNjY2NjY2NjY2NjY2Njl9LHsieCI6MTY0LCJ5IjoyMjAuNjY2NjY2NjY2NjY2Njl9XQ==" data-look="neo" marker-end="url(#mermaid-a1-2_flowchart-v2-pointEnd-margin)"/></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(304, 220.66666666666669)"><g class="label" data-id="L_D_U_0" transform="translate(-100, -24)"><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel"><p>comes back for approval</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default" id="my-svg-flowchart-U-0" data-look="neo" transform="translate(88, 204)"><rect class="basic label-container" style="" x="-76" y="-60" width="152" height="120"/><g class="label" style="" transform="translate(-60, -48)"><rect/><foreignObject width="120" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>User — ChatGPT / Slack / Teams</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-D-1" data-look="neo" transform="translate(520, 204)"><rect class="basic label-container" style="" x="-76" y="-24" width="152" height="48"/><g class="label" style="" transform="translate(-60, -12)"><rect/><foreignObject width="120" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: nowrap; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>a dot</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Cloud-3" data-look="neo" transform="translate(712, 204)"><rect class="basic label-container" style="" x="-76" y="-48" width="152" height="96"/><g class="label" style="" transform="translate(-60, -36)"><rect/><foreignObject width="120" height="72"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>OpenAI cloud computer</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Astra-5" data-look="neo" transform="translate(924, 36)"><rect class="basic label-container" style="" x="-76" y="-24" width="152" height="48"/><g class="label" style="" transform="translate(-60, -12)"><rect/><foreignObject width="120" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: nowrap; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>GPT-6 Astra</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Browser2-7" data-look="neo" transform="translate(924, 136)"><rect class="basic label-container" style="" x="-76" y="-36" width="152" height="72"/><g class="label" style="" transform="translate(-60, -24)"><rect/><foreignObject width="120" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Cloud browser</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-MCP-9" data-look="neo" transform="translate(924, 272)"><rect class="basic label-container" style="" x="-76" y="-60" width="152" height="120"/><g class="label" style="" transform="translate(-60, -48)"><rect/><foreignObject width="120" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Remote MCP servers / Secure MCP Tunnel</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Apps-11" data-look="neo" transform="translate(924, 420)"><rect class="basic label-container" style="" x="-76" y="-48" width="152" height="96"/><g class="label" style="" transform="translate(-60, -36)"><rect/><foreignObject width="120" height="72"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>4,000+ connected apps</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="my-svg-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><defs><filter id="my-svg-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><linearGradient id="my-svg-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#2e2a25" stop-opacity="1"/><stop offset="100%" stop-color="hsl(38.5714285714, 0%, 82.9411764706%)" stop-opacity="1"/></linearGradient></svg><figcaption>OpenAI Dots architecture: a dot in ChatGPT/Slack/Teams, running on an OpenAI cloud computer with GPT-6 Astra, a cloud browser, remote MCP servers, and 4,000+ connected apps.</figcaption></figure>
+
+<p>OpenAI&rsquo;s own example use cases skew toward knowledge work: a developer dot that watches customer feedback and ships fixes, a research dot that reruns an analysis when new data lands. There is no dots-specific API — you don&rsquo;t build with dots, you delegate to one inside ChatGPT.</p>
+<h3>Grok Bot: a computer-use teammate built for technical teams</h3>
+<p>Grok Bot&rsquo;s whole pitch is that it gets its own persistent cloud computer — browser, filesystem, terminal, and a set of connectors — and stays logged in between sessions. Rather than one assistant, you get named &ldquo;Bots&rdquo; (think: a &ldquo;Sales&rdquo; Bot and an &ldquo;Ops&rdquo; Bot) that can run in parallel on one shared account-scoped VM and hand work to each other. Its most distinctive feature is &ldquo;teach-a-task&rdquo;: record yourself doing a workflow once, and Grok Bot turns the recording into a reusable skill, no API wiring required.</p>
+<figure class="mermaid-diagram"><svg role="img" aria-label="Grok Bot architecture: an account-scoped shared cloud VM running multiple named Bots, each with a terminal, filesystem, browser, built-in connectors, and tunneled MCP servers, sharing one VM with no security boundary between Bots." style="width:100%;height:auto;max-width:720px;display:block;margin:0 auto;" id="mermaid-a1-3" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" style="max-width: 1004px; background-color: transparent;" viewBox="4 4 1004 622.9166870117188" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mermaid-a1-3{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;fill:#0d0d0d;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mermaid-a1-3 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mermaid-a1-3 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mermaid-a1-3 .error-icon{fill:#ffffff;}#mermaid-a1-3 .error-text{fill:#000000;stroke:#000000;}#mermaid-a1-3 .edge-thickness-normal{stroke-width:1px;}#mermaid-a1-3 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-a1-3 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-a1-3 .edge-thickness-invisible{stroke-width:0;fill:none;}#mermaid-a1-3 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-a1-3 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-a1-3 .marker{fill:#8a4a2f;stroke:#8a4a2f;}#mermaid-a1-3 .marker.cross{stroke:#8a4a2f;}#mermaid-a1-3 svg{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;}#mermaid-a1-3 p{margin:0;}#mermaid-a1-3 .label{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#0d0d0d;}#mermaid-a1-3 .cluster-label text{fill:#000000;}#mermaid-a1-3 .cluster-label span{color:#000000;}#mermaid-a1-3 .cluster-label span p{background-color:transparent;}#mermaid-a1-3 .label text,#mermaid-a1-3 span{fill:#0d0d0d;color:#0d0d0d;}#mermaid-a1-3 .node rect,#mermaid-a1-3 .node circle,#mermaid-a1-3 .node ellipse,#mermaid-a1-3 .node polygon,#mermaid-a1-3 .node path{fill:#f4efe6;stroke:#2e2a25;stroke-width:1px;}#mermaid-a1-3 .rough-node .label text,#mermaid-a1-3 .node .label text,#mermaid-a1-3 .image-shape .label,#mermaid-a1-3 .icon-shape .label{text-anchor:middle;}#mermaid-a1-3 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mermaid-a1-3 .rough-node .label,#mermaid-a1-3 .node .label,#mermaid-a1-3 .image-shape .label,#mermaid-a1-3 .icon-shape .label{text-align:center;}#mermaid-a1-3 .node.clickable{cursor:pointer;}#mermaid-a1-3 .root .anchor path{fill:#8a4a2f!important;stroke-width:0;stroke:#8a4a2f;}#mermaid-a1-3 .arrowheadPath{fill:#0b0b0b;}#mermaid-a1-3 .edgePaths .path{stroke:#8a4a2f;stroke-width:1px;}#mermaid-a1-3 .flowchart-link{stroke:#8a4a2f;fill:none;}#mermaid-a1-3 .edgeLabel{background-color:#f4efe6;text-align:center;}#mermaid-a1-3 .edgeLabel p{background-color:#f4efe6;}#mermaid-a1-3 .edgeLabel rect{opacity:0.5;background-color:#f4efe6;fill:#f4efe6;}#mermaid-a1-3 .labelBkg{background-color:rgba(244, 239, 230, 0.5);}#mermaid-a1-3 .cluster rect{fill:#f9f6f0;stroke:#2e2a25;stroke-width:1px;}#mermaid-a1-3 .cluster text{fill:#000000;}#mermaid-a1-3 .cluster span{color:#000000;}#mermaid-a1-3 .node .collapsed-indicator{fill:#2e2a25;stroke:none;opacity:0.6;}#mermaid-a1-3 .node .collapsed-separator{stroke:#2e2a25;stroke-width:0.75px;}#mermaid-a1-3 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;background:#ffffff;border:1px solid hsl(0, 0%, 90%);border-radius:2px;pointer-events:none;z-index:100;}#mermaid-a1-3 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#0d0d0d;}#mermaid-a1-3 rect.text{fill:none;stroke-width:0;}#mermaid-a1-3 .icon-shape,#mermaid-a1-3 .image-shape{background-color:#f4efe6;text-align:center;}#mermaid-a1-3 .icon-shape p,#mermaid-a1-3 .image-shape p{background-color:#f4efe6;padding:2px;}#mermaid-a1-3 .icon-shape .label rect,#mermaid-a1-3 .image-shape .label rect{opacity:0.5;background-color:#f4efe6;fill:#f4efe6;}#mermaid-a1-3 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mermaid-a1-3 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mermaid-a1-3 .node .neo-node{stroke:#2e2a25;}#mermaid-a1-3 [data-look="neo"].node rect,#mermaid-a1-3 [data-look="neo"].cluster rect,#mermaid-a1-3 [data-look="neo"].node polygon{stroke:url(#mermaid-a1-3-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-3 [data-look="neo"].swimlane.cluster rect{filter:none;}#mermaid-a1-3 [data-look="neo"].node path{stroke:url(#mermaid-a1-3-gradient);stroke-width:1px;}#mermaid-a1-3 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-3 [data-look="neo"].node .neo-line path{stroke:#2e2a25;filter:none;}#mermaid-a1-3 [data-look="neo"].node circle{stroke:url(#mermaid-a1-3-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-3 [data-look="neo"].node circle .state-start{fill:#000000;}#mermaid-a1-3 [data-look="neo"].icon-shape .icon{fill:url(#mermaid-a1-3-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-3 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mermaid-a1-3-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-3 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker id="my-svg_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"/></marker><marker id="my-svg_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"/></marker><g class="root"><g class="clusters"/><g class="edges edgePaths"><path d="M164,457L200,457" id="my-svg-L_U_VM2_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 32 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_U_VM2_0" data-points="W3sieCI6MTY0LCJ5Ijo0NTd9LHsieCI6MjA0LCJ5Ijo0NTd9XQ==" data-look="neo" marker-end="url(#mermaid-a1-3_flowchart-v2-pointEnd-margin)"/><path d="M356,440.3333333333333L368.9289321881345,440.3333333333333Q376,440.3333333333333 376,433.26226552146784L376,315.0710678118655Q376,308 383.0710678118655,308L392,308" id="my-svg-L_VM2_Bot1_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 159.00506591796875 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_VM2_Bot1_0" data-points="W3sieCI6MzU2LCJ5Ijo0NDAuMzMzMzMzMzMzMzMzM30seyJ4IjozNzYsInkiOjQ0MC4zMzMzMzMzMzMzMzMzfSx7IngiOjM3NiwieSI6MzA4fSx7IngiOjM5NiwieSI6MzA4fV0=" data-look="neo" marker-end="url(#mermaid-a1-3_flowchart-v2-pointEnd-margin)"/><path d="M356,473.6666666666667L368.9289321881345,473.6666666666667Q376,473.6666666666667 376,480.73773447853216L376,604.095598854801Q376,611.1666666666665 383.0710678118655,611.1666666666665L472,611.1666666666665L708,611.1666666666665L820.9289321881345,611.1666666666665Q828,611.1666666666665 828,604.095598854801L828,598.6544011451988Q828,591.5833333333333 835.0710678118655,591.5833333333333L844,591.5833333333333" id="my-svg-L_VM2_Bot2_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 630.4267578125 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_VM2_Bot2_0" data-points="W3sieCI6MzU2LCJ5Ijo0NzMuNjY2NjY2NjY2NjY2N30seyJ4IjozNzYsInkiOjQ3My42NjY2NjY2NjY2NjY3fSx7IngiOjM3NiwieSI6NjExLjE2NjY2NjY2NjY2NjV9LHsieCI6NDcyLCJ5Ijo2MTEuMTY2NjY2NjY2NjY2NX0seyJ4Ijo3MDgsInkiOjYxMS4xNjY2NjY2NjY2NjY1fSx7IngiOjgyOCwieSI6NjExLjE2NjY2NjY2NjY2NjV9LHsieCI6ODI4LCJ5Ijo1OTEuNTgzMzMzMzMzMzMzM30seyJ4Ijo4NDgsInkiOjU5MS41ODMzMzMzMzMzMzMzfV0=" data-look="neo" marker-end="url(#mermaid-a1-3_flowchart-v2-pointEnd-margin)"/><path d="M548,290.66666666666663L560.9289321881345,290.66666666666663Q568,290.66666666666663 568,283.59559885480115L568,55.071067811865476Q568,48 575.0710678118655,48L604,48" id="my-svg-L_Bot1_Term_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 289.33837890625 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Bot1_Term_0" data-points="W3sieCI6NTQ4LCJ5IjoyOTAuNjY2NjY2NjY2NjY2NjN9LHsieCI6NTY4LCJ5IjoyOTAuNjY2NjY2NjY2NjY2NjN9LHsieCI6NTY4LCJ5Ijo0OH0seyJ4Ijo2MDgsInkiOjQ4fV0=" data-look="neo" marker-end="url(#mermaid-a1-3_flowchart-v2-pointEnd-margin)"/><path d="M548,299.3333333333333L580.9289321881345,299.3333333333333Q588,299.3333333333333 588,292.26226552146784L588,155.07106781186545Q588,147.99999999999997 595.0710678118655,147.99999999999997L604,147.99999999999997" id="my-svg-L_Bot1_Browser3_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 198.00506591796875 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Bot1_Browser3_0" data-points="W3sieCI6NTQ4LCJ5IjoyOTkuMzMzMzMzMzMzMzMzM30seyJ4Ijo1ODgsInkiOjI5OS4zMzMzMzMzMzMzMzMzfSx7IngiOjU4OCwieSI6MTQ3Ljk5OTk5OTk5OTk5OTk3fSx7IngiOjYwOCwieSI6MTQ3Ljk5OTk5OTk5OTk5OTk3fV0=" data-look="neo" marker-end="url(#mermaid-a1-3_flowchart-v2-pointEnd-margin)"/><path d="M548,307.99999999999994L604,308" id="my-svg-L_Bot1_Conn2_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 52 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Bot1_Conn2_0" data-points="W3sieCI6NTQ4LCJ5IjozMDcuOTk5OTk5OTk5OTk5OTR9LHsieCI6NjA4LCJ5IjozMDh9XQ==" data-look="neo" marker-end="url(#mermaid-a1-3_flowchart-v2-pointEnd-margin)"/><path d="M548,316.66666666666663L580.9289321881345,316.66666666666663Q588,316.66666666666663 588,323.7377344785321L588,461.4289321881345Q588,468.5 595.0710678118655,468.5L844,468.5" id="my-svg-L_Bot1_MCP2_0" class="edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Bot1_MCP2_0" data-points="W3sieCI6NTQ4LCJ5IjozMTYuNjY2NjY2NjY2NjY2NjN9LHsieCI6NTg4LCJ5IjozMTYuNjY2NjY2NjY2NjY2NjN9LHsieCI6NTg4LCJ5Ijo0NjguNX0seyJ4Ijo4NDgsInkiOjQ2OC41fV0=" data-look="neo" marker-end="url(#mermaid-a1-3_flowchart-v2-pointEnd-margin)"/><path d="M548,325.3333333333333L560.9289321881345,325.3333333333333Q568,325.3333333333333 568,332.4044011451988L568,547.5955988548012Q568,554.6666666666666 575.0710678118655,554.6666666666666L820.9289321881345,554.6666666666666Q828,554.6666666666666 828,561.737734478532L828,567.1789321881345Q828,574.25 835.0710678118655,574.25L844,574.25" id="my-svg-L_Bot1_Bot2_0" class="edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Bot1_Bot2_0" data-points="W3sieCI6NTQ4LCJ5IjozMjUuMzMzMzMzMzMzMzMzM30seyJ4Ijo1NjgsInkiOjMyNS4zMzMzMzMzMzMzMzMzfSx7IngiOjU2OCwieSI6NTU0LjY2NjY2NjY2NjY2NjZ9LHsieCI6ODI4LCJ5Ijo1NTQuNjY2NjY2NjY2NjY2Nn0seyJ4Ijo4MjgsInkiOjU3NC4yNX0seyJ4Ijo4NDgsInkiOjU3NC4yNX1d" data-look="neo" marker-end="url(#mermaid-a1-3_flowchart-v2-pointEnd-margin)"/></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(708, 468)"><g class="label" data-id="L_Bot1_MCP2_0" transform="translate(-100, -24)"><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel"><p>tunneled / public MCP servers</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(708, 554.1666666666666)"><g class="label" data-id="L_Bot1_Bot2_0" transform="translate(-100, -36)"><foreignObject width="200" height="72"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel"><p>shared VM — no security boundary between Bots</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default" id="my-svg-flowchart-U-0" data-look="neo" transform="translate(88, 457)"><rect class="basic label-container" style="" x="-76" y="-60" width="152" height="120"/><g class="label" style="" transform="translate(-60, -48)"><rect/><foreignObject width="120" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>User — desktop / mobile client</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-VM2-1" data-look="neo" transform="translate(280, 457)"><rect class="basic label-container" style="" x="-76" y="-60" width="152" height="120"/><g class="label" style="" transform="translate(-60, -48)"><rect/><foreignObject width="120" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Account-scoped shared cloud VM</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Bot1-3" data-look="neo" transform="translate(472, 308)"><rect class="basic label-container" style="" x="-76" y="-36" width="152" height="72"/><g class="label" style="" transform="translate(-60, -24)"><rect/><foreignObject width="120" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Bot: e.g. 'Sales'</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Bot2-5" data-look="neo" transform="translate(924, 582.9166666666666)"><rect class="basic label-container" style="" x="-76" y="-36" width="152" height="72"/><g class="label" style="" transform="translate(-60, -24)"><rect/><foreignObject width="120" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Bot: e.g. 'Ops'</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Term-7" data-look="neo" transform="translate(684, 48)"><rect class="basic label-container" style="" x="-76" y="-36" width="152" height="72"/><g class="label" style="" transform="translate(-60, -24)"><rect/><foreignObject width="120" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Terminal + filesystem</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Browser3-9" data-look="neo" transform="translate(684, 147.99999999999997)"><rect class="basic label-container" style="" x="-76" y="-24" width="152" height="48"/><g class="label" style="" transform="translate(-60, -12)"><rect/><foreignObject width="120" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: nowrap; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Browser</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Conn2-11" data-look="neo" transform="translate(684, 308)"><rect class="basic label-container" style="" x="-76" y="-96" width="152" height="192"/><g class="label" style="" transform="translate(-60, -84)"><rect/><foreignObject width="120" height="168"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Built-in connectors: Gmail, Drive, Teams, SharePoint, Salesforce</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-MCP2-13" data-look="neo" transform="translate(924, 468.5)"><rect class="basic label-container" style="" x="-76" y="-24" width="152" height="48"/><g class="label" style="" transform="translate(-60, -12)"><rect/><foreignObject width="120" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: nowrap; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>MCP servers</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="my-svg-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><defs><filter id="my-svg-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><linearGradient id="my-svg-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#2e2a25" stop-opacity="1"/><stop offset="100%" stop-color="hsl(38.5714285714, 0%, 82.9411764706%)" stop-opacity="1"/></linearGradient></svg><figcaption>Grok Bot architecture: an account-scoped shared cloud VM running multiple named Bots, each with a terminal, filesystem, browser, built-in connectors, and tunneled MCP servers, sharing one VM with no security boundary between Bots.</figcaption></figure>
+
+<p>It&rsquo;s deliberately positioned for people already living in developer tools — it&rsquo;s bundled into Cursor plans as much as it&rsquo;s sold on its own — and its sibling product, Grok Build, is a genuinely capable terminal coding agent (70.8% on SWE-bench Verified as of May 2026) that gives the broader &ldquo;Grok agent family&rdquo; real coding credibility, even though Grok Build and Grok Bot are separate products.</p>
+<h2>The 29-point framework</h2>
+<p><strong>1. What the product is.</strong> Muse: a personal/SMB task agent. Dots: an always-on delegate for business and knowledge work inside ChatGPT. Grok Bot: a computer-use &ldquo;AI teammate&rdquo; aimed at technical teams.</p>
+<p><strong>2. Who built it.</strong> Meta Platforms (Muse, under Chief AI Officer Alexandr Wang); OpenAI (dots); xAI (Grok Bot).</p>
+<p><strong>3. The problem it&rsquo;s designed to solve.</strong> Muse solves &ldquo;I don&rsquo;t want to do this errand myself.&rdquo; Dots solves &ldquo;I have a backlog of work already living inside my business apps that needs a delegate, not a chatbot.&rdquo; Grok Bot solves &ldquo;I need a teammate that can operate software — including code — the way a person would, continuously.&rdquo;</p>
+<p><strong>4. Core architecture.</strong> All three share the same shape: client surface → vendor-hosted VM/cloud computer → model → connectors/browser/terminal. The differences are in isolation and surface area — Muse isolates per user, Dots per dot-instance (with shared memory on OpenAI&rsquo;s side), Grok Bot shares one VM across all of an account&rsquo;s Bots.</p>
+<p><strong>5. How the agent reasons and executes.</strong> Muse Spark uses tiered reasoning (Instant/Thinking/Contemplating) with explicit &ldquo;thought compression&rdquo; to cut inference cost. Dots runs on GPT-6 Astra with an agentic loop that works toward a goal and returns for approval. Grok Bot&rsquo;s reasoning model isn&rsquo;t publicly specified; its loop is explicitly &ldquo;act on the computer, then report.&rdquo;</p>
+<p><strong>6. Model support.</strong> Single-vendor, non-substitutable in all three cases: Muse→Muse Spark only, Dots→GPT-6 Astra only, Grok Bot→an undisclosed xAI model only. None lets you swap in a different foundation model.</p>
+<p><strong>7. Tool use.</strong> Muse and Grok Bot lean on a fixed connector catalog plus browser/computer-use for everything else; Dots adds the largest existing catalog (OpenAI&rsquo;s 4,000+ app ecosystem).</p>
+<p><strong>8. Browser and computer-use capabilities.</strong> All three can drive a browser. Only Grok Bot documents full computer-use (terminal + filesystem + apps) as a core, marketed capability; Muse added macOS app control in September 2026; Dots&rsquo; &ldquo;computer&rdquo; is framed around its own cloud environment plus connectors rather than general desktop GUI control.</p>
+<p><strong>9. Memory and persistent context.</strong> All three retain memory across sessions (preferences, prior work, in Grok Bot&rsquo;s case &ldquo;skills&rdquo; learned from a recording). None publishes a way for a user to inspect, export, or delete individual memories — this is a real gap across the board, not a Muse-only or Dots-only issue.</p>
+<p><strong>10. Multi-agent support.</strong> Muse Spark&rsquo;s &ldquo;Contemplating&rdquo; mode parallelizes sub-agents internally; Dots explicitly markets &ldquo;teams of dots&rdquo;; Grok Bot runs multiple named Bots on one shared VM. Grok Bot is the only one that&rsquo;s explicit about those agents sharing a security boundary rather than being isolated from each other.</p>
+<p><strong>11. Workflow automation.</strong> All three target recurring, multi-step work, not one-shot Q&amp;A — that&rsquo;s the entire category these products compete in.</p>
+<p><strong>12. MCP support.</strong> This is where the three genuinely diverge. Grok Bot documents MCP support directly, with the caveat that a local server must be tunneled or publicly reachable. OpenAI&rsquo;s platform supports remote MCP servers and a Secure MCP Tunnel for private ones, but we could not confirm this is wired into dots specifically, as opposed to being a general Responses-API feature — see our <a href="/blog/mcp-server-vs-webhook-automation-builders.html">MCP server vs webhook: when the server wins</a> piece for what MCP buys you over a plain webhook integration, which is the right lens for judging this row. Muse&rsquo;s consumer app has no documented MCP support at all; MCP shows up only in Meta&rsquo;s separate developer-facing model API, which is a different product.</p>
+<p><strong>13. API support.</strong> Dots has none — it&rsquo;s a ChatGPT feature, full stop. Muse has none for the consumer app, but a separate &ldquo;Meta Model API&rdquo; (Muse Spark 1.1, public preview, OpenAI/Anthropic-SDK-compatible) exists for developers building their own agents on the underlying model. Grok Bot has no standalone API either; it&rsquo;s client-app-only.</p>
+<p><strong>14. Integrations.</strong> Dots wins on raw count (4,000+ apps inherited from ChatGPT). Grok Bot covers the core enterprise productivity stack (Gmail, Calendar, Drive, Outlook, Teams, SharePoint, Salesforce) plus MCP for the rest. Muse&rsquo;s integration list skews consumer/commerce (Shopify, Stripe, Best Buy, Instacart) with a growing SMB set (Dropbox, Slack, QuickBooks, Klaviyo).</p>
+<p><strong>15. Local versus cloud execution.</strong> All three are cloud-only. None executes on your own hardware by default.</p>
+<p><strong>16. Self-hosting options.</strong> None. Zero, across all three. If that&rsquo;s a hard requirement, skip ahead to the &ldquo;none of the three is right&rdquo; section below.</p>
+<p><strong>17. Enterprise and on-prem deployment.</strong> Grok Bot has the most defined enterprise motion (a named &ldquo;Grok Bot for Enterprise&rdquo; tier with access/network/audit controls). Dots has a Business Premium tier but no dots-specific enterprise security page we could find. Muse&rsquo;s enterprise ambitions (&ldquo;Meta Enterprise Platform,&rdquo; &ldquo;Muse API,&rdquo; &ldquo;Muse Code&rdquo;) were announced but are thin on documentation as of this writing. On-prem is off the table for all three — there is no on-prem version of any of them.</p>
+<p><strong>18. Data privacy.</strong> Business/Enterprise workspace content is excluded from model training by default on OpenAI&rsquo;s platform (dots inherits this general policy, not confirmed dots-specific). Meta says Muse &ldquo;has no visibility into people&rsquo;s passwords or payment methods&rdquo; and trains on queries by default, with an opt-out and a promised (undated) workspace-privacy mode. xAI&rsquo;s enterprise tier is described as adding access/network/audit controls; specific compliance certifications for Grok Bot appear only in secondary sources, not on xAI&rsquo;s own enterprise page.</p>
+<p><strong>19. Security model.</strong> See table below — summarized, Muse relies on a credential vault + payment tokenization, Dots relies on layered permission surfaces with a non-trivial &ldquo;pause doesn&rsquo;t fully stop things&rdquo; caveat, and Grok Bot relies on default-deny access plus explicit allow/deny/always-allow rules.</p>
+<p><strong>20. Human approval mechanisms.</strong> All three support approval gates before consequential actions (purchases for Muse, decision points for Dots, &ldquo;hands control back to you&rdquo; for Grok Bot). None of the three publishes a hard guarantee that a paused or denied action is instantly and completely reversible — see the trade-offs section below, this is a real operational risk, not a nitpick.</p>
+<p><strong>21. Observability and debugging.</strong> This is the weakest-documented row across all three. We found no vendor-published tracing/observability product for any of them. Third-party security analysis of Dots reports that cloud orchestration events don&rsquo;t reach a customer&rsquo;s own OpenTelemetry collector — treat that as a reported gap, not a confirmed OpenAI statement. If you&rsquo;re used to instrumenting your own agents, read <a href="/blog/ai-agent-evals-builders.html">AI agent evals: what to measure before you ship</a> before assuming any of these three will give you equivalent visibility — none will, today.</p>
+<p><strong>22. Developer experience.</strong> Grok Bot is the most &ldquo;developer-shaped&rdquo; of the three by distribution (bundled into Cursor), even though it has no API. Dots is the most &ldquo;no-code&rdquo; — you configure it inside ChatGPT. Muse is a consumer app; &ldquo;developer experience&rdquo; barely applies except via the separate Meta Model API track.</p>
+<p><strong>23. Extensibility.</strong> Grok Bot &gt; Dots &gt; Muse, in that order, based on MCP support, computer-use breadth, and the teach-a-task skill mechanism. Muse is the most closed of the three for a technical user who wants to extend it beyond Meta&rsquo;s connector catalog.</p>
+<p><strong>24. Ease of setup.</strong> Muse is easiest (free app, no paid plan required to start). Dots requires an existing Pro/Business Premium ChatGPT subscription. Grok Bot requires a desktop app install plus a SuperGrok Heavy or Cursor subscription, plus MCP/connector configuration for non-trivial work — the most setup friction of the three.</p>
+<p><strong>25. Reliability for long-running tasks.</strong> Unproven for all three, not just one. Independent early-access reporting describes a dot claiming to be &ldquo;running&rdquo; after it had actually stopped; Grok Bot&rsquo;s shared-VM design means one stuck computer can take down every Bot on an account at once; and Muse&rsquo;s own stress testing reportedly saw only 33 of 120 parallel sub-agent runs succeed. Weigh vendor marketing accordingly.</p>
+<p><strong>26. Cost structure.</strong> Muse: free tier, $20/mo or $100/mo paid tiers. Dots: bundled into existing ChatGPT Pro ($100–$500/mo) or Business Premium ($125/user/mo), extra-dot pricing unpublished. Grok Bot: roughly $200/mo standalone, or bundled into SuperGrok Heavy ($300/mo)/Cursor plans, with a custom-quoted Enterprise tier and a cheaper self-serve Grok Business tier (~$30/seat/mo) reported by secondary sources.</p>
+<p><strong>27. Major limitations.</strong> Muse: blocked outright by at least one major retailer (Amazon), shaky shopping-task success rate in early reviews. Dots: no API, excluded markets (EEA/Switzerland/UK) on the Pro tier at launch, early reliability complaints. Grok Bot: no isolation between a single account&rsquo;s Bots, local MCP needs tunneling, early-beta status acknowledged by xAI itself.</p>
+<p><strong>28. Best use cases.</strong> Muse: consumer/SMB errands and commerce. Dots: knowledge work inside an existing ChatGPT/Slack/Teams stack. Grok Bot: technical, computer-use-heavy operational work for teams already in the Cursor/xAI orbit.</p>
+<p><strong>29. Who should avoid it.</strong> Avoid Muse if you need enterprise governance or anything beyond consumer/SMB commerce workflows. Avoid Dots if you need an API, self-hosting, or a confirmed compliance certification today. Avoid Grok Bot if you need strict isolation between agents on the same account, or can&rsquo;t tolerate early-beta reliability risk on something business-critical.</p>
+<h2>The comparison table</h2>
+<div class="table-scroll"><table class="comparison-table">
+<thead>
+<tr>
+<th>Capability</th>
+<th>Meta Muse</th>
+<th>OpenAI Dots</th>
+<th>Grok Bot (xAI)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Primary purpose</td>
+<td>Personal/SMB errand agent</td>
+<td>Always-on business delegate</td>
+<td>Computer-use teammate for technical teams</td>
+</tr>
+<tr>
+<td>Open source</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Local execution</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Cloud execution</td>
+<td>Yes (Meta-hosted)</td>
+<td>Yes (OpenAI-hosted)</td>
+<td>Yes (xAI-hosted)</td>
+</tr>
+<tr>
+<td>Persistent memory</td>
+<td>Yes (no export/delete tool)</td>
+<td>Yes (no export/delete tool)</td>
+<td>Yes (no export/delete tool)</td>
+</tr>
+<tr>
+<td>Browser control</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Computer control</td>
+<td>Partial (macOS app control only)</td>
+<td>Partial (cloud computer, not general desktop)</td>
+<td>Yes (full computer-use)</td>
+</tr>
+<tr>
+<td>MCP support</td>
+<td>Not publicly documented (app); dev-platform only</td>
+<td>Platform-level yes; dots-specific unconfirmed</td>
+<td>Yes (local servers need tunneling)</td>
+</tr>
+<tr>
+<td>Multi-agent</td>
+<td>Yes (internal sub-agents)</td>
+<td>Yes (named dots, &ldquo;teams&rdquo;)</td>
+<td>Yes (shared VM, no isolation)</td>
+</tr>
+<tr>
+<td>API</td>
+<td>No (consumer app)</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Self-hosting</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Enterprise deployment</td>
+<td>Nascent (SMB + announced enterprise platform)</td>
+<td>Business Premium tier</td>
+<td>Yes, named enterprise tier</td>
+</tr>
+<tr>
+<td>Security controls</td>
+<td>Credential vault, payment tokenization</td>
+<td>Layered permissions, &ldquo;pause&rdquo; caveats</td>
+<td>Default-deny, allow/deny/always-allow rules</td>
+</tr>
+<tr>
+<td>Integrations</td>
+<td>Consumer/commerce-heavy, growing SMB set</td>
+<td>4,000+ apps (widest)</td>
+<td>Core productivity stack + MCP</td>
+</tr>
+<tr>
+<td>Coding ability</td>
+<td>Not publicly documented</td>
+<td>Codex-adjacent, not dots-specific</td>
+<td>Strong via sibling Grok Build</td>
+</tr>
+<tr>
+<td>Research ability</td>
+<td>Not publicly documented beyond shopping research</td>
+<td>Good (OpenAI&rsquo;s own research-dot example)</td>
+<td>Moderate (browser + terminal)</td>
+</tr>
+<tr>
+<td>Workflow automation</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Ease of setup</td>
+<td>Easiest</td>
+<td>Moderate</td>
+<td>Hardest</td>
+</tr>
+<tr>
+<td>Customization</td>
+<td>Lowest</td>
+<td>Moderate</td>
+<td>Highest (for technical users)</td>
+</tr>
+<tr>
+<td>Best suited for</td>
+<td>Consumers, SMB commerce</td>
+<td>Teams already in ChatGPT/Slack/Teams</td>
+<td>Technical teams in Cursor/xAI ecosystem</td>
+</tr>
+</tbody>
+</table></div>
+<p>Every cell above is backed by a cited source or marked otherwise in this project&rsquo;s fact-check file; where a vendor hasn&rsquo;t published something, we wrote &ldquo;not publicly documented&rdquo; instead of guessing.</p>
+<h2>Architectural trade-offs that actually matter</h2>
+<p><strong>Hosted vs. self-hosted.</strong> All three of these are hosted-only, full stop — which is itself the trade-off. You get zero infrastructure burden and zero patching, in exchange for zero control over where the model runs, zero ability to swap models, and a dependency on each vendor&rsquo;s uptime and roadmap. If &ldquo;the data never leaves infrastructure I control&rdquo; is a real requirement — not a preference — none of these three products can satisfy it, no matter which one you pick. That&rsquo;s a different category of tool, and it&rsquo;s worth reading <a href="/blog/n8n-self-host-docker.html">self-hosting n8n with Docker</a> alongside our companion comparison of self-hostable agent platforms, <a href="https://rajsuyash.com/blog/openclaw-vs-hermes-agent.html">OpenClaw vs Hermes Agent</a>, before you assume a hosted agent is the only option.</p>
+<p><strong>Agent loops.</strong> All three follow the same basic shape — plan, act, observe, repeat, return for approval — but differ in <em>where</em> the loop runs and who can see inside it. Grok Bot&rsquo;s loop is the most transparent to the end user (you watch it use a real screen); Dots&rsquo; loop is the most &ldquo;fire and forget&rdquo; by design; Muse&rsquo;s loop is tuned for consumer latency, not auditability.</p>
+<p><strong>Context management.</strong> None of the three publishes context-window specifics for the agent&rsquo;s working memory versus its long-term memory. Treat &ldquo;it remembers things&rdquo; and &ldquo;it manages context well&rdquo; as two different claims — only the first is documented for any of them. If what you actually need isn&rsquo;t a full always-on agent but a single, bounded, repeated decision (route this, score that, flag this for review), a much narrower tool like <a href="https://rajsuyash.com/blog/jev-typesafe-architecture-use-cases-guide.html">JEV, TypeSafe&rsquo;s &ldquo;System One model&rdquo;</a> is worth a look before you reach for any of these three — it skips the agent loop and context problem entirely by design.</p>
+<p><strong>Memory architecture.</strong> This is the single biggest common gap across all three: persistent memory, yes; a user-facing way to inspect, correct, export, or delete what&rsquo;s been remembered, no. For a CTO evaluating these for anything touching customer or employee data, that&rsquo;s a compliance question you&rsquo;ll have to answer with the vendor directly — it isn&rsquo;t answered in public docs today.</p>
+<p><strong>Tool execution, permissions, and sandboxing.</strong> Grok Bot is the most explicit about isolation boundaries — and the most explicit that those boundaries don&rsquo;t exist <em>between</em> a single account&rsquo;s own Bots, only between different accounts. Dots&rsquo; permission model is the most granular on paper (separate surfaces for local computer, cloud computer, connected app, website session) but a third-party security review found that &ldquo;pause&rdquo; doesn&rsquo;t actually stop delegated or recurring work, only the main task. Muse&rsquo;s sandboxing story is the simplest to explain (credential vault, tokenized payments) but also the least documented at the infrastructure level.</p>
+<p><strong>Reliability.</strong> Covered above in point 25 — don&rsquo;t take vendor demos as evidence of multi-week unattended reliability for any of these three. Early-access reporting on all three describes failure modes serious enough to change how you&rsquo;d pilot one: silent &ldquo;still running&rdquo; false positives, shared-VM outages, and sub-agent failure rates far above what internal testing apparently expected.</p>
+<p><strong>Orchestration.</strong> Dots and Grok Bot both market explicit multi-agent orchestration (&ldquo;teams of dots,&rdquo; multiple named Bots); Muse&rsquo;s orchestration is internal to the model (parallel sub-agents) rather than something you compose yourself. If you need to design a multi-agent system with your own topology, Dots and Grok Bot give you more surface to work with — Muse gives you none.</p>
+<p><strong>Human-in-the-loop.</strong> All three gate consequential actions behind approval. The meaningful difference is granularity: Grok Bot&rsquo;s &ldquo;Allow once / Deny / Always allow&rdquo; plus &ldquo;Auto Review&rdquo; rules give you the most control over <em>which</em> actions need a human; Muse&rsquo;s approval gate is effectively one gate (purchases); Dots sits in between, with custom rules that are explicitly described as instructional guidance the agent can still get wrong, not hard access controls.</p>
+<p><strong>Failure recovery.</strong> None of the three publishes a documented rollback or undo mechanism for actions already taken. &ldquo;Pause&rdquo; and &ldquo;stop&rdquo; affect future steps, not past ones, in all three cases as far as public documentation shows. Build your pilot assuming any action it completes is final unless you&rsquo;ve separately verified otherwise.</p>
+<p><strong>Vendor lock-in.</strong> Complete, by model, in all three cases. There is no path to running Muse on anything but Muse Spark, Dots on anything but GPT-6 Astra, or Grok Bot on anything but xAI&rsquo;s (undisclosed) model. This is the most important architectural fact in this entire comparison for a build-vs-buy decision, and it&rsquo;s true of every option here — see <a href="/blog/ai-automation-build-vs-buy-vs-outsource.html">build vs buy vs outsource</a> for the broader framework on evaluating that kind of lock-in.</p>
+<p><strong>Observability.</strong> The weakest-documented dimension across the board, discussed above in point 21. If observability is a hard requirement for your use case, plan to build your own logging layer around whichever of these three you pilot — don&rsquo;t expect the vendor to hand you one.</p>
+<h2>14 real-world scenarios: which one, and why</h2>
+<div class="table-scroll"><table class="comparison-table">
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Pick</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Personal AI assistant</td>
+<td><strong>Muse</strong></td>
+<td>Purpose-built for this, free to start, consumer-app polish</td>
+</tr>
+<tr>
+<td>Executive assistant</td>
+<td><strong>Dots</strong></td>
+<td>Lives in Slack/Teams where an exec&rsquo;s requests already land; widest connector reach</td>
+</tr>
+<tr>
+<td>AI software engineer</td>
+<td><strong>Grok Bot</strong> (via Grok Build)</td>
+<td>Grok Build&rsquo;s SWE-bench score and git-worktree parallelism beat either competitor&rsquo;s non-existent coding focus</td>
+</tr>
+<tr>
+<td>Research agent</td>
+<td><strong>Dots</strong></td>
+<td>OpenAI&rsquo;s own stated use case; strongest documented research workflow fit</td>
+</tr>
+<tr>
+<td>Sales research &amp; outbound agent</td>
+<td><strong>Grok Bot</strong></td>
+<td>xAI explicitly positions it for sales outbound; Salesforce connector built in</td>
+</tr>
+<tr>
+<td>Customer support automation</td>
+<td><strong>Dots</strong></td>
+<td>Widest app reach for ticketing/CRM systems; &ldquo;teams of dots&rdquo; fits escalation tiers</td>
+</tr>
+<tr>
+<td>Internal enterprise knowledge agent</td>
+<td><strong>Dots</strong>, with reservations</td>
+<td>Best connector coverage, but no confirmed compliance cert — verify before using on sensitive internal data</td>
+</tr>
+<tr>
+<td>Browser automation</td>
+<td><strong>Grok Bot</strong></td>
+<td>Full computer-use is the explicit core feature, not an add-on</td>
+</tr>
+<tr>
+<td>Back-office workflow automation</td>
+<td><strong>Dots</strong></td>
+<td>&ldquo;Always-on, built to handle everything&rdquo; is literally the pitch; see <a href="/blog/ai-automation-scale-full-stack.html">scaling AI automation to a full stack</a> for how this fits a broader stack</td>
+</tr>
+<tr>
+<td>Long-running autonomous workflows</td>
+<td><strong>None confidently</strong></td>
+<td>All three are reliability-unproven for this; pilot small on whichever fits your stack, don&rsquo;t bet a critical path on it yet</td>
+</tr>
+<tr>
+<td>On-premise enterprise AI</td>
+<td><strong>None of the three</strong></td>
+<td>Zero on-prem options exist; see the decision tree below</td>
+</tr>
+<tr>
+<td>Privacy-sensitive industries</td>
+<td><strong>None of the three without further verification</strong></td>
+<td>No confirmed product-specific compliance certs; read our <a href="/blog/ai-voice-agent-compliance-tcpa-hipaa.html">AI voice agent compliance guide</a> for the kind of diligence this requires regardless of vendor</td>
+</tr>
+<tr>
+<td>Running agents on a VPS</td>
+<td><strong>None of the three</strong></td>
+<td>All are cloud-only, vendor-hosted; a VPS-run agent means a different category of tool entirely</td>
+</tr>
+<tr>
+<td>Connecting Gmail, Drive, Slack, CRM, APIs and internal tools</td>
+<td><strong>Dots</strong>, then <strong>Grok Bot</strong></td>
+<td>Dots wins on breadth (4,000+ apps); Grok Bot wins if you also need MCP for something custom and bespoke</td>
+</tr>
+</tbody>
+</table></div>
+<h2>Which one should you choose?</h2>
+<p><strong>Choose Muse if</strong> you or your team need a low-friction personal/errand agent, you&rsquo;re a consumer or small business already inside Meta&rsquo;s app ecosystem, and you don&rsquo;t need enterprise governance, an API, or MCP.</p>
+<p><strong>Choose OpenAI Dots if</strong> your team already lives in ChatGPT plus Slack or Teams, you want the widest existing app connector reach with the least setup effort, and you can accept that there&rsquo;s no API and no confirmed compliance certification yet.</p>
+<p><strong>Choose Grok Bot if</strong> your team is technical, you&rsquo;re already in or open to the Cursor ecosystem, you need genuine computer-use (terminal, filesystem, browser) and MCP extensibility, and you can tolerate early-beta reliability risk and a shared-VM security model.</p>
+<p><strong>None of the three is right if</strong> you need self-hosting, on-prem deployment, model choice/portability, a documented compliance certification today, or proven reliability for business-critical long-running workflows. That&rsquo;s a real, common set of requirements — and it&rsquo;s exactly the gap self-hosted, open-source agent platforms are built to fill. If that&rsquo;s your situation, read our companion comparison, <a href="https://rajsuyash.com/blog/openclaw-vs-hermes-agent.html">OpenClaw vs Hermes Agent</a>, before piloting any of the three products above.</p>
+<figure class="mermaid-diagram"><svg role="img" aria-label="Decision tree for choosing between Meta Muse, OpenAI Dots, Grok Bot, or neither, based on data residency, where the work happens, budget, and governance needs." style="width:100%;height:auto;max-width:720px;display:block;margin:0 auto;" id="mermaid-a1-4" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" style="max-width: 942px; background-color: transparent;" viewBox="4 4 942 1602" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mermaid-a1-4{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;fill:#0d0d0d;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mermaid-a1-4 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mermaid-a1-4 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mermaid-a1-4 .error-icon{fill:#ffffff;}#mermaid-a1-4 .error-text{fill:#000000;stroke:#000000;}#mermaid-a1-4 .edge-thickness-normal{stroke-width:1px;}#mermaid-a1-4 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-a1-4 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-a1-4 .edge-thickness-invisible{stroke-width:0;fill:none;}#mermaid-a1-4 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-a1-4 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-a1-4 .marker{fill:#8a4a2f;stroke:#8a4a2f;}#mermaid-a1-4 .marker.cross{stroke:#8a4a2f;}#mermaid-a1-4 svg{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;}#mermaid-a1-4 p{margin:0;}#mermaid-a1-4 .label{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#0d0d0d;}#mermaid-a1-4 .cluster-label text{fill:#000000;}#mermaid-a1-4 .cluster-label span{color:#000000;}#mermaid-a1-4 .cluster-label span p{background-color:transparent;}#mermaid-a1-4 .label text,#mermaid-a1-4 span{fill:#0d0d0d;color:#0d0d0d;}#mermaid-a1-4 .node rect,#mermaid-a1-4 .node circle,#mermaid-a1-4 .node ellipse,#mermaid-a1-4 .node polygon,#mermaid-a1-4 .node path{fill:#f4efe6;stroke:#2e2a25;stroke-width:1px;}#mermaid-a1-4 .rough-node .label text,#mermaid-a1-4 .node .label text,#mermaid-a1-4 .image-shape .label,#mermaid-a1-4 .icon-shape .label{text-anchor:middle;}#mermaid-a1-4 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mermaid-a1-4 .rough-node .label,#mermaid-a1-4 .node .label,#mermaid-a1-4 .image-shape .label,#mermaid-a1-4 .icon-shape .label{text-align:center;}#mermaid-a1-4 .node.clickable{cursor:pointer;}#mermaid-a1-4 .root .anchor path{fill:#8a4a2f!important;stroke-width:0;stroke:#8a4a2f;}#mermaid-a1-4 .arrowheadPath{fill:#0b0b0b;}#mermaid-a1-4 .edgePaths .path{stroke:#8a4a2f;stroke-width:1px;}#mermaid-a1-4 .flowchart-link{stroke:#8a4a2f;fill:none;}#mermaid-a1-4 .edgeLabel{background-color:#f4efe6;text-align:center;}#mermaid-a1-4 .edgeLabel p{background-color:#f4efe6;}#mermaid-a1-4 .edgeLabel rect{opacity:0.5;background-color:#f4efe6;fill:#f4efe6;}#mermaid-a1-4 .labelBkg{background-color:rgba(244, 239, 230, 0.5);}#mermaid-a1-4 .cluster rect{fill:#f9f6f0;stroke:#2e2a25;stroke-width:1px;}#mermaid-a1-4 .cluster text{fill:#000000;}#mermaid-a1-4 .cluster span{color:#000000;}#mermaid-a1-4 .node .collapsed-indicator{fill:#2e2a25;stroke:none;opacity:0.6;}#mermaid-a1-4 .node .collapsed-separator{stroke:#2e2a25;stroke-width:0.75px;}#mermaid-a1-4 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;background:#ffffff;border:1px solid hsl(0, 0%, 90%);border-radius:2px;pointer-events:none;z-index:100;}#mermaid-a1-4 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#0d0d0d;}#mermaid-a1-4 rect.text{fill:none;stroke-width:0;}#mermaid-a1-4 .icon-shape,#mermaid-a1-4 .image-shape{background-color:#f4efe6;text-align:center;}#mermaid-a1-4 .icon-shape p,#mermaid-a1-4 .image-shape p{background-color:#f4efe6;padding:2px;}#mermaid-a1-4 .icon-shape .label rect,#mermaid-a1-4 .image-shape .label rect{opacity:0.5;background-color:#f4efe6;fill:#f4efe6;}#mermaid-a1-4 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mermaid-a1-4 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mermaid-a1-4 .node .neo-node{stroke:#2e2a25;}#mermaid-a1-4 [data-look="neo"].node rect,#mermaid-a1-4 [data-look="neo"].cluster rect,#mermaid-a1-4 [data-look="neo"].node polygon{stroke:url(#mermaid-a1-4-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-4 [data-look="neo"].swimlane.cluster rect{filter:none;}#mermaid-a1-4 [data-look="neo"].node path{stroke:url(#mermaid-a1-4-gradient);stroke-width:1px;}#mermaid-a1-4 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-4 [data-look="neo"].node .neo-line path{stroke:#2e2a25;filter:none;}#mermaid-a1-4 [data-look="neo"].node circle{stroke:url(#mermaid-a1-4-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-4 [data-look="neo"].node circle .state-start{fill:#000000;}#mermaid-a1-4 [data-look="neo"].icon-shape .icon{fill:url(#mermaid-a1-4-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-4 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mermaid-a1-4-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mermaid-a1-4 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker id="my-svg_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"/></marker><marker id="my-svg_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"/></marker><g class="root"><g class="clusters"/><g class="edges edgePaths"><path d="M247.4999999999999,108L247.4999999999999,144" id="my-svg-L_Start_Priv_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 32 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Start_Priv_0" data-points="W3sieCI6MjQ3LjQ5OTk5OTk5OTk5OTksInkiOjEwOH0seyJ4IjoyNDcuNDk5OTk5OTk5OTk5OSwieSI6MTQ4fV0=" data-look="neo" marker-end="url(#mermaid-a1-4_flowchart-v2-pointEnd-margin)"/><path d="M209.83333333333326,356.333291053772L209.83333333333326,394L209.83333333333326,406.9289321881345Q209.83333333333326,414 202.76226552146778,414L33.57106781186542,414Q26.499999999999943,414 26.499999999999943,421.0710678118655L26.499999999999943,446L26.499999999999943,621L26.499999999999943,932L26.499999999999943,1155L26.499999999999943,1354L26.499999999999943,1378.9289321881345Q26.499999999999943,1386 33.57106781186542,1386L129.12033843813447,1386Q136.19140624999994,1386 136.19140624999994,1393.0710678118655L136.19140624999994,1402" id="my-svg-L_Priv_Self_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 1324.0350341796875 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Priv_Self_0" data-points="W3sieCI6MjA5LjgzMzMzMzMzMzMzMzI2LCJ5IjozNTYuMzMzMjkxMDUzNzcyfSx7IngiOjIwOS44MzMzMzMzMzMzMzMyNiwieSI6Mzk0fSx7IngiOjIwOS44MzMzMzMzMzMzMzMyNiwieSI6NDE0fSx7IngiOjI2LjQ5OTk5OTk5OTk5OTk0MywieSI6NDE0fSx7IngiOjI2LjQ5OTk5OTk5OTk5OTk0MywieSI6NDQ2fSx7IngiOjI2LjQ5OTk5OTk5OTk5OTk0MywieSI6NjIxfSx7IngiOjI2LjQ5OTk5OTk5OTk5OTk0MywieSI6OTMyfSx7IngiOjI2LjQ5OTk5OTk5OTk5OTk0MywieSI6MTE1NX0seyJ4IjoyNi40OTk5OTk5OTk5OTk5NDMsInkiOjEzNTR9LHsieCI6MjYuNDk5OTk5OTk5OTk5OTQzLCJ5IjoxMzg2fSx7IngiOjEzNi4xOTE0MDYyNDk5OTk5NCwieSI6MTM4Nn0seyJ4IjoxMzYuMTkxNDA2MjQ5OTk5OTQsInkiOjE0MDZ9XQ==" data-look="neo" marker-end="url(#mermaid-a1-4_flowchart-v2-pointEnd-margin)"/><path d="M285.1666666666666,356.333291053772L285.1666666666666,394L285.1666666666666,406.9289321881345Q285.1666666666666,414 292.23773447853205,414L461.4289321881344,414Q468.4999999999999,414 468.4999999999999,421.0710678118655L468.4999999999999,494" id="my-svg-L_Priv_Surface_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 311.6717529296875 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Priv_Surface_0" data-points="W3sieCI6Mjg1LjE2NjY2NjY2NjY2NjYsInkiOjM1Ni4zMzMyOTEwNTM3NzJ9LHsieCI6Mjg1LjE2NjY2NjY2NjY2NjYsInkiOjM5NH0seyJ4IjoyODUuMTY2NjY2NjY2NjY2NiwieSI6NDE0fSx7IngiOjQ2OC40OTk5OTk5OTk5OTk5LCJ5Ijo0MTR9LHsieCI6NDY4LjQ5OTk5OTk5OTk5OTksInkiOjQ5OH1d" data-look="neo" marker-end="url(#mermaid-a1-4_flowchart-v2-pointEnd-margin)"/><path d="M411.9999999999999,687.4999952316284L411.9999999999999,744L411.9999999999999,756.9289321881345Q411.9999999999999,764 404.9289321881344,764L177.57106781186542,764Q170.49999999999994,764 170.49999999999994,771.0710678118655L170.49999999999994,892" id="my-svg-L_Surface_MuseC_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 436.67169189453125 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Surface_MuseC_0" data-points="W3sieCI6NDExLjk5OTk5OTk5OTk5OTksInkiOjY4Ny40OTk5OTUyMzE2Mjg0fSx7IngiOjQxMS45OTk5OTk5OTk5OTk5LCJ5Ijo3NDR9LHsieCI6NDExLjk5OTk5OTk5OTk5OTksInkiOjc2NH0seyJ4IjoxNzAuNDk5OTk5OTk5OTk5OTQsInkiOjc2NH0seyJ4IjoxNzAuNDk5OTk5OTk5OTk5OTQsInkiOjg5Nn1d" data-look="neo" marker-end="url(#mermaid-a1-4_flowchart-v2-pointEnd-margin)"/><path d="M468.4999999999999,744L468.4999999999999,892" id="my-svg-L_Surface_DotsC_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 144 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Surface_DotsC_0" data-points="W3sieCI6NDY4LjQ5OTk5OTk5OTk5OTksInkiOjc0NH0seyJ4Ijo0NjguNDk5OTk5OTk5OTk5OSwieSI6ODk2fV0=" data-look="neo" marker-end="url(#mermaid-a1-4_flowchart-v2-pointEnd-margin)"/><path d="M524.9999999999999,687.4999952316284L524.9999999999999,744L524.9999999999999,756.9289321881345Q524.9999999999999,764 532.0710678118653,764L783.4289321881345,764Q790.4999999999999,764 790.4999999999999,771.0710678118655L790.4999999999999,892" id="my-svg-L_Surface_GrokC_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 460.6717224121094 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Surface_GrokC_0" data-points="W3sieCI6NTI0Ljk5OTk5OTk5OTk5OTksInkiOjY4Ny40OTk5OTUyMzE2Mjg0fSx7IngiOjUyNC45OTk5OTk5OTk5OTk5LCJ5Ijo3NDR9LHsieCI6NTI0Ljk5OTk5OTk5OTk5OTksInkiOjc2NH0seyJ4Ijo3OTAuNDk5OTk5OTk5OTk5OSwieSI6NzY0fSx7IngiOjc5MC40OTk5OTk5OTk5OTk5LCJ5Ijo4OTZ9XQ==" data-look="neo" marker-end="url(#mermaid-a1-4_flowchart-v2-pointEnd-margin)"/><path d="M468.4999999999999,968L468.4999999999999,1016" id="my-svg-L_DotsC_Budget1_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 44 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_DotsC_Budget1_0" data-points="W3sieCI6NDY4LjQ5OTk5OTk5OTk5OTksInkiOjk2OH0seyJ4Ijo0NjguNDk5OTk5OTk5OTk5OSwieSI6MTAyMH1d" data-look="neo" marker-end="url(#mermaid-a1-4_flowchart-v2-pointEnd-margin)"/><path d="M468.4999999999999,1290L468.4999999999999,1378.9289321881345Q468.4999999999999,1386 461.4289321881344,1386L211.87966156186542,1386Q204.80859374999994,1386 204.80859374999994,1393.0710678118655L204.80859374999994,1402" id="my-svg-L_Budget1_Self_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 366.36309814453125 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Budget1_Self_0" data-points="W3sieCI6NDY4LjQ5OTk5OTk5OTk5OTksInkiOjEyOTB9LHsieCI6NDY4LjQ5OTk5OTk5OTk5OTksInkiOjEzODZ9LHsieCI6MjA0LjgwODU5Mzc0OTk5OTk0LCJ5IjoxMzg2fSx7IngiOjIwNC44MDg1OTM3NDk5OTk5NCwieSI6MTQwNn1d" data-look="neo" marker-end="url(#mermaid-a1-4_flowchart-v2-pointEnd-margin)"/><path d="M790.4999999999999,968L790.4999999999999,1004" id="my-svg-L_GrokC_Budget2_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 32 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_GrokC_Budget2_0" data-points="W3sieCI6NzkwLjQ5OTk5OTk5OTk5OTksInkiOjk2OH0seyJ4Ijo3OTAuNDk5OTk5OTk5OTk5OSwieSI6MTAwOH1d" data-look="neo" marker-end="url(#mermaid-a1-4_flowchart-v2-pointEnd-margin)"/><path d="M790.4999999999999,1302L790.4999999999999,1402" id="my-svg-L_Budget2_Wait_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 96 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Budget2_Wait_0" data-points="W3sieCI6NzkwLjQ5OTk5OTk5OTk5OTksInkiOjEzMDJ9LHsieCI6NzkwLjQ5OTk5OTk5OTk5OTksInkiOjE0MDZ9XQ==" data-look="neo" marker-end="url(#mermaid-a1-4_flowchart-v2-pointEnd-margin)"/><path d="M170.49999999999994,968L170.49999999999994,1028" id="my-svg-L_MuseC_Scope_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 56 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_MuseC_Scope_0" data-points="W3sieCI6MTcwLjQ5OTk5OTk5OTk5OTk0LCJ5Ijo5Njh9LHsieCI6MTcwLjQ5OTk5OTk5OTk5OTk0LCJ5IjoxMDMyfV0=" data-look="neo" marker-end="url(#mermaid-a1-4_flowchart-v2-pointEnd-margin)"/><path d="M170.49999999999994,1278L170.49999999999994,1402" id="my-svg-L_Scope_Self_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style="stroke-dasharray: 0 0 120 4; stroke-dashoffset: 0;;" data-edge="true" data-et="edge" data-id="L_Scope_Self_0" data-points="W3sieCI6MTcwLjQ5OTk5OTk5OTk5OTk0LCJ5IjoxMjc4fSx7IngiOjE3MC40OTk5OTk5OTk5OTk5NCwieSI6MTQwNn1d" data-look="neo" marker-end="url(#mermaid-a1-4_flowchart-v2-pointEnd-margin)"/></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(26.453125, 820)"><g class="label" data-id="L_Priv_Self_0" transform="translate(-14.453125, -12)"><foreignObject width="28.90625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>Yes</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(468.1328124999999, 446)"><g class="label" data-id="L_Priv_Surface_0" transform="translate(-9.6328125, -12)"><foreignObject width="19.265625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>No</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(170.49999999999994, 820)"><g class="label" data-id="L_Surface_MuseC_0" transform="translate(-100, -24)"><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel"><p>Consumer/SMB errands &amp; commerce</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(468.4999999999999, 820)"><g class="label" data-id="L_Surface_DotsC_0" transform="translate(-100, -24)"><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel"><p>ChatGPT / Slack / Teams knowledge work</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(790.4999999999999, 820)"><g class="label" data-id="L_Surface_GrokC_0" transform="translate(-100, -36)"><foreignObject width="200" height="72"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel"><p>Developer tooling / Cursor / computer-use work</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(468.1328124999999, 1354)"><g class="label" data-id="L_Budget1_Self_0" transform="translate(-9.6328125, -12)"><foreignObject width="19.265625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>No</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(790.1328124999999, 1354)"><g class="label" data-id="L_Budget2_Wait_0" transform="translate(-9.6328125, -12)"><foreignObject width="19.265625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>No</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(170.45312499999994, 1354)"><g class="label" data-id="L_Scope_Self_0" transform="translate(-14.453125, -12)"><foreignObject width="28.90625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>Yes</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default" id="my-svg-flowchart-Start-0" data-look="neo" transform="translate(247.4999999999999, 60)"><rect class="basic label-container" style="" x="-76" y="-48" width="152" height="96"/><g class="label" style="" transform="translate(-60, -36)"><rect/><foreignObject width="120" height="72"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Need an always-on AI agent?</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Priv-1" data-look="neo" transform="translate(247.4999999999999, 271)"><polygon points="123,0 246,-123 123,-246 0,-123" class="label-container" transform="translate(-122.5, 123)"/><g class="label" style="" transform="translate(-60, -48)"><rect/><foreignObject width="120" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Must data stay inside your own infra?</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Self-3" data-look="neo" transform="translate(170.49999999999994, 1502)"><rect class="basic label-container" style="" x="-78.6171875" y="-96" width="157.234375" height="192"/><g class="label" style="" transform="translate(-62.6171875, -84)"><rect/><foreignObject width="125.234375" height="168"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>None of these three - see OpenClaw vs Hermes Agent (self-hosted alternatives)</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Surface-5" data-look="neo" transform="translate(468.4999999999999, 621)"><polygon points="123,0 246,-123 123,-246 0,-123" class="label-container" transform="translate(-122.5, 123)"/><g class="label" style="" transform="translate(-60, -48)"><rect/><foreignObject width="120" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Where does the work already happen?</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-MuseC-7" data-look="neo" transform="translate(170.49999999999994, 932)"><rect class="basic label-container" style="" x="-76" y="-36" width="152" height="72"/><g class="label" style="" transform="translate(-60, -24)"><rect/><foreignObject width="120" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Choose Meta Muse</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-DotsC-9" data-look="neo" transform="translate(468.4999999999999, 932)"><rect class="basic label-container" style="" x="-76" y="-36" width="152" height="72"/><g class="label" style="" transform="translate(-60, -24)"><rect/><foreignObject width="120" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Choose OpenAI Dots</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-GrokC-11" data-look="neo" transform="translate(790.4999999999999, 932)"><rect class="basic label-container" style="" x="-76" y="-36" width="152" height="72"/><g class="label" style="" transform="translate(-60, -24)"><rect/><foreignObject width="120" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Choose Grok Bot</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Budget1-13" data-look="neo" transform="translate(468.4999999999999, 1155)"><polygon points="135,0 270,-135 135,-270 0,-135" class="label-container" transform="translate(-134.5, 135)"/><g class="label" style="" transform="translate(-60, -60)"><rect/><foreignObject width="120" height="120"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>OK with $100-500/mo, no API, no self-host?</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Budget2-17" data-look="neo" transform="translate(790.4999999999999, 1155)"><polygon points="147,0 294,-147 147,-294 0,-147" class="label-container" transform="translate(-146.5, 147)"/><g class="label" style="" transform="translate(-60, -72)"><rect/><foreignObject width="120" height="144"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>OK with early-beta risk + shared-VM security model?</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Wait-19" data-look="neo" transform="translate(790.4999999999999, 1466)"><rect class="basic label-container" style="" x="-76" y="-60" width="152" height="120"/><g class="label" style="" transform="translate(-60, -48)"><rect/><foreignObject width="120" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Pilot small or wait — revisit in a quarter</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Scope-21" data-look="neo" transform="translate(170.49999999999994, 1155)"><polygon points="123,0 246,-123 123,-246 0,-123" class="label-container" transform="translate(-122.5, 123)"/><g class="label" style="" transform="translate(-60, -48)"><rect/><foreignObject width="120" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 120px; text-align: center; width: 120px;"><span class="nodeLabel"><p>Need enterprise governance or an API?</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="my-svg-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><defs><filter id="my-svg-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><linearGradient id="my-svg-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#2e2a25" stop-opacity="1"/><stop offset="100%" stop-color="hsl(38.5714285714, 0%, 82.9411764706%)" stop-opacity="1"/></linearGradient></svg><figcaption>Decision tree for choosing between Meta Muse, OpenAI Dots, Grok Bot, or neither, based on data residency, where the work happens, budget, and governance needs.</figcaption></figure>
+
+<h2>Sources / Further Reading</h2>
+<ul>
+<li>Meta, <a href="https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent/">&ldquo;Introducing Muse: The World&rsquo;s First Personal AI Agent Built for Everyone&rdquo;</a> — primary announcement</li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/Muse_(AI_agent)">&ldquo;Muse (AI agent)&rdquo;</a> — consolidated, citation-backed overview including controversies</li>
+<li>TechCrunch, <a href="https://techcrunch.com/2026/09/23/everything-new-coming-to-metas-ai-agent-muse/">&ldquo;Everything new coming to Meta&rsquo;s AI agent Muse&rdquo;</a></li>
+<li>TechCrunch, <a href="https://techcrunch.com/2026/09/29/meta-is-expanding-its-ai-agent-muse-to-small-businesses/">&ldquo;Meta is expanding its AI agent Muse to small businesses&rdquo;</a></li>
+<li>OpenAI, <a href="https://openai.com/index/introducing-dots/">&ldquo;Introducing dots&rdquo;</a> — primary announcement</li>
+<li>TechCrunch, <a href="https://techcrunch.com/2026/09/29/openai-launches-dots-its-bubbly-agentic-avatar/">&ldquo;OpenAI launches Dots, its bubbly agentic avatar&rdquo;</a></li>
+<li>OpenAI Developers, <a href="https://developers.openai.com/api/docs/guides/tools-connectors-mcp">&ldquo;MCP servers — tools &amp; connectors&rdquo;</a> — platform-level MCP documentation</li>
+<li>General Analysis, <a href="https://generalanalysis.com/guides/openai-dots-security-controls">&ldquo;OpenAI Dots Security Controls&rdquo;</a> — independent analysis built on OpenAI&rsquo;s own admin docs</li>
+<li>xAI, <a href="https://docs.x.ai/grok-bot/overview">Grok Bot overview</a> — primary documentation</li>
+<li>xAI, <a href="https://x.ai/news/grok-bot-for-enterprise">&ldquo;Grok Bot for Enterprise&rdquo;</a> — primary announcement</li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/Grok_Build">&ldquo;Grok Build&rdquo;</a> — coding-CLI sibling product, cited for the coding-ability comparison only</li>
+<li>Vellum, <a href="https://www.vellum.ai/blog/official-grok-bot-breakdown">&ldquo;Official Grok Bot Breakdown (2026)&rdquo;</a> — independent technical synthesis of xAI&rsquo;s own documentation</li>
+</ul>
+<p><em>Full fact-check notes, including every &ldquo;not publicly documented&rdquo; cell in the comparison table above, are maintained alongside this article&rsquo;s research files.</em></p>
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>Is &quot;Clawbot&quot; the same as Grok Bot?</h3>
+                <p>No official product is named &ldquo;Clawbot.&rdquo; If you&rsquo;re looking for xAI&rsquo;s always-on agent, the correct name is Grok Bot — used throughout this article.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I self-host Meta Muse, OpenAI Dots, or Grok Bot?</h3>
+                <p>No. All three are closed, vendor-hosted cloud products with no self-hosting option as of this writing. If self-hosting is a requirement, see our companion comparison of open-source alternatives, <a href="https://rajsuyash.com/blog/openclaw-vs-hermes-agent.html">OpenClaw vs Hermes Agent</a>.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Which one supports MCP (Model Context Protocol)?</h3>
+                <p>Grok Bot documents MCP support directly (local servers need a public URL or tunnel). OpenAI&rsquo;s platform supports remote MCP and a Secure MCP Tunnel, but this isn&rsquo;t confirmed as a dots-specific surface. Meta&rsquo;s consumer Muse app has no documented MCP support; MCP appears only in Meta&rsquo;s separate developer-facing Muse Spark API.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is Meta Muse, OpenAI Dots, or Grok Bot ready for enterprise production use?</h3>
+                <p>Grok Bot and Dots both have enterprise tiers with access/governance controls; Muse has a nascent small-business and enterprise push. None has a long track record — independent early-access reporting on all three describes reliability as unproven for long-running, unattended work. Pilot before you commit a workflow to any of them.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What does each one cost?</h3>
+                <p>Muse: free tier plus $20/mo or $100/mo consumer tiers. Dots: included with ChatGPT Pro ($100–$500/mo) or Business Premium ($125/user/mo), with extra-dot pricing not yet published. Grok Bot: roughly $200/mo standalone, or bundled into SuperGrok Heavy ($300/mo) or Cursor plans, with a custom-priced Enterprise tier.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Which is best for a CTO who wants to connect Gmail, Drive, Slack, a CRM and internal APIs?</h3>
+                <p>Dots has the widest existing connector reach (4,000+ apps via ChatGPT&rsquo;s ecosystem) and is the most &ldquo;already integrated&rdquo; option. Grok Bot covers the core productivity stack (Gmail, Drive, Teams, SharePoint, Salesforce) plus MCP for anything custom. Muse&rsquo;s integrations skew toward consumer/commerce apps, not internal enterprise tooling.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is any of these safe for privacy-sensitive industries (health, finance, legal)?</h3>
+                <p>Treat all three as unverified for regulated data until you&rsquo;ve done your own legal/compliance review. None has a confirmed, product-specific SOC 2 or HIPAA attestation at the time of writing — see the fact-check notes behind this article for exactly what is and isn&rsquo;t documented.</p>
+            </div>
+        </div>
+        <!-- CTA in article -->
+        <h2>Ready to Get Started?</h2>
+        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
+        <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/openclaw-vs-hermes-agent.html" class="related-card">
+                <h3 class="related-card-title">OpenClaw vs Hermes Agent: Which Open-Source AI Agent Should You Self-Host?</h3>
+                <p class="related-card-excerpt">If none of the three hosted agents above fit because you need to self-host, this is the comparison to read next.</p>
+            </a>
+            <a href="/blog/jev-typesafe-architecture-use-cases-guide.html" class="related-card">
+                <h3 class="related-card-title">JEV: Architecture, Use Cases, Limitations and When You Should Use It</h3>
+                <p class="related-card-excerpt">A much narrower tool for when you need one bounded decision, not a full always-on agent.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify.html" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a></p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
