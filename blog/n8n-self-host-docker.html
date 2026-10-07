@@ -691,7 +691,7 @@ N8N_ENCRYPTION_KEY=your-64-character-random-hex-key</code></pre>
 
         <pre><code>openssl rand -hex 32</code></pre>
 
-        <p>Copy the output into <code>N8N_ENCRYPTION_KEY</code> and store it somewhere safe. Lose it and every credential in the instance becomes unreadable.</p>
+        <p>Copy the output into <code>N8N_ENCRYPTION_KEY</code> and store it somewhere safe. Lose it and <a href="/blog/n8n-credentials-secrets-management.html">every credential in the instance</a> becomes unreadable.</p>
 
         <p>There is no password in this file. n8n dropped basic auth in version 1.0: the first time you open the editor it asks you to create an owner account, and user management takes it from there. Until you have created that account and put HTTPS in front of the instance, keep the port bound to localhost as shown above.</p>
 
