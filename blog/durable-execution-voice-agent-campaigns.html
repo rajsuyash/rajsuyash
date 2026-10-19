@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>Durable Execution for Voice and AI Agent Campaigns</title>
+    <meta name="description" content="I killed an outbound campaign mid-dial under DBOS and Temporal. Both resumed, but only an idempotency key stopped the duplicate call.">
+    <meta name="keywords" content="durable execution AI agents, durable execution voice agent campaign, DBOS vs Temporal, idempotency key outbound calls, AI agent crash recovery">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/durable-execution-voice-agent-campaigns.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/durable-execution-voice-agent-campaigns.html">
+    <meta property="og:title" content="Durable Execution for Voice and AI Agent Campaigns">
+    <meta property="og:description" content="I killed an outbound campaign mid-dial under DBOS and Temporal. Both resumed, but only an idempotency key stopped the duplicate call.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj">
+    <meta property="article:published_time" content="2026-10-19">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Durable Execution for Voice and AI Agent Campaigns">
+    <meta name="twitter:description" content="I killed an outbound campaign mid-dial under DBOS and Temporal. Both resumed, but only an idempotency key stopped the duplicate call.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260216b">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Durable Execution for Voice and AI Agent Campaigns",
+        "description": "I killed an outbound campaign mid-dial under DBOS and Temporal. Both resumed, but only an idempotency key stopped the duplicate call.",
+        "author": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com/about.html"
+        },
+        "publisher": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj"
+        },
+        "datePublished": "2026-10-19",
+        "dateModified": "2026-10-19",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/durable-execution-voice-agent-campaigns.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+{
+            "@type": "Question",
+            "name": "What is durable execution for AI agents?",
+            "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "It is a way of running a long task so each step's result is saved and the task resumes from the last saved step after a crash or redeploy. In my test, a 40-lead outbound campaign survived a hard kill under both DBOS and Temporal without losing its place."
+            }
+},
+{
+            "@type": "Question",
+            "name": "Does durable execution stop duplicate calls?",
+            "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "No. In my run both DBOS and Temporal re-ran the interrupted dial once, which produced 1 duplicate call. Adding an idempotency key that the carrier checked brought duplicates to 0 in both. Both vendors document that steps and activities should be idempotent."
+            }
+},
+{
+            "@type": "Question",
+            "name": "Should I use DBOS or Temporal for an outbound voice campaign?",
+            "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "My test did not separate them on correctness. DBOS runs as a library with a database you operate, and Temporal needs a server and workers. If you already run Postgres and have one Python service, DBOS is the lighter choice. If a platform team runs shared workflows, Temporal fits that model. I did not test either at scale."
+            }
+},
+{
+            "@type": "Question",
+            "name": "Why can't I call the LLM inside workflow code?",
+            "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Because the workflow function re-runs after a crash and must make the same decisions. In my DBOS test, a random branch in workflow code caused a non-determinism error after restart in 8 of 20 trials. Put the model call in a step so its answer is recorded and read back."
+            }
+},
+{
+            "@type": "Question",
+            "name": "Do I need durable execution for a single short call?",
+            "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Usually not. A live call cannot be replayed mid-conversation, so durable execution protects the campaign around calls: the lead list, outcomes and follow-ups. For a few hundred leads that finish in minutes, a checkpoint after each lead plus a carrier-side key had the same one-lead exposure window in my test."
+            }
+}
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "Durable Execution for Voice and AI Agent Campaigns", "item": "https://rajsuyash.com/blog/durable-execution-voice-agent-campaigns.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/about.html" class="nav-link">About</a>
+                <a href="/qualify.html" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">AI Agents</span>
+                <span class="article-date">October 19, 2026</span>
+                <span class="article-read-time">14 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">Durable Execution for Voice and AI Agent Campaigns</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">I crashed a 40-lead outbound campaign on purpose under DBOS and Temporal, counted the duplicate dials, and tested what the determinism rule does to an LLM in workflow code.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <div class="definition-block">
+            <p><strong>Short answer:</strong> durable execution keeps an outbound voice or agent campaign alive across a crash or redeploy by recording each step's result and resuming from the last recorded step. It does not stop a duplicate call by itself. In my test both DBOS and Temporal re-ran the interrupted dial once, and only an idempotency key checked by the carrier brought duplicates to zero.</p>
+        </div>
+
+        <p><strong>Updated October 2026.</strong> Everything below was run on 19 October 2026 on a Linux VPS with Python 3.12.3, <code>dbos</code> 3.3.0, <code>temporalio</code> 1.34.0 and the Temporal dev server that package starts (CLI 1.9.1, server 1.32.0). I read the vendor documents quoted here on the same day. The carrier is a fake I wrote, so there is no real telephony, no LLM and no cost data in this post.</p>
+
+        <h2>1. The problem: a campaign that dies at lead 17</h2>
+
+        <p>An outbound campaign is a loop that can run for hours. For each lead it places a call, waits for an outcome, asks a model to classify the transcript, and sometimes sends a WhatsApp confirmation. Somewhere in that loop the process will die: a deploy, an out-of-memory kill, a host reboot. The question I wanted answered is what happens to the leads already dialed.</p>
+
+        <p>The obvious fixes are not enough, and I wanted numbers rather than opinions. So I built the smallest campaign I could and killed it on purpose. Forty leads, a fake carrier that appends one line to a log file for every real dial, and a hard <code>os._exit(137)</code> (a stand-in for a SIGKILL) right after the carrier records the dial for lead 17 and before the program records that it happened. Then I restarted the program and counted lines in the carrier log.</p>
+
+        <h2>2. Why this is hard</h2>
+
+        <p>There are three places a crash can land, and they behave differently:</p>
+
+        <ol>
+            <li><strong>Before the side effect.</strong> The call was never placed. Retrying is safe.</li>
+            <li><strong>After the side effect, before the record.</strong> The call happened and nothing remembers it. A retry places it again. This is the window that matters.</li>
+            <li><strong>After the record.</strong> Resuming skips the call. Safe.</li>
+        </ol>
+
+        <p>Case 2 cannot be closed by the orchestrator alone, because the orchestrator cannot make a phone call and write a database row atomically. Whatever you choose has to be paired with something at the carrier boundary. I come back to that in section 6.</p>
+
+        <p>The second difficulty is the model. A classifier or an agent step is non-deterministic: ask twice, get two answers. Durable engines that re-run your workflow function after a crash need that function to make the same decisions the second time. A model call placed in workflow code breaks that, and I show it break in section 7.</p>
+
+        <h2>3. Reference architecture</h2>
+
+        <p>The shape is the same in every engine I tried. One function decides what happens next and contains no side effects. Separate units of work, called steps in DBOS and activities in Temporal, perform every side effect and have their outputs recorded. A state store holds those records. Something starts recovery after a crash. And the carrier gets an idempotency key it can check.</p>
+
+<pre><code>                 +-----------------------------+
+                 |  workflow function          |   deterministic: loops, ifs,
+                 |  for lead in leads: ...     |   no clock, no random, no I/O
+                 +--------------+--------------+
+                                | calls
+          +---------------------+----------------------+
+          v                     v                      v
+   dial(lead)             classify(lead)         whatsapp(lead)
+   side effect            LLM call               side effect
+   key = wf_id:lead       output recorded        output recorded
+          |
+          v
+   carrier checks key  --&gt; same key seen? return the old result, do not dial
+
+   state store (SQLite in my lab, Postgres in the DBOS docs) records
+   workflow input, each step's output, workflow status
+   recovery: restart the process (DBOS) or retry after timeout (Temporal)</code></pre>
+
+        <p>Two rules fall out of the diagram. Anything that touches the outside world or a model goes in a step. Anything in the workflow function must give the same answer on a second run.</p>
+
+        <h2>4. The lab</h2>
+
+        <p>The fake carrier is the measuring instrument. Every real dial appends one JSON line, and a call with an idempotency key that is already in the log returns the old result without appending. Duplicate dials are then just lines minus distinct leads.</p>
+
+<pre><code>def place_call(lead_id, idempotency_key=None):
+    seen = set()
+    if idempotency_key and os.path.exists(LOG):
+        for line in open(LOG):
+            seen.add(json.loads(line).get("key"))
+        if idempotency_key in seen:
+            return {"lead": lead_id, "deduped": True}
+    with open(LOG, "a") as f:
+        f.write(json.dumps({"t": round(time.time(), 3), "pid": os.getpid(),
+                            "lead": lead_id, "key": idempotency_key}) + "\n")
+    return {"lead": lead_id, "deduped": False}</code></pre>
+
+        <p>I ran six variants. Each one crashes once, at lead 17, between the carrier write and the record, then restarts and runs to completion. Forty leads means 40 dials is the correct answer.</p>
+
+<pre><code>naive-memory:        dials=58 unique_leads=40 duplicate_dials=18
+naive-checkpoint:    dials=41 unique_leads=40 duplicate_dials=1
+dbos(use_key=False): dials=41 unique_leads=40 duplicate_dials=1
+dbos(use_key=True):  dials=40 unique_leads=40 duplicate_dials=0
+temporal(use_key=False): dials=41 unique_leads=40 duplicate_dials=1
+temporal(use_key=True):  dials=40 unique_leads=40 duplicate_dials=0</code></pre>
+
+        <table class="comparison-table">
+            <thead>
+                <tr><th>Variant</th><th>What survives the crash</th><th>Duplicate dials</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Plain loop, state in memory</td><td>Nothing</td><td>18</td></tr>
+                <tr><td>Plain loop, JSON checkpoint file after each lead</td><td>All leads before the in-flight one</td><td>1</td></tr>
+                <tr><td>DBOS, no idempotency key</td><td>All recorded steps</td><td>1</td></tr>
+                <tr><td>DBOS, key = workflow ID + lead</td><td>All recorded steps</td><td>0</td></tr>
+                <tr><td>Temporal, no idempotency key</td><td>All recorded activities</td><td>1</td></tr>
+                <tr><td>Temporal, key = workflow ID + lead</td><td>All recorded activities</td><td>0</td></tr>
+            </tbody>
+        </table>
+
+        <p>All six rows are observed in this run, with a single crash and a single trial each. The plain loop's 18 is simply leads 0 to 17 dialed twice. A file written after every lead has the same one-lead exposure window as a durable engine. What the engines add is not a smaller window. They add recorded step outputs, a status you can query, and resume-on-restart, which a hand-rolled file leaves for you to build.</p>
+
+        <h2>5. The two implementations</h2>
+
+        <h3>DBOS</h3>
+
+        <p>DBOS is a Python library. I decorated the three side-effecting functions as steps and the loop as a workflow. The line I care about is the key built from the workflow ID, which is stable across restarts.</p>
+
+<pre><code>@DBOS.step()
+def dial(lead: int) -&gt; dict:
+    key = f"{DBOS.workflow_id}:{lead}" if USE_KEY else None
+    res = place_call(lead, idempotency_key=key)
+    if lead == CRASH_AT and not os.path.exists("crashed.marker"):
+        open("crashed.marker", "w").close()
+        os._exit(137)          # after the dial, before DBOS records the result
+    return res
+
+@DBOS.workflow()
+def campaign(leads: list) -&gt; int:
+    n = 0
+    for lead in leads:
+        dial(lead)
+        if classify(lead) == "interested":
+            whatsapp(lead); n += 1
+    return n
+
+DBOS.launch()                  # also recovers a PENDING workflow from the last process
+with SetWorkflowID("campaign-2026-10-19"):
+    h = DBOS.start_workflow(campaign, LEADS)</code></pre>
+
+        <p>Recovery needed no extra code. I ran <code>python camp.py</code>, it exited with code 137, I ran it again, and the second process picked up the pending workflow and finished it. DBOS printed one warning on the second run saying the workflow already exists in the internal queue, which I take to mean recovery had already claimed that workflow ID before my code tried to start it. After the run I read the state tables directly:</p>
+
+<pre><code>operation_outputs: [('classify', 40), ('dial', 40), ('whatsapp', 14)]
+workflow_status:   [('campaign-2026-10-19', 'SUCCESS', 2)]</code></pre>
+
+        <p>That is one recorded output per step execution and a workflow that shows two recovery attempts counted. The DBOS documentation says "If a DBOS process is interrupted while executing a workflow and restarts, it resumes the workflow from the last completed step" and that "An assigned workflow ID acts as an idempotency key: if a workflow is called multiple times with the same ID, it executes only once" (docs.dbos.dev, workflow tutorial, read 19 October 2026). Note that the workflow-level key protects the campaign from being started twice. It does not protect the individual calls. That is why I built a per-call key as well.</p>
+
+        <p>One caveat about storage. DBOS's architecture page says it checkpoints to Postgres. The <code>DBOSConfig</code> docstring in 3.3.0 says the system database defaults to SQLite, and that is what I used. I did not test Postgres, so treat my results as the engine's behavior, not as a statement about production database load.</p>
+
+        <h3>Temporal</h3>
+
+        <p>Temporal separates the pieces into a server, a worker and a client. I used the dev server that the Python package starts in-process, and ran the worker as a subprocess so I could kill it without killing the server. The driver restarts the worker when it exits.</p>
+
+<pre><code>@activity.defn
+async def dial(lead: int) -&gt; dict:
+    info = activity.info()
+    key = f"{info.workflow_id}:{lead}" if USE_KEY else None
+    res = place_call(lead, idempotency_key=key)
+    if lead == CRASH_AT and not os.path.exists("tcrashed.marker"):
+        open("tcrashed.marker", "w").close()
+        os._exit(137)          # the worker dies after the dial
+
+@workflow.defn
+class Campaign:
+    @workflow.run
+    async def run(self, leads: list) -&gt; int:
+        n = 0
+        opts = dict(start_to_close_timeout=timedelta(seconds=4),
+                    retry_policy=RetryPolicy(maximum_attempts=5,
+                                             initial_interval=timedelta(seconds=1)))
+        for lead in leads:
+            await workflow.execute_activity(dial, lead, **opts)
+            if await workflow.execute_activity(classify, lead, **opts) == "interested":
+                await workflow.execute_activity(whatsapp, lead, **opts); n += 1
+        return n</code></pre>
+
+        <p>The driver printed <code>worker exited with 137; restarting (#1)</code> and then the workflow result. Recovery here is different from DBOS. The server noticed the activity never completed when my 4-second <code>start_to_close_timeout</code> expired, and it scheduled a retry for the restarted worker. Temporal's documentation says "If an Activity attempt fails, it is automatically retried using its Retry Policy" and recommends that activities be "idempotent, so retries can be processed without duplicate side effects" (docs.temporal.io/activities, read 19 October 2026). My one duplicate dial is exactly that retry.</p>
+
+        <p>One thing I did not chase. The first Temporal run printed several <code>Task exception was never retrieved ... RPCError('transport error')</code> tracebacks. They came from abandoned result-polling tasks in my own driver loop, where I wrap <code>handle.result()</code> in <code>asyncio.wait_for</code>. The second run was clean, and the duplicate counts come from the carrier log, not from the SDK output, so I left it. A production driver should not poll like that.</p>
+
+        <h2>6. The idempotency key is the real fix</h2>
+
+        <p>Look at the two zero rows. In both, the interrupted step ran again after the restart. The carrier received the same key, found it in its log and returned without dialing. The engine did not prevent the second attempt. The carrier boundary did.</p>
+
+        <p>This is the point I would put in front of anyone buying or building this. DBOS's architecture page says "Steps should be idempotent, meaning it should be safe to retry them multiple times." Temporal's says activities should be idempotent. Both vendors tell you that a step can run more than once, and my run confirms it for one crash. So the engine reduces your risk from "lose all progress" to "repeat at most the step in flight", and your design has to make that repeat harmless.</p>
+
+        <p>What does a usable key look like for a real voice campaign? Mine was workflow ID plus lead ID, which is stable across restarts and unique per lead per campaign. If a lead can be called twice in one campaign on purpose, such as a retry after no answer, add the attempt number to the key. Whether your telephony provider accepts an idempotency key on call creation is something I did not test, because I did not call any provider. If it does not, the same effect needs a check-then-write on your own table keyed the same way, inside the step, before the dial. That narrows the window but does not close it, since a crash between the dial and the write is case 2 again. For a live outbound call I would treat "a lead might get one extra call after a crash" as a business rule to decide on, not an engineering bug to hide.</p>
+
+        <h2>7. The determinism rule, measured</h2>
+
+        <p>The other half of the architecture is the rule that the workflow function must not decide anything from a source that changes between runs. I tested what happens when it does. The workflow below chooses between two steps with <code>random.random()</code>, a stand-in for an LLM that routes the campaign. It then crashes once, and the process is restarted.</p>
+
+<pre><code>@DBOS.workflow()
+def bad():
+    if random.random() &lt; 0.5:      # decision made in workflow code, not in a step
+        r = call_a()
+    else:
+        r = call_b()
+    crash_once()
+    return r</code></pre>
+
+        <p>On restart the function runs from the top again, draws a new random number, and may choose the other branch. I ran the crash and restart 20 times. In 8 of the 20 trials the restarted workflow failed with:</p>
+
+<pre><code>DBOSUnexpectedStepError: DBOS Error 11: During execution of workflow nd-1 step 1,
+function call_b was recorded when call_a was expected.
+Check that your workflow is deterministic.</code></pre>
+
+        <p>Eight of twenty is close to the one-in-two I would expect from a coin flip, which is the point: the bug shows up half the time, only after a crash, and only in production. Both engines state the rule. DBOS says "a workflow function must be deterministic: if called multiple times with the same inputs, it should invoke the same steps with the same inputs in the same order." Temporal says that "any time your Workflow code is executed it makes the same Workflow API calls in the same sequence, given the same input" and that a mismatch makes the execution return a non-deterministic error (docs.temporal.io/workflow-definition, read 19 October 2026). I only reproduced the failure in DBOS. I did not write the equivalent Temporal test, partly because I did not want to guess how its Python sandbox treats <code>random</code>.</p>
+
+        <p>The practical consequence for agent work: the model call goes in a step, and the branch the model chose is the step's recorded return value. In my DBOS lab, <code>classify</code> returned a random label from inside a step. The "interested" count differed between my two DBOS experiments (23 and 14). That is expected, because each experiment began a new campaign on a fresh state file and the classifier draws labels at random.</p>
+
+        <h2>8. DBOS and Temporal side by side</h2>
+
+        <p>I am not going to name a winner. The two solve the same problem from different places, and what I measured does not separate them on correctness. This is what I observed, what the vendors state, and what I did not test.</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr><th>Question</th><th>DBOS (3.3.0)</th><th>Temporal (SDK 1.34.0)</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>What do I run?</td><td>A Python library inside my process, plus a database</td><td>A Temporal server, plus workers that I run</td></tr>
+                <tr><td>Where is state kept?</td><td>Docs: Postgres. My lab: SQLite (the 3.3.0 default)</td><td>On the server. My lab: dev server, in-memory</td></tr>
+                <tr><td>How did recovery start?</td><td>I restarted the process and <code>DBOS.launch()</code> resumed it</td><td>The server retried after my 4 s timeout expired</td></tr>
+                <tr><td>Duplicate dials, no key</td><td>1 (observed)</td><td>1 (observed)</td></tr>
+                <tr><td>Duplicate dials, with key</td><td>0 (observed)</td><td>0 (observed)</td></tr>
+                <tr><td>Non-deterministic workflow code</td><td>Error on restart in 8 of 20 trials (observed)</td><td>Error by design per docs; not reproduced by me</td></tr>
+                <tr><td>Package license metadata</td><td>MIT (pip metadata)</td><td>MIT (pip metadata)</td></tr>
+                <tr><td>Not tested by me</td><td>Postgres, two competing processes, code changes mid-flight</td><td>Server loss, multiple workers, versioning, history growth</td></tr>
+            </tbody>
+        </table>
+
+        <p>The package license row covers the Python SDK packages only. I did not read the license of the Temporal server binary, so I make no claim about it.</p>
+
+        <h2>9. Failure modes I did not test</h2>
+
+        <p>A single crash on one machine is a narrow test. These are the things I would test before putting a real campaign on either engine, and I list them so you do not read my zero-duplicate rows as a guarantee.</p>
+
+        <ul>
+            <li><strong>Two processes recovering the same workflow.</strong> My runs had one process at a time. DBOS and Temporal both have a story for this, but I did not exercise it.</li>
+            <li><strong>Deploying new workflow code while a campaign is mid-flight.</strong> The determinism rule means a changed loop can fail on recovery. DBOS's tutorial links an "Upgrading Workflow Code" page that I did not read, and Temporal has its own versioning guidance that I did not read either.</li>
+            <li><strong>Losing the state store.</strong> My Temporal dev server kept state in memory and my DBOS lab used a local SQLite file. Neither says anything about a database failover.</li>
+            <li><strong>A live call in progress.</strong> A step can be replayed, but audio on a phone line cannot. A crash during a conversation drops that conversation. Durable execution protects the campaign around the call, not the call. That is my reading of the problem, not something I measured.</li>
+            <li><strong>Throughput and rate limits.</strong> Forty leads is not a campaign. I measured nothing about speed, and I did not check any carrier's concurrency or calling-hour rules.</li>
+        </ul>
+
+        <h2>10. Decision framework</h2>
+
+        <p>Here is how I would choose, as a judgment based on the lab and the vendors' own statements. It is my opinion, not a measured ranking.</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr><th>Your situation</th><th>What I would use</th><th>Why</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Campaigns of a few hundred leads, finishes in minutes, a crash is rare and a repeat call is acceptable</td><td>A checkpoint written after each lead, plus a carrier-side key</td><td>My checkpoint-file run had the same one-lead exposure as the engines</td></tr>
+                <tr><td>Hours-long runs, you already operate Postgres, one Python service</td><td>A library-style engine such as DBOS</td><td>No new server to run. State sits in a database you already back up</td></tr>
+                <tr><td>Many workflows, several services or languages, a platform team to run it</td><td>Temporal</td><td>A central server and worker model suits a shared platform. I did not test it at that scale</td></tr>
+                <tr><td>Short, simple automation across SaaS tools</td><td>Neither. See my <a href="/blog/n8n-retries-rate-limits-queue-mode.html">n8n retries and queue mode</a> post</td><td>Retries inside the workflow tool are usually enough</td></tr>
+            </tbody>
+        </table>
+
+        <p>In the first three rows the carrier-side key stays. It is the only part of the design that changed my duplicate count from 1 to 0.</p>
+
+        <h2>11. Recommendation</h2>
+
+        <p>If you run outbound campaigns that last longer than a deploy cycle, do three things in this order. First, give every side-effecting step a key that survives a restart, and make the carrier or your own table honour it. Second, move every model call and every external call out of the workflow function and into a step, so the function stays a deterministic loop. Third, pick the engine by what you already operate: a database you trust for a library-style engine, or a platform team for Temporal.</p>
+
+        <p>I would not buy an engine to fix the first problem, because the checkpoint-file run showed the same exposure window. I would buy one for the second and for the visibility: a queryable record of exactly which step each lead reached. That is the part I would have had to build myself.</p>
+
+        <p>If you want this designed against your own dialer, CRM and compliance rules, that is the kind of work I take on through <a href="/ai-agents.html">my AI agents practice</a>. To size the effort first, use the <a href="/roi-calculator.html">ROI calculator</a> or the <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a>. For what happens after a call goes wrong, see my post on <a href="/blog/ai-voice-agent-handoff-escalation.html">voice agent handoff and escalation</a>, and for the build-or-buy side of the voice stack see <a href="/blog/ai-voice-agent-platform-comparison-2026.html">Vapi vs Retell vs self-hosted</a>.</p>
+
+        <h2>12. Reproduce it</h2>
+
+        <p>The lab is five small files, under 200 lines in total. To run it yourself, create a virtualenv, <code>pip install dbos temporalio</code>, save the carrier and the variants, set <code>CRASH_AT=17</code> and <code>USE_KEY=0</code> or <code>1</code>, run each script, run it a second time after it exits with code 137, and call the carrier's report function. The Temporal variant needs network access the first time, because the SDK downloads the dev server. Changing <code>CRASH_AT</code> moves the crash window, and setting it to <code>-1</code> gives a clean run to compare against.</p>
+
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>What is durable execution for AI agents?</h3>
+                <p>It is a way of running a long task so each step&#x27;s result is saved and the task resumes from the last saved step after a crash or redeploy. In my test, a 40-lead outbound campaign survived a hard kill under both DBOS and Temporal without losing its place.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Does durable execution stop duplicate calls?</h3>
+                <p>No. In my run both DBOS and Temporal re-ran the interrupted dial once, which produced 1 duplicate call. Adding an idempotency key that the carrier checked brought duplicates to 0 in both. Both vendors document that steps and activities should be idempotent.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Should I use DBOS or Temporal for an outbound voice campaign?</h3>
+                <p>My test did not separate them on correctness. DBOS runs as a library with a database you operate, and Temporal needs a server and workers. If you already run Postgres and have one Python service, DBOS is the lighter choice. If a platform team runs shared workflows, Temporal fits that model. I did not test either at scale.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Why can&#x27;t I call the LLM inside workflow code?</h3>
+                <p>Because the workflow function re-runs after a crash and must make the same decisions. In my DBOS test, a random branch in workflow code caused a non-determinism error after restart in 8 of 20 trials. Put the model call in a step so its answer is recorded and read back.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Do I need durable execution for a single short call?</h3>
+                <p>Usually not. A live call cannot be replayed mid-conversation, so durable execution protects the campaign around calls: the lead list, outcomes and follow-ups. For a few hundred leads that finish in minutes, a checkpoint after each lead plus a carrier-side key had the same one-lead exposure window in my test.</p>
+            </div>
+        </div>
+
+        <!-- CTA in article -->
+        <h2>Ready to Get Started?</h2>
+        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
+        <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/n8n-retries-rate-limits-queue-mode.html" class="related-card">
+                <h3 class="related-card-title">n8n Retries, Rate Limits and Queue Mode</h3>
+                <p class="related-card-excerpt">When retries inside a workflow tool are enough, and when queue mode is the next step.</p>
+            </a>
+            <a href="/blog/ai-voice-agent-handoff-escalation.html" class="related-card">
+                <h3 class="related-card-title">What Happens When an AI Voice Agent Cannot Help</h3>
+                <p class="related-card-excerpt">Handoff and escalation design for the calls that go wrong.</p>
+            </a>
+            <a href="/blog/ai-voice-agent-platform-comparison-2026.html" class="related-card">
+                <h3 class="related-card-title">Vapi vs Retell vs Self-Hosted Pipecat and LiveKit</h3>
+                <p class="related-card-excerpt">A build-or-buy decision guide for voice infrastructure.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify.html" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a></p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
