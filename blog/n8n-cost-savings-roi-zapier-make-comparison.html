@@ -7,7 +7,7 @@
     <!-- Primary SEO Meta Tags -->
     <title>Switch from Zapier to N8N? Cost Breakdown by Task Volume</title>
     <meta name="description" content="Is switching from Zapier or Make to N8N worth it? Monthly costs from 1,000 to 100,000+ tasks, hidden charges, self-host vs cloud, and the ROI maths.">
-    <meta name="keywords" content="n8n cost savings, n8n roi, n8n vs zapier cost, n8n vs make pricing, workflow automation cost, zapier alternative cost, n8n pricing comparison, best AI automation agency for small businesses">
+    <meta name="keywords" content="n8n cost savings, n8n roi, n8n vs zapier cost, n8n vs make pricing, workflow automation cost, zapier alternative cost, n8n pricing comparison">
     <meta name="author" content="Suyash Raj">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://rajsuyash.com/blog/n8n-cost-savings-roi-zapier-make-comparison.html">
@@ -55,7 +55,7 @@
                 "name": "Suyash Raj"
             },
             "datePublished": "2026-07-28T00:00:00Z",
-            "dateModified": "2026-07-28T00:00:00Z",
+            "dateModified": "2026-10-20T00:00:00Z",
             "mainEntityOfPage": {
                 "@type": "WebPage",
                 "@id": "https://rajsuyash.com/blog/n8n-cost-savings-roi-zapier-make-comparison.html"
@@ -72,50 +72,50 @@
             "mainEntity": [
                 {
                     "@type": "Question",
-                    "name": "How much does N8N cost compared to Zapier?",
+                    "name": "How much does n8n cost compared to Zapier?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "N8N Cloud starts at $20/month for 2,500 executions, while Zapier's Professional plan runs $49/month for 2,000 tasks. At higher volumes (10,000+ tasks/month), the gap widens dramatically: Zapier charges $99-$299/month, while N8N self-hosted on a $10-20/month VPS handles unlimited executions. Businesses running 20,000+ tasks monthly typically save $150-$500/month by switching to self-hosted N8N."
+                        "text": "As of 20 October 2026, n8n Cloud Starter is €20 a month billed yearly (€24 monthly) for 2,500 workflow executions, and Pro is €50 (€60 monthly) for 10,000. Zapier Professional is $19.99 a month billed yearly for 750 tasks, $49 for 2,000 and $129 for 10,000. n8n counts whole-workflow runs and Zapier counts successful action steps, so the gap grows with the number of steps."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "Is switching from Zapier to N8N worth the effort?",
+                    "name": "Is switching from Zapier to n8n worth the effort?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "For businesses running more than 5,000 tasks per month, switching is almost always worth it financially. The break-even point on migration effort (typically 4-8 hours for a small stack) is usually within 2-3 months of savings. Beyond cost, N8N gives you unlimited executions, no per-task pricing surprises, and the ability to run complex logic that Zapier does not support natively."
+                        "text": "Usually when your Zapier plan is about $89 a month or more, and less clearly below that. For a six-step workflow run 2,000 times a month ($129 on Zapier), moving to a $12 server repays a 10-hour migration valued at $75 an hour in about 6.4 months if upkeep is free, and about 18 months if upkeep takes an hour a month. Those inputs are assumptions, so substitute your own."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "What does it cost to self-host N8N?",
+                    "name": "What does it cost to self-host n8n?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Self-hosting N8N requires a VPS or cloud instance. A basic DigitalOcean or Hetzner server ($5-$20/month) handles most SMB workloads up to 50,000 executions per month. Add SSL via Let's Encrypt at no cost, and your total infrastructure spend is typically $10-$25/month, compared to $99-$299/month for equivalent capacity on Zapier or Make."
+                        "text": "The server is cheap: Hetzner shared cloud starts at €5.99 a month excluding VAT, and a DigitalOcean 2 GB Droplet is $12 (October 2026). The n8n Community Edition is free but does not include Projects, workflow sharing or SSO, and the paid Business plan is €667 a month billed yearly for 40,000 executions. The larger cost is your time for updates, backups and monitoring."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "How does N8N pricing compare to Make (formerly Integromat)?",
+                    "name": "How does n8n pricing compare to Make?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Make is cheaper than Zapier but still per-operation. Make's Core plan runs $9/month for 10,000 operations and their Pro plan is $16/month for 10,000 operations. However, Make counts each node execution as an operation, so complex multi-step scenarios burn through operations quickly. N8N Cloud's $20/month covers 2,500 workflow executions with no per-node charging, and self-hosted N8N has no execution limits."
+                        "text": "Make bills credits, usually one per module run. Per Make's comparison page, Core is $9, Pro is $16 and Teams is $29 for the first 10,000 credits a month. For small workflows that fit that allowance, Make Core is cheaper than n8n Cloud Starter at €20. n8n pulls ahead when workflows have many steps, because it counts one execution however many nodes run. I could not read Make's prices above 10,000 credits."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "What hidden costs does N8N avoid?",
+                    "name": "Which hidden costs should I check on Zapier, Make and n8n?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Zapier and Make both charge per task or operation, meaning a single 10-step workflow costs 10x what a 1-step workflow costs. Error retries count as additional tasks. Premium app connectors cost more on higher-tier plans. N8N avoids all of these: every node in a workflow executes for free on self-hosted, retries do not cost extra, and there are no premium connector fees."
+                        "text": "On Zapier, successful action steps and replays of previously successful steps use tasks, while triggers, filters, paths, Formatter and errored steps do not. Seats matter too: Professional has one seat and Team has 25. On n8n Cloud, check concurrency (5 on Starter), the 5-minute maximum execution time on Starter and the one shared project. On self-hosted n8n, the hidden cost is upkeep time."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "Does N8N require technical expertise to run?",
+                    "name": "Does n8n require technical expertise to run?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "N8N Cloud requires zero technical setup. Self-hosted N8N requires basic Linux comfort and one-time Docker or npm setup, typically one to two hours for someone new to it. Once running, the workflow builder is visual and similar in experience to Zapier. For businesses without in-house technical staff, working with an N8N automation agency removes this barrier entirely."
+                        "text": "n8n Cloud needs no server. Self-hosting needs comfort with Docker and Linux, plus ongoing updates and backups; my self-hosting guide walks through the install. If you want help choosing or setting up, see my n8n consulting page."
                     }
                 }
             ]
@@ -469,267 +469,269 @@
         <div class="article-hero-content">
             <div class="article-meta reveal" style="--delay: 0">
                 <span class="article-category">N8N Automation</span>
-                <span class="article-date">July 28, 2026</span>
-                <span class="article-read-time">11 min read</span>
+                <span class="article-date">July 28, 2026 · Updated October 20, 2026</span>
+                <span class="article-read-time">9 min read</span>
             </div>
             <h1 class="article-title reveal" style="--delay: 1">N8N Cost Savings ROI: What Switching from Zapier or Make Really Costs (And Saves)</h1>
-            <p class="article-subtitle reveal" style="--delay: 2">A real-numbers breakdown of what you actually spend on Zapier and Make at scale, what N8N costs to run, and the point where switching becomes an obvious financial decision.</p>
+            <p class="article-subtitle reveal" style="--delay: 2">What Zapier, Make and n8n charge for the same workflow, checked against each vendor's pricing page in October 2026, and where switching stops paying off.</p>
         </div>
     </section>
 
     <!-- Article Body -->
     <article class="article-body">
 
-        <p>Most businesses evaluate N8N vs Zapier vs Make as a feature question. That is the wrong lens. Once you have worked with these platforms at any meaningful scale, the decision almost always comes down to one thing: what does this actually cost to run, and what do I get for that money?</p>
+        <div class="definition-block">
+            <p><strong>Short answer:</strong> usually yes if you leave Zapier, rarely if you leave Make. A six-step workflow run 1,000 times a month needs about 5,000 Zapier tasks: $89 a month billed yearly, against €20 on n8n Cloud Starter or $9 on Make Core (October 2026). Moving from Make to n8n only pays above roughly 10,000 credits a month.</p>
+        </div>
 
-        <p>This post gives you the numbers. Not marketing numbers. Real monthly costs at different usage tiers, the hidden charges that compound over time, the infrastructure cost of self-hosting N8N, and the ROI calculation that tells you when switching is worth the migration effort.</p>
+        <p><em>Updated October 2026. Every price and limit below was re-read from the vendor's own page on 20 October 2026, and the sources are listed at the end. Several figures in earlier versions of this post were out of date or had no source, and they have been corrected or removed.</em></p>
 
-        <p>If you are running more than 3,000 automated tasks per month and paying for Zapier or Make, keep reading.</p>
+        <p>Most businesses compare n8n, Zapier and Make as a feature question. The bill is usually what decides it, and the three tools do not count usage in the same unit, so their price lists cannot be compared line by line. This post prices one concrete workflow on all three, shows where the saving comes from, and shows where it disappears.</p>
 
-        <h2>How Each Platform Charges (And Why It Matters)</h2>
+        <h2>How Each Platform Counts Usage</h2>
 
-        <p>The billing model is more important than the price per unit. Zapier and Make both charge per task or operation. N8N charges per workflow execution on its cloud plan, and nothing on self-hosted.</p>
+        <p>The billing unit matters more than the price. Here is what each vendor's own documentation says.</p>
 
-        <p>Here is why that distinction matters in practice:</p>
+        <p><strong>Zapier counts tasks.</strong> Zapier's help centre says successful action steps count. Trigger steps, Filter and Paths steps, and Formatter, Delay and Looping steps do not count, and neither do steps that error or halt. Replaying a run counts the previously successful steps again. AI steps and Code steps can use more than one task depending on the model tier or runtime you pick.</p>
 
-        <p><strong>Zapier counts tasks.</strong> Each action a zap performs is one task. A 5-step zap consumes 5 tasks every time it runs. If that zap fires 500 times per month, that is 2,500 tasks from a single workflow. Add more workflows and task consumption compounds fast.</p>
+        <p><strong>Make counts credits.</strong> Make renamed operations to credits and says existing plans and prices were unchanged. Most modules use one credit per run, and some AI and advanced modules use a variable amount. The Make documentation I read does not say how routers, filters or retries are charged, so the estimates below assume one credit per module and nothing more.</p>
 
-        <p><strong>Make counts operations.</strong> Each module (node) executed is one operation. Like Zapier, multi-step scenarios multiply your operation usage. Error retries also consume operations. Make is generally cheaper per unit than Zapier, but the model is the same: more steps and more runs equals more spend.</p>
+        <p><strong>n8n Cloud counts executions.</strong> n8n defines an execution as a single run of the entire workflow, whatever the number of steps or the amount of data. Cloud plans cap executions, not steps.</p>
 
-        <p><strong>N8N Cloud counts executions.</strong> A workflow with 10 nodes that runs once is one execution, not ten. This is a fundamentally different economic model. Complexity does not increase your costs.</p>
+        <p><strong>Self-hosted n8n has no usage meter.</strong> You pay for the server. The Community Edition documentation I read lists no execution limit.</p>
 
-        <p><strong>N8N self-hosted counts nothing.</strong> You pay for compute, not for usage. Once the server is running, every workflow runs as many times as needed, at no additional cost.</p>
+        <h2>Monthly Cost by Task Volume for One Workflow</h2>
 
-        <h2>Side-by-Side Monthly Cost at Different Usage Tiers</h2>
+        <p>To compare the units, I priced a single workflow: a trigger plus five action steps, so six modules. On Zapier each run uses 5 tasks, because the trigger is free. On Make each run uses about 6 credits, assuming one credit per module (an estimate). On n8n each run is 1 execution. The table converts Zapier task volume into the number of runs and prices each platform for that many runs.</p>
 
-        <p>The table below uses publicly available 2026 pricing. Zapier Professional at $49/month, Zapier Team at $299/month. Make Core at $9/month, Make Pro at $16/month, Make Teams at $29/month. N8N Cloud Starter at $20/month, N8N Cloud Pro at $50/month. Self-hosted N8N on a $15/month VPS.</p>
-
+        <div style="overflow-x: auto;">
         <table class="comparison-table">
             <thead>
                 <tr>
-                    <th>Monthly Tasks / Executions</th>
-                    <th>Zapier</th>
-                    <th>Make</th>
-                    <th>N8N Cloud</th>
-                    <th>N8N Self-Hosted</th>
+                    <th>Zapier tasks / month</th>
+                    <th>Runs of the workflow</th>
+                    <th>Zapier Professional (yearly / monthly billing)</th>
+                    <th>Make (about 6 credits per run)</th>
+                    <th>n8n Cloud (yearly / monthly billing)</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>1,000 tasks / executions</td>
-                    <td>$19.99 (Starter)</td>
-                    <td>$9 (Core)</td>
-                    <td>$20 (Starter)</td>
-                    <td>$15 (VPS only)</td>
+                    <td>1,000</td>
+                    <td>200</td>
+                    <td>$39 / $58.50 (1,500-task plan)</td>
+                    <td>$9 Core (about 1,200 credits)</td>
+                    <td>€20 / €24 (Starter)</td>
                 </tr>
                 <tr>
-                    <td>3,000 tasks / executions</td>
-                    <td>$49 (Professional)</td>
-                    <td>$9-$16</td>
-                    <td>$20 (Starter)</td>
-                    <td>$15</td>
+                    <td>2,000</td>
+                    <td>400</td>
+                    <td>$49 / $73.50</td>
+                    <td>$9 Core (about 2,400 credits)</td>
+                    <td>€20 / €24 (Starter)</td>
                 </tr>
                 <tr>
-                    <td>10,000 tasks / executions</td>
-                    <td>$99+ (Professional)</td>
-                    <td>$29-$79</td>
-                    <td>$50 (Pro)</td>
-                    <td>$15-$20</td>
+                    <td>5,000</td>
+                    <td>1,000</td>
+                    <td>$89 / $133.50</td>
+                    <td>$9 Core (about 6,000 credits)</td>
+                    <td>€20 / €24 (Starter)</td>
                 </tr>
                 <tr>
-                    <td>25,000 tasks / executions</td>
-                    <td>$149-$299</td>
-                    <td>$79-$119</td>
-                    <td>$100+ (or custom)</td>
-                    <td>$20-$30</td>
+                    <td>10,000</td>
+                    <td>2,000</td>
+                    <td>$129 / $193.50</td>
+                    <td>About 12,000 credits, above the 10,000 entry tier (price not verified)</td>
+                    <td>€20 / €24 (Starter)</td>
                 </tr>
                 <tr>
-                    <td>100,000+ tasks / executions</td>
-                    <td>$299-$599+</td>
-                    <td>$159+</td>
-                    <td>Custom pricing</td>
-                    <td>$30-$60 (larger VPS)</td>
+                    <td>20,000</td>
+                    <td>4,000</td>
+                    <td>$189 / $283.50</td>
+                    <td>About 24,000 credits (price not verified)</td>
+                    <td>€50 / €60 (Pro, 10,000 executions)</td>
+                </tr>
+                <tr>
+                    <td>50,000</td>
+                    <td>10,000</td>
+                    <td>$289 / $433.50</td>
+                    <td>About 60,000 credits (price not verified)</td>
+                    <td>€50 / €60 (Pro, at its 10,000 limit)</td>
+                </tr>
+                <tr>
+                    <td>100,000</td>
+                    <td>20,000</td>
+                    <td>$489 / $733.50</td>
+                    <td>About 120,000 credits (price not verified)</td>
+                    <td>About €121 / €145 (Pro, 50,000 executions)</td>
                 </tr>
             </tbody>
         </table>
+        </div>
 
-        <p>The self-hosted N8N column stays flat because you are paying for compute, not transactions. As your automation volume grows, the cost barely moves.</p>
+        <p><strong>How to read it.</strong> Zapier and n8n prices come from each vendor's pricing page, read on 20 October 2026. Zapier is in US dollars and n8n is in euros, and I have not converted between them. Zapier's lowest-cost figure is the yearly-billing price per month. The Make figures are the entry price Make publishes for its first 10,000 credits: Core is $9, Pro is $16 and Teams is $29 for that tier, per Make's own comparison page. Make's pricing page sits behind a bot check that I could not pass from this server, so I could not read its higher credit tiers and I have not guessed them. Check <a href="https://www.make.com/en/pricing" rel="noopener">Make's pricing page</a> for those. The credit counts are my estimate from the one-credit-per-module assumption.</p>
 
-        <h2>The Hidden Costs That Do Not Show Up in Pricing Pages</h2>
+        <p><strong>Self-hosted n8n</strong> has no per-run charge, so its monthly cost is the server plus your time. A Hetzner shared cloud server starts at €5.99 a month excluding VAT, and a DigitalOcean 2 GB Basic Droplet is $12 a month (both read 20 October 2026).</p>
 
-        <p>Sticker price comparisons understate the Zapier and Make premium. Here are the costs that accumulate over time and rarely appear in a straightforward comparison.</p>
+        <p>Two things stand out. At the low end the prices converge: Zapier Professional's 750-task plan is $19.99 a month billed yearly, and n8n Cloud Starter is €20. And Make Core at $9 is cheaper than n8n Cloud as long as your credits fit inside 10,000 a month. The big gap is against Zapier once step counts and volume rise.</p>
 
-        <h3>Step Count Inflation</h3>
+        <h2>What the Table Leaves Out</h2>
 
-        <p>Any real business workflow is not three steps. It involves conditional logic, data transformation, error branching, and notifications. A realistic lead qualification workflow might be 12 steps. On Zapier, that is 12 tasks per execution. Run it 500 times per month and you have consumed 6,000 tasks from one workflow alone.</p>
+        <p>Volume is only part of what you pay for. These limits change which plan you land on.</p>
 
-        <p>On N8N, that same workflow is one execution per run. 500 executions means 500 counted executions on N8N Cloud, or zero additional cost on self-hosted.</p>
+        <h3>Plan Features That Move You Up a Tier</h3>
 
-        <h3>Error Retry Costs</h3>
+        <p>Zapier Professional includes unlimited premium apps and multi-step Zaps, so connector tiers are not the reason for an upgrade there (older versions of this post said otherwise, and that was wrong). Seats are: Professional has one seat, and Team has 25 users and starts at $69 a month billed yearly. Polling triggers check for new data every 15 minutes on Free, every 2 minutes on Professional and every minute on Team.</p>
 
-        <p>When an API call fails and your workflow retries, Zapier counts the retry as additional tasks. If you run high-volume workflows with any API that has rate limits, retry costs stack up. N8N self-hosted retries are free. N8N Cloud retries do count as executions but at one execution per retry, not per step.</p>
+        <h3>n8n Cloud Limits</h3>
 
-        <h3>Premium App Connector Fees</h3>
+        <p>Every n8n Cloud plan includes unlimited users and workflows. The limits are elsewhere. Starter has 5 concurrent executions, a 5-minute maximum execution time, one shared project and 2,500 saved executions. Pro raises that to up to 50 concurrent executions, a 40-minute maximum and three shared projects. If you run long jobs or heavy parallel traffic, those limits matter more than the monthly price.</p>
 
-        <p>On Zapier's lower tiers, premium apps like Salesforce, HubSpot, and certain payment processors require higher plans. You may be on a higher Zapier tier not because of volume, but because of which apps you need. N8N has no premium connector tiering. Every integration is available on every plan.</p>
+        <h3>Retries and Replays</h3>
 
-        <h3>Team Seat Costs</h3>
+        <p>On Zapier, a step that errors does not use a task, but replaying a run charges again for the steps that had already succeeded. On n8n, the Retry On Fail setting on a node retries inside the same run. n8n's pricing page defines an execution as one run of the whole workflow and does not list retries as a separate charge. Make's documentation did not answer the question, so I leave it open rather than assume.</p>
 
-        <p>If more than one person in your business needs to view or edit workflows, Zapier and Make charge for team seats. N8N Cloud's Pro and Enterprise plans include multiple users. Self-hosted N8N includes unlimited users with no per-seat charge.</p>
+        <h3>Currency, Tax and Billing Period</h3>
 
-        <h2>The Real Cost of Self-Hosting N8N</h2>
+        <p>Yearly billing is cheaper on both Zapier and n8n (n8n says 17%, Zapier says 33%). If you cannot commit for a year, use the monthly column. Hetzner quotes its prices excluding VAT; check how tax applies on the others.</p>
 
-        <p>Self-hosting N8N is the most common source of hesitation and the most commonly overestimated cost. Let me give you actual numbers.</p>
+        <h2>What Self-Hosting n8n Really Costs</h2>
 
-        <p>A standard SMB N8N self-hosted setup requires:</p>
+        <p>The server is the small part. The cost people underestimate is the time to keep it running: applying updates, backups, TLS renewal, and watching for failures. I have not measured how many hours that takes on your stack, so the next section treats it as a variable instead of a constant. My <a href="/blog/n8n-self-host-docker.html">Docker self-hosting guide</a> covers the install, backups and updates step by step.</p>
 
-        <ul>
-            <li><strong>VPS instance:</strong> DigitalOcean Droplet (2GB RAM) at $12/month, or Hetzner CX22 at roughly $5-6/month. Either handles 50,000+ executions per month comfortably for most workloads.</li>
-            <li><strong>SSL certificate:</strong> Free via Let's Encrypt, auto-renewing.</li>
-            <li><strong>Domain (optional):</strong> If you want a dedicated subdomain like n8n.yourdomain.com, add $10-15/year.</li>
-            <li><strong>Initial setup time:</strong> 1-3 hours using Docker. One-time cost. Once running, it requires minimal maintenance.</li>
-        </ul>
+        <p>There is also a feature boundary. According to n8n's documentation, the free Community Edition does not include Projects, workflow and credential sharing, SSO, Git-based version control or environments. It says that on Community, only the instance owner and the person who creates a workflow or credential can access it. Teams that need sharing or SSO move to the paid Business plan, which n8n lists at €667 a month billed yearly for 40,000 executions, self-hosted only. If you plan to resell or manage n8n for clients, read what the <a href="/blog/n8n-sustainable-use-license-consultants.html">Sustainable Use License allows for consultants</a> first.</p>
 
-        <p>Total ongoing monthly cost: $12-20 for most SMBs.</p>
+        <h2>Break-Even: When Does Switching Pay Off?</h2>
 
-        <p>If you are currently paying $99/month on Zapier, switching to self-hosted N8N saves approximately $80-87/month, or roughly $1,000 per year. That is before accounting for volume growth, which will push Zapier costs higher over time while N8N costs stay flat.</p>
+        <p>The question is not whether n8n is cheaper. It is whether the saving beats the migration effort and the upkeep. Work it out in four steps.</p>
 
-        <p>Not technical? An <a href="/n8n-automation.html">N8N automation agency</a> can set up and manage your self-hosted instance. Even with a one-time setup fee, the annual cost typically breaks even within 6 months compared to equivalent Zapier capacity.</p>
+        <ol>
+            <li><strong>Current bill.</strong> Take your Zapier or Make invoice, plus any seat charges.</li>
+            <li><strong>New cost.</strong> Pick n8n Cloud from the table, or a server plus your upkeep time.</li>
+            <li><strong>Monthly saving.</strong> Current bill minus new cost, including the value of your upkeep hours.</li>
+            <li><strong>Payback in months.</strong> Migration cost divided by monthly saving.</li>
+        </ol>
 
-        <h2>ROI Calculation: When Does Switching Pay Off?</h2>
+        <p>Here is a worked example. The inputs marked as assumptions are mine, not measurements: a migration of 10 hours, your time valued at $75 an hour (so $750), and a $12 DigitalOcean server. The Zapier bills are the yearly-billing prices from the table.</p>
 
-        <p>The question is not just "is N8N cheaper?" It is "does the savings justify the switching effort?" Here is how to calculate that honestly.</p>
+        <div style="overflow-x: auto;">
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Upkeep time (assumption)</th>
+                    <th>1,000 runs / month (Zapier $89)</th>
+                    <th>2,000 runs / month (Zapier $129)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0 hours a month</td>
+                    <td>$77 saved a month, payback in 9.7 months</td>
+                    <td>$117 saved a month, payback in 6.4 months</td>
+                </tr>
+                <tr>
+                    <td>1 hour a month</td>
+                    <td>$2 saved a month, effectively never pays back</td>
+                    <td>$42 saved a month, payback in 17.9 months</td>
+                </tr>
+                <tr>
+                    <td>2 hours a month</td>
+                    <td>Loses $73 a month</td>
+                    <td>Loses $33 a month</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
 
-        <h3>Step 1: Calculate Your Current Monthly Automation Spend</h3>
+        <p>This is why self-hosting is not automatically the cheap option. If you value your time, one hour of upkeep a month removes almost the entire saving at 1,000 runs. n8n Cloud avoids the upkeep: at 1,000 runs it is €20 against Zapier's $89, with no server to run. For a precise figure on your own volume, use the <a href="/roi-calculator.html">automation ROI calculator</a>. For the mechanics of moving, see my guide to <a href="/blog/n8n-migrate-from-zapier.html">migrating from Zapier to n8n</a>.</p>
 
-        <p>Take your current Zapier or Make monthly bill. Add any team seat costs. If you are on a higher plan primarily for access to premium connectors, note that too.</p>
+        <h2>What n8n Does Better Beyond Cost</h2>
 
-        <h3>Step 2: Estimate N8N Monthly Cost</h3>
+        <h3>Cost Does Not Rise With Complexity</h3>
 
-        <p>If you are comfortable with basic Linux administration, self-hosted N8N costs $12-20/month on a suitable VPS. If you prefer managed cloud with no setup, N8N Cloud Pro at $50/month handles up to 10,000 executions with full support.</p>
+        <p>A workflow with 30 nodes is still one execution. On Zapier the same workflow uses one task for each successful action step. Branching, error handling and data cleanup therefore cost nothing extra on n8n, and the savings table above understates the gap for workflows with more than six steps.</p>
 
-        <h3>Step 3: Calculate Monthly Savings</h3>
+        <h3>Code Steps</h3>
 
-        <p>Monthly savings = (Current bill) - (N8N monthly cost)</p>
+        <p>n8n lists code steps in JavaScript and Python on every Cloud plan, and you can call any API through the HTTP Request node. Zapier has Code by Zapier, with an included runtime of 1 second per step on Free, 30 seconds on Professional and Team, and 2 minutes on Enterprise, and longer runtimes use more tasks.</p>
 
-        <p>Example: A business paying $149/month on Zapier (25,000 tasks/month with premium apps) moves to self-hosted N8N at $15/month. Monthly savings: $134. Annual savings: $1,608.</p>
+        <h3>Where Your Data Lives</h3>
 
-        <h3>Step 4: Estimate Migration Effort Cost</h3>
-
-        <p>Migration effort depends on your existing workflow count and complexity. Typical estimates:</p>
-
-        <ul>
-            <li><strong>5-10 simple workflows:</strong> 4-8 hours for a developer, or 8-16 hours if you are learning N8N while rebuilding.</li>
-            <li><strong>10-25 workflows with moderate complexity:</strong> 16-32 hours.</li>
-            <li><strong>25+ workflows or very complex logic:</strong> 40+ hours, or hire an N8N specialist.</li>
-        </ul>
-
-        <p>If your time is worth $75/hour, a 10-hour migration costs $750. At $134/month savings, that pays back in roughly 6 months. Year one net savings: $858. Year two: $1,608 (pure savings). Most migrations pay back within 3-6 months.</p>
-
-        <h3>Use the ROI Calculator</h3>
-
-        <p>For a precise calculation based on your specific workflow volume, team size, and current platform costs, use the <a href="/roi-calculator.html">automation ROI calculator</a> on this site. It factors in migration effort, current tool costs, and gives you a month-by-month payback timeline.</p>
-
-        <h2>What N8N Does Better Beyond Cost</h2>
-
-        <p>Cost is the strongest switching argument, but it is not the only one. The capabilities gap between N8N and Zapier/Make has widened over the past two years.</p>
-
-        <h3>Complex Conditional Logic</h3>
-
-        <p>N8N handles branching, loops, and nested conditions natively. Zapier's filter and path system is limited to simple if/else logic. If your workflow needs to process a list of items, evaluate multiple conditions per item, and route to different actions based on the result, N8N handles this cleanly. Zapier often requires multiple separate zaps and workaround data structures to approximate the same result.</p>
-
-        <h3>Code Execution</h3>
-
-        <p>N8N's Code node lets you run JavaScript or Python inline. This means you can parse complex data, write custom transformations, or call SDK functions directly within a workflow. Zapier has a Code step, but it has significant limitations on what you can import and execute. Make has no equivalent.</p>
-
-        <h3>No Polling Delays</h3>
-
-        <p>On Zapier's lower tiers, triggers poll for new data every 5 to 15 minutes. If a new form submission needs to trigger an action within seconds, you need Zapier's highest tier. N8N webhooks are real-time on every plan, including self-hosted.</p>
-
-        <h3>Data Privacy and Control</h3>
-
-        <p>When you run automations through Zapier or Make, your business data passes through their servers. For businesses in regulated industries or handling sensitive customer data, self-hosted N8N keeps all workflow data on infrastructure you control. This is increasingly relevant for healthcare, legal, and financial services clients.</p>
+        <p>On n8n Cloud, data is stored in Frankfurt, Germany, according to n8n. Self-hosted data stays wherever you run the server. If a data-location requirement decides your platform, that is a stronger reason to look at n8n than price is.</p>
 
         <h2>What Zapier and Make Do Better</h2>
 
-        <p>This is not a purely one-sided comparison. Zapier and Make have real advantages in specific situations.</p>
+        <p><strong>Zapier covers more apps.</strong> Zapier's pricing page says 9,000+ app connections. n8n's integrations page shows 2,367 integrations. For most workflows either covers your stack, and n8n's HTTP Request node reaches any service with an API. For a niche app with no n8n node, Zapier may already have a ready-made connector.</p>
 
-        <p><strong>Zapier's connector library is larger.</strong> Zapier has 6,000+ integrations. N8N has around 400+ built-in integrations, plus HTTP request and webhook nodes that can connect to anything with an API. For the vast majority of SMB workflows, N8N covers the bases. But if you need a very niche SaaS connector that N8N has not built, Zapier may have it ready-made.</p>
+        <p><strong>Make is the cheapest hosted option at small volume.</strong> Make Core is $9 for 10,000 credits, lower than n8n Cloud Starter at €20. If your workflows fit in that allowance and you want a hosted tool, moving to Make is the better saving than moving to n8n.</p>
 
-        <p><strong>Zapier is simpler to start.</strong> For a non-technical business owner who wants to set up a single trigger-action workflow with no code and no server, Zapier's UI is the fastest path to running. N8N Cloud matches this for simplicity, but self-hosted adds a setup step.</p>
+        <p><strong>Zapier bundles extra products.</strong> Zapier's help centre says steps in Zapier Tables and Zapier Forms do not count as tasks, which helps if you use them for light data capture.</p>
 
-        <p><strong>Make's scenario history is excellent.</strong> Make shows detailed execution history with data snapshots at each step. This makes debugging easier for non-technical users. N8N Cloud and self-hosted both have execution logs, but Make's presentation is particularly clear.</p>
+        <p><strong>Hosted tools remove the server.</strong> Zapier and Make are fully hosted. n8n Cloud is too, so the server question only applies if you choose to self-host.</p>
 
-        <h2>A Real-World Example: What This Looks Like for an SMB</h2>
+        <h2>Who Should Switch and Who Should Stay</h2>
 
-        <p>Consider a small e-commerce brand running the following automations: order confirmation and shipping notification emails, inventory reorder alerts from Shopify to a supplier spreadsheet, new lead qualification from a contact form to HubSpot, weekly sales report assembly and delivery to Slack, and customer support ticket routing from email to Zendesk.</p>
+        <p><strong>Price the move to n8n if</strong> your Zapier bill is about $89 a month or more, your workflows have many steps, and you are happy with n8n Cloud or have someone who will own a server.</p>
 
-        <p>These five workflow types, running at a modest volume of 1,000 orders per month and several hundred leads and support tickets, easily reach 15,000-20,000 Zapier tasks per month after counting every step in every workflow. That places this business at Zapier Professional or Team tier: $149-$299/month.</p>
+        <p><strong>Look at Make instead if</strong> your workload fits inside roughly 10,000 credits a month and you want the lowest hosted price.</p>
 
-        <p>On self-hosted N8N, those same workflows run at about 5,000-7,000 executions per month. Infrastructure cost: $15/month. Annual savings over Zapier: $1,600-$3,400, depending on which Zapier tier applies.</p>
+        <p><strong>Stay where you are if</strong> your volume is low (the Zapier Free plan covers 100 tasks, and Professional starts at $19.99 for 750, about what n8n Starter costs), you depend on an app only Zapier connects to, or nobody can own a server and the saving is smaller than the upkeep hours.</p>
 
-        <p>This is the pattern we see consistently in client work. Businesses that automate meaningfully almost always hit Zapier tiers where N8N savings become substantial.</p>
+        <p>If you are unsure which side you are on, the <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> covers current tool costs, workflow complexity and technical capacity, and my comparison of <a href="/blog/n8n-vs-zapier-vs-make.html">n8n vs Zapier vs Make</a> covers features.</p>
 
-        <p>We have seen similar dynamics in client results. Le Marquier, a BBQ equipment brand, achieved an <strong>80% reduction in operational costs</strong> after moving customer service and inquiry handling to an AI-automated workflow, with <strong>98% of inquiries handled without human intervention</strong>. Read the full breakdown in the <a href="https://voxdonna.com/case-studies/le-marquier.html">Le Marquier case study</a>.</p>
-
-        <h2>Who Should Stay on Zapier or Make</h2>
-
-        <p>Switching to N8N is not the right call for everyone. Stay on Zapier or Make if:</p>
+        <h2>Sources Checked on 20 October 2026</h2>
 
         <ul>
-            <li>You run fewer than 2,000 tasks per month and the cost is already minimal.</li>
-            <li>Your entire workflow stack uses apps that Zapier/Make support natively but N8N does not yet have connectors for.</li>
-            <li>You have zero technical capacity and no budget for a one-time setup, and N8N Cloud's $20/month is comparable to what you pay now.</li>
-            <li>Your team relies heavily on Make's visual execution history for non-technical debugging.</li>
+            <li><a href="https://n8n.io/pricing/" rel="noopener">n8n pricing</a>: Starter, Pro and Business plans, executions, limits (euro prices).</li>
+            <li><a href="https://zapier.com/pricing" rel="noopener">Zapier pricing</a>: Professional and Team plan tiers, seats, polling intervals, Code runtime.</li>
+            <li><a href="https://help.zapier.com/hc/en-us/articles/8496196837261-How-is-task-usage-measured-in-Zapier" rel="noopener">Zapier help: what counts as tasks</a>.</li>
+            <li><a href="https://www.make.com/compare/make-vs-zapier" rel="noopener">Make vs Zapier</a> and <a href="https://www.make.com/compare/make-vs-n8n" rel="noopener">Make vs n8n</a>: Make plan prices for the first 10,000 credits.</li>
+            <li><a href="https://help.make.com/credits" rel="noopener">Make help: credits consumption</a>.</li>
+            <li><a href="https://docs.n8n.io/hosting/community-edition-features/" rel="noopener">n8n docs: Community Edition features</a> and <a href="https://n8n.io/integrations/" rel="noopener">n8n integrations</a>.</li>
+            <li><a href="https://www.hetzner.com/cloud/" rel="noopener">Hetzner Cloud</a> and <a href="https://www.digitalocean.com/pricing/droplets" rel="noopener">DigitalOcean Droplets</a>: server prices.</li>
         </ul>
 
-        <p>For everyone else running meaningful automation volume, the math almost always points toward N8N.</p>
-
-        <h2>Is Your Business Ready to Switch?</h2>
-
-        <p>Before migrating, it helps to audit what you have and what you actually need from an automation platform. The <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> walks through the key questions: current tool costs, workflow complexity, technical capacity, and what platform best fits your growth trajectory over the next 12-24 months.</p>
-
-        <p>If you want a human to look at your specific stack and give you a recommendation, that is what the discovery call is for. We have migrated enough businesses from Zapier and Make to N8N to know where the effort concentrates and how to keep migration time short.</p>
+        <p>Labels used above: prices and plan limits are vendor-reported on the date shown. Credit counts for Make and the workload conversion are estimates. The break-even table is my own arithmetic from stated assumptions, not a measured result.</p>
 
         <!-- FAQ Section -->
         <div class="article-faq">
             <h2>Frequently Asked Questions</h2>
 
             <div class="faq-item">
-                <h3>How much does N8N cost compared to Zapier?</h3>
-                <p>N8N Cloud starts at $20/month for 2,500 executions, while Zapier's Professional plan runs $49/month for 2,000 tasks. At higher volumes (10,000+ tasks/month), the gap widens dramatically: Zapier charges $99-$299/month, while N8N self-hosted on a $10-20/month VPS handles unlimited executions. Businesses running 20,000+ tasks monthly typically save $150-$500/month by switching to self-hosted N8N.</p>
+                <h3>How much does n8n cost compared to Zapier?</h3>
+                <p>As of 20 October 2026, n8n Cloud Starter is €20 a month billed yearly (€24 monthly) for 2,500 workflow executions, and Pro is €50 (€60 monthly) for 10,000. Zapier Professional is $19.99 a month billed yearly for 750 tasks, $49 for 2,000 and $129 for 10,000. n8n counts whole-workflow runs and Zapier counts successful action steps, so the gap grows with the number of steps.</p>
             </div>
 
             <div class="faq-item">
-                <h3>Is switching from Zapier to N8N worth the effort?</h3>
-                <p>For businesses running more than 5,000 tasks per month, switching is almost always worth it financially. The break-even point on migration effort (typically 4-8 hours for a small stack) is usually within 2-3 months of savings. Beyond cost, N8N gives you unlimited executions, no per-task pricing surprises, and the ability to run complex logic that Zapier does not support natively.</p>
+                <h3>Is switching from Zapier to n8n worth the effort?</h3>
+                <p>Usually when your Zapier plan is about $89 a month or more, and less clearly below that. For a six-step workflow run 2,000 times a month ($129 on Zapier), moving to a $12 server repays a 10-hour migration valued at $75 an hour in about 6.4 months if upkeep is free, and about 18 months if upkeep takes an hour a month. Those inputs are assumptions, so substitute your own.</p>
             </div>
 
             <div class="faq-item">
-                <h3>What does it cost to self-host N8N?</h3>
-                <p>Self-hosting N8N requires a VPS or cloud instance. A basic DigitalOcean or Hetzner server ($5-$20/month) handles most SMB workloads up to 50,000 executions per month. Add SSL via Let's Encrypt at no cost, and your total infrastructure spend is typically $10-$25/month, compared to $99-$299/month for equivalent capacity on Zapier or Make.</p>
+                <h3>What does it cost to self-host n8n?</h3>
+                <p>The server is cheap: Hetzner shared cloud starts at €5.99 a month excluding VAT, and a DigitalOcean 2 GB Droplet is $12 (October 2026). The n8n Community Edition is free but does not include Projects, workflow sharing or SSO, and the paid Business plan is €667 a month billed yearly for 40,000 executions. The larger cost is your time for updates, backups and monitoring.</p>
             </div>
 
             <div class="faq-item">
-                <h3>How does N8N pricing compare to Make (formerly Integromat)?</h3>
-                <p>Make is cheaper than Zapier but still per-operation. Make's Core plan runs $9/month for 10,000 operations and their Pro plan is $16/month for 10,000 operations. However, Make counts each node execution as an operation, so complex multi-step scenarios burn through operations quickly. N8N Cloud's $20/month covers 2,500 workflow executions with no per-node charging, and self-hosted N8N has no execution limits.</p>
+                <h3>How does n8n pricing compare to Make?</h3>
+                <p>Make bills credits, usually one per module run. Per Make's comparison page, Core is $9, Pro is $16 and Teams is $29 for the first 10,000 credits a month. For small workflows that fit that allowance, Make Core is cheaper than n8n Cloud Starter at €20. n8n pulls ahead when workflows have many steps, because it counts one execution however many nodes run. I could not read Make's prices above 10,000 credits.</p>
             </div>
 
             <div class="faq-item">
-                <h3>What hidden costs does N8N avoid?</h3>
-                <p>Zapier and Make both charge per task or operation, meaning a single 10-step workflow costs 10x what a 1-step workflow costs. Error retries count as additional tasks. Premium app connectors cost more on higher-tier plans. N8N avoids all of these: every node in a workflow executes for free on self-hosted, retries do not cost extra, and there are no premium connector fees.</p>
+                <h3>Which hidden costs should I check on Zapier, Make and n8n?</h3>
+                <p>On Zapier, successful action steps and replays of previously successful steps use tasks, while triggers, filters, paths, Formatter and errored steps do not. Seats matter too: Professional has one seat and Team has 25. On n8n Cloud, check concurrency (5 on Starter), the 5-minute maximum execution time on Starter and the one shared project. On self-hosted n8n, the hidden cost is upkeep time.</p>
             </div>
 
             <div class="faq-item">
-                <h3>Does N8N require technical expertise to run?</h3>
-                <p>N8N Cloud requires zero technical setup. Self-hosted N8N requires basic Linux comfort and one-time Docker or npm setup, typically one to two hours for someone new to it. Once running, the workflow builder is visual and similar in experience to Zapier. For businesses without in-house technical staff, working with an <a href="/n8n-automation.html">N8N automation agency</a> removes this barrier entirely.</p>
+                <h3>Does n8n require technical expertise to run?</h3>
+                <p>n8n Cloud needs no server. Self-hosting needs comfort with Docker and Linux, plus ongoing updates and backups; my <a href="/blog/n8n-self-host-docker.html">self-hosting guide</a> walks through the install. If you want help choosing or setting up, see my <a href="/n8n-automation.html">n8n consulting</a> page.</p>
             </div>
         </div>
 
         <!-- CTA in article -->
-        <h2>Ready to Get Started?</h2>
-        <p>Book a free 30-minute discovery call. We will audit your current automation stack, calculate your exact savings potential, and show you a migration plan that gets you onto N8N with minimal disruption.</p>
-        <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+        <h2>Want a Second Opinion on Your Numbers?</h2>
+        <p>If you have an export of your Zapier or Make usage and want to know whether switching pays off, book a free 30-minute call on the consulting page and bring the figures.</p>
+        <p><a href="/consulting.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Call</a></p>
 
         <!-- Author Byline -->
         <div class="article-author">
@@ -750,13 +752,13 @@
                 <h3 class="related-card-title">N8N vs Zapier vs Make: Which Automation Platform Is Best?</h3>
                 <p class="related-card-excerpt">A features-first comparison of the three major automation platforms, including integration count, UI, and use-case fit.</p>
             </a>
-            <a href="/blog/n8n-event-driven-automation-guide.html" class="related-card">
-                <h3 class="related-card-title">N8N Event-Driven Automation: Webhooks and Conditional Logic</h3>
-                <p class="related-card-excerpt">Build automations that respond in real time to triggers, with branching logic that handles every scenario your business creates.</p>
+            <a href="/blog/n8n-migrate-from-zapier.html" class="related-card">
+                <h3 class="related-card-title">Migrate from Zapier to N8N: Complete Guide</h3>
+                <p class="related-card-excerpt">Exporting Zaps, rebuilding workflows, handling credentials and avoiding the usual pitfalls.</p>
             </a>
-            <a href="/blog/build-first-n8n-workflow.html" class="related-card">
-                <h3 class="related-card-title">How to Build Your First N8N Workflow</h3>
-                <p class="related-card-excerpt">A step-by-step tutorial for setting up N8N and building your first automation from scratch, with no prior experience required.</p>
+            <a href="/blog/n8n-self-host-docker.html" class="related-card">
+                <h3 class="related-card-title">Self-Host n8n with Docker: Complete Setup Guide</h3>
+                <p class="related-card-excerpt">Run n8n on your own server with Docker Compose, including HTTPS, backups and updates.</p>
             </a>
         </div>
     </section>
