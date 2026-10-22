@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>OpenClaw Self-Hosting Guide: Tested on 2026.10.5</title>
+    <meta name="description" content="OpenClaw self-hosting guide, run on 2026.10.5: it needs Node 24, took 13s to start, held about 1 GB idle, and restarted in 12s after kill -9.">
+    <meta name="keywords" content="openclaw self hosting, self-host openclaw, openclaw install node 24, openclaw gateway, openclaw vps, openclaw doctor">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/openclaw-self-hosting-deployment-guide.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/openclaw-self-hosting-deployment-guide.html">
+    <meta property="og:title" content="OpenClaw Self-Hosting Guide: Tested on 2026.10.5">
+    <meta property="og:description" content="OpenClaw self-hosting guide, run on 2026.10.5: it needs Node 24, took 13s to start, held about 1 GB idle, and restarted in 12s after kill -9.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj">
+    <meta property="article:published_time" content="2026-10-22">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="OpenClaw Self-Hosting Guide: Tested on 2026.10.5">
+    <meta name="twitter:description" content="OpenClaw self-hosting guide, run on 2026.10.5: it needs Node 24, took 13s to start, held about 1 GB idle, and restarted in 12s after kill -9.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260216b">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "OpenClaw Self-Hosting Guide: Tested on 2026.10.5",
+        "description": "OpenClaw self-hosting guide, run on 2026.10.5: it needs Node 24, took 13s to start, held about 1 GB idle, and restarted in 12s after kill -9.",
+        "author": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com/about.html"
+        },
+        "publisher": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj"
+        },
+        "datePublished": "2026-10-22",
+        "dateModified": "2026-10-22",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/openclaw-self-hosting-deployment-guide.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What Node version does OpenClaw 2026.10.5 need?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Node 24.16 or newer in the 24 line, or Node 26.1 or newer. Node 22 fails at install time: npm ran the package's preinstall check and exited with 'this OpenClaw release requires Node >=24.16.0 <25 || >=26.1.0'. The documentation recommends Node 26."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How much memory does a self-hosted OpenClaw gateway use?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "In my run, one gateway process with no channels, no model provider and no sessions held about 1,000 MiB resident at 30 seconds and 1,008 MiB two minutes later. That is one idle measurement on Node 24.22.1, not a load test. I would not plan below 2 GB of RAM for a real deployment."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is it safe to expose the OpenClaw gateway to the internet?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The documentation says a regular host install binds to loopback and recommends reaching it through an SSH tunnel, with HTTPS or wss only for public connections. It also states that one gateway is one trust boundary and is not a security boundary between mutually untrusted users. I tested only the loopback and token-auth case."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How long does OpenClaw take to restart after a crash?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "After I killed the gateway process with SIGKILL, the port was free immediately and a fresh start was listening 12.2 seconds later with no repair step. A normal SIGTERM stop took 1.0 second, and the log reported a clean shutdown in 201 ms. There were no sessions in the store, so this says nothing about recovering a busy gateway."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Does openclaw doctor only report problems?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. Run non-interactively on a fresh state directory, it installed four plugin packages from npm before printing its warnings. Treat it as a command that changes the machine, and run it in a maintenance window rather than as a read-only check."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "OpenClaw Self-Hosting Guide", "item": "https://rajsuyash.com/blog/openclaw-self-hosting-deployment-guide.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/about.html" class="nav-link">About</a>
+                <a href="/qualify.html" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">AI Agents</span>
+                <span class="article-date">October 22, 2026</span>
+                <span class="article-read-time">14 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">OpenClaw Self-Hosting Guide: Tested on 2026.10.5</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">I installed the current release into a throwaway prefix, broke it on purpose, and wrote down exactly what it printed.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <!-- CONTENT GOES HERE -->
+        <div class="definition-block">
+<p><strong>Short answer:</strong> to self-host OpenClaw 2026.10.5 you need Node 24.16+ or 26.1+, a config with <code>gateway.mode=local</code> and token auth, and a loopback bind that you reach over an SSH tunnel. In my run the gateway accepted connections 13 seconds after launch, sat at about 1 GB of memory idle, and came back 12 seconds after a <code>kill -9</code>.</p>
+</div>
+
+<p><strong>Updated October 2026.</strong> Everything below was run on 22 October 2026 on Ubuntu 24.04.4 LTS (4 vCPUs, 7.7 GB RAM) with OpenClaw 2026.10.5 (build 1b58cb9), the latest version on npm that day. The machine was not idle while I tested, so treat the timings as rough upper bounds. Where a number comes from the documentation instead of my run, I say so and link the page.</p>
+
+<h2>1. The problem: guides that tell you where to host it, not what happens when you do</h2>
+
+<p>Search for OpenClaw self-hosting and the first page is mostly provider roundups and Docker walkthroughs. They tell you which VPS to rent. They rarely tell you what the current release does on first start, what it refuses to do, or how it behaves after a crash. Those are the things you find out at 2 a.m. instead.</p>
+
+<p>So I set up a small lab and wrote down what happened. I installed the latest release into a throwaway directory, gave it its own state directory and port, ran it with no model provider and no chat channels, and then broke it in the ways a production server gets broken: wrong runtime, missing config, wrong token, a second copy, a hard kill, a bad config edit. This is a build log, not a benchmark. It covers one machine and one version, and the last section lists what I did not test.</p>
+
+<p>If you are still deciding whether OpenClaw is the right agent for you, read the <a href="/blog/openclaw-vs-hermes-agent.html">OpenClaw vs Hermes Agent comparison</a> first. This post assumes you have chosen and want to run it yourself.</p>
+
+<h2>2. How I isolated the lab</h2>
+
+<p>I did not want a test gateway anywhere near anything real. Three things kept it contained. I pointed <code>HOME</code> at an empty directory, so every state file landed under <code>/tmp/oc-lab/home/.openclaw</code> instead of my real home. I installed OpenClaw with <code>npm install --prefix</code> instead of globally, so nothing touched the system Node or <code>/usr/bin</code>. And I used port 28789 instead of the default 18789, which the OpenClaw documentation gives as the Gateway default on its <a href="https://docs.openclaw.ai/platforms/linux" rel="noopener">Linux server page</a>.</p>
+
+<p>I did not run <code>openclaw onboard --install-daemon</code>, so no systemd unit was created. I ran the gateway in the foreground with <code>openclaw gateway run</code>. That means I tested the process, not the service wrapper. The documented unit settings are in section 9.</p>
+
+<h2>3. Step one: the install fails on Node 22, and says so clearly</h2>
+
+<p>The machine's system Node is 22.23.1 with npm 10.9.8. I tried the obvious thing first, because that is what most people will do. The output below is trimmed to the lines that matter:</p>
+
+<pre><code>$ npm install --prefix /tmp/oc-lab/p22 openclaw@2026.10.5 --no-audit --no-fund
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: 'openclaw@2026.10.5',
+npm warn EBADENGINE   required: { node: '&gt;=24.16.0 &lt;25 || &gt;=26.1.0' },
+npm warn EBADENGINE   current: { node: 'v22.23.1', npm: '10.9.8' }
+npm warn EBADENGINE }
+npm error code 1
+npm error command failed
+npm error command sh -c node scripts/preinstall-package-manager-warning.mjs
+npm error [openclaw] error: this OpenClaw release requires Node &gt;=24.16.0 &lt;25 || &gt;=26.1.0.
+npm error [openclaw] detected Node 22.23.1 (exec: /usr/bin/node).
+npm error [openclaw] upgrade Node, then retry the OpenClaw update.
+
+real    0m30.760s</code></pre>
+
+<p>Two things worth noticing. The failure is a deliberate preinstall guard, not a crash halfway through, so you do not end up with a half-installed package. And the engine warning alone would not have stopped the install: it is the guard script that exits with code 1. If you run npm with scripts disabled, that guard does not run, and you would find out about the Node requirement later and less politely.</p>
+
+<p>The <a href="https://docs.openclaw.ai/install" rel="noopener">install page</a> lists the requirement as "Node 24.16+ or 26.1+" and adds that "Node 26 is recommended". It also says the installer provisions Node 24 LTS on Linux when Node is missing. I did not run the installer, so I cannot tell you what it does when an older Node is already on the machine. A server that already has Node 22, like this one, hits the error above first.</p>
+
+<h2>4. Step two: get Node 24 and install into a prefix</h2>
+
+<p>To avoid replacing the system Node, I installed the <code>node</code> npm package into its own prefix and put its <code>bin</code> directory first on <code>PATH</code>:</p>
+
+<pre><code>$ npm install --prefix /tmp/oc-lab/node24 node@24 --no-audit --no-fund
+added 2 packages in 6s
+$ node -v
+v24.22.1
+
+$ npm install --prefix /tmp/oc-lab/p24 openclaw@2026.10.5 --no-audit --no-fund
+added 344 packages in 17s
+$ openclaw --version
+OpenClaw 2026.10.5 (1b58cb9)</code></pre>
+
+<p>The Node 24 runtime is 190 MB on disk and the OpenClaw install is 619 MB across 344 packages. The install took 17 seconds on this connection. That disk figure matters on a small VPS: with a 20 GB disk, the runtime and package already take about 4% before you have any state, logs or plugins.</p>
+
+<p>My command differs from the documented one in one way. The install page gives <code>npm install -g openclaw@latest --allow-scripts=openclaw</code> for npm 12 or npm 11.16+, notes that npm 12 blocks unapproved lifecycle scripts by default, and says to omit the flag on npm 11.15 and earlier. I was on npm 10.9.8, so I omitted the flag, and I used <code>--prefix</code> instead of <code>-g</code> to keep the install contained. On a newer npm, use the flag the page gives, or the preinstall guard from section 3 will not get to run.</p>
+
+<h2>5. Step three: first start with no config exits with code 78</h2>
+
+<p>I started the gateway before configuring anything, to see what a new server owner sees:</p>
+
+<pre><code>$ openclaw gateway run --port 28789
+Missing config. Run `openclaw setup` or set gateway.mode=local (or pass --allow-unconfigured).
+$ echo $?
+78</code></pre>
+
+<p>The real output also contained 36 lines of <code>[gateway] startup phase</code> timing messages before that last line, so on a terminal the actual error is easy to miss. I redirected the output to a file and read the tail. Exit code 78 is useful under a supervisor. The hand-written systemd unit in the documentation sets <code>RestartPreventExitStatus=78</code>, so a config error stops the service instead of restart-looping on it.</p>
+
+<p>I then configured it with five <code>config set</code> commands instead of the interactive wizard, because a wizard cannot be scripted or reviewed:</p>
+
+<pre><code>$ openclaw config set gateway.mode local
+$ openclaw config set gateway.port 28789
+$ openclaw config set gateway.bind loopback
+$ openclaw config set gateway.auth.mode token
+$ openclaw config set gateway.auth.token "$TOK"     # 32 random characters
+$ openclaw config validate
+Config valid: ~/.openclaw/openclaw.json</code></pre>
+
+<p>Each command answered "Restart the gateway to apply." The file it produced, with the token redacted, is short:</p>
+
+<pre><code>{
+  "gateway": {
+    "mode": "local",
+    "port": 28789,
+    "bind": "loopback",
+    "auth": { "mode": "token", "token": "&lt;REDACTED&gt;" }
+  },
+  "meta": { "lastTouchedVersion": "2026.10.5" }
+}</code></pre>
+
+<p>The real file also had a <code>plugins</code> block with two session-catalog settings and a <code>meta.migrations</code> block, which I left out here for length. Everything you need for a loopback, token-protected gateway fits in the four <code>gateway</code> keys above.</p>
+
+<h2>6. Step four: start it and measure what it costs</h2>
+
+<pre><code>$ nohup openclaw gateway run &gt; gateway.log 2&gt;&amp;1 &amp;
+time_to_listen_s=13.2
+LISTEN 127.0.0.1:28789   (openclaw-gateway)
+LISTEN [::1]:28789       (openclaw-gateway)</code></pre>
+
+<p>The port opened 13.2 seconds after I launched the command, polled every half second. The log reached <code>[gateway] ready</code> about one second after the HTTP server line, and the HTTP line itself reported 14 plugins loaded in 6.1 seconds. The gateway's first log line appeared several seconds after I launched the command, so a good part of the wait is the CLI starting up, before the gateway proper begins. If you put a health check in front of this, give it more than 15 seconds before you call it failed, and compare against the <code>TimeoutStartSec=30</code> in the documented unit on your own plan.</p>
+
+<p><strong>Binding.</strong> It listened on 127.0.0.1 and on [::1] only. Nothing was reachable from another machine, which matches the documented default for a regular host install. The <a href="https://docs.openclaw.ai/platforms/linux" rel="noopener">Linux page</a> then tells you to reach it with <code>ssh -N -L 18789:127.0.0.1:18789 user@host</code> and open the local port. That is the access pattern I would use too.</p>
+
+<p><strong>Memory.</strong> One gateway process, no channels, no model provider and no sessions:</p>
+
+<pre><code>  PID     RSS (KiB)  ELAPSED
+ 467620   1024688    00:30
+ (same process, about two minutes later: 1008 MiB)</code></pre>
+
+<p>That is about 1,000 MiB resident for an idle gateway. It is one reading on one version, and it will grow once channels, a model provider and real sessions are attached. It is still enough to rule out the smallest 512 MB plans. For a real deployment I would not plan below 2 GB of RAM; that is my estimate from this reading plus headroom, not a measurement under load.</p>
+
+<p><strong>Health.</strong> <code>openclaw health</code> answered in 51 ms with an event-loop reading of max 23 ms and no sessions in the store. An HTTP request to <code>/health</code> returned <code>{"ok":true,"status":"live"}</code> with no token, and <code>GET /</code> returned 200 with security headers. I did not inspect what the root page serves, so I cannot tell you whether it exposes anything beyond the shell of the Control UI. If you put the gateway behind a reverse proxy, decide deliberately whether <code>/health</code> should be public. The Docker page also lists <code>/healthz</code>, <code>/startupz</code> and <code>/readyz</code> as no-auth container check endpoints; I only tried <code>/health</code> and the CLI command.</p>
+
+<p><strong>Ambient credentials.</strong> The shell I ran this from had Telegram credentials set as environment variables. The gateway did not use it. It logged <code>suppressed ambient channel auto-configuration for 1 channel: telegram. Configure channels.&lt;id&gt; (openclaw channels add &lt;id&gt;) to enable the channel, or pass --ambient-channels to allow ambient env credentials.</code> I am glad that is the default. A throwaway test gateway that silently adopted a production bot's token from the environment would be a bad afternoon. Do not pass <code>--ambient-channels</code> on a machine that holds credentials for anything else.</p>
+
+<h2>7. Step five: breaking it on purpose</h2>
+
+<p>Here is every failure I tried, what the command printed, and what it means for you. All of these are observed in my run.</p>
+
+<table class="comparison-table">
+<thead><tr><th>What I did</th><th>What happened</th><th>What I take from it</th></tr></thead>
+<tbody>
+<tr><td>Used a wrong token with <code>openclaw gateway call health</code></td><td><code>unauthorized: gateway token mismatch (use this gateway's gateway.auth.token or pair the device)</code></td><td>Token auth rejects a bad token at the connect step. I only tested the CLI client, not a browser WebSocket.</td></tr>
+<tr><td>Started a second <code>gateway run</code> with the same state</td><td>Exit 78: <code>Another gateway (pid 467620) already owns this state directory; refusing to run automatic startup migrations or report the gateway ready.</code></td><td>The guard is on the state directory, not on the port. Two gateways on different ports with the same state still collide, which is the safe behavior.</td></tr>
+<tr><td>Killed the gateway with <code>kill -9</code>, then restarted</td><td>Port freed at once. The restart was listening in 12.2 s and <code>/health</code> returned live. No repair command was needed.</td><td>A hard kill with no sessions in the store recovers cleanly. A busy gateway with in-flight work is a different test that I did not run.</td></tr>
+<tr><td>Sent SIGTERM</td><td>Process gone in 1.0 s. Log: <code>shutdown completed cleanly in 201ms</code>.</td><td>A normal stop is fast when there is no work to drain. The documented unit allows far longer, see section 9.</td></tr>
+<tr><td>Ran <code>openclaw gateway stop</code> under my overridden HOME</td><td>Refused: <code>This stops the operator's running gateway service. Use an isolated dev gateway ... or re-run with --force if you really mean it.</code></td><td>It appears to act on the service manager, not on a foreground process. I stopped the lab process by PID and did not use --force.</td></tr>
+<tr><td>Tried <code>config set gateway.bind bogus</code></td><td><code>Config change declined. No settings were saved.</code> It listed the allowed values: auto, lan, loopback, custom, tailnet.</td><td>Bad values are rejected before they reach the file.</td></tr>
+<tr><td>Edited the port in the file to a string, then validated</td><td><code>gateway.port: Invalid input: expected number, received string</code>, pointing at line 4, plus a pointer to <code>openclaw doctor --fix</code>.</td><td>Hand edits get a line number. I restored the file from a copy.</td></tr>
+</tbody></table>
+
+<p>The <code>gateway stop</code> result is the one I would have gotten wrong without reading it. My first attempt to stop the test process used a <code>pgrep -f</code> name pattern, and the pattern also matched my own shell, which ended that command with no output. I checked afterwards that nothing else on the machine had been touched, but I had been careless. Stop lab processes by the PID that owns the port, and never by a broad name match.</p>
+
+<h2>8. Step six: openclaw doctor changes things</h2>
+
+<p>Most health tools only read. I ran <code>openclaw doctor --non-interactive</code> expecting a report. Before it printed any warning, it printed this:</p>
+
+<pre><code>Doctor changes
+  - Installed missing configured plugin "brave" from @openclaw/brave-plugin@2026.10.5.
+  - Installed missing configured plugin "featherless" from @openclaw/featherless-provider@2026.10.5.
+  - Installed missing configured plugin "firecrawl" from @openclaw/firecrawl-plugin@2026.10.5.
+  - Installed missing configured plugin "tavily" from @openclaw/tavily-plugin@2026.10.5.</code></pre>
+
+<p>It had pulled four packages from npm; the lab state directory was 72 MB afterwards. I had not asked for any search or scraping plugin. The messages say "configured plugin", so these appear to come from default configuration, but I did not trace where. The practical point is simple: on a server with a locked-down outbound firewall or a change-control process, doctor is not a safe read-only check. Run it deliberately.</p>
+
+<p>After the changes it printed warnings I found useful:</p>
+
+<ul>
+<li><strong>Plaintext token.</strong> <code>openclaw.json contains plaintext secret-bearing config fields</code>, naming <code>gateway.auth.token</code>. It suggested <code>openclaw secrets configure</code> to move it to a SecretRef, and warned that agents or workspace tools that can read config files may see the token. I set the token as a plain string, as most quick-start guides do, so this warning is about my own setup.</li>
+<li><strong>No command owner.</strong> It explained that the owner is the trusted operator account allowed to update OpenClaw, restart the gateway, change config and approve commands, and that you set it by completing a channel's setup.</li>
+<li><strong>Loopback-only warning.</strong> A node-hosting check noted the gateway is bound only to loopback and pointed at <code>gateway.publicOrigin</code> and an edge-proxy fix for remote node onboarding. I have no remote nodes, so this was expected.</li>
+<li><strong>Startup hints for small hosts.</strong> It suggested setting <code>NODE_COMPILE_CACHE</code> to a directory under <code>/var/tmp</code> and <code>OPENCLAW_NO_RESPAWN=1</code> to keep restarts in-process instead of handing off to a supervisor.</li>
+</ul>
+
+<p>It also printed <code>service management skipped: non-default state dir or config path</code>, which is consistent with the <code>gateway stop</code> behavior above. It suggested <code>openclaw security audit --deep</code>. I did not run that, so I have nothing to report about what it finds.</p>
+
+<h2>9. What the documentation says that I did not test</h2>
+
+<p>These are vendor-reported claims, read on 22 October 2026. I link each page so you can check them against the current version.</p>
+
+<table class="comparison-table">
+<thead><tr><th>Topic</th><th>What the page says</th><th>Page</th></tr></thead>
+<tbody>
+<tr><td>Systemd unit</td><td>A user unit at <code>~/.config/systemd/user/openclaw-gateway.service</code>. The example sets <code>Restart=always</code>, <code>RestartSec=5</code>, <code>RestartPreventExitStatus=78</code>, <code>TimeoutStartSec=30</code>, <code>TimeoutStopSec=330</code> (the five-minute cooperative drain plus teardown reserve), <code>OOMPolicy=continue</code> and <code>KillMode=mixed</code>. It says to write a unit by hand only for a custom setup, because hand-written units do not inherit the adaptive heap sizing that <code>openclaw gateway install</code> writes.</td><td><a href="https://docs.openclaw.ai/platforms/linux" rel="noopener">Linux server</a></td></tr>
+<tr><td>Remote access</td><td>Reach the gateway from your laptop with <code>ssh -N -L 18789:127.0.0.1:18789 &lt;user&gt;@&lt;host&gt;</code>. Use HTTPS or wss:// for public direct connections; keep plain HTTP or ws:// to loopback, trusted private networks and Tailnet hosts.</td><td><a href="https://docs.openclaw.ai/platforms/linux" rel="noopener">Linux server</a></td></tr>
+<tr><td>Auth</td><td>Token by default; password if <code>gateway.auth.mode</code> is set to &quot;password&quot;.</td><td><a href="https://docs.openclaw.ai/install" rel="noopener">Install</a></td></tr>
+<tr><td>Trust boundary</td><td>One trust boundary per gateway. It is not a hostile multi-tenant boundary for mutually adversarial users who share one agent or gateway.</td><td><a href="https://docs.openclaw.ai/gateway/security" rel="noopener">Security</a></td></tr>
+<tr><td>Docker build</td><td>At least 6 GB RAM for a local source image build. Pre-built images avoid that requirement.</td><td><a href="https://docs.openclaw.ai/install/docker" rel="noopener">Docker</a></td></tr>
+<tr><td>Install methods</td><td>Installer script, desktop apps, a local-prefix installer, npm/pnpm/bun, source build, standalone builds, and container platforms.</td><td><a href="https://docs.openclaw.ai/install" rel="noopener">Install</a></td></tr>
+</tbody></table>
+
+<p><strong>Containers bind differently from a host install.</strong> The security page says: "On a regular host install the Gateway binds to loopback", and then lists an exception: "container images default to an exposed bind (pair that with auth - see the exposure runbook)". The Docker page's own configuration example sets <code>gateway.bind</code> to <code>lan</code>. What I measured in section 6 is the host install, so it tells you nothing about a container. I did not run the Docker path. Before you publish a container port on a VPS, check how the port is published and what address the gateway listens on inside the container, and make sure auth is on. A successful install does not prove either one.</p>
+
+<p>Two items in the unit line up with what I saw. The missing-config exit code of 78 is the one status the example refuses to restart on. And the 30 second start timeout is more than double my 13 second start on a busy 4 vCPU machine, which leaves room on that hardware but is worth testing on the cheapest plan you intend to use.</p>
+
+<h2>10. What I would do on a real server</h2>
+
+<p>This section is judgment, not measurement. It is what I would do with the evidence above and the documentation, and you should weigh it that way.</p>
+
+<ol>
+<li><strong>Pin the version and the Node line.</strong> Install <code>openclaw@2026.10.5</code> (or whichever version you validate), not <code>@latest</code>, and write the Node version into your runbook. The Node 22 failure shows a minor release can change the runtime requirement.</li>
+<li><strong>Keep the bind on loopback and use an SSH tunnel</strong> for the Control UI, as the documentation describes. Add a reverse proxy only when you have a reason, and then follow the docs' guidance on HTTPS and trusted-proxy auth.</li>
+<li><strong>Move the token to a SecretRef</strong> before an agent with file tools exists on the box. The doctor warning gives the reason: anything that can read the config can read the token.</li>
+<li><strong>Run it under a dedicated OS user</strong>, with nothing else of value in that user's home, and one gateway per trust boundary as the security page asks.</li>
+<li><strong>Use the managed installer, <code>openclaw gateway install</code>,</strong> instead of a hand-written unit. The documentation says hand-written units miss the adaptive heap sizing. Keep <code>--ambient-channels</code> off.</li>
+<li><strong>Budget at least 2 GB of RAM and 5 GB of disk</strong> for the gateway alone, plus whatever your channels and tools add. That is my estimate from one idle reading, not a sizing guarantee.</li>
+<li><strong>Treat doctor as a change.</strong> Take a copy of the state directory first.</li>
+</ol>
+
+<p>On cost, the server is the small part. <a href="https://www.hetzner.com/cloud/" rel="noopener">Hetzner's cloud page</a>, read on 22 October 2026, lists "Cost-Optimized" plans from €5.99 per month and "Regular Performance" plans from €6.49 per month, both excluding VAT. That page did not show vCPU or RAM, so I cannot map either price to a plan that fits the 2 GB estimate above; check the plan table before you buy. Your model provider bill is a separate line that I did not measure, and for most workloads it will be larger than the server.</p>
+
+<h2>11. What I did not test</h2>
+
+<p>A guide that hides its gaps is worse than no guide. This run did not cover:</p>
+
+<ul>
+<li>The Docker install, including the address it actually listens on (see section 9).</li>
+<li>The installer script, the <code>install-cli.sh</code> local-prefix installer, pnpm, bun and the desktop apps.</li>
+<li>Installing and running the systemd service, including a restart under load.</li>
+<li>Any chat channel, model provider, agent turn, tool call, cron job or memory write. The session store had zero entries throughout.</li>
+<li>Exposing the gateway beyond loopback, with or without a reverse proxy.</li>
+<li><code>openclaw security audit --deep</code>, backups and restores, and upgrades from an older version.</li>
+<li>Anything above one machine and one day. The behavior may differ on other versions.</li>
+</ul>
+
+<p>For security history, the <a href="/blog/openclaw-vs-hermes-agent.html">comparison post</a> lists publicly disclosed vulnerabilities on both projects. I did not re-verify them here. If your agent will run long campaigns or calls, the failure-recovery questions in <a href="/blog/durable-execution-voice-agent-campaigns.html">durable execution for voice and AI agent campaigns</a> apply to anything you build on top of a gateway like this. And if you are weighing a self-hosted tool against a hosted workflow tool, the <a href="/blog/n8n-self-host-docker.html">n8n self-hosting guide</a> covers the same ownership trade-off.</p>
+
+<h2>12. When to hire help instead</h2>
+
+<p>Everything above takes an afternoon if you are comfortable with Linux, Node and systemd. The part that takes longer is what comes after: connecting channels, choosing a model and budget, restricting tools so an agent cannot do more than you intend, and deciding who gets paged when it stops. If you want that built and handed over with a runbook, my <a href="/ai-agents.html">AI agents page</a> describes how I work, and the <a href="/roi-calculator.html">ROI calculator</a> and <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> will help you decide whether it is worth doing at all. For broader planning, see <a href="/consulting.html">consulting</a>.</p>
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>What Node version does OpenClaw 2026.10.5 need?</h3>
+                <p>Node 24.16 or newer in the 24 line, or Node 26.1 or newer. Node 22 fails at install time: npm ran the package's preinstall check and exited with 'this OpenClaw release requires Node &gt;=24.16.0 &lt;25 || &gt;=26.1.0'. The documentation recommends Node 26.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How much memory does a self-hosted OpenClaw gateway use?</h3>
+                <p>In my run, one gateway process with no channels, no model provider and no sessions held about 1,000 MiB resident at 30 seconds and 1,008 MiB two minutes later. That is one idle measurement on Node 24.22.1, not a load test. I would not plan below 2 GB of RAM for a real deployment.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is it safe to expose the OpenClaw gateway to the internet?</h3>
+                <p>The documentation says a regular host install binds to loopback and recommends reaching it through an SSH tunnel, with HTTPS or wss only for public connections. It also states that one gateway is one trust boundary and is not a security boundary between mutually untrusted users. I tested only the loopback and token-auth case.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How long does OpenClaw take to restart after a crash?</h3>
+                <p>After I killed the gateway process with SIGKILL, the port was free immediately and a fresh start was listening 12.2 seconds later with no repair step. A normal SIGTERM stop took 1.0 second, and the log reported a clean shutdown in 201 ms. There were no sessions in the store, so this says nothing about recovering a busy gateway.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Does openclaw doctor only report problems?</h3>
+                <p>No. Run non-interactively on a fresh state directory, it installed four plugin packages from npm before printing its warnings. Treat it as a command that changes the machine, and run it in a maintenance window rather than as a read-only check.</p>
+            </div>
+
+        </div>
+
+        <!-- CTA in article -->
+        <h2>Ready to Get Started?</h2>
+        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
+        <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/openclaw-vs-hermes-agent.html" class="related-card">
+                <h3 class="related-card-title">OpenClaw vs Hermes Agent: The Full Comparison (2026)</h3>
+                <p class="related-card-excerpt">Architecture, memory, MCP, sandboxing and self-hosting trade-offs for teams choosing an open-source agent.</p>
+            </a>
+            <a href="/blog/n8n-self-host-docker.html" class="related-card">
+                <h3 class="related-card-title">Self-Host n8n with Docker</h3>
+                <p class="related-card-excerpt">The same ownership trade-off for a workflow tool: what you run, what you maintain.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify.html" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a></p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
