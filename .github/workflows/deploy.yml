@@ -52,6 +52,7 @@ jobs:
           rsync -rlcz --delete --itemize-changes $RSYNC_DRY_RUN \
             -e "ssh -i ~/.ssh/hostinger -p $PORT" \
             --exclude='.git/' --exclude='.github/' --exclude='.gitignore' --exclude='*.bak' \
+            --exclude='/seo/' \
             --filter='P /wordpress/' \
             --filter='P /foresta/' \
             --filter='P /FEB/' \
