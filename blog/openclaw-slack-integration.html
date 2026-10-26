@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>OpenClaw Slack Integration Setup, Tested With Limits</title>
+    <meta name="description" content="OpenClaw Slack setup tested on 2026.10.7 against a mock Slack: DM pairing, channel allowlists, tool limits, exec approvals, and what a mock can't prove.">
+    <meta name="keywords" content="openclaw slack integration setup, openclaw slack, openclaw slack bot, openclaw dm pairing, openclaw exec approvals, openclaw channel allowlist">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/openclaw-slack-integration.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/openclaw-slack-integration.html">
+    <meta property="og:title" content="OpenClaw Slack Integration Setup, Tested With Limits">
+    <meta property="og:description" content="OpenClaw Slack setup tested on 2026.10.7 against a mock Slack: DM pairing, channel allowlists, tool limits, exec approvals, and what a mock can't prove.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj">
+    <meta property="article:published_time" content="2026-10-26">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="OpenClaw Slack Integration Setup, Tested With Limits">
+    <meta name="twitter:description" content="OpenClaw Slack setup tested on 2026.10.7 against a mock Slack: DM pairing, channel allowlists, tool limits, exec approvals, and what a mock can't prove.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260216b">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "OpenClaw Slack Integration Setup, Tested With Limits",
+        "description": "OpenClaw Slack setup tested on 2026.10.7 against a mock Slack: DM pairing, channel allowlists, tool limits, exec approvals, and what a mock can't prove.",
+        "author": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com/about.html"
+        },
+        "publisher": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj"
+        },
+        "datePublished": "2026-10-26",
+        "dateModified": "2026-10-26",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/openclaw-slack-integration.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Do I need a public URL to connect OpenClaw to Slack?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Not for the default transport. The documentation says Socket Mode, the default, needs no public Gateway URL but does need outbound WSS to Slack. HTTP Request URLs need a public HTTPS endpoint with TLS. I tested only the HTTP route, against a local mock, so I have no first-hand result for Socket Mode."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Who can talk to an OpenClaw Slack bot by default?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "In DMs, the default policy is pairing: an unknown user gets a short code and no model call happens until the bot owner approves it. In channels, the bot answers only in channels on the allowlist, and only when mentioned. In my test, an unpaired person in an allowlisted channel was still answered, because pairing covers DMs only. A per-channel users list closed that."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can an OpenClaw bot in a Slack channel run shell commands?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Not if you deny it. With the default tool policy, the model was offered exec, write and edit in a DM. With a channel-level deny list for runtime and filesystem groups, a scripted attempt to call exec through the tool catalog returned an unknown tool error. An allow list of messaging tools only cut the offered tools to three. I did not test every tool in the catalog."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I approve agent actions from Slack buttons?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes for exec, in my test. With tools.exec.ask set to always and channels.slack.execApprovals enabled, the approver got a DM with Allow Once and Deny buttons. A click from a non-approver was rejected, and an Allow Once click from the approver released the command. I tested exec only, not file writes or plugin approvals."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Which Slack scopes does OpenClaw need?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The documentation offers two manifests. The Minimal one covers DMs, channel history, mentions and slash commands. The Recommended one adds files, reactions, pins, group DMs, emoji and user-group reads. In a simulated test where reaction calls returned missing_scope, the reply was still delivered, but a real Slack error may differ."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "OpenClaw Slack Integration", "item": "https://rajsuyash.com/blog/openclaw-slack-integration.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/about.html" class="nav-link">About</a>
+                <a href="/qualify.html" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">AI Agents</span>
+                <span class="article-date">October 26, 2026</span>
+                <span class="article-read-time">17 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">OpenClaw Slack Integration Setup, Tested With Limits</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">I put OpenClaw 2026.10.7 behind a fake Slack, sent it signed events, and wrote down who it answered, what the model could touch, and what it asked before running a command.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <!-- CONTENT GOES HERE -->
+        <div class="definition-block">
+<p><strong>Short answer:</strong> to connect OpenClaw 2026.10.7 to Slack you install the <code>@openclaw/slack</code> plugin, create a Slack app from the documented manifest, give OpenClaw a bot token plus either an app-level token (Socket Mode) or a signing secret (HTTP), and then decide three things the manifest does not decide for you: who may talk to the bot, which tools the model is offered when they do, and which actions need a human click. In my test the defaults handled the first question mostly sensibly, the second one badly, and the third not at all.</p>
+</div>
+
+<p><strong>Updated October 2026.</strong> Everything I describe running below was run on 26 October 2026 on Ubuntu 24.04.4 LTS (4 vCPUs, 7.6 GB RAM) with OpenClaw 2026.10.7 (build 157d8c2) and <code>@openclaw/slack</code> 2026.10.7, on Node 24.22.1. I did not have a Slack workspace for this. Slack was a small program I wrote, so read the section "What this test is, and is not" before you trust any line of it.</p>
+
+<h2>1. The problem: setup guides stop when the bot says hello</h2>
+
+<p>Search for an OpenClaw Slack setup and you get the official pages plus a stack of walkthroughs that end at "mention the bot and it replies". That is the easy ten minutes. The questions that decide whether you can leave it running are different. Who exactly can reach it? When they do, can the model read your files and run shell commands on the host? And if something does need a human to say yes, where does that yes happen?</p>
+
+<p>I wanted answers to those from the software itself, not from a feature list. So I built a harness that lets the real OpenClaw gateway and the real Slack plugin talk to a fake Slack and a fake model, drove it with signed events, and logged every call it made. This post is the build log, the numbers, and a starting configuration. It sits next to my <a href="/blog/openclaw-self-hosting-deployment-guide.html">OpenClaw self-hosting guide</a>, which covers the gateway itself, and the <a href="/blog/openclaw-vs-hermes-agent.html">OpenClaw vs Hermes Agent comparison</a>, which covers whether to pick it at all.</p>
+
+<h2>2. What this test is, and is not</h2>
+
+<p>The OpenClaw Slack plugin reads a <code>SLACK_API_URL</code> environment variable and sends its Web API calls there instead of to <code>slack.com</code>. I pointed it at a Python server of about 50 lines that answers the calls the plugin makes (<code>auth.test</code>, <code>chat.postMessage</code>, <code>conversations.info</code>, <code>users.info</code>, <code>reactions.add</code>, a few more) and writes each one to a log file. For inbound traffic I used the plugin's HTTP mode and sent events to the gateway myself, signed with HMAC-SHA256 the way Slack's <a href="https://docs.slack.dev/authentication/verifying-requests-from-slack/" rel="noopener">request-signing documentation</a> describes. For the model I ran a second tiny server that speaks the OpenAI chat-completions format and either returns a fixed sentence or, when I ask, returns a scripted tool call.</p>
+
+<p>So what you can trust here is OpenClaw's behavior when it is handed Slack-shaped input: which events it accepts, who it answers, which tools it offers the model, and what it does with a tool call. What you cannot trust is anything about Slack itself. I did not test Socket Mode, a real app install, real scope enforcement, rate limits, Enterprise Grid, threads, files, slash commands or streaming replies. Every Slack response in this post was written by me. Where I quote the OpenClaw documentation instead of my own run, I say so and link the page.</p>
+
+<h2>3. Pick the transport first</h2>
+
+<p>OpenClaw's <a href="https://docs.openclaw.ai/channels/slack/transports" rel="noopener">transport page</a> says Socket Mode and HTTP Request URLs reach feature parity for messaging, slash commands, App Home and interactivity, and that you should choose by deployment shape. The table below is my reading of it, not a test result:</p>
+
+<table class="comparison-table">
+<thead><tr><th>Question</th><th>Socket Mode (default)</th><th>HTTP Request URLs</th></tr></thead>
+<tbody>
+<tr><td>Public URL for the gateway</td><td>Not needed</td><td>Needed, with DNS and TLS</td></tr>
+<tr><td>Network direction</td><td>Outbound WSS to Slack must work</td><td>Inbound HTTPS from Slack must work</td></tr>
+<tr><td>Credentials</td><td>Bot token plus app-level token with <code>connections:write</code></td><td>Bot token plus signing secret</td></tr>
+<tr><td>Several gateways, one app</td><td>Separate Slack apps per gateway</td><td>Replicas can share one app behind a load balancer</td></tr>
+<tr><td>Slash commands</td><td>Arrive over the socket; <code>url</code> field ignored</td><td>Slack posts to the <code>url</code> field, which is required</td></tr>
+</tbody></table>
+
+<p>I used HTTP mode for one reason: I can send a signed POST from a script, and I cannot open a Slack websocket from one. If your gateway is a single VPS that can reach Slack outbound, the documentation's own advice points at Socket Mode. The access and tool findings below do not depend on the transport, because the checks run after an event is accepted. The signature findings in section 6 do.</p>
+
+<h2>4. Scopes: Minimal or Recommended</h2>
+
+<p>The <a href="https://docs.openclaw.ai/channels/slack/setup" rel="noopener">setup page</a> ships two manifests per transport. Recommended requests 23 bot scopes. Minimal requests 12: <code>app_mentions:read</code>, <code>assistant:write</code>, <code>channels:history</code>, <code>channels:read</code>, <code>chat:write</code>, <code>commands</code>, <code>groups:history</code>, <code>groups:read</code>, <code>im:history</code>, <code>im:read</code>, <code>im:write</code> and <code>users:read</code>. The page says Minimal drops files, reactions, pins, group DMs, <code>emoji:read</code> and <code>usergroups:read</code>, and that it suits workspaces whose policy restricts scopes.</p>
+
+<p>For a bounded workflow, I would start with Minimal. The one place it might bite is the status reaction the bot adds while it works. In my run the plugin added an eyes reaction when it accepted a mention and an hourglass while the model ran, even though I had set <code>actions.reactions</code> to false, which suggests that setting gates the agent's reaction tool, not the plugin's own acknowledgement. Minimal has no <code>reactions:write</code>, so I made my fake Slack answer every <code>reactions.*</code> call with <code>missing_scope</code> and mentioned the bot again. The reply was still delivered. That is a simulated result, and a real Slack error may not look like mine, but it suggests a missing reaction scope is cosmetic, not fatal.</p>
+
+<p>One scope-adjacent detail that I only read, not ran: the documentation says to follow up in a thread without mentioning the bot, you must subscribe to <code>message.channels</code> (public) or <code>message.groups</code> (private) with the matching history scope, because subscribing to <code>app_mention</code> alone cannot deliver unmentioned follow-ups. Both manifests include those subscriptions.</p>
+
+<h2>5. Install and the first config</h2>
+
+<p>I reused the isolation method from the self-hosting guide: an empty <code>HOME</code>, <code>npm --prefix</code> installs, and a non-default port. OpenClaw 2026.10.7 needs Node 24.16+ or 26.1+, so the system Node 22 would have failed at install time, as it did on 2026.10.5 in my last guide.</p>
+
+<pre><code>$ npm --prefix /tmp/oc-lab2/node24 install node@24         # 5.6 s
+$ npm --prefix /tmp/oc-lab2/p24 install openclaw@2026.10.7 # 27.6 s
+$ openclaw --version
+OpenClaw 2026.10.7 (157d8c2)
+$ openclaw plugins install @openclaw/slack
+Installed plugin: slack
+Saved for the next Gateway start.</code></pre>
+
+<p>The plugin was not bundled in the main package. Installing it recorded an unpinned npm spec, which the security audit later flagged (section 11). The Node runtime, OpenClaw, the plugin and the state directory together took about 0.9 GB of disk.</p>
+
+<p>I then applied the documented HTTP-mode patch. The documentation recommends SecretRefs that read tokens from the environment, so no secret sits in the config file, and it recommends a dry run first:</p>
+
+<pre><code>$ export SLACK_BOT_TOKEN=xoxb-LAB-0000-fake
+$ export SLACK_SIGNING_SECRET=&lt;random string&gt;
+$ openclaw config patch --file ./slack.http.patch.json5 --dry-run
+Dry run successful: 14 update(s) validated against ~/.openclaw/openclaw.json.
+$ openclaw config patch --file ./slack.http.patch.json5
+Applied 14 config update(s). Change will apply without restarting the gateway.</code></pre>
+
+<p>The gateway took about 14 seconds to start listening, and the Slack provider registered its route one second later:</p>
+
+<pre><code>[gateway] http server listening (15 plugins: ... slack ...; 14.0s)
+[slack] [default] starting provider
+[slack] http mode listening at /slack/events
+$ openclaw channels status --probe
+- Slack default: enabled, configured, running, connected, bot:config, works</code></pre>
+
+<p>Before that, I broke the config three ways to see what the validator catches. A typo (<code>groupPolcy</code>) failed the dry run with <code>must not have additional properties</code>, which is useful. Two real mistakes passed it: HTTP mode with no signing secret, and <code>dmPolicy: "open"</code> without the wildcard that the documentation says it requires. The first only showed up in the status output, as <code>Slack default: enabled, not configured, bot:config</code>. So a green dry run tells you the file is well formed, not that Slack is wired up. Read the status output.</p>
+
+<h2>6. Check the front door: signatures</h2>
+
+<p>With the route up, I sent three requests. A signed <code>url_verification</code> returned <code>200</code> and echoed the challenge, which is what Slack expects when you save a Request URL. A request signed with the wrong secret returned <code>401</code>. A request with a valid signature but a timestamp one hour old also returned <code>401</code>, and the gateway log said why:</p>
+
+<pre><code>[WARN] Failed to parse and verify the request data: Failed to verify authenticity:
+x-slack-request-timestamp must differ from system time by no more than 5 minutes
+or request is stale</code></pre>
+
+<p>That matters in practice. If your server clock drifts more than five minutes, Slack's genuine events would fail the same check, and the symptom is a Slack app whose Request URL worked at setup and then stopped delivering. Check the clock before you suspect the app.</p>
+
+<h2>7. Who can talk to it: DMs</h2>
+
+<p>The default <code>dmPolicy</code> is <code>pairing</code>. I sent a DM from a user the gateway had never seen. No model call happened. The plugin looked the user up and posted this back, which I am quoting from my fake Slack's log:</p>
+
+<pre><code>OpenClaw: access not configured.
+
+Your Slack user id: U0ALICE001
+Pairing code:
+3F5U2WZE
+Ask the bot owner to approve with:
+openclaw pairing approve slack 3F5U2WZE</code></pre>
+
+<p>The model server's request counter stayed at zero. Then I approved the code on the gateway host and sent the same DM again:</p>
+
+<pre><code>$ openclaw pairing approve slack 3F5U2WZE
+Approved slack sender U0ALICE001.
+Command owner configured slack:U0ALICE001 (commands.ownerAllowFrom was empty).</code></pre>
+
+<p>The second DM reached the model and a reply came back. The surprise is that second output line. Approving the first Slack sender on a fresh install also made that person the <em>command owner</em>, because the owner list was empty. I confirmed it afterwards with <code>openclaw config get commands.ownerAllowFrom</code>, which printed <code>["slack:U0ALICE001"]</code>. If the first person you approve is not you, you have just handed them owner-level commands. Set <code>commands.ownerAllowFrom</code> yourself before you approve anyone.</p>
+
+<p>I also tried <code>dmPolicy: "open"</code>. Without <code>allowFrom: ["*"]</code>, a DM from a stranger was silently dropped: my fake Slack saw one <code>users.info</code> lookup and nothing else. With the wildcard, the stranger got a normal session. Section 9 shows what that session was allowed to use. The practical rule is that <code>open</code> is a tool-exposure decision as much as an access decision.</p>
+
+<h2>8. Who can talk to it: channels</h2>
+
+<p>Channels are governed separately. The default <code>groupPolicy</code> is <code>allowlist</code>, and the allowlist keys must be Slack channel IDs, not names. The <a href="https://docs.openclaw.ai/channels/slack/troubleshooting" rel="noopener">troubleshooting page</a> warns that name-based keys fail silently when the name lookup fails. I used IDs throughout and did not test the name-lookup failure. My config allowed one channel and required a mention there. These are the results, each from a signed event:</p>
+
+<table class="comparison-table">
+<thead><tr><th>What I sent</th><th>What the gateway did</th></tr></thead>
+<tbody>
+<tr><td>Mention in a channel not on the allowlist</td><td>No model call. Posted an ephemeral message to the sender: the bot cannot reply here because the channel is not in its allowlist.</td></tr>
+<tr><td>Plain message in the allowlisted channel, no mention</td><td>Looked the channel up, then nothing. No model call.</td></tr>
+<tr><td>Mention in the allowlisted channel, from a paired user</td><td>Eyes reaction, history fetch, one model call, one reply posted.</td></tr>
+<tr><td>Slack's usual double delivery: a <code>message</code> event and an <code>app_mention</code> event with the same timestamp</td><td>One model call and one reply, not two.</td></tr>
+<tr><td>Mention from a user who was never paired</td><td>Answered. Pairing covers DMs only.</td></tr>
+<tr><td>Same, after adding <code>users: [one user ID]</code> to that channel</td><td>Silently ignored. No reply, no ephemeral message.</td></tr>
+</tbody></table>
+
+<p>The fifth row is the one to remember. If you allow a channel, everyone in it can use the bot, whether or not you ever approved them in a DM. The sixth row is the fix, and the config change took effect without restarting the gateway; the log line was <code>config change detected; evaluating reload (channels.slack.channels.C0OPS00001.users)</code>. The silence is also a trap. A blocked user gets no explanation, so "the bot ignores Bob" has more than one cause, and the per-channel users list is one of them.</p>
+
+<h2>9. What the model can touch</h2>
+
+<p>My model server logs the tool list it receives on each request, which is the cleanest way I found to see the tool surface a given conversation gets. Same gateway, same agent, five situations:</p>
+
+<table class="comparison-table">
+<thead><tr><th>Situation (my lab config at that point)</th><th>Who</th><th>Tools offered to the model</th></tr></thead>
+<tbody>
+<tr><td>DM, default tool policy, after pairing approval</td><td>Command owner</td><td>12: apply_patch, edit, exec, ls, openclaw, process, read, sessions_yield, tool_call, tool_describe, tool_search, write</td></tr>
+<tr><td>DM, <code>open</code> with wildcard, exec ask set to always</td><td>Stranger</td><td>11: the same list without <code>openclaw</code></td></tr>
+<tr><td>Channel, deny list: runtime, fs, ui, nodes, cron, gateway</td><td>Command owner</td><td>5: openclaw, sessions_yield, tool_call, tool_describe, tool_search</td></tr>
+<tr><td>Same channel config</td><td>Non-owner member</td><td>4: the same without <code>openclaw</code></td></tr>
+<tr><td>Channel, allow list: <code>group:messaging</code> only</td><td>Command owner</td><td>3: tool_call, tool_describe, tool_search</td></tr>
+</tbody></table>
+
+<p>Two things follow. First, a DM is a much wider door than a channel. The channel deny list I configured does nothing for DMs, and a paired or open DM user gets <code>exec</code>, <code>write</code> and <code>edit</code> on the gateway host unless you restrict that separately. Second, the deny list left a catalog behind it. <code>tool_search</code>, <code>tool_describe</code> and <code>tool_call</code> are a search-and-call layer over a larger set of tools, 57 by the gateway's own log line, so I tested whether it was a back door.</p>
+
+<p>I had my model server return a scripted <code>tool_call</code> asking the catalog to run <code>exec</code> with a harmless echo, inside the denied channel. OpenClaw answered the model with this:</p>
+
+<pre><code>{ "status": "error", "tool": "tool_call",
+  "error": "Unknown tool id: exec. Did you mean: sessions_spawn, skills_read, subagents?
+  Use tool_search to find a tool, tool_describe to inspect it, then tool_call with the exact id or name." }</code></pre>
+
+<p>The denial held. The "did you mean" list is the part I would not ignore. It names <code>sessions_spawn</code> and <code>subagents</code>, which I did not deny and did not try. I do not know what a spawned sub-agent inherits from the channel's rules, and I am not going to guess. A deny list protects against the names you thought of. An allow list protects against the names you did not, and my allow-list run left the model with three plumbing tools and nothing else. For a channel bot, I would write the allow list.</p>
+
+<h2>10. Where approval happens</h2>
+
+<p>Out of the box, in my run, it does not. I asked OpenClaw for its effective execution policy before touching anything:</p>
+
+<pre><code>$ openclaw approvals get
+Effective Policy
+tools.exec   security=full   ask=off   askFallback=deny   (condensed from the table it prints)</code></pre>
+
+<p>Then I had the scripted model call <code>exec</code> with <code>echo RAN-IN-DM && id -un</code> in the paired DM. It ran immediately, with no prompt, and the model got back <code>RAN-IN-DM</code> followed by the Linux user the gateway runs as. The OpenClaw <a href="https://docs.openclaw.ai/gateway/security/trust-model" rel="noopener">trust model page</a> is consistent with that: it describes one trust boundary per gateway and says everyone who can message a tool-enabled agent shares its delegated tool authority.</p>
+
+<p>Approvals exist, but you turn them on. I set <code>tools.exec.security</code> to <code>allowlist</code>, <code>tools.exec.ask</code> to <code>always</code>, and enabled Slack as a native approval client with one named approver:</p>
+
+<pre><code>{
+  tools: { exec: { security: "allowlist", ask: "always" } },
+  channels: { slack: { execApprovals: { enabled: true, approvers: ["U0ALICE001"], target: "dm" } } },
+}</code></pre>
+
+<p>The same scripted <code>exec</code> call now stopped. My fake Slack received a DM to the approver with a Block Kit message titled "Exec approval required", the command, the agent name, the working directory, the host, and two buttons, Allow Once and Deny. Each button carried an approval ID and a decision in its value. The model's turn waited, and the plugin kept re-adding the hourglass reaction every few seconds while it waited.</p>
+
+<p>Then I played the human. I sent a signed interactivity payload shaped like a Slack <code>block_actions</code> click, built from the buttons in the prompt. A click from a user who was not an approver was refused, with the log line <code>interaction drop exec approval user=U0BOB00001 (not authorized)</code> and an ephemeral reply, "You are not authorized to approve this request." The command stayed pending. A click on Allow Once from the named approver released it: the prompt message was edited to "Allowed once", and the model received <code>RAN-AFTER-APPROVAL</code>. A second command that I answered with Deny ended with the model receiving <code>Exec denied (gateway id=..., user-denied): echo SHOULD-NOT-RUN</code>, and the command never ran.</p>
+
+<p>Two limits on that result. I only tested <code>exec</code>. The same DM session still had <code>write</code> and <code>edit</code>, and I did not check whether those prompt. And the documentation is careful about what this is: its exec-approvals page says approvals "reduce accidental execution risk" but "are not a per-user auth boundary". A button is a speed bump with an audit trail. It is not a sandbox.</p>
+
+<h2>11. What the built-in audit said</h2>
+
+<p>I ran <code>openclaw security audit</code> (not <code>--deep</code>) against the finished config. It reported 0 critical, 4 warnings and 1 info line. Two were about my lab: a 17-character gateway token and no trusted-proxy setting. One flagged the unpinned plugin install from section 5. The fourth is the one that applies to any team Slack:</p>
+
+<pre><code>security.trust_model.multi_user_heuristic
+  Potential multi-user setup detected (personal-assistant model warning)
+  - channels.slack.groupPolicy="allowlist" with configured group targets
+  Runtime/process tools are exposed without full sandboxing in at least one context.
+  OpenClaw's default security model is personal-assistant (one trusted operator boundary),
+  not hostile multi-tenant isolation on one shared gateway.</code></pre>
+
+<p>That block is trimmed to the relevant lines. Read it as the design limit. One gateway is fine for a team that already trusts each other. It is not the right shape for a Slack workspace that includes customers, contractors you have not vetted, or people who should not see each other's sessions. Its fix text suggests separate gateways, or <code>agents.defaults.sandbox.mode="all"</code> with <code>tools.fs.workspaceOnly=true</code>. I did not test either.</p>
+
+<h2>12. Symptoms I hit, and what caused them</h2>
+
+<table class="comparison-table">
+<thead><tr><th>Symptom</th><th>What I saw</th><th>Cause and fix</th></tr></thead>
+<tbody>
+<tr><td>Slack events return 401</td><td><code>Failed to verify authenticity</code> in the gateway log</td><td>Wrong signing secret, or clock more than 5 minutes off. Fix the secret or the clock.</td></tr>
+<tr><td>Status says <code>not configured</code></td><td><code>enabled, not configured, bot:config</code></td><td>HTTP mode without a signing secret. The dry run passed anyway.</td></tr>
+<tr><td>Status says <code>check failed</code></td><td><code>error:...invalid_auth</code> beside <code>running, connected</code></td><td>Slack rejected the token on <code>auth.test</code>. Replace the bot token.</td></tr>
+<tr><td>Stranger DMs are ignored</td><td>One <code>users.info</code> call, no reply</td><td><code>dmPolicy: open</code> without <code>allowFrom: ["*"]</code>.</td></tr>
+<tr><td>Bot silent in a channel</td><td>No model call, no ephemeral message</td><td>Not mentioned, or a <code>users</code> list excludes the sender, or the channel key is not an ID (docs).</td></tr>
+<tr><td>Bot silent, with an ephemeral notice</td><td>The notice says the channel is not in its OpenClaw channel allowlist</td><td>Add the channel ID under <code>channels.slack.channels</code>.</td></tr>
+</tbody></table>
+
+<p>The <code>invalid_auth</code> row was produced by switching my fake Slack to answer <code>auth.test</code> with that error and running the probe again. The channel-key-is-a-name cause in the silent-channel row comes from the documentation, not from my run.</p>
+
+<h2>13. The configuration I would start from</h2>
+
+<p>This is the config I ended the lab with, plus one change I am recommending but ran only on its own: an allow list instead of the deny list. Tokens come from the environment. User and channel IDs are placeholders.</p>
+
+<pre><code>{
+  channels: {
+    slack: {
+      enabled: true,
+      mode: "http",                       // or "socket" if you can reach Slack outbound
+      botToken:      { source: "env", provider: "default", id: "SLACK_BOT_TOKEN" },
+      signingSecret: { source: "env", provider: "default", id: "SLACK_SIGNING_SECRET" },
+      webhookPath: "/slack/events",
+      dmPolicy: "pairing",
+      groupPolicy: "allowlist",
+      channels: {
+        C0XXXXXXXXX: {                    // channel ID, not name
+          enabled: true,
+          requireMention: true,
+          users: ["U0YYYYYYYYY"],         // only these people, even if they are in the channel
+          tools: { allow: ["group:messaging"] },
+        },
+      },
+      execApprovals: { enabled: true, approvers: ["U0YYYYYYYYY"], target: "dm" },
+    },
+  },
+  commands: { ownerAllowFrom: ["slack:U0YYYYYYYYY"] },   // set BEFORE approving any pairing
+  tools: { exec: { security: "allowlist", ask: "always" } },
+}</code></pre>
+
+<p>What this does not cover is DMs. A paired user still gets the full DM tool surface from section 9. If DMs matter, restrict who gets paired, or keep the bot channel-only by setting <code>dmPolicy</code> to <code>disabled</code> (one of the four documented values, which I did not run).</p>
+
+<h2>14. What I did not test</h2>
+
+<p>A guide that hides its gaps is worse than none. This run did not cover:</p>
+
+<ul>
+<li>A real Slack workspace, a real app install, real scope enforcement, and every Slack-side error message. My fake Slack always said what I told it to say.</li>
+<li>Socket Mode, relay mode, Enterprise Grid, user-token identity and multi-account setups.</li>
+<li>Threads and session keys, slash commands, file uploads, streaming previews, Agent View and charts.</li>
+<li>A real model. The model server returned a fixed sentence or a tool call I scripted, so I learned nothing about how well a model follows a channel's rules.</li>
+<li>Whether <code>write</code>, <code>edit</code>, <code>sessions_spawn</code> or plugin tools prompt for approval, and what a spawned sub-agent inherits.</li>
+<li>Sandboxing, load, restarts mid-conversation, and the name-lookup failure for channel keys.</li>
+<li>Anything on another version. This is 2026.10.7 on one day, and the Slack plugin changes quickly.</li>
+</ul>
+
+<p>If you only need Slack messages triggered by business events, and not an agent that reasons over them, a workflow tool is a smaller attack surface. My <a href="/blog/n8n-slack-integration.html">n8n Slack integration guide</a> covers that route. And if your agent will start long jobs from Slack, the restart and duplicate-action problems in <a href="/blog/durable-execution-voice-agent-campaigns.html">durable execution for voice and AI agent campaigns</a> apply to it.</p>
+
+<h2>15. When to hire help instead</h2>
+
+<p>The setup takes an afternoon. The decisions in sections 7 to 10 take longer, because they depend on who is in your workspace, what the host can reach, and what a wrong answer costs. If you want those decided, tested against your own tools, and handed over with a runbook, my <a href="/ai-agents.html">AI agents page</a> describes how I work. The <a href="/roi-calculator.html">ROI calculator</a> and the <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> help you judge whether it is worth doing, and <a href="/consulting.html">consulting</a> covers the wider plan.</p>
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>Do I need a public URL to connect OpenClaw to Slack?</h3>
+                <p>Not for the default transport. The documentation says Socket Mode, the default, needs no public Gateway URL but does need outbound WSS to Slack. HTTP Request URLs need a public HTTPS endpoint with TLS. I tested only the HTTP route, against a local mock, so I have no first-hand result for Socket Mode.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Who can talk to an OpenClaw Slack bot by default?</h3>
+                <p>In DMs, the default policy is pairing: an unknown user gets a short code and no model call happens until the bot owner approves it. In channels, the bot answers only in channels on the allowlist, and only when mentioned. In my test, an unpaired person in an allowlisted channel was still answered, because pairing covers DMs only. A per-channel users list closed that.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can an OpenClaw bot in a Slack channel run shell commands?</h3>
+                <p>Not if you deny it. With the default tool policy, the model was offered exec, write and edit in a DM. With a channel-level deny list for runtime and filesystem groups, a scripted attempt to call exec through the tool catalog returned an unknown tool error. An allow list of messaging tools only cut the offered tools to three. I did not test every tool in the catalog.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I approve agent actions from Slack buttons?</h3>
+                <p>Yes for exec, in my test. With tools.exec.ask set to always and channels.slack.execApprovals enabled, the approver got a DM with Allow Once and Deny buttons. A click from a non-approver was rejected, and an Allow Once click from the approver released the command. I tested exec only, not file writes or plugin approvals.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Which Slack scopes does OpenClaw need?</h3>
+                <p>The documentation offers two manifests. The Minimal one covers DMs, channel history, mentions and slash commands. The Recommended one adds files, reactions, pins, group DMs, emoji and user-group reads. In a simulated test where reaction calls returned missing_scope, the reply was still delivered, but a real Slack error may differ.</p>
+            </div>
+
+        </div>
+
+        <!-- CTA in article -->
+        <h2>Ready to Get Started?</h2>
+        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
+        <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/openclaw-self-hosting-deployment-guide.html" class="related-card">
+                <h3 class="related-card-title">OpenClaw Self-Hosting Guide: Tested on 2026.10.5</h3>
+                <p class="related-card-excerpt">What the gateway does on first start, after a crash and with a bad config, from a throwaway lab.</p>
+            </a>
+            <a href="/blog/openclaw-vs-hermes-agent.html" class="related-card">
+                <h3 class="related-card-title">OpenClaw vs Hermes Agent: The Full Comparison (2026)</h3>
+                <p class="related-card-excerpt">Architecture, memory, MCP, sandboxing and self-hosting trade-offs for teams choosing an open-source agent.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify.html" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a></p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
