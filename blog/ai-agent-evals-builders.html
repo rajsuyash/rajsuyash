@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Primary SEO Meta Tags -->
-    <title>AI agent evals: what to measure before you ship</title>
-    <meta name="description" content="I shipped an agent without evals and it failed in production. Here are the five metrics I track now and how to run them before you push.">
+    <title>How to Evaluate an AI Agent Before Deployment: 5 Metrics</title>
+    <meta name="description" content="Evaluate an AI agent before deployment: five metrics, a validated golden set and a CI release gate. Code run on 30 Oct 2026, with its output shown.">
     <meta name="keywords" content="AI agent evals, how to evaluate AI agents, LLM eval metrics, AI agent testing, agent golden set, DeepEval, Langfuse">
     <meta name="author" content="Suyash Raj">
     <meta name="robots" content="index, follow">
@@ -15,17 +15,18 @@
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://rajsuyash.com/blog/ai-agent-evals-builders.html">
-    <meta property="og:title" content="AI agent evals: what to measure before you ship">
-    <meta property="og:description" content="I shipped an agent without evals and it failed in production. Here are the five metrics I track now and how to run them before you push.">
+    <meta property="og:title" content="How to Evaluate an AI Agent Before Deployment: 5 Metrics">
+    <meta property="og:description" content="Evaluate an AI agent before deployment: five metrics, a validated golden set and a CI release gate. Code run on 30 Oct 2026, with its output shown.">
     <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
     <meta property="og:site_name" content="Suyash Raj">
     <meta property="article:published_time" content="2026-09-24">
+    <meta property="article:modified_time" content="2026-10-30">
     <meta property="article:author" content="Suyash Raj">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="AI agent evals: what to measure before you ship">
-    <meta name="twitter:description" content="I shipped an agent without evals and it failed in production. Here are the five metrics I track now and how to run them before you push.">
+    <meta name="twitter:title" content="How to Evaluate an AI Agent Before Deployment: 5 Metrics">
+    <meta name="twitter:description" content="Evaluate an AI agent before deployment: five metrics, a validated golden set and a CI release gate. Code run on 30 Oct 2026, with its output shown.">
     <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
     <meta name="twitter:creator" content="@suyash_raj">
 
@@ -41,8 +42,8 @@
     {
         "@context": "https://schema.org",
         "@type": "Article",
-        "headline": "AI agent evals: what to measure before you ship",
-        "description": "I shipped an agent without evals and it failed in production. Here are the five metrics I track now and how to run them before you push.",
+        "headline": "How to Evaluate an AI Agent Before Deployment: 5 Metrics",
+        "description": "Evaluate an AI agent before deployment: five metrics, a validated golden set and a CI release gate. Code run on 30 Oct 2026, with its output shown.",
         "author": {
             "@type": "Person",
             "@id": "https://rajsuyash.com/about.html#person",
@@ -55,7 +56,7 @@
             "name": "Suyash Raj"
         },
         "datePublished": "2026-09-24",
-        "dateModified": "2026-09-24",
+        "dateModified": "2026-10-30",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https://rajsuyash.com/blog/ai-agent-evals-builders.html"
@@ -72,10 +73,10 @@
         "mainEntity": [
             {
                 "@type": "Question",
-                "name": "What are AI agent evals?",
+                "name": "How do I evaluate an AI agent before deployment?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "AI agent evals are automated tests that measure whether your agent does the right thing before you ship. They go beyond unit tests: they check that the agent picks the right tools, returns accurate information, completes tasks end-to-end, and does not regress when you change the prompt. Evals run against a golden set of representative inputs with known expected outputs."
+                    "text": "Write a golden set of 20 to 50 reviewed test cases that record the expected tool calls and outcomes, run the agent against them, and score tool-call precision, task completion, faithfulness, latency and regression rate. Release only if every critical case passes and the overall pass rate clears your threshold. The numbers on this page come from a stub agent, so use them to understand the harness, not to predict a model."
                 }
             },
             {
@@ -83,7 +84,7 @@
                 "name": "What is a golden set in AI agent testing?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "A golden set is a curated list of input-output pairs that represent real or realistic agent tasks, annotated with what the correct response or action looks like. You run your agent against these inputs on every code or prompt change and check whether the outputs still match expectations. The golden set grows over time as you discover edge cases in production."
+                    "text": "A golden set is a list of inputs paired with the tool calls and results a correct agent should produce. It only helps if the expected answers are right, so check the file for duplicate inputs, conflicting labels and impossible ranges, and have someone who did not build the agent review the labels. Add real failures from production traces over time."
                 }
             },
             {
@@ -91,7 +92,7 @@
                 "name": "How many examples do I need in a golden set?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Start with 20 to 50 examples that cover your most common scenarios and your known failure modes. That is enough to catch most regressions and to get meaningful pass rates within a CI run that finishes in a few minutes. Do not aim for 100% coverage before shipping; aim for coverage of the scenarios where failure would actually matter."
+                    "text": "Start with 20 to 50 cases covering the common paths and the failures that would cost you the most. That range is my rule of thumb, not a published standard. What matters more than the count is that every case you cannot afford to fail is in the set and is marked critical."
                 }
             },
             {
@@ -99,15 +100,15 @@
                 "name": "Should I use an LLM as a judge for my evals?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "LLM-as-judge is useful for criteria that are hard to express as assertions, like whether a response is polite or whether it answers the user's intent. But it adds cost and latency to your eval loop, and the judge's own biases can make scores noisy. For tool calls and task completion, deterministic assertions are cheaper and more reliable. Use LLM-as-judge only for the criteria that genuinely need it."
+                    "text": "Use deterministic assertions wherever you can, such as tool names, argument ranges and required events. Use an LLM judge only for criteria you cannot assert, such as whether an answer is supported by retrieved text. Judges can favour their own model family (arXiv:2404.13076), so use a different family from the agent and check the judge against human labels first."
                 }
             },
             {
                 "@type": "Question",
-                "name": "What tools do builders use to run AI agent evals?",
+                "name": "What tools can run AI agent evals?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "DeepEval is a popular open-source Python library that integrates with pytest and provides metrics like faithfulness, answer relevancy, and tool call accuracy out of the box. Langfuse is an open-source observability platform that lets you run evals against logged traces from production. Inspect AI, from the UK AI Safety Institute, is a task-based eval framework suited to agentic workflows. You can also write evals by hand using pytest and assertion functions, which gives you maximum control at the cost of more setup."
+                    "text": "Plain pytest with assertion functions needs nothing else. DeepEval (Apache-2.0) adds metrics such as tool correctness, task completion and faithfulness and runs through pytest. Inspect AI (MIT), from the UK AI Security Institute, is a framework for model evaluations. Langfuse scores production traces and runs dataset experiments. Versions and licences were checked on 30 October 2026."
                 }
             },
             {
@@ -115,7 +116,7 @@
                 "name": "How do I run AI agent evals in CI?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Create a test file that loads your golden set, runs the agent against each input, and asserts on the output or tool calls using pytest. Add that test job to your GitHub Actions or GitLab CI configuration. Set a minimum pass rate (for example, 90%) rather than requiring 100%, because a small fraction of LLM outputs will vary. Track the pass rate over time so you can spot trends before they become incidents."
+                    "text": "Run the suite on every pull request that touches the agent or its prompts, write a JUnit file, and add a second step that computes the pass rate and fails the job below your threshold. A single pytest step cannot enforce a 90% rate, because pytest exits non-zero on any failing case. Also block the release when any critical case fails."
                 }
             }
         ]
@@ -130,7 +131,7 @@
         "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
             {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
-            {"@type": "ListItem", "position": 3, "name": "AI agent evals: what to measure before you ship", "item": "https://rajsuyash.com/blog/ai-agent-evals-builders.html"}
+            {"@type": "ListItem", "position": 3, "name": "How to Evaluate an AI Agent Before Deployment: 5 Metrics", "item": "https://rajsuyash.com/blog/ai-agent-evals-builders.html"}
         ]
     }
     </script>
@@ -478,354 +479,431 @@
         <div class="article-hero-content">
             <div class="article-meta reveal" style="--delay: 0">
                 <span class="article-category">AI Agents</span>
-                <span class="article-date">September 24, 2026</span>
-                <span class="article-read-time">14 min read</span>
+                <span class="article-date">September 24, 2026 &middot; Updated October 30, 2026</span>
+                <span class="article-read-time">17 min read</span>
             </div>
-            <h1 class="article-title reveal" style="--delay: 1">AI agent evals: what to measure before you ship</h1>
-            <p class="article-subtitle reveal" style="--delay: 2">I shipped an agent without evals and it failed in production in ways I did not see coming. Here is what I measure now.</p>
+            <h1 class="article-title reveal" style="--delay: 1">How to Evaluate an AI Agent Before Deployment: 5 Metrics</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">Five metrics, a golden set you can trust, and a release gate. Every code block below was run on 30 October 2026. The agent in it is a stub, so the numbers show the harness, not a model.</p>
         </div>
     </section>
 
     <!-- Article Body -->
     <article class="article-body">
 
-        <p>The agent worked perfectly in my tests. I ran it against a dozen inputs, the outputs looked right, and I shipped it. Three days later it started calling the wrong tool on inputs that seemed ordinary, hallucinating field names that were not in its context, and completing tasks in the wrong order when the user phrased things slightly differently than I expected. I had no numbers, no baseline, and no way to tell whether a prompt change made things better or worse.</p>
+        <div class="definition-block">
+            <p><strong>Short answer:</strong> To evaluate an AI agent before deployment, write 20 to 50 hand-reviewed test cases with the expected tool calls, run the agent against them, and score tool-call precision, task completion, faithfulness, latency and regression rate. Block the release if a critical case fails, not only when the overall pass rate drops.</p>
+        </div>
 
-        <p>I had been doing vibe checks and calling them testing. That is the mistake nearly every builder makes when they first ship an agent, because agents look different from software. The outputs are text, they vary run to run, and there is no obvious assertion to write. So most people skip evals entirely, or run a handful of manual tests and hope for the best. Then something breaks in production and there is no signal to act on.</p>
+        <p><strong>Updated October 30, 2026.</strong> The earlier version of this page described measurements and a production failure that I cannot document, so they are removed. What replaces them is a small harness I wrote and ran on 30 October 2026 with Python 3.12.3 and pytest 9.2.0. The agent inside it is a 27-line rule-based stub standing in for an LLM, so the numbers show how the metrics behave, not how any model performs. Vendor facts were re-read from their own docs and package pages that day.</p>
 
-        <p>I have since added evals to every agent I build before it goes live. This post covers the five metrics I track, how I build and maintain a golden set, and the tools I use to run evals in CI. Everything here is from working on real agents, not from theory. I will show actual code, paste real outputs, and tell you what did not work as well as what did.</p>
+        <p>Agents break differently from ordinary software. The output is text, it can change from run to run, and there is no obvious assertion to write, so many teams ship on a handful of manual tries. That leaves nothing to compare when a prompt change lands. The fix is a repeatable set of cases with expected tool calls, a few numbers computed from it, and a rule for when a release is blocked. If you are building <a href="/ai-agents.html">AI agents</a> for a real workflow, this is the minimum I would put in place before the first user.</p>
 
-        <p>If you are working on <a href="/ai-agents.html">AI agents</a> and want to ship with confidence rather than hope, this is the workflow I use.</p>
+        <h2>What an agent eval is, and the three levels</h2>
 
-        <h2>What evals are, and what they are not</h2>
+        <p>An agent eval is a test that runs the agent on a fixed input and scores what it did: which tools it called, with which arguments, and whether the task finished. It is not a unit test of a function, because the same prompt can produce different output on different runs, and "correct" is sometimes a matter of degree.</p>
 
-        <p>Evals are not unit tests in the traditional sense. A unit test checks that a function returns the expected value for a given input. With a deterministic function, that works perfectly. An LLM-based agent is not deterministic: the same prompt can produce slightly different outputs on different runs, and "correct" is often a matter of degree rather than a binary.</p>
+        <p>Hamel Husain's <a href="https://hamel.dev/blog/posts/evals/" rel="noopener noreferrer">guide to evals</a> splits the work into three levels: Level 1 is unit tests (assertions, in the same spirit as pytest tests), Level 2 is human and model evaluation, and Level 3 is A/B testing. He notes that cost rises with each level. This page covers Level 1 in full and the pre-release part of Level 2. Level 3 needs production traffic, so it comes after launch.</p>
 
-        <p>Evals are also not human review alone. I do manual review on new agent builds, and it is useful. But I cannot run a hundred manual tests on every prompt change. The feedback loop is too slow. The point of automated evals is to give you a pass rate you can track over time, and to catch regressions before they reach users.</p>
+        <h2>Step 1: a golden set you can trust</h2>
 
-        <p>A useful mental model, which I borrowed from <a href="https://hamel.dev/blog/posts/evals/" rel="noopener noreferrer">Hamel Husain's eval framework</a>, is three levels:</p>
+        <p>The golden set is the list of cases the agent is scored on. Each case records an input, the tool calls a correct agent would make (with allowed argument ranges), and any text the reply must contain. Mine are hand-written and live next to the code. Two cases from the file:</p>
 
-        <ul>
-            <li><strong>Level 1: Assertions.</strong> Deterministic checks on tool calls, output format, and specific facts. These run fast, cost almost nothing, and catch the most common failures. I run these on every code and prompt change.</li>
-            <li><strong>Level 2: Human or LLM review on traces.</strong> <a href="/blog/meta-muse-vs-openai-dots-vs-grok-bot.html" title="Reliability for long-running always-on agents, compared">You log every agent run, then score a sample for quality, tone, and correctness.</a> More expensive, slower, but it catches the subtler failures that assertions miss. I run these on a weekly cadence or after a major prompt rewrite.</li>
-            <li><strong>Level 3: A/B or large-scale evaluation.</strong> You run two versions of the agent against the same user base and measure real outcomes. This is the most reliable signal but requires production traffic. I only do this once an agent is already earning enough usage to split.</li>
-        </ul>
+        <pre><code>{
+ "id": "ql-01",
+ "input": "We are a 15-person design studio, about $800k revenue, want to automate client onboarding",
+ "expected_calls": [{"name": "qualify_lead", "args": {"score": {"range": [70, 100]}, "follow_up": true}}],
+ "reply_contains": [], "source": "hand-written", "reviewed": "2026-10-30"
+},
+{
+ "id": "hd-01",
+ "input": "This is unacceptable, I want a refund",
+ "expected_calls": [{"name": "handoff_to_human", "args": {"reason": "complaint"}}],
+ "reply_contains": ["person"], "source": "hand-written", "reviewed": "2026-10-30"
+}</code></pre>
 
-        <p>Most builders skip Level 1 entirely and try to go straight to Level 2 or 3. The problem is that Level 1 is the cheapest and catches the most bugs. Get Level 1 right before worrying about anything else.</p>
+        <p>The file has 20 cases: 12 lead-qualification cases (<code>ql-</code>), 4 booking requests (<code>bk-</code>) and 4 complaints that must be handed to a person (<code>hd-</code>). The stub agent passes all 20 on its first run, and that tells you the set is easy, not that the agent is good. I wrote the stub and the cases together, so they agree by construction. The cases that find real faults come from two places: production traces of things that went wrong, and a reviewer who did not build the agent.</p>
 
-        <h2>The five metrics I track</h2>
+        <p>Before trusting the numbers, check the file itself. A mislabelled case produces a failing test that looks like an agent bug. This validator checks for duplicate ids, missing review dates, unknown tools, impossible score ranges, a <code>follow_up</code> flag that contradicts the range, and the same input labelled two ways:</p>
+
+<pre><code>import sys, collections
+from evals import load_golden
+TOOLS = {"qualify_lead", "book_meeting", "handoff_to_human"}
+
+def validate(cases):
+    errors, seen_ids = [], set()
+    by_input = collections.defaultdict(list)
+    for c in cases:
+        if c["id"] in seen_ids: errors.append(f"{c['id']}: duplicate id")
+        seen_ids.add(c["id"])
+        by_input[c["input"]].append(c)
+        if not c.get("reviewed"): errors.append(f"{c['id']}: no reviewer date")
+        for e in c["expected_calls"]:
+            if e["name"] not in TOOLS: errors.append(f"{c['id']}: unknown tool {e['name']}")
+            r = e["args"].get("score", {}).get("range")
+            if r and not 0 &lt;= r[0] &lt;= r[1] &lt;= 100: errors.append(f"{c['id']}: bad range {r}")
+            if r and "follow_up" in e["args"] and e["args"]["follow_up"] != (r[0] &gt;= 50):
+                errors.append(f"{c['id']}: follow_up={e['args']['follow_up']} contradicts range {r}")
+    for text, group in by_input.items():
+        if len(group) &gt; 1:
+            labels = {str(g["expected_calls"]) for g in group}
+            ids = [g["id"] for g in group]
+            errors.append(f"{ids}: same input, {'CONFLICTING' if len(labels) &gt; 1 else 'identical'} labels")
+    return errors
+
+if __name__ == "__main__":
+    errs = validate(load_golden(sys.argv[1] if len(sys.argv) &gt; 1 else "golden_set.json"))
+    print("\n".join(errs) or "golden set OK")
+    sys.exit(1 if errs else 0)</code></pre>
+
+        <p>I added one deliberately conflicting case (<code>ql-13</code>, the <code>ql-01</code> input labelled as a low score) to a copy of the file. The validator rejects the copy and passes the real file:</p>
+
+<pre><code>$ python validate_golden.py golden_set_bad.json
+['ql-01', 'ql-13']: same input, CONFLICTING labels
+exit=1
+$ python validate_golden.py
+golden set OK
+exit=0</code></pre>
+
+        <p>It also caught a mistake of mine in a first draft: case <code>ql-07</code> had a score range of 40 to 70 but expected <code>follow_up: true</code>, and the follow-up threshold in the stub is 50, so the label contradicted itself. I changed the range to 50 to 70. A validator cannot tell you a label is right, only that it is consistent. Someone other than the author still has to read the expected answers.</p>
+
+        <h2>Step 2: the five metrics</h2>
+
+        <p>Here is the scoring code, exactly as run. <code>score_case</code> compares each tool call the agent made with the expected calls, <code>run_suite</code> times each case, and the functions at the bottom turn the rows into the metrics.</p>
+
+<pre><code>import json, math, time
+from pathlib import Path
+from agent import run_agent
+
+def args_match(actual: dict, expected: dict) -&gt; bool:
+    for k, exp in expected.items():
+        val = actual.get(k)
+        if isinstance(exp, dict) and "range" in exp:
+            lo, hi = exp["range"]
+            if val is None or not lo &lt;= val &lt;= hi:
+                return False
+        elif val != exp:
+            return False
+    return True
+
+def call_matches(actual: dict, expected: dict) -&gt; bool:
+    return actual["name"] == expected["name"] and args_match(actual["arguments"], expected["args"])
+
+def score_case(case: dict, result: dict) -&gt; dict:
+    actual, expected = result["tool_calls"], case["expected_calls"]
+    good = [a for a in actual if any(call_matches(a, e) for e in expected)]
+    found = [e for e in expected if any(call_matches(a, e) for a in actual)]
+    reply_ok = all(s in result["reply"] for s in case["reply_contains"])
+    return {"id": case["id"], "calls": len(actual), "good_calls": len(good),
+            "complete": len(found) == len(expected) and reply_ok}
+
+def run_suite(cases: list, version: str) -&gt; list:
+    out = []
+    for c in cases:
+        t0 = time.perf_counter()
+        r = run_agent(c["input"], version)
+        s = score_case(c, r)
+        s["latency_s"] = time.perf_counter() - t0
+        s["input"], s["actual"] = c["input"], r["tool_calls"]
+        out.append(s)
+    return out
+
+def tool_precision(rows): return sum(r["good_calls"] for r in rows) / sum(r["calls"] for r in rows)
+def completion_rate(rows): return sum(r["complete"] for r in rows) / len(rows)
+
+def percentile(values, q):  # nearest-rank
+    s = sorted(values)
+    return s[max(0, math.ceil(q * len(s)) - 1)]
+
+def regression_rate(prev_rows, new_rows):
+    prev_pass = {r["id"] for r in prev_rows if r["complete"]}
+    new_pass = {r["id"] for r in new_rows if r["complete"]}
+    return len(prev_pass - new_pass) / len(prev_pass), sorted(prev_pass - new_pass)
+
+def load_golden(path="golden_set.json"): return json.loads(Path(path).read_text())</code></pre>
 
         <h3>1. Tool call precision</h3>
 
-        <p>This is the metric I care about most for tool-using agents. Tool call precision measures whether the agent called the right tool with the right arguments. A wrong tool call can have consequences: updating the wrong record, sending a message to the wrong recipient, or triggering an action the user did not ask for.</p>
+        <p>Precision is the share of the agent's tool calls that match an expected call by name and arguments: correct calls divided by all calls made. It drops when the agent calls the wrong tool, passes bad arguments, or adds calls nobody asked for. Recall, the share of expected calls that happened, is the mirror image and is covered by task completion below. An extra or wrong call can update the wrong record or message the wrong person, so for tool-using agents this is the metric to put first.</p>
 
-        <p>I measure it as: (number of correct tool calls) / (total tool calls). "Correct" means the agent called the tool the golden set specifies, with the parameter values that match expectations within a defined tolerance.</p>
+        <p>DeepEval ships a <a href="https://deepeval.com/docs/metrics-tool-correctness" rel="noopener noreferrer"><code>ToolCorrectnessMetric</code></a>. By default it compares tool names, and you can require input parameters and outputs to match too. I tried it on the complaint case with DeepEval 4.3.2. Two things were worth knowing. Constructing the metric raised an error when no <code>OPENAI_API_KEY</code> was set, even though I was only matching tool names. With a placeholder key and outbound traffic pointed at a closed proxy port, <code>measure()</code> completed, which shows name matching did not need a judge call:</p>
 
-        <p>For example, when I built a lead-qualification agent, I had it call a <code>qualify_lead</code> tool with the lead's score and a boolean for whether to follow up. In my golden set I had 30 inputs with the expected tool name and argument ranges. On the first version, precision was 0.73. After fixing the prompt to be more explicit about the score calculation, it went to 0.93. That number told me the fix was real, not just a feeling.</p>
+<pre><code>from deepeval.test_case import LLMTestCase, ToolCall
+from deepeval.metrics import ToolCorrectnessMetric
+from agent import run_agent
 
-        <pre><code>import json
-
-def check_tool_call(actual: dict, expected: dict) -> bool:
-    """Check that actual tool call matches expected name and key args."""
-    if actual.get("name") != expected.get("name"):
-        return False
-    for key, exp_val in expected.get("required_args", {}).items():
-        act_val = actual.get("arguments", {}).get(key)
-        if isinstance(exp_val, dict) and "range" in exp_val:
-            lo, hi = exp_val["range"]
-            if act_val is None or not (lo <= act_val <= hi):
-                return False
-        elif act_val != exp_val:
-            return False
-    return True</code></pre>
-
-        <p>I run this against every test case in the golden set and report the fraction that pass. Below 0.90 on tool precision and I do not ship.</p>
+text = "This is unacceptable, I want a refund"
+for v in ("v1", "v2"):
+    r = run_agent(text, v)
+    tc = LLMTestCase(input=text, actual_output=r["reply"],
+                     tools_called=[ToolCall(name=c["name"]) for c in r["tool_calls"]],
+                     expected_tools=[ToolCall(name="handoff_to_human")])
+    m = ToolCorrectnessMetric(include_reason=False)
+    m.measure(tc)
+    print(v, "score", m.score, "success", m.is_successful())</code></pre><pre><code>v1 score 1.0 success True
+v2 score 0.0 success False</code></pre>
 
         <h3>2. Task completion rate</h3>
 
-        <p>Tool precision tells you whether individual tool calls are correct. Task completion rate tells you whether the agent actually finished what it was supposed to do from end to end. An agent can call the right tool and still fail the task if it stops too early, calls the right tool with the wrong sequencing, or misses a required step.</p>
+        <p>Precision says whether the calls were right. Task completion says whether the job got done. In this harness a case is complete when every expected call happened and the reply contains the required text. That is a deterministic definition I chose, written down per case. DeepEval's <a href="https://deepeval.com/docs/metrics-task-completion" rel="noopener noreferrer"><code>TaskCompletionMetric</code></a> takes a different route: an LLM judge reads the agent's full trace, which requires setting up tracing. Use the deterministic version wherever "done" can be written as events, and a judge where it cannot.</p>
 
-        <p>I define task completion in my golden set by annotating each test case with a set of "must happen" events: specific tools that must be called, specific values that must appear in the final response, or a specific state the world must be in after the agent finishes. If all of those happen, the task is complete.</p>
+        <h3>3. Faithfulness</h3>
 
-        <p>For a booking agent, the "must happen" set for a confirmation request might be: <code>check_availability</code> called, <code>create_booking</code> called, confirmation message contains booking ID. If any of those is missing, I count it as incomplete.</p>
-
-        <p>In my experience, task completion rate drops most when the agent's system prompt is too long and starts truncating context, or when the user's phrasing triggers a different branch than expected. Both are fixable once you can see the number drop.</p>
-
-        <h3>3. Faithfulness (hallucination rate)</h3>
-
-        <p>Faithfulness measures whether every factual claim the agent makes is grounded in the context it was given. For a retrieval-augmented agent, that means: did it say anything that was not in the retrieved documents? For a tool-using agent, it means: did it cite or describe results that were not in the tool's response?</p>
-
-        <p>This is the hardest metric to check with pure assertions because it requires semantic understanding. I use an LLM-as-judge here: I pass the agent's response and its context to a judge model and ask it to identify claims in the response that have no support in the context. I then compute (unsupported claims) / (total factual claims).</p>
-
-        <p>DeepEval has a <code>FaithfulnessMetric</code> that does this automatically against a set of "retrieval context" strings. <a href="/blog/jev-typesafe-architecture-use-cases-guide.html" title="JEV returns a calibrated 0-1 probability with every answer">The score it returns is 0 to 1, where 1 means every claim is supported.</a> I use it directly for RAG agents:</p>
-
-        <pre><code># requires: pip install deepeval
-from deepeval.metrics import FaithfulnessMetric
-from deepeval.test_case import LLMTestCase
-
-metric = FaithfulnessMetric(threshold=0.8, model="gpt-4o-mini")
-
-test_case = LLMTestCase(
-    input="What is the refund policy?",
-    actual_output=agent_response,
-    retrieval_context=retrieved_docs
-)
-
-metric.measure(test_case)
-print(metric.score, metric.reason)</code></pre>
-
-        <p>For tool-using agents without retrieval, I skip the formal faithfulness check and instead assert on specific fields: if the agent says the booking is confirmed, check that <code>create_booking</code> was actually called and returned success. Grounding in tool results is more reliable than grounding in documents.</p>
+        <p>Faithfulness asks whether the agent's claims are supported by the context it was given. DeepEval's <a href="https://deepeval.com/docs/metrics-faithfulness" rel="noopener noreferrer"><code>FaithfulnessMetric</code></a> is an LLM-as-judge metric for retrieval pipelines: it needs the agent's output and the retrieved context, and it checks the output against that context. I did not run it for this page, because it needs a judge model and a key. For a tool-using agent with no retrieval, the cheaper check is deterministic. If the reply says "Booked", a successful <code>book_meeting</code> call must exist. The <code>reply_contains</code> field plus the expected calls above does exactly that.</p>
 
         <h3>4. Latency: p50 and p95</h3>
 
-        <p>Latency is not just a performance metric; it tells you something about agent behavior. An agent that is suddenly 30% slower than baseline might be calling more tools than expected, entering a loop, or processing a longer context window. I track latency not because I need to hit a specific number, but because changes in latency often signal something else is wrong.</p>
+        <p>Latency matters because a sudden rise often means extra tool calls or a loop. Track the median and the 95th percentile end to end, from the user's message to the final reply. A common snippet computes p95 as <code>sorted_values[int(n * 0.95)]</code>. For 20 values that returns the maximum, not the 95th percentile. Nearest-rank is <code>ceil(0.95 * n) - 1</code>, which gives the 19th value, and a unit test pins it down:</p>
 
-        <p>I measure wall-clock time from the first token of the user's message to the agent's final response. I track p50 (median) and p95. The p95 tells me about my worst cases, which are often the edge-case inputs in my golden set.</p>
+<pre><code>from evals import percentile
+def test_p95_nearest_rank():
+    assert percentile(list(range(1, 21)), 0.95) == 19   # 20 values: 95th percentile is the 19th, not the max
+    assert percentile([5], 0.95) == 5
+def test_old_formula_returns_max():
+    s = list(range(1, 21)); assert s[min(int(len(s) * 0.95), len(s) - 1)] == 20</code></pre><pre><code>2 passed in 0.01s</code></pre>
 
-        <pre><code>import time
+        <p>The stub answers in microseconds, so the latency figures in the run below are meaningless for judging an agent. Measure latency on the real agent, with real tool calls, and set the budget from how long your user will wait.</p>
 
-def run_with_timing(agent_fn, inputs: list) -> list:
-    results = []
-    for inp in inputs:
-        start = time.perf_counter()
-        output = agent_fn(inp)
-        elapsed = time.perf_counter() - start
-        results.append({"input": inp, "output": output, "latency_s": elapsed})
-    return results
+        <h3>5. Regression rate</h3>
 
-def p95(latencies: list) -> float:
-    sorted_l = sorted(latencies)
-    idx = int(len(sorted_l) * 0.95)
-    return sorted_l[min(idx, len(sorted_l) - 1)]</code></pre>
+        <p>Regression rate is the share of cases that passed on the previous version and fail on this one. It is the number to watch while tuning prompts, because it shows what a change broke even when the overall score looks flat. To test it, I made a second version of the stub (<code>v2</code>) that drops the complaint-handoff rule, a stand-in for a prompt edit that removes a branch by accident. Here is the report script and its output:</p>
 
-        <p>I set a soft threshold: if my p95 crosses 10 seconds on the golden set, I investigate before shipping. That threshold is specific to my use case. Yours will be different depending on what the agent is doing and who is waiting for it.</p>
+<pre><code>import json
+from evals import *
 
-        <h3>5. Regression rate against the golden set</h3>
+cases = load_golden()
+v1, v2 = run_suite(cases, "v1"), run_suite(cases, "v2")
+for name, rows in (("v1", v1), ("v2", v2)):
+    lat = [r["latency_s"] * 1000 for r in rows]
+    print(f"{name}: tool_precision={tool_precision(rows):.2f} completion={completion_rate(rows):.2f} "
+          f"p50={percentile(lat, .5):.3f}ms p95={percentile(lat, .95):.3f}ms n={len(rows)}")
+rate, broke = regression_rate(v1, v2)
+print(f"regression v1-&gt;v2: {rate:.2f} ({len(broke)} of {sum(r['complete'] for r in v1)} previously passing) {broke}")
+with open("failures-v2.jsonl", "w") as f:
+    for r in v2:
+        if not r["complete"]:
+            f.write(json.dumps({"id": r["id"], "input": r["input"], "actual": r["actual"]}) + "\n")</code></pre><pre><code>v1: tool_precision=1.00 completion=1.00 p50=0.010ms p95=0.018ms n=20
+v2: tool_precision=0.80 completion=0.80 p50=0.008ms p95=0.012ms n=20
+regression v1-&gt;v2: 0.20 (4 of 20 previously passing) ['hd-01', 'hd-02', 'hd-03', 'hd-04']</code></pre>
 
-        <p>The previous four metrics tell you the absolute quality of your agent on a given version. Regression rate tells you whether a specific change made things worse. It is the metric I run most often because I am constantly tuning prompts.</p>
+        <p>The v2 run loses four cases that v1 passed: <code>hd-01</code> to <code>hd-04</code>. Regression rate is 0.20, tool precision falls from 1.00 to 0.80, and task completion falls from 1.00 to 0.80. The same cases show up under pytest, with one result per case id:</p>
 
-        <p>I define regression rate as: (test cases that passed in the previous run and fail in this run) / (test cases that passed in the previous run). If I change the system prompt and 5 out of 40 previously-passing cases now fail, the regression rate is 0.125 and I need to understand why before shipping.</p>
+<pre><code>$ pytest tests/ -q
+....................                                                     [100%]
+20 passed in 0.02s
 
-        <p>To track this across runs, I store the pass/fail state of each test case by its ID, keyed by git commit. Then before shipping I compare the current run's results to the last known-good run. This gives me a diff rather than just an absolute score, which is easier to act on.</p>
+$ AGENT_VERSION=v2 pytest tests/ -q --tb=no
+................FFFF                                                     [100%]
+=========================== short test summary info ============================
+FAILED tests/test_agent.py::test_case[hd-01] - AssertionError: got [{'name': ...
+FAILED tests/test_agent.py::test_case[hd-02] - AssertionError: got [{'name': ...
+FAILED tests/test_agent.py::test_case[hd-03] - AssertionError: got [{'name': ...
+FAILED tests/test_agent.py::test_case[hd-04] - AssertionError: got [{'name': ...
+4 failed, 16 passed in 0.02s</code></pre>
 
-        <h2>Building the golden set</h2>
+        <h2>Step 3: read the failure traces, not only the rate</h2>
 
-        <p>The golden set is the hardest part, and skipping it is the most common mistake I see. Without a golden set, evals are just running the agent against random inputs and hoping the output looks reasonable. That is not measurable.</p>
+        <p>The report also writes each failing case to a JSONL file, so you can read what the agent did instead of guessing. These are the first two lines for v2:</p>
 
-        <p>I build the golden set in two stages.</p>
+<pre><code>{"id": "hd-01", "input": "This is unacceptable, I want a refund", "actual": [{"name": "qualify_lead", "arguments": {"score": 20, "follow_up": false}}]}
+{"id": "hd-02", "input": "I'm angry, nobody replied to my last email", "actual": [{"name": "qualify_lead", "arguments": {"score": 20, "follow_up": false}}]}</code></pre>
 
-        <p>First, I create synthetic cases before shipping. I think through the main scenarios the agent needs to handle: the happy path, the most common edge cases, and any inputs where I already know the agent should behave a specific way. For a 10-tool agent, I usually end up with 25 to 40 synthetic cases at this stage. I write the expected tool calls and expected response properties by hand for each one.</p>
+        <p>The agent called <code>qualify_lead</code> on an angry refund request and never handed off. A pass rate of 0.80 would not tell you that. Look at the split by group for the v2 run: 12 of 12 lead-qualification cases passed, 4 of 4 booking cases passed, and 0 of 4 handoff cases passed. One whole behaviour is gone.</p>
 
-        <p>Second, I add real cases from production as they accumulate. When I see an interesting or unexpected interaction in the logs, I add it to the golden set with the correct behavior annotated. Over time, the golden set shifts from synthetic to mostly real, and it becomes more representative of what users actually do.</p>
+        <p>That points at a weakness in gating on the overall rate alone. If only two of the four handoff cases had failed, v2 would score 18 of 20, which is 0.90, and a 90% gate would let it ship with the handoff path half broken. Mark the cases you cannot afford to fail, such as handoffs, refunds and anything that writes to a system, as critical, and block the release on any critical failure whatever the overall rate says.</p>
 
-        <p>The format I use is a JSON file per test suite:</p>
+        <h2>Step 4: run it in CI</h2>
 
-        <pre><code>[
-  {
-    "id": "lead-qual-001",
-    "input": "I run a 15-person design agency, revenue around $800k, want to automate client onboarding",
-    "expected_tool": "qualify_lead",
-    "expected_args": {
-      "score": {"range": [70, 100]},
-      "follow_up": true
-    },
-    "expected_response_contains": ["onboarding", "automation"]
-  },
-  {
-    "id": "lead-qual-002",
-    "input": "just browsing, not sure if I need this",
-    "expected_tool": "qualify_lead",
-    "expected_args": {
-      "score": {"range": [0, 40]},
-      "follow_up": false
-    }
-  }
-]</code></pre>
+        <p>Run the suite on every pull request that touches the agent, its prompts or the golden set. One trap: pytest exits non-zero on any failing case, so a workflow that says "fail below 90%" but runs a single pytest step fails on the first bad case instead. To enforce a rate, let the pytest step produce a JUnit file without failing the job, then check the rate in a second step. Here is the gate script and its result on the two runs above:</p>
 
-        <p>I keep this file in the repo next to the agent code. When the agent's intended behavior changes, I update the golden set to match before making the code change. That way the golden set reflects what I intend, not just what the previous version happened to do.</p>
+<pre><code>import sys, xml.etree.ElementTree as ET
+root = ET.parse(sys.argv[1]).getroot()
+suite = root if root.tag == "testsuite" else root.find("testsuite")
+total, bad = int(suite.get("tests")), int(suite.get("failures")) + int(suite.get("errors"))
+rate = (total - bad) / total
+print(f"pass rate {rate:.2f} ({total - bad}/{total}), threshold {float(sys.argv[2]):.2f}")
+sys.exit(0 if rate &gt;= float(sys.argv[2]) else 1)</code></pre><pre><code>$ python gate.py v1.xml 0.90
+pass rate 1.00 (20/20), threshold 0.90
+exit=0
+$ python gate.py v2.xml 0.90
+pass rate 0.80 (16/20), threshold 0.90
+exit=1</code></pre>
 
-        <h2>Running evals with DeepEval and pytest</h2>
+        <p>And the workflow that wires it together:</p>
 
-        <p>I use two tools for running evals: DeepEval for the faithfulness and relevancy metrics that require LLM-as-judge, and plain pytest with assertion functions for everything else. The two work well together because DeepEval integrates with pytest natively.</p>
-
-        <p>Here is the test file structure I use for a tool-using agent:</p>
-
-        <pre><code>import json
-import pytest
-from pathlib import Path
-from my_agent import run_agent  # your agent function
-
-GOLDEN_SET = json.loads(Path("tests/golden_set.json").read_text())
-
-@pytest.mark.parametrize("case", GOLDEN_SET, ids=[c["id"] for c in GOLDEN_SET])
-def test_tool_call_precision(case):
-    result = run_agent(case["input"])
-    tool_calls = result.get("tool_calls", [])
-    assert len(tool_calls) > 0, f"No tool calls for: {case['input']}"
-    last_call = tool_calls[-1]
-    assert last_call["name"] == case["expected_tool"], (
-        f"Expected {case['expected_tool']}, got {last_call['name']}"
-    )
-    for arg, expectation in case.get("expected_args", {}).items():
-        actual_val = last_call.get("arguments", {}).get(arg)
-        if isinstance(expectation, dict) and "range" in expectation:
-            lo, hi = expectation["range"]
-            assert lo <= actual_val <= hi, f"{arg}={actual_val} outside [{lo},{hi}]"
-        else:
-            assert actual_val == expectation, f"{arg}: expected {expectation}, got {actual_val}"</code></pre>
-
-        <p>I run this with <code>pytest tests/ -v --tb=short</code>. The parametrize decorator gives me one test result per case, so I can see exactly which cases pass and which fail. The output looks like this:</p>
-
-        <pre><code>tests/test_agent.py::test_tool_call_precision[lead-qual-001] PASSED
-tests/test_agent.py::test_tool_call_precision[lead-qual-002] PASSED
-tests/test_agent.py::test_tool_call_precision[lead-qual-003] FAILED
-...
-15 passed, 3 failed in 42.3s</code></pre>
-
-        <p>The 42-second runtime is because each test case makes a real LLM call. I accept that cost. Running 40 test cases takes about 2 minutes on GPT-4o-mini, which costs roughly $0.08. That is a worthwhile gate before a deployment.</p>
-
-        <p>For production monitoring, I also instrument the live agent with <a href="https://langfuse.com" rel="noopener noreferrer">Langfuse</a>, which captures every trace including tool calls, latency, token counts, and model responses. When something goes wrong in production, I can pull the trace, reproduce the input in my test suite, and add it to the golden set. The combination of pre-ship evals and production tracing covers both the planned and unplanned failure modes.</p>
-
-        <h2>Eval frameworks compared</h2>
-
-        <p>I have tried four different approaches over the past year. Here is what each one is actually good for:</p>
-
-        <table class="comparison-table">
-            <thead>
-                <tr>
-                    <th>Framework</th>
-                    <th>Best for</th>
-                    <th>LLM-as-judge</th>
-                    <th>CI-ready</th>
-                    <th>Cost per run</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>DeepEval</strong></td>
-                    <td>RAG + tool agents, many built-in metrics</td>
-                    <td>Yes, configurable</td>
-                    <td>Yes (pytest plugin)</td>
-                    <td>LLM API cost only</td>
-                </tr>
-                <tr>
-                    <td><strong>Langfuse evals</strong></td>
-                    <td>Production trace scoring</td>
-                    <td>Yes, runs async on traces</td>
-                    <td>Via webhooks</td>
-                    <td>Free OSS, cloud pricing above free tier</td>
-                </tr>
-                <tr>
-                    <td><strong>Inspect AI</strong></td>
-                    <td>Task-based agents, safety evals</td>
-                    <td>Yes, model graders</td>
-                    <td>Yes (Python CLI)</td>
-                    <td>LLM API cost only</td>
-                </tr>
-                <tr>
-                    <td><strong>pytest + assertions</strong></td>
-                    <td>Tool calls, format checks, regression</td>
-                    <td>No (hand-roll it)</td>
-                    <td>Yes (native)</td>
-                    <td>LLM API cost only</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <p>My current setup: pytest for all Level 1 assertion checks, DeepEval for faithfulness and relevancy on the small subset of cases where I need semantic scoring, and Langfuse in production for trace capture. I do not use all three at once in CI; pytest runs on every push, DeepEval runs on a scheduled daily job, and Langfuse is always-on in production.</p>
-
-        <h2>Putting evals in CI</h2>
-
-        <p>The eval workflow only pays off if it runs automatically. Running it manually before every deploy is something I will skip when I am in a hurry, and that is exactly when I most need it.</p>
-
-        <p>My GitHub Actions job looks like this:</p>
-
-        <pre><code>name: Agent Evals
+<pre><code>name: Agent Evals
 on:
-  push:
-    branches: [main, staging]
   pull_request:
-    paths:
-      - "agent/**"
-      - "prompts/**"
-
+    paths: ["agent/**", "prompts/**", "tests/**", "golden_set.json"]
 jobs:
   evals:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - run: pip install -r requirements.txt
-      - run: pytest tests/test_agent.py -v --tb=short --junitxml=eval-results.xml
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      - uses: actions/upload-artifact@v4
+      - run: pip install pytest
+      - run: python validate_golden.py
+      - run: pytest tests/ -q --junitxml=eval-results.xml
+        continue-on-error: true
+      - run: python gate.py eval-results.xml 0.90
+      - uses: actions/upload-artifact@v7
+        if: always()
         with:
           name: eval-results
           path: eval-results.xml</code></pre>
 
-        <p>I set the CI job to fail the PR if the test pass rate drops below 90%. Not 100%: LLM outputs vary slightly run to run, and a small number of cases will occasionally fail due to natural variance, not a real regression. Setting the threshold at 90% means a random-variation failure does not block a deploy, but a systematic regression does. I tune this per agent depending on how sensitive the task is.</p>
+        <p>I parsed this file as YAML, but I did not run it on GitHub, so treat it as a starting point. The action versions are the current majors as of 30 October 2026: <code>actions/checkout</code> v7.0.1, <code>actions/setup-python</code> v7.1.0 and <code>actions/upload-artifact</code> v7.0.2, each read from the repository's releases. If you use DeepEval, its docs recommend <code>deepeval test run</code> over plain pytest because it adds flags for repeats, error handling and async. Langfuse documents a GitHub Action, <code>langfuse/experiment-action</code>, that fails the job when your experiment script raises <code>RegressionError</code>.</p>
 
-        <p>I also track the pass rate over time. I store each run's results in a simple JSON file committed to the repo, and I have a script that plots pass rate by commit. After a prompt change, I can see immediately whether the rate went up, down, or stayed flat, which is more useful than a single green or red CI result.</p>
+        <p>The 90% threshold here is a starting point I picked, not a standard. A stub is deterministic, so one run is enough. A real LLM agent varies between runs, so run each case more than once before you decide how much slack the rate needs.</p>
 
-        <h2>The LLM-as-judge calibration problem</h2>
+        <h2>Tools compared</h2>
 
-        <p>LLM-as-judge is useful but it has a failure mode I did not see until I started comparing judge scores against my own manual labels. The judge model tends to agree with the agent model's style, especially if they are from the same family. This means GPT-4o judging GPT-4o outputs will give higher scores than a human would, particularly on fluency and tone.</p>
+        <p>These rows were checked on 30 October 2026 against PyPI, the projects' own repositories and Langfuse's pricing page.</p>
 
-        <p>I calibrate my judge by running it against a set of cases I have already labeled myself. I take 20 to 30 cases from the golden set and manually score each one on the metric I care about, then compare my scores to the judge's scores. If the judge is consistently higher than me by more than 0.15 points, I adjust the threshold I use for pass/fail downward by that offset. This is not perfect, but it keeps the judge from becoming a rubber stamp.</p>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Tool</th>
+                    <th>Licence</th>
+                    <th>Version checked</th>
+                    <th>What it gives you</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>pytest + assertions</strong></td>
+                    <td>MIT</td>
+                    <td>9.2.0 (2026-10-27)</td>
+                    <td>Deterministic checks on tool calls and events. No judge model. What I ran on this page.</td>
+                </tr>
+                <tr>
+                    <td><strong>DeepEval</strong></td>
+                    <td>Apache-2.0</td>
+                    <td>4.3.2 (2026-10-27)</td>
+                    <td>Metrics for tool correctness, task completion (trace-based) and faithfulness (retrieval). Runs through pytest. Judge metrics use your own model API.</td>
+                </tr>
+                <tr>
+                    <td><strong>Inspect AI</strong></td>
+                    <td>MIT</td>
+                    <td>0.3.286 (2026-10-28)</td>
+                    <td>Framework for LLM evaluations from the UK AI Security Institute. Its README lists tool use, multi-turn dialog, model-graded evaluations and 200+ pre-built evals.</td>
+                </tr>
+                <tr>
+                    <td><strong>Langfuse</strong></td>
+                    <td>MIT outside its <code>ee/</code> directories</td>
+                    <td>Python SDK 5.0.4 (2026-10-21)</td>
+                    <td>Scores live traces, builds datasets from them, runs experiments. Cloud Hobby plan is free with 50k units a month. Core is $29 a month with 100k units.</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <p>The other issue is that LLM-as-judge is expensive compared to assertions. Each judged case adds one LLM call. For a 50-case golden set evaluated on two metrics, that is 100 extra calls per eval run. I run the judge-based metrics less frequently and reserve assertions for the CI gate.</p>
+        <h2>The LLM-as-judge problem</h2>
 
-        <h2>What I do differently now, and what it changed</h2>
+        <p>A judge model is another model with its own bias. The paper <a href="https://arxiv.org/abs/2404.13076" rel="noopener noreferrer">LLM Evaluators Recognize and Favor Their Own Generations</a> (arXiv:2404.13076, April 2024) reports that an LLM evaluator can score its own outputs higher than others' while human annotators rate them as equal in quality. Two practical consequences follow. Use a judge from a different model family than the agent. And before you trust judge scores, label 20 to 30 cases by hand, run the judge on the same cases, and look at how often it agrees with you. I did not run a judge for this page, so I have no agreement figure to show. A judge also adds a model call per case per metric, so judged metrics are better kept out of the per-pull-request gate and run on a schedule instead.</p>
 
-        <p>Before I added evals, my deploy process was: run the agent manually a few times, look at the outputs, and push if they looked right. After adding evals, my deploy process is: run the 40-case pytest suite, look at the pass rate, review any new failures, and push only if the rate is above 90%.</p>
+        <h2>A release checklist</h2>
 
-        <p>The difference in practice: I caught a regression in a lead-qualification agent three days before it would have reached production users. I had changed the system prompt to be more concise and the tool call precision dropped from 0.93 to 0.71 on the golden set. Without the eval, I would have shipped that change because the outputs I manually reviewed all looked fine. The regression was only visible on the edge cases I did not think to check by hand.</p>
+        <p>These are starting rules, written as gates. Adjust each to the cost of a failure in your own workflow.</p>
 
-        <p>I have also reduced the time I spend on manual review after prompt changes, because the eval tells me whether the change was structurally good or bad before I read any outputs. That frees up time to look at the interesting cases rather than trying to spot regressions by eye across 50 outputs.</p>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Gate</th>
+                    <th>Starting rule</th>
+                    <th>Evidence to keep</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Golden set is valid</td>
+                    <td>Validator passes; labels reviewed by someone who did not build the agent</td>
+                    <td>Validator output, reviewer name and date in each case</td>
+                </tr>
+                <tr>
+                    <td>Critical cases</td>
+                    <td>100% pass</td>
+                    <td>Per-case results from the JUnit file</td>
+                </tr>
+                <tr>
+                    <td>Tool call precision</td>
+                    <td>At least 0.90, and no wrong-target write calls</td>
+                    <td>Metric output and the failing traces</td>
+                </tr>
+                <tr>
+                    <td>Regression</td>
+                    <td>No previously passing critical case may fail</td>
+                    <td>Diff against the last released version</td>
+                </tr>
+                <tr>
+                    <td>Overall pass rate</td>
+                    <td>At least 0.90 on repeated runs</td>
+                    <td>Gate script output per run</td>
+                </tr>
+                <tr>
+                    <td>Faithfulness</td>
+                    <td>Judge checked against human labels first, then a threshold you set</td>
+                    <td>Agreement figure for the judge, scores per case</td>
+                </tr>
+                <tr>
+                    <td>Latency</td>
+                    <td>p95 inside the wait your user will accept</td>
+                    <td>p50 and p95 from the real agent with real tools</td>
+                </tr>
+                <tr>
+                    <td>Human review</td>
+                    <td>A person reads a sample of 10 to 20 traces before launch</td>
+                    <td>Notes on what was found</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <p>If you want to talk through what evals make sense for your specific agent, <a href="/consulting.html">book a call</a>. I am happy to look at your setup and tell you where the most useful eval would be.</p>
+        <p>If you are not sure the use case is ready for production at all, the <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> covers the organisational side, and the <a href="/blog/ai-pilot-to-production-guide.html">pilot to production guide</a> covers what usually breaks between a demo and a launch. To judge whether the use case is worth the cost of building and running evals, the <a href="/roi-calculator.html">ROI calculator</a> gives you a first estimate.</p>
+
+        <h2>What this page does not show</h2>
+
+        <p>The agent is a stub, so there is no model variance, no real latency and no real tool failures. The golden set is synthetic and hand-written by the same person who wrote the stub. Faithfulness was not run. The workflow file was parsed but not executed on GitHub. Agents that run for hours add another failure class, resuming after a crash, which I cover in <a href="/blog/durable-execution-voice-agent-campaigns.html">durable execution for long-running agent campaigns</a>. Everything above that I did run is shown with its output, and the code is complete enough to copy and adapt to a real agent by replacing <code>run_agent()</code>.</p>
+
+        <p>If you want a second pair of eyes on which cases and gates make sense for your agent, you can <a href="/consulting.html">book a call</a>.</p>
 
         <!-- FAQ Section -->
         <div class="article-faq">
             <h2>Frequently Asked Questions</h2>
 
             <div class="faq-item">
-                <h3>What are AI agent evals?</h3>
-                <p>AI agent evals are automated tests that measure whether your agent does the right thing before you ship. They go beyond unit tests: they check that the agent picks the right tools, returns accurate information, completes tasks end-to-end, and does not regress when you change the prompt. Evals run against a golden set of representative inputs with known expected outputs.</p>
+                <h3>How do I evaluate an AI agent before deployment?</h3>
+                <p>Write a golden set of 20 to 50 reviewed test cases that record the expected tool calls and outcomes, run the agent against them, and score tool-call precision, task completion, faithfulness, latency and regression rate. Release only if every critical case passes and the overall pass rate clears your threshold. The numbers on this page come from a stub agent, so use them to understand the harness, not to predict a model.</p>
             </div>
 
             <div class="faq-item">
                 <h3>What is a golden set in AI agent testing?</h3>
-                <p>A golden set is a curated list of input-output pairs that represent real or realistic agent tasks, annotated with what the correct response or action looks like. You run your agent against these inputs on every code or prompt change and check whether the outputs still match expectations. The golden set grows over time as you discover edge cases in production.</p>
+                <p>A golden set is a list of inputs paired with the tool calls and results a correct agent should produce. It only helps if the expected answers are right, so check the file for duplicate inputs, conflicting labels and impossible ranges, and have someone who did not build the agent review the labels. Add real failures from production traces over time.</p>
             </div>
 
             <div class="faq-item">
                 <h3>How many examples do I need in a golden set?</h3>
-                <p>Start with 20 to 50 examples that cover your most common scenarios and your known failure modes. That is enough to catch most regressions and to get meaningful pass rates within a CI run that finishes in a few minutes. Do not aim for 100% coverage before shipping; aim for coverage of the scenarios where failure would actually matter.</p>
+                <p>Start with 20 to 50 cases covering the common paths and the failures that would cost you the most. That range is my rule of thumb, not a published standard. What matters more than the count is that every case you cannot afford to fail is in the set and is marked critical.</p>
             </div>
 
             <div class="faq-item">
                 <h3>Should I use an LLM as a judge for my evals?</h3>
-                <p>LLM-as-judge is useful for criteria that are hard to express as assertions, like whether a response is polite or whether it answers the user's intent. But it adds cost and latency to your eval loop, and the judge's own biases can make scores noisy. For tool calls and task completion, deterministic assertions are cheaper and more reliable. Use LLM-as-judge only for the criteria that genuinely need it.</p>
+                <p>Use deterministic assertions wherever you can, such as tool names, argument ranges and required events. Use an LLM judge only for criteria you cannot assert, such as whether an answer is supported by retrieved text. Judges can favour their own model family (arXiv:2404.13076), so use a different family from the agent and check the judge against human labels first.</p>
             </div>
 
             <div class="faq-item">
-                <h3>What tools do builders use to run AI agent evals?</h3>
-                <p>DeepEval is a popular open-source Python library that integrates with pytest and provides metrics like faithfulness, answer relevancy, and tool call accuracy out of the box. Langfuse is an open-source observability platform that lets you run evals against logged traces from production. Inspect AI, from the UK AI Safety Institute, is a task-based eval framework suited to agentic workflows. You can also write evals by hand using pytest and assertion functions, which gives you maximum control at the cost of more setup.</p>
+                <h3>What tools can run AI agent evals?</h3>
+                <p>Plain pytest with assertion functions needs nothing else. DeepEval (Apache-2.0) adds metrics such as tool correctness, task completion and faithfulness and runs through pytest. Inspect AI (MIT), from the UK AI Security Institute, is a framework for model evaluations. Langfuse scores production traces and runs dataset experiments. Versions and licences were checked on 30 October 2026.</p>
             </div>
 
             <div class="faq-item">
                 <h3>How do I run AI agent evals in CI?</h3>
-                <p>Create a test file that loads your golden set, runs the agent against each input, and asserts on the output or tool calls using pytest. Add that test job to your GitHub Actions or GitLab CI configuration. Set a minimum pass rate (for example, 90%) rather than requiring 100%, because a small fraction of LLM outputs will vary. Track the pass rate over time so you can spot trends before they become incidents.</p>
+                <p>Run the suite on every pull request that touches the agent or its prompts, write a JUnit file, and add a second step that computes the pass rate and fails the job below your threshold. A single pytest step cannot enforce a 90% rate, because pytest exits non-zero on any failing case. Also block the release when any critical case fails.</p>
             </div>
         </div>
 
         <!-- CTA in article -->
         <h2>Want help setting up evals for your agent?</h2>
-        <p>If you have an agent in production or getting close to shipping and are not sure where to start with evals, I can review your setup and point out the biggest gaps. Book a free 30-minute call.</p>
+        <p>If you have an agent in production or close to shipping and are not sure where to start with evals, I can review your setup and point out the biggest gaps. Book a free 30-minute call.</p>
         <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
 
         <!-- Author Byline -->
@@ -843,17 +921,17 @@ jobs:
     <section class="related-posts">
         <h2>Related Posts</h2>
         <div class="related-grid">
-            <a href="/blog/mcp-server-vs-webhook-automation-builders.html" class="related-card">
-                <h3 class="related-card-title">MCP server vs webhook: when the server wins</h3>
-                <p class="related-card-excerpt">I rebuilt an n8n lead webhook as an MCP server and timed both. The decision rule I use to pick between them.</p>
+            <a href="/blog/ai-pilot-to-production-guide.html" class="related-card">
+                <h3 class="related-card-title">From Pilot to Production: Why 70% of AI Pilots Never Scale</h3>
+                <p class="related-card-excerpt">Most AI pilots never reach production. The reasons are predictable. Here is the playbook for moving AI from experiment to operating reality.</p>
+            </a>
+            <a href="/blog/durable-execution-voice-agent-campaigns.html" class="related-card">
+                <h3 class="related-card-title">Durable Execution for Voice and AI Agent Campaigns</h3>
+                <p class="related-card-excerpt">I killed an outbound campaign mid-dial under DBOS and Temporal. Both resumed, but only an idempotency key stopped the duplicate call.</p>
             </a>
             <a href="/blog/agentic-ai-enterprise-2027.html" class="related-card">
                 <h3 class="related-card-title">Agentic AI in the Enterprise: A Grounded 2027 Outlook</h3>
-                <p class="related-card-excerpt">What agentic AI actually looks like in production today, and what changes by 2027.</p>
-            </a>
-            <a href="/blog/ai-pilot-to-production-guide.html" class="related-card">
-                <h3 class="related-card-title">AI pilot to production: what actually breaks in the middle</h3>
-                <p class="related-card-excerpt">The gaps between a working demo and a shipped product, and how to close them systematically.</p>
+                <p class="related-card-excerpt">Verified data on where agentic AI stands in 2026, what changes by 2027, and what executives should decide now versus wait on.</p>
             </a>
         </div>
     </section>
