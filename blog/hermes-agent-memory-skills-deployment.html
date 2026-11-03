@@ -663,7 +663,7 @@ Decision: NEEDS CONFIRMATION (agent-created source + dangerous verdict, 3 findin
 <tr><td>Environment hygiene</td><td>Shell tokens leaked into a throwaway home</td><td>Run labs and CI with a scrubbed environment</td><td>Observed</td></tr>
 </tbody></table>
 
-<p>The tools row is the one I would raise first with a client. Memory and skills decide what the agent knows. The tool list decides what it can do when its knowledge is wrong. The <a href="https://hermes-agent.nousresearch.com/docs/user-guide/security" rel="noopener">security documentation</a> describes eight layers, with dangerous-command approval and file-write safety near the top, and it is worth reading with the tool list in front of you. I tested none of those layers. For a related look at how a different agent behaves when a chat user can reach its tools, see my <a href="/blog/openclaw-slack-integration.html">OpenClaw Slack integration test</a>.</p>
+<p>The tools row is the one I would raise first with a client. Memory and skills decide what the agent knows. The tool list decides what it can do when its knowledge is wrong. The <a href="https://hermes-agent.nousresearch.com/docs/user-guide/security" rel="noopener">security documentation</a> describes eight layers, with <a href="/blog/ai-agent-approval-gate-placement.html">dangerous-command approval</a> and file-write safety near the top, and it is worth reading with the tool list in front of you. I tested none of those layers. For a related look at how a different agent behaves when a chat user can reach its tools, see my <a href="/blog/openclaw-slack-integration.html">OpenClaw Slack integration test</a>.</p>
 
 <h2>12. What I did not test</h2>
 
