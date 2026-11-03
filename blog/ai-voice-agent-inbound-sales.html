@@ -7,7 +7,7 @@
     <!-- Primary SEO Meta Tags -->
     <title>AI Voice Agent for Inbound Sales: How It Qualifies Calls</title>
     <meta name="description" content="How an AI voice agent qualifies inbound sales calls: a sample qualification script, CRM and calendar hookup, and the results to expect.">
-    <meta name="keywords" content="ai voice agent inbound sales, ai phone agent sales calls, ai voice agent lead qualification, ai sales automation, best AI automation agency for small businesses">
+    <meta name="keywords" content="ai voice agent inbound sales, ai phone agent sales calls, ai voice agent lead qualification, ai sales automation">
     <meta name="author" content="Suyash Raj">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://rajsuyash.com/blog/ai-voice-agent-inbound-sales.html">
@@ -55,7 +55,7 @@
                 "name": "Suyash Raj"
             },
             "datePublished": "2026-05-15",
-            "dateModified": "2026-05-15",
+            "dateModified": "2026-11-03",
             "mainEntityOfPage": {
                 "@type": "WebPage",
                 "@id": "https://rajsuyash.com/blog/ai-voice-agent-inbound-sales.html"
@@ -75,7 +75,7 @@
                     "name": "Can an AI voice agent actually close sales?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "AI voice agents are best positioned to qualify leads, capture intent, and book follow-up calls rather than close complex deals. For transactional or low-consideration purchases, they can walk a caller through options and confirm orders. For higher-value B2B or service sales, they qualify the lead and hand off to a human closer with a full briefing already written."
+                        "text": "In my view it is better suited to qualifying and booking than to closing. A higher-value or considered purchase usually needs a person for the decision, so the agent's job is to capture the answers, book the next step and hand over with the notes already written. Simple, low-consideration purchases are a different case, and I have not tested those here."
                     }
                 },
                 {
@@ -83,23 +83,23 @@
                     "name": "How does an AI voice agent qualify a sales lead?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "The agent asks a short qualification script you define: budget range, timeline, project type, location (for service businesses), or company size. Answers are scored against your criteria and the lead is either routed to a sales rep, booked for a discovery call, or added to a nurture sequence automatically."
+                        "text": "It asks your screening questions in conversation, converts the answers into structured fields such as need, budget range, timeline and region, then applies rules you wrote. Clear passes get a booking, hard fails get a polite decline, and anything unknown or contradictory goes to a person."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "What happens when the AI cannot answer a sales question?",
+                    "name": "What happens when the caller wants a person?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Good AI voice agents have a graceful escalation path. They capture the caller's name and question, offer a callback window, and immediately notify a sales rep by SMS or CRM update. No lead falls through the cracks even when the AI hits its knowledge boundary."
+                        "text": "The request should override every other rule. Retell and Vapi both document transferring a live phone call to a number or SIP URI, and Retell offers cold, warm and agentic warm transfer. Plan a callback task for when nobody is available, and treat a transfer as attempted until you can confirm someone answered."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "How long does it take to set up an AI voice agent for sales?",
+                    "name": "Can it write to my CRM without creating duplicates?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "A basic inbound sales voice agent can go live in two to four weeks. That includes writing the qualification script, connecting your CRM and calendar, setting escalation rules, and running test calls. A more complex deployment with custom integrations and multi-path conversation flows typically takes six to eight weeks."
+                        "text": "With HubSpot, the documented route is the batch upsert endpoint with email as the idProperty, since email is the primary unique identifier. A caller who gives no valid email cannot be matched that way, so flag that contact for a person to check. Also make the webhook handler idempotent, because Retell can redeliver an event up to 3 times."
                     }
                 },
                 {
@@ -107,7 +107,7 @@
                     "name": "How much does an AI voice agent for inbound sales cost?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Costs vary by platform and call volume. Most SMBs pay between $300 and $800 per month for a dedicated inbound sales voice agent handling up to several hundred calls. This compares favorably to one inside sales rep at $50,000 to $70,000 per year fully loaded, who can only take calls during business hours."
+                        "text": "It depends on the platform, the call minutes and the setup work, and prices change often. I do not quote a single figure here. The dated per-minute prices and a worked model are in my pricing breakdown, and the ROI calculator takes your own call volume."
                     }
                 }
             ]
@@ -276,6 +276,29 @@
             line-height: 1.8;
             color: var(--color-ink);
             margin-bottom: 0;
+        }
+
+        .article-body pre {
+            background: var(--color-paper-warm);
+            border-left: 3px solid var(--color-accent);
+            padding: var(--space-md);
+            overflow-x: auto;
+            margin: var(--space-md) 0;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .article-body code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.875em;
+            background: rgba(13, 13, 13, 0.07);
+            padding: 0.1em 0.35em;
+        }
+
+        .article-body pre code {
+            background: none;
+            padding: 0;
+            font-size: inherit;
         }
 
         /* Comparison Table */
@@ -461,280 +484,223 @@
         <div class="article-hero-content">
             <div class="article-meta reveal" style="--delay: 0">
                 <span class="article-category">Voice Agents</span>
-                <span class="article-date">May 15, 2026</span>
-                <span class="article-read-time">11 min read</span>
+                <span class="article-date">May 15, 2026 &middot; Updated November 3, 2026</span>
+                <span class="article-read-time">12 min read</span>
             </div>
             <h1 class="article-title reveal" style="--delay: 1">AI Voice Agent for Inbound Sales: Turn Every Inquiry Into a Qualified Lead</h1>
-            <p class="article-subtitle reveal" style="--delay: 2">Most inbound sales calls go to voicemail or get answered by someone who cannot qualify the lead. An AI voice agent changes that. Here is exactly how to set one up and what to expect.</p>
+            <p class="article-subtitle reveal" style="--delay: 2">An AI voice agent can ask the qualifying questions, but the part that decides what happens next should be ordinary code you can test. Here is how that works, with a routing layer I ran.</p>
         </div>
     </section>
 
     <!-- Article Body -->
     <article class="article-body">
 
-        <p>Your marketing is working. Ads are running, SEO is delivering traffic, and your phone rings throughout the day. But a good portion of those calls go to voicemail. Or they reach someone on your team who is juggling three other things and gives the caller a rushed, incomplete answer.</p>
-
-        <p>The lead calls two more competitors. One of them answers well. You lose the deal before you ever had a real conversation.</p>
-
-        <p>This is the inbound sales problem for small and mid-sized businesses. It is not a marketing problem. It is a response and qualification problem. AI voice agents solve it by being available, consistent, and fast at every hour without adding headcount.</p>
-
-        <p>This guide explains how AI voice agents work for inbound sales, what a good qualification script looks like, how to connect your agent to your CRM and calendar, and what results you can realistically expect.</p>
-
-        <h2>Why Inbound Sales Calls Break Down at the First Touch</h2>
-
-        <p>When a prospect calls your business, they are at peak intent. Something prompted them to pick up the phone rather than fill out a form or send an email. That moment is precious. Here is what typically goes wrong:</p>
-
-        <ul>
-            <li><strong>No answer during peak hours.</strong> If you run a service business, your team is out in the field during the hours when most inbound calls come in.</li>
-            <li><strong>Inconsistent qualification.</strong> Different people on your team ask different questions. Some leads get thoroughly vetted; others book a demo without any information gathered.</li>
-            <li><strong>After-hours calls go nowhere.</strong> Studies consistently show that 30 to 40 percent of business calls happen outside of standard working hours. Those callers either leave a voicemail no one returns promptly or hang up and move on.</li>
-            <li><strong>No CRM data captured.</strong> Even when someone answers the phone and handles the call well, the notes rarely make it into your CRM within the hour.</li>
-        </ul>
-
-        <p>An AI voice agent eliminates all four of these failure points. It answers every call, runs the same qualification process every time, works at 2 a.m. the same way it works at 10 a.m., and writes the lead record directly to your CRM before the call ends.</p>
-
-        <h2>What an AI Voice Agent Actually Does on a Sales Call</h2>
-
         <div class="definition-block">
-            <p>An AI voice agent for inbound sales is a phone system that uses natural language AI to converse with callers, qualify them against your criteria, capture their information, and trigger the next step in your sales process, all without human intervention.</p>
+            <p>An AI voice agent qualifies an inbound call by asking your screening questions in conversation, turning the answers into structured fields, and passing them to rules you wrote. The rules decide whether to book a meeting, hand the lead to a person, decline politely or transfer the call. It works when those rules, not the model, make the decision.</p>
         </div>
 
-        <p>This is different from a traditional phone tree or IVR. The caller does not press buttons to navigate menus. They speak naturally. The agent understands context, handles follow-up questions, and adapts the conversation based on what the caller says.</p>
+        <p><strong>Updated November 3, 2026.</strong> I rewrote this page. The earlier version carried figures I cannot source: a 30 to 40 percent after-hours call share, answer rates going from 60 to 70 percent to 100 percent, CRM completeness of 40 to over 90 percent, a rep-versus-agent cost table, and a customer-service result from a case study that was about support costs, not sales calls. Those are gone. What replaces them is a small routing layer that I wrote and ran on 3 November 2026 (Python 3.12.3, standard library only), plus vendor documentation I read the same day. I did not run a voice agent, place a call or send a request to a CRM. The test covers the decision step after the call, and I say below what it does not cover.</p>
 
-        <p>Here is a realistic example of how a conversation might unfold for a home renovation company:</p>
+        <h2>Do AI Voice Agents Work for Qualifying Inbound Callers?</h2>
 
-        <p><strong>Caller:</strong> Hi, I'm looking to get a quote for a kitchen remodel.</p>
-        <p><strong>Agent:</strong> Great, I'd love to help you get that started. Can I ask a couple of quick questions so we can make sure we're a good fit? What's the rough square footage of the kitchen you're looking to renovate?</p>
-        <p><strong>Caller:</strong> It's about 200 square feet.</p>
-        <p><strong>Agent:</strong> Got it. And do you have a rough budget range in mind? We typically work on projects between $25,000 and $150,000.</p>
-        <p><strong>Caller:</strong> We're thinking around $60,000 to $80,000.</p>
-        <p><strong>Agent:</strong> That's well within the range we work with regularly. What's your target timeline to start the project?</p>
+        <p>For asking the same questions every time and writing the answers down, yes, and that part is not hard. For deciding what a vague, partial or contradictory answer means, it depends on how you build it. A caller who says "I'm not sure about budget yet" is the common case, not an edge case, and what the system does with it decides whether the agent helps or books your sales team into bad meetings.</p>
 
-        <p>The conversation continues for another 90 seconds. By the end, the agent has captured the caller's name, phone number, email, project details, budget, timeline, and location. It has scored the lead against your defined criteria and either booked a time with your sales calendar or flagged the lead for follow-up based on priority.</p>
+        <p>I do not have a measured conversion lift, answer rate or time saving to give you, and I would distrust any page that quotes one without naming the deployment, the period and how it counted. What I can show is where the logic goes wrong and how to test for it before a caller ever reaches the agent.</p>
 
-        <p>All of this data lands in your CRM within seconds of the call ending.</p>
+        <h2>What Happens Between "Hello" and a Booked Meeting</h2>
 
-        <h2>Building Your Qualification Script</h2>
-
-        <p>The quality of your AI voice agent is directly proportional to the quality of your qualification criteria. Before any technical setup, you need to answer two questions clearly:</p>
-
-        <ol>
-            <li><strong>What makes a lead qualified for you?</strong> Think about the deals you have closed in the past 12 months. What did the best ones have in common? Budget range? Project type? Timeline? Geographic area? Company size?</li>
-            <li><strong>What disqualifies a lead immediately?</strong> If someone is far outside your service area, wants a project well below your minimum, or has a timeline incompatible with your schedule, you need the agent to deliver a polite, helpful response and close gracefully rather than book a demo that wastes your time.</li>
-        </ol>
-
-        <p>A typical SMB qualification script covers three to five questions. Keeping it short respects the caller's time and maintains a conversational feel. Here is a sample structure:</p>
+        <p>Split the work into five steps. Only the first two involve a language model. The other three are ordinary software, and ordinary software can be tested without a phone.</p>
 
         <table class="comparison-table">
             <thead>
                 <tr>
-                    <th>Question</th>
-                    <th>What You Are Qualifying</th>
-                    <th>Disqualifier Threshold</th>
+                    <th>Step</th>
+                    <th>Done by</th>
+                    <th>Testable without a phone?</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>What brings you to call us today?</td>
-                    <td>Intent and fit with services offered</td>
-                    <td>Service not offered at all</td>
-                </tr>
-                <tr>
-                    <td>What is your approximate budget?</td>
-                    <td>Deal size viability</td>
-                    <td>Below minimum project size</td>
-                </tr>
-                <tr>
-                    <td>What is your target timeline?</td>
-                    <td>Urgency and availability alignment</td>
-                    <td>Timeline incompatible with current capacity</td>
-                </tr>
-                <tr>
-                    <td>Where is the project located?</td>
-                    <td>Service area coverage</td>
-                    <td>Outside service radius</td>
-                </tr>
-                <tr>
-                    <td>Have you worked with a [service type] before?</td>
-                    <td>Sophistication and education needed</td>
-                    <td>Rarely a disqualifier; informs pitch</td>
-                </tr>
+                <tr><td>1. Hold the conversation and ask the screening questions</td><td>Voice agent (speech-to-text, LLM, text-to-speech)</td><td>No, needs real or recorded calls</td></tr>
+                <tr><td>2. Turn what was said into fields: need, budget range, timeline, region, name, phone, email</td><td>LLM extraction, after or during the call</td><td>Partly, on saved transcripts</td></tr>
+                <tr><td>3. Decide the route: book, send to a person, decline, transfer now, ignore</td><td>Your rules, as code</td><td>Yes</td></tr>
+                <tr><td>4. Write the lead to the CRM and offer calendar slots</td><td>Webhook handler and API calls</td><td>Mostly, with a sandbox account</td></tr>
+                <tr><td>5. Notify a human and show them what was said</td><td>Webhook handler</td><td>Yes</td></tr>
             </tbody>
         </table>
 
-        <p>For leads that pass all criteria, the agent books a time on your calendar using your real-time availability. For borderline leads, it captures information and flags for human review. For clear mismatches, it offers helpful resources and ends the call without wasting anyone's time.</p>
+        <p>Most "AI sales agent" pages describe step 1 and skip step 3. Step 3 is where a lead is wrongly booked, wrongly turned away or lost, and it is the step you control completely.</p>
 
-        <h2>Connecting Your Agent to Your CRM and Calendar</h2>
+        <h2>Write the Criteria Before You Write the Script</h2>
 
-        <p>An AI voice agent without CRM integration is a telephone. The power comes from the automation that happens after the call ends. At minimum, your agent should connect to three systems:</p>
+        <p>Before any prompt, answer two questions. What makes a lead qualified for you? What disqualifies one immediately? Then split every criterion into a hard fail, which ends the call politely, and a soft one, which sends the lead to a person. I use that split because an answer the caller did not give is not a pass and is not a fail. It is unknown, and unknown goes to a human.</p>
 
-        <h3>1. CRM (HubSpot, Salesforce, Pipedrive, etc.)</h3>
-
-        <p>Every qualified call should create or update a contact record automatically. The agent's call transcript, qualification score, and captured fields should populate the contact without manual data entry. This alone saves your sales team 20 to 30 minutes per qualified lead.</p>
-
-        <p>If you run N8N workflows, you can build a custom post-call pipeline that pulls the call data, enriches the contact with company information via Apollo or Clearbit, and creates a follow-up task for the assigned rep. See our <a href="/n8n-automation.html">N8N automation service</a> for how we build these pipelines.</p>
-
-        <h3>2. Calendar (Google Calendar, Calendly, HubSpot Meetings)</h3>
-
-        <p>For qualified leads who want to move forward immediately, the agent should offer a specific time slot based on real availability. Integrating with a booking tool prevents double-booking and eliminates back-and-forth scheduling emails. The prospect gets a confirmation with the meeting details; your rep gets a briefed calendar invite with the qualification notes attached.</p>
-
-        <h3>3. SMS or Email Notifications</h3>
-
-        <p>Even when a call is handled entirely by the agent, your team should know about it within seconds. A simple SMS to the relevant rep with the lead's name, what they need, and their qualification score lets humans stay informed without being in the loop for every call.</p>
-
-        <p>Want to see whether your current setup is ready for this kind of automation? Use our <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> to identify gaps before you build.</p>
-
-        <h2>Handling Escalations Without Losing the Lead</h2>
-
-        <p>AI voice agents handle the majority of inbound sales calls without any human involvement. But some callers want to speak to a person, and some questions fall outside what the agent knows. Your escalation protocol determines whether these situations cost you leads or convert them.</p>
-
-        <p>A well-designed escalation path works like this:</p>
-
-        <ol>
-            <li>The agent detects that the caller wants to speak to someone, or reaches the boundary of its knowledge.</li>
-            <li>It offers to connect them with a team member immediately (if someone is available) or schedule a call within a specific window.</li>
-            <li>It captures all context gathered so far so the human who takes over does not have to repeat the qualification from the beginning.</li>
-            <li>A CRM task and SMS notification are triggered before the transfer or callback is arranged.</li>
-        </ol>
-
-        <p>This process means a caller who says "I just want to talk to a real person" never feels dismissed. They get a concrete next step within 30 seconds. And your team inherits a warm, briefed lead rather than a cold callback.</p>
-
-        <h2>Real Results: What Businesses See After Deployment</h2>
-
-        <p>The results from businesses that deploy AI voice agents for inbound sales follow a consistent pattern. The gains are not incremental. They are structural changes in how leads flow through the funnel.</p>
-
-        <p>At <a href="https://voxdonna.com/case-studies/le-marquier.html">Le Marquier</a>, a premium outdoor kitchen brand, deploying an AI voice agent produced an 80% reduction in customer service costs and a 98% AI handling rate. The business stopped missing after-hours inquiries from customers ready to make purchase decisions, and their sales team started each day with pre-qualified leads rather than a stack of voicemails to sort through.</p>
-
-        <p>Across service-based SMBs in similar deployments, the pattern holds:</p>
-
-        <ul>
-            <li>Call answer rate goes from 60 to 70% to 100%</li>
-            <li>Lead response time drops from hours to seconds</li>
-            <li>CRM data completeness improves from roughly 40% to over 90% of captured fields</li>
-            <li>Sales team time on unqualified calls drops significantly, freeing capacity for closing</li>
-        </ul>
-
-        <p>The second-order benefit is consistency. When every lead goes through the same qualification process every time, your conversion data becomes trustworthy. You can see exactly where leads drop off, which questions produce the best predictive signal, and how to improve your script over time based on closed deal data.</p>
-
-        <h2>AI Voice Agent vs. Inside Sales Rep: The Real Cost Comparison</h2>
-
-        <p>The most common objection to deploying an AI voice agent for inbound sales is that it feels impersonal. But the economics make the comparison stark.</p>
+        <p>The table below is the example I used in the test. The business is invented and generic: it serves callers in the US and Canada, will not take work under $20,000, can start within 12 weeks, and offers three services.</p>
 
         <table class="comparison-table">
             <thead>
                 <tr>
-                    <th>Factor</th>
-                    <th>Inside Sales Rep</th>
-                    <th>AI Voice Agent</th>
+                    <th>Field the agent captures</th>
+                    <th>Hard fail (decline politely)</th>
+                    <th>Soft: unknown or doubtful (send to a person)</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Annual cost (fully loaded)</td>
-                    <td>$55,000 to $75,000</td>
-                    <td>$3,600 to $9,600/year</td>
-                </tr>
-                <tr>
-                    <td>Availability</td>
-                    <td>Business hours only</td>
-                    <td>24/7/365</td>
-                </tr>
-                <tr>
-                    <td>Simultaneous calls</td>
-                    <td>1 at a time</td>
-                    <td>Unlimited</td>
-                </tr>
-                <tr>
-                    <td>Qualification consistency</td>
-                    <td>Varies by rep</td>
-                    <td>Identical every call</td>
-                </tr>
-                <tr>
-                    <td>CRM data entry</td>
-                    <td>Manual, often delayed</td>
-                    <td>Automatic, real-time</td>
-                </tr>
-                <tr>
-                    <td>Ramp time</td>
-                    <td>60 to 90 days</td>
-                    <td>2 to 4 weeks to deploy</td>
-                </tr>
-                <tr>
-                    <td>Handles emotional callers</td>
-                    <td>Yes</td>
-                    <td>With escalation protocol</td>
-                </tr>
+                <tr><td>Region</td><td>Outside US and Canada</td><td>Never asked</td></tr>
+                <tr><td>What they need</td><td>Something you do not offer</td><td>Never said</td></tr>
+                <tr><td>Budget range</td><td>Whole range below $20,000</td><td>Not given, range straddles $20,000, or two stated ranges that contradict</td></tr>
+                <tr><td>Start timeline</td><td>None</td><td>Not given, or beyond 12 weeks</td></tr>
+                <tr><td>Name and phone</td><td>None</td><td>Name missing or phone not valid</td></tr>
+                <tr><td>Asked for a person</td><td>Not a fail: overrides everything and transfers or books a callback</td><td></td></tr>
             </tbody>
         </table>
 
-        <p>The right answer for most SMBs is not either/or. The AI voice agent handles first contact and qualification. Your sales rep handles discovery calls and closing. The agent makes your rep more productive, not redundant.</p>
+        <p>A booking requires every row to be a clear pass. Anything else falls to a person or a polite decline. That one rule is the whole design.</p>
 
-        <p>Use our <a href="/roi-calculator.html">ROI calculator</a> to model the specific numbers for your call volume and average deal size.</p>
+        <h2>The Routing Layer I Tested</h2>
 
-        <h2>How to Set Up Your First Inbound Sales Voice Agent</h2>
+        <p>Here is the core of it. <code>budget_state</code> reduces everything the caller said about money to one of five states, and <code>route</code> applies the table above.</p>
 
-        <p>Here is the sequence that works for most SMB deployments:</p>
+        <pre><code>def budget_state(budgets, minimum):
+    &quot;&quot;&quot;&#x27;ok&#x27; | &#x27;below&#x27; | &#x27;straddle&#x27; | &#x27;unknown&#x27; | &#x27;conflict&#x27;&quot;&quot;&quot;
+    if not budgets:
+        return &quot;unknown&quot;
+    lo = max(b[0] for b in budgets); hi = min(b[1] for b in budgets)
+    if lo &gt; hi:
+        return &quot;conflict&quot;                      # stated ranges do not overlap
+    if hi &lt; minimum:
+        return &quot;below&quot;
+    return &quot;ok&quot; if lo &gt;= minimum else &quot;straddle&quot;
 
-        <ol>
-            <li><strong>Define your qualification criteria.</strong> Three to five questions that sort good leads from poor fits. Get input from whoever currently handles sales calls about what they actually ask.</li>
-            <li><strong>Write the script and objection handling.</strong> Cover the main reasons a caller might push back or ask an unexpected question. Include graceful exits for disqualified leads.</li>
-            <li><strong>Choose your platform.</strong> Options range from full-service AI voice platforms to building on top of telephony APIs with a custom LLM layer. Your choice depends on how custom your conversation flows need to be and what integrations matter most.</li>
-            <li><strong>Connect your CRM and calendar.</strong> Most platforms have native connectors. For more complex setups, N8N webhooks handle custom routing logic between the voice agent and your downstream systems.</li>
-            <li><strong>Run test calls before going live.</strong> Call your own number and try to break the agent. Ask unexpected questions, give incomplete answers, request a human. Log every gap and fix it before launch.</li>
-            <li><strong>Set up call recording and review.</strong> Review the first 50 real calls personally. You will find patterns in what callers ask that were not in your original script. Update accordingly.</li>
-        </ol>
+def route(x: Extracted, office_open: bool, criteria=CRITERIA):
+    if x.is_solicitation:
+        return &quot;no_action&quot;, &quot;caller is selling to us&quot;
+    if x.asked_for_human:
+        return (&quot;transfer_now&quot;, &quot;caller asked for a person&quot;) if office_open \
+            else (&quot;callback_task&quot;, &quot;caller asked for a person, office closed&quot;)
+    if x.region is not None and x.region not in criteria[&quot;regions&quot;]:
+        return &quot;decline_polite&quot;, f&quot;region {x.region} not served&quot;
+    if x.need == &quot;other&quot;:
+        return &quot;decline_polite&quot;, &quot;need not offered&quot;
+    b = budget_state(x.budgets, criteria[&quot;min_budget&quot;])
+    if b == &quot;below&quot;:
+        return &quot;decline_polite&quot;, &quot;budget below minimum&quot;
+    soft = []
+    if b != &quot;ok&quot;: soft.append(f&quot;budget {b}&quot;)
+    if x.region is None: soft.append(&quot;region unknown&quot;)
+    if x.need is None: soft.append(&quot;need unknown&quot;)
+    if x.start_weeks is None: soft.append(&quot;timeline unknown&quot;)
+    elif x.start_weeks &gt; criteria[&quot;max_start_weeks&quot;]: soft.append(&quot;timeline beyond capacity window&quot;)
+    if not (x.name and E164.match(x.phone)): soft.append(&quot;contact incomplete&quot;)
+    return (&quot;book&quot;, &quot;all criteria met&quot;) if not soft else (&quot;human_review&quot;, &quot;; &quot;.join(soft))</code></pre>
 
-        <p>If you want hands-on help building this, our <a href="https://voxdonna.com/ai-voice-agents.html">AI voice agent service</a> covers the full setup from script design through CRM integration and launch. We also handle ongoing iteration based on real call data.</p>
+        <p>The full file also holds the HubSpot request builder and a webhook handler that ignores redelivered events. I wrote 14 synthetic calls as test cases, each with the route I wanted. I also wrote the version most people write first, where a missing answer counts as a pass, so I could see what the tests catch. Here is the run:</p>
 
-        <h2>What to Watch in Your First 90 Days</h2>
+        <pre><code>----------------------------------------------------------------------
+Ran 5 tests in 0.001s
 
-        <p>After launch, track four metrics weekly:</p>
+OK</code></pre>
+
+        <pre><code>case                                   expected        router          naive
+01 meets every criterion               book            book            book
+02 budget below minimum                decline_polite  decline_polite  decline_polite
+03 budget range straddles minimum      human_review    human_review    book  &lt;-- WRONG
+04 &#x27;not sure&#x27; about budget             human_review    human_review    book  &lt;-- WRONG
+05 outside service area                decline_polite  decline_polite  decline_polite
+06 asks for a person, office open      transfer_now    transfer_now    transfer_now
+07 asks for a person, office closed    callback_task   callback_task   callback_task
+08 never gave a name                   human_review    human_review    book  &lt;-- WRONG
+09 start date 52 weeks out             human_review    human_review    human_review
+10 need is not something we offer      decline_polite  decline_polite  decline_polite
+11 two budgets that contradict         human_review    human_review    book  &lt;-- WRONG
+12 no timeline stated                  human_review    human_review    book  &lt;-- WRONG
+13 caller is a vendor pitching us      no_action       no_action       no_action
+14 region never asked                  human_review    human_review    book  &lt;-- WRONG
+
+router correct: 14/14   naive correct: 8/14</code></pre>
+
+        <p>The six cases the naive version gets wrong are all the same kind of mistake. A budget range that straddles the minimum, a caller who said "not sure", a caller who never gave a name, two budgets that contradict each other, no start date and no region all became bookings. Nobody wrote a rule that says "book unknowns". The naive code just never asked what happens when the field is empty. That is why I treat unknown as its own state instead of defaulting it to a pass.</p>
+
+        <p>What this does not show: the 14/14 is by construction, because I wrote the expected route and the router myself, so it checks the code against my policy and not against ground truth. The cases are synthetic. And it says nothing about step 2. How often an LLM extracts the right budget from a real accent-heavy phone call is a separate measurement, and the harder one. The method for that, with reviewed expected answers and failure traces, is in my post on <a href="/blog/ai-agent-evals-builders.html">how to evaluate an AI agent before deployment</a>.</p>
+
+        <h2>Handing Off to a Person</h2>
+
+        <p>Two rules in the test do the work. A caller who asks for a person overrides every other rule. And if nobody is available, the route is a callback task, not a transfer into a dead line.</p>
+
+        <p>On the platform side, both vendors I checked document phone transfer. In Retell's docs, the Transfer Call tool works on phone calls only, not web calls, and offers cold, warm and agentic warm transfer. A warm transfer keeps the agent on the line after it dials the destination, so it can wait for a real person and play a message only that person hears. In Vapi's docs, the transfer call tool routes an active call to a phone number or SIP URI, and if neither the tool nor the destination sets a message the assistant says "Transferring the call now". Vapi also sends a <code>status-update</code> with status <code>forwarding</code> when a transfer starts, and its docs say that event does not confirm the destination rang, answered or accepted the caller. So log a transfer as attempted, not completed, and have a fallback when nobody picks up. I read both pages on 3 November 2026 and did not test either transfer.</p>
+
+        <h2>Getting the Result Into Your CRM and Calendar</h2>
+
+        <p>The voice platform tells your server the call is over, and your server does the rest. Two details from the docs matter more than the rest.</p>
 
         <ul>
-            <li><strong>Answer rate:</strong> What percentage of inbound calls are answered by the agent versus going to voicemail? It should be close to 100%.</li>
-            <li><strong>Qualification rate:</strong> What percentage of callers complete the qualification questions? If this is below 70%, your script is too long or too intrusive.</li>
-            <li><strong>Book rate:</strong> Of qualified leads, how many book a call or next step? This is your benchmark for improving your closing language in the agent's script.</li>
-            <li><strong>CRM data completeness:</strong> Are the required fields populating consistently? Any systematic gaps indicate a script or integration issue to fix.</li>
+            <li><strong>When the data arrives.</strong> Retell fires <code>call_ended</code> first, and that payload does not include <code>call_analysis</code>. The structured fields you define under post-call extraction arrive in the later <code>call_analyzed</code> webhook. Vapi's <code>end-of-call-report</code> carries the transcript, the messages and recording URLs.</li>
+            <li><strong>Redelivery.</strong> Retell waits 10 seconds for a 2xx response and retries up to 3 times, so the same event can reach you more than once. Its docs recommend keying on the event name plus the call ID, and replying with a 2xx as soon as the payload is safely stored. The webhook class in my test does exactly that, and one test sends the same event twice and checks that only one CRM write happens.</li>
         </ul>
 
-        <p>At the 90-day mark, you will have enough data to identify which lead sources produce the highest quality calls, which qualification questions predict closed deals most reliably, and where to adjust the script for higher conversion. This feedback loop is something manual qualification rarely generates because the data is too inconsistent to trust.</p>
+        <p>For HubSpot, the contacts guide documents <code>POST /crm/v3/objects/contacts/batch/upsert</code>, where you set <code>idProperty</code> to <code>email</code> and existing contacts are updated while new ones are created. It also names email as the primary unique identifier for avoiding duplicate contacts, and notes that partial upserts are not supported when email is the <code>idProperty</code>. I did not test what that last note means against a live portal, so check it before relying on upsert to update an existing contact. The consequence for the voice call is practical: a caller who never gives a valid email cannot be matched by that key. In my design, that call creates a contact through the plain create endpoint and carries a flag asking a person to check for a duplicate. The test checks that a malformed address like "sam at example" is never used as the key. For the full integration, see <a href="/blog/ai-voice-agent-hubspot-integration.html">how an AI voice agent connects to HubSpot</a>.</p>
 
-        <p>For a broader view of how this fits into a full AI automation stack for your business, read our guide on <a href="/blog/ai-voice-agent-use-cases.html">AI voice agent use cases for small businesses</a>. And if you are comparing your options before committing, see <a href="/blog/ai-voice-agent-vs-call-center-cost.html">AI voice agent vs call center cost</a> for a detailed financial breakdown.</p>
+        <p>For the calendar, Google's <code>freeBusy.query</code> (<code>POST https://www.googleapis.com/calendar/v3/freeBusy</code>) returns busy intervals for the calendars you list, and accepts narrow scopes including <code>calendar.freebusy</code>. That is enough to offer real open slots without giving the agent access to event details. Booking is a separate step with its own permission, and I would keep that step behind your rules too. If you run n8n, the same post-call pipeline fits in a workflow; see the <a href="/n8n-automation.html">n8n automation page</a>.</p>
 
-        <!-- FAQ Section -->
+        <h2>Cost and Return</h2>
+
+        <p>I removed the rep-versus-agent table from this page because I could not source either column. Per-minute prices change often and differ by platform, so read the dated numbers in <a href="/blog/ai-voice-agent-pricing-cost-2026.html">the pricing breakdown</a> and the worked example with stated assumptions in <a href="/blog/ai-voice-agent-roi-small-business.html">the ROI post</a>, then put your own call volume into the <a href="/roi-calculator.html">ROI calculator</a>. If you are still choosing a platform, <a href="/blog/ai-voice-agent-platform-comparison-2026.html">the platform comparison</a> covers the build-or-buy decision.</p>
+
+        <h2>Setting Up a First Inbound Qualification Agent</h2>
+
+        <ol>
+            <li><strong>Write the criteria table first.</strong> Hard fails, soft unknowns, and what a person does with each soft case. Ask whoever answers sales calls today what they actually ask.</li>
+            <li><strong>Write the router and its test table.</strong> Include the ugly cases: no answer, contradiction, a vendor pitching you, a caller who wants a human at 11 p.m.</li>
+            <li><strong>Pick a platform.</strong> Whether you build on a platform or have one managed for you depends on how custom the conversation and integrations need to be. I run Voxdonna, so I am not neutral; its <a href="https://voxdonna.com/ai-voice-agents.html">voice agent page</a> is the managed option, and the comparison post above is the neutral one.</li>
+            <li><strong>Define the extraction fields</strong> on the platform and map them to the fields the router expects. Mismatched names here silently turn everything into "unknown".</li>
+            <li><strong>Test with recorded and live calls</strong> before launch. Call it yourself and try to break it: partial answers, a changed mind, a request for a person.</li>
+            <li><strong>Review the first batch of real calls yourself.</strong> That is my recommendation, not a documented requirement. Compare what was said with what the extraction captured and what route it took.</li>
+        </ol>
+
+        <h2>What to Measure in the First 90 Days</h2>
+
+        <p>Instead of promising results, here is what I would track, because each number points to a specific fix:</p>
+
+        <ul>
+            <li><strong>Answer rate:</strong> calls answered by the agent against calls that rang out. Take it from your phone provider's logs, not the voice platform's dashboard alone.</li>
+            <li><strong>Extraction accuracy:</strong> on a weekly sample, did the captured budget, timeline and region match what the caller said? This is the number my routing test cannot give you.</li>
+            <li><strong>Human-review share:</strong> the proportion of calls routed to a person. Very high usually means a question is being skipped or the criteria are too tight. Near zero usually means unknowns are being treated as passes.</li>
+            <li><strong>Book rate and show rate:</strong> of the leads booked, how many reach the meeting, and how many your reps call qualified afterwards.</li>
+        </ul>
+
+        <p>For a readiness check on the rest of your stack before you build, use the <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a>. The wider set of voice and agent builds is on the <a href="/ai-agents.html">AI agents page</a>.</p>
+
         <div class="article-faq">
             <h2>Frequently Asked Questions</h2>
 
             <div class="faq-item">
                 <h3>Can an AI voice agent actually close sales?</h3>
-                <p>AI voice agents are best positioned to qualify leads, capture intent, and book follow-up calls rather than close complex deals. For transactional or low-consideration purchases, they can walk a caller through options and confirm orders. For higher-value B2B or service sales, they qualify the lead and hand off to a human closer with a full briefing already written.</p>
+                <p>In my view it is better suited to qualifying and booking than to closing. A higher-value or considered purchase usually needs a person for the decision, so the agent's job is to capture the answers, book the next step and hand over with the notes already written. Simple, low-consideration purchases are a different case, and I have not tested those here.</p>
             </div>
 
             <div class="faq-item">
                 <h3>How does an AI voice agent qualify a sales lead?</h3>
-                <p>The agent asks a short qualification script you define: budget range, timeline, project type, location (for service businesses), or company size. Answers are scored against your criteria and the lead is either routed to a sales rep, booked for a discovery call, or added to a nurture sequence automatically.</p>
+                <p>It asks your screening questions in conversation, converts the answers into structured fields such as need, budget range, timeline and region, then applies rules you wrote. Clear passes get a booking, hard fails get a polite decline, and anything unknown or contradictory goes to a person.</p>
             </div>
 
             <div class="faq-item">
-                <h3>What happens when the AI cannot answer a sales question?</h3>
-                <p>Good AI voice agents have a graceful escalation path. They capture the caller's name and question, offer a callback window, and immediately notify a sales rep by SMS or CRM update. No lead falls through the cracks even when the AI hits its knowledge boundary.</p>
+                <h3>What happens when the caller wants a person?</h3>
+                <p>The request should override every other rule. Retell and Vapi both document transferring a live phone call to a number or SIP URI, and Retell offers cold, warm and agentic warm transfer. Plan a callback task for when nobody is available, and treat a transfer as attempted until you can confirm someone answered.</p>
             </div>
 
             <div class="faq-item">
-                <h3>How long does it take to set up an AI voice agent for sales?</h3>
-                <p>A basic inbound sales voice agent can go live in two to four weeks. That includes writing the qualification script, connecting your CRM and calendar, setting escalation rules, and running test calls. A more complex deployment with custom integrations and multi-path conversation flows typically takes six to eight weeks.</p>
+                <h3>Can it write to my CRM without creating duplicates?</h3>
+                <p>With HubSpot, the documented route is the batch upsert endpoint with email as the <code>idProperty</code>, since email is the primary unique identifier. A caller who gives no valid email cannot be matched that way, so flag that contact for a person to check. Also make the webhook handler idempotent, because Retell can redeliver an event up to 3 times.</p>
             </div>
 
             <div class="faq-item">
                 <h3>How much does an AI voice agent for inbound sales cost?</h3>
-                <p>Costs vary by platform and call volume. Most SMBs pay between $300 and $800 per month for a dedicated inbound sales voice agent handling up to several hundred calls. This compares favorably to one inside sales rep at $50,000 to $70,000 per year fully loaded, who can only take calls during business hours.</p>
+                <p>It depends on the platform, the call minutes and the setup work, and prices change often. I do not quote a single figure here. The dated per-minute prices and a worked model are in my <a href="/blog/ai-voice-agent-pricing-cost-2026.html">pricing breakdown</a>, and the <a href="/roi-calculator.html">ROI calculator</a> takes your own call volume.</p>
             </div>
         </div>
 
-        <!-- CTA in article -->
-        <h2>Ready to Get Started?</h2>
-        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
-        <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+        <h2>Want Help Building This?</h2>
+        <p>If you want a qualification flow like this designed, tested and connected to your CRM, you can book a scoping call on the <a href="/consulting.html">consulting page</a>.</p>
+        <p><a href="/consulting.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Scoping Call</a></p>
 
         <!-- Author Byline -->
         <div class="article-author">
@@ -751,17 +717,17 @@
     <section class="related-posts">
         <h2>Related Posts</h2>
         <div class="related-grid">
-            <a href="/blog/ai-voice-agent-use-cases.html" class="related-card">
-                <h3 class="related-card-title">AI Voice Agent Use Cases for Small Businesses</h3>
-                <p class="related-card-excerpt">From answering service to lead qualification, here are the highest-ROI applications for AI voice agents across service industries.</p>
+            <a href="/blog/ai-voice-agent-hubspot-integration.html" class="related-card">
+                <h3 class="related-card-title">AI Voice Agent HubSpot Integration: How It Works</h3>
+                <p class="related-card-excerpt">How call data reaches HubSpot contacts, and where duplicates and missing fields come from.</p>
             </a>
-            <a href="/blog/ai-voice-agent-vs-call-center-cost.html" class="related-card">
-                <h3 class="related-card-title">AI Voice Agent vs Call Center: Full Cost Comparison</h3>
-                <p class="related-card-excerpt">How the per-call economics of AI voice compare to traditional call center staffing at different call volumes.</p>
+            <a href="/blog/ai-voice-agent-platform-comparison-2026.html" class="related-card">
+                <h3 class="related-card-title">Vapi vs Retell vs Pipecat: Voice AI Build or Buy 2026</h3>
+                <p class="related-card-excerpt">A decision guide to choosing a voice agent platform, with dated pricing and a cost model.</p>
             </a>
-            <a href="/blog/how-to-choose-ai-voice-agent.html" class="related-card">
-                <h3 class="related-card-title">How to Choose an AI Voice Agent: A Buyer's Guide</h3>
-                <p class="related-card-excerpt">The five questions to ask before selecting a voice AI platform for your business, and what separates good implementations from poor ones.</p>
+            <a href="/blog/ai-agent-evals-builders.html" class="related-card">
+                <h3 class="related-card-title">How to Evaluate an AI Agent Before Deployment: 5 Metrics</h3>
+                <p class="related-card-excerpt">A run-verified test harness for checking an agent's answers before real users reach it.</p>
             </a>
         </div>
     </section>
