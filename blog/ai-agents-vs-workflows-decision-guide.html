@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>AI Agents vs Workflows: A Decision Guide for CTOs</title>
+    <meta name="description" content="Agent or fixed workflow? A five-question scorecard plus a cost model: on one email-triage task a 6-turn agent cost 10x a 2-call workflow.">
+    <meta name="keywords" content="ai agents vs workflows, when to use ai agents vs workflows, agents vs deterministic workflows, agentic vs deterministic workflow, ai agent decision framework, workflow vs agent cost">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/ai-agents-vs-workflows-decision-guide.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/ai-agents-vs-workflows-decision-guide.html">
+    <meta property="og:title" content="AI Agents vs Workflows: A Decision Guide for CTOs">
+    <meta property="og:description" content="Agent or fixed workflow? A five-question scorecard plus a cost model: on one email-triage task a 6-turn agent cost 10x a 2-call workflow.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj">
+    <meta property="article:published_time" content="2026-11-12">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI Agents vs Workflows: A Decision Guide for CTOs">
+    <meta name="twitter:description" content="Agent or fixed workflow? A five-question scorecard plus a cost model: on one email-triage task a 6-turn agent cost 10x a 2-call workflow.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260216b">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "AI Agents vs Workflows: A Decision Guide for CTOs",
+        "description": "Agent or fixed workflow? A five-question scorecard plus a cost model: on one email-triage task a 6-turn agent cost 10x a 2-call workflow.",
+        "author": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com/about.html"
+        },
+        "publisher": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj"
+        },
+        "datePublished": "2026-11-12",
+        "dateModified": "2026-11-12",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/ai-agents-vs-workflows-decision-guide.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "When should I use an AI agent instead of a workflow?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Use an agent when you cannot write the steps down before seeing the input, and the cost of a wrong action is low or reversible. If the steps are known, a workflow with model calls in named steps is cheaper, easier to audit and easier to test. Anthropic's guidance is the same: add multi-step agentic systems only when simpler solutions fall short."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How much more does an AI agent cost than a workflow?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "In my estimate for one email-triage task, a 6-turn tool-using agent cost $0.0777 per run against $0.0077 for a 2-call workflow, about 10 times more, at Anthropic's list prices on 12 November 2026. With prompt caching the agent was 2.6 to 3.9 times the workflow. These are modelled figures with stated assumptions, not a production bill."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Why does an agent cost grow faster than the number of turns?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "A tool-calling loop re-sends the system prompt, tool definitions and all earlier turns on every call, so each turn carries more tokens than the one before. In my model, 4 turns cost 6.0 times the workflow and 15 turns cost 37.0 times."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is a workflow with LLM steps an AI agent?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. Anthropic defines workflows as systems where LLMs and tools are orchestrated through predefined code paths, and agents as systems where LLMs dynamically direct their own processes and tool usage. A fixed path in code with model calls inside it is a workflow, even if the vendor calls it an agent."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I put an agent inside a workflow?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, and it is often the safest way to start. Give the agent one bounded step, such as a read-only investigation, with a turn cap, a spend cap and scoped credentials, and keep writes behind an approval node that the workflow runs every time."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "AI Agents vs Workflows", "item": "https://rajsuyash.com/blog/ai-agents-vs-workflows-decision-guide.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Code Block */
+        .article-body pre {
+            background: var(--color-paper-warm);
+            border-left: 3px solid var(--color-accent);
+            padding: var(--space-md);
+            overflow-x: auto;
+            margin: var(--space-md) 0;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .article-body code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.875em;
+            background: rgba(13, 13, 13, 0.07);
+            padding: 0.1em 0.35em;
+        }
+
+        .article-body pre code {
+            background: none;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/about.html" class="nav-link">About</a>
+                <a href="/qualify.html" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">AI Agents</span>
+                <span class="article-date">November 12, 2026</span>
+                <span class="article-read-time">17 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">AI Agents vs Workflows: A Decision Guide for CTOs</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">A five-question scorecard and a cost model you can rerun. Start with a workflow, add model calls where rules fail, and give an agent only the residue.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <!-- CONTENT GOES HERE -->
+<div class="definition-block">
+<p><strong>Short answer:</strong> start with a fixed workflow. Add a model call only at the steps where a rule cannot do the job, and move to an agent only when you cannot write the steps down before you see the input. On one email-triage task I priced a 2-call workflow at $0.0077 per run and a 6-turn tool-using agent at $0.0777, about 10 times more, at Anthropic's list prices on 12 November 2026. That is an estimate from a script, not a production bill. The script is below so you can change every assumption.</p>
+</div>
+
+<p><strong>Updated November 2026.</strong> I wrote and ran the cost model on 12 November 2026 with Python 3.12.3 on Ubuntu 24.04 (4 vCPUs, 7.6 GB RAM). Token prices come from Anthropic's pricing page, which I read the same day. The workflow and agent definitions come from Anthropic's "Building effective agents" post (19 December 2024). The adoption figures come from Gartner (25 June 2025) and Menlo Ventures (9 December 2025). I did not run a live agent for this post, so every cost and reliability number here is labelled as an estimate or as arithmetic.</p>
+
+<h2>1. The decision</h2>
+<p>The question a CTO actually asks is: "Does this task need an agent, or can a workflow with a few model calls do it?" The CTO owns the architecture, but the product owner who carries the cost of a wrong action should sign off on the answer. Three things usually force the question. A demo shows an agent doing something a workflow could do. A usage bill arrives and nobody can say which feature caused it. Or a reviewer asks "why did it do that?" and the only answer is the transcript.</p>
+
+<h2>2. Why this is contested, not settled</h2>
+<p>The vocabulary first, because teams use "agent" for both. <strong>Fact</strong>, per Anthropic: "Workflows are systems where LLMs and tools are orchestrated through predefined code paths. Agents, on the other hand, are systems where LLMs dynamically direct their own processes and tool usage, maintaining control over how they accomplish tasks." The same post says agents "trade latency and cost for better task performance" and tells you to consider "when this tradeoff makes sense." Source: <a href="https://www.anthropic.com/engineering/building-effective-agents" rel="noopener">Building effective agents</a>, 19 December 2024.</p>
+<p>Two outside data points show the market is still sorting this out, and they measure different things, so do not add them together.</p>
+<ul>
+<li><strong>Fact (a forecast, not a count):</strong> Gartner predicted on 25 June 2025 that over 40% of agentic AI projects will be canceled by the end of 2027 because of escalating costs, unclear business value or inadequate risk controls. Source: <a href="https://www.gartner.com/en/newsroom/press-releases/2025-06-25-gartner-predicts-over-40-percent-of-agentic-ai-projects-will-be-canceled-by-end-of-2027" rel="noopener">Gartner press release</a>. I could not load that page directly (it returned a 403 to my fetch), so I cross-checked the wording against <a href="https://www.computerworld.com/article/4016206/nearly-half-of-agentic-ai-projects-will-be-killed-by-27-due-to-hype-costs-and-risks.html" rel="noopener">Computerworld's report of it</a>, dated 4 July 2025.</li>
+<li><strong>Fact (survey, vendor-defined):</strong> Menlo Ventures reported on 9 December 2025 that 16% of enterprise deployments and 27% of startup deployments meet its definition of an agent, "systems where an LLM plans and executes actions, observes feedback, and adapts its behavior". The rest are fixed-sequence or routing-based workflows wrapped around a model call. The definition is Menlo's own. Source: <a href="https://menlovc.com/perspective/2025-the-state-of-generative-ai-in-the-enterprise/" rel="noopener">Menlo Ventures, State of Generative AI in the Enterprise 2025</a>.</li>
+</ul>
+<p>Read together: most production AI today is a workflow, and a large share of the agent projects that were started are expected to be stopped on cost, value or risk grounds. That does not say agents are a mistake. It says the default should be the cheaper, more predictable thing, with a reason written down for anything more autonomous.</p>
+
+<h2>3. The options</h2>
+<p>There are four real options. "Keep the manual process" is a fifth, and for low-volume tasks with expensive mistakes it is sometimes correct.</p>
+<div style="overflow-x:auto"><table class="comparison-table">
+<thead><tr><th>Option</th><th>What it commits you to</th><th>Typical shape</th></tr></thead>
+<tbody>
+<tr><td>A. Deterministic workflow</td><td>You write every rule. No model in the path.</td><td>Parse, validate, map fields, post to an API</td></tr>
+<tr><td>B. Workflow with model steps</td><td>The path is fixed in code. A model does language work inside named steps (classify, extract, draft). Anthropic's workflow patterns include prompt chaining, routing, parallelization and orchestrator-workers.</td><td>Classify an email, look up the order in code, draft a reply, update the ticket</td></tr>
+<tr><td>C. Bounded agent inside a workflow</td><td>One step lets a model choose tools in a loop, with a turn cap, a token cap and no write access without approval.</td><td>"Find why this order is stuck" as a read-only investigation step</td></tr>
+<tr><td>D. Open agent</td><td>The model plans the whole task and acts on it. You need a sandbox, evals and a spend limit before launch.</td><td>Multi-file code changes, open-ended research</td></tr>
+</tbody>
+</table></div>
+
+<h2>4. Architecture implications</h2>
+<p>What you build differs more than the model call does. For a workflow you build an explicit state machine: a schema check at every step boundary, a retry policy per step, and fixed places to put a human approval. For an agent you build the tool layer, the credentials each tool runs with, a turn and token budget, trace logging that a reviewer can read, and an eval set that tells you whether last week's prompt change made things worse.</p>
+<p>The approval point deserves its own sentence, because it is where the two designs differ most. In a workflow the approval node is a step, so it runs every time. In an agent, "ask before writing" is something the model has to choose to do. In my <a href="/blog/ai-agent-approval-gate-placement.html">approval-gate lab on Postgres</a>, a policy written in the prompt stopped none of the 5 harmful tool calls once the model emitted them, while a broker and scoped database grants stopped all five. If you pick an agent, the gate belongs in the layer the agent cannot talk to. If the work runs for hours or days, also read my note on <a href="/blog/durable-execution-voice-agent-campaigns.html">durable execution</a>, because a loop that dies mid-run needs somewhere to resume from.</p>
+
+<h2>5. Cost: the model, the assumptions and the output</h2>
+<p>I picked one task and priced it both ways: triage one inbound support email. Classify it, look up the order, draft a reply, update the ticket. The workflow makes 2 model calls and does the lookup and the ticket update in code. The agent is one model in a loop with 4 tools, and it re-sends the whole conversation on every turn, because that is how a tool-calling loop works.</p>
+<p><strong>Assumptions (all mine, not measured on a live system).</strong> Change them to match your task.</p>
+<div style="overflow-x:auto"><table class="comparison-table">
+<thead><tr><th>Input</th><th>Value</th><th>Basis</th></tr></thead>
+<tbody>
+<tr><td>Email plus instructions</td><td>1,200 tokens</td><td>Assumption</td></tr>
+<tr><td>Agent system prompt and 4 tool definitions</td><td>2,500 tokens</td><td>Assumption</td></tr>
+<tr><td>Agent output per turn</td><td>220 tokens</td><td>Assumption</td></tr>
+<tr><td>Each tool result added to history</td><td>450 tokens</td><td>Assumption</td></tr>
+<tr><td>Workflow call 1 (classify and extract)</td><td>1,200 in, 150 out, Claude Haiku 5.5</td><td>Assumption</td></tr>
+<tr><td>Workflow call 2 (draft reply)</td><td>2,000 in, 350 out, Claude Sonnet 5.5</td><td>Assumption</td></tr>
+<tr><td>Claude Sonnet 5.5 price</td><td>$2 in, $10 out, $0.10 cache read, per million tokens</td><td>Fact, Anthropic pricing page, read 12 Nov 2026</td></tr>
+<tr><td>Claude Haiku 5.5 price (prompts up to 100,000 tokens)</td><td>$0.10 in, $0.50 out, $0.01 cache read, per million tokens</td><td>Fact, same page and date</td></tr>
+</tbody>
+</table></div>
+<p>Pricing source: <a href="https://platform.claude.com/docs/en/about-claude/pricing" rel="noopener">platform.claude.com/docs/en/about-claude/pricing</a>. List prices change, so re-read the page before you reuse the numbers.</p>
+<p>Here is the script exactly as I ran it:</p>
+<pre><code># Cost and reliability model: fixed workflow vs tool-loop agent, same task.
+# Prices: platform.claude.com/docs/en/about-claude/pricing, read 2026-11-12 ($ per million tokens)
+PRICE = {
+    "haiku-5.5":  {"in": 0.10, "out": 0.50, "cache_read": 0.01},
+    "sonnet-5.5": {"in": 2.00, "out": 10.00, "cache_read": 0.10},
+}
+
+def usd(model, tok_in=0, tok_out=0, tok_cached=0):
+    p = PRICE[model]
+    return (tok_in * p["in"] + tok_out * p["out"] + tok_cached * p["cache_read"]) / 1e6
+
+# --- Task: triage one inbound support email (classify, look up order, draft reply, update ticket)
+EMAIL = 1200          # tokens: email + instructions
+SYSTEM_TOOLS = 2500   # tokens: agent system prompt + 4 tool definitions
+TURN_OUT = 220        # tokens the agent writes per turn (reasoning + tool call)
+TOOL_RESULT = 450     # tokens each tool result adds to the history
+
+def workflow_cost():
+    classify = usd("haiku-5.5", tok_in=EMAIL, tok_out=150)
+    draft = usd("sonnet-5.5", tok_in=2000, tok_out=350)
+    return classify + draft, 2   # (usd, sequential LLM calls)
+
+def agent_cost(turns, cached=False):
+    total = 0.0
+    history = SYSTEM_TOOLS + EMAIL
+    for t in range(turns):
+        if cached and t &gt; 0:
+            total += usd("sonnet-5.5", tok_in=TURN_OUT + TOOL_RESULT, tok_out=TURN_OUT, tok_cached=history)
+        else:
+            total += usd("sonnet-5.5", tok_in=history, tok_out=TURN_OUT)
+        history += TURN_OUT + TOOL_RESULT      # every turn re-sends everything so far
+    return total, turns
+
+w, wcalls = workflow_cost()
+print(f"workflow: ${w:.5f}/run, {wcalls} sequential LLM calls")
+print()
+print("agent, Sonnet 5.5 loop (history re-sent each turn):")
+print(f"{'turns':&gt;5} {'uncached $/run':&gt;15} {'cached $/run':&gt;13} {'x workflow (uncached)':&gt;22}")
+for turns in (4, 6, 10, 15):
+    u, _ = agent_cost(turns)
+    c, _ = agent_cost(turns, cached=True)
+    print(f"{turns:&gt;5} {u:&gt;15.5f} {c:&gt;13.5f} {u/w:&gt;21.1f}x")
+
+print()
+print("monthly spend gap (6-turn agent, uncached, vs workflow):")
+u6, _ = agent_cost(6)
+for vol in (1_000, 10_000, 100_000, 1_000_000):
+    print(f"  {vol:&gt;9,} runs/month: workflow ${w*vol:&gt;9,.2f}  agent ${u6*vol:&gt;10,.2f}  gap ${(u6-w)*vol:&gt;10,.2f}")
+
+print()
+print("end-to-end success if every step succeeds independently with probability p (p^n):")
+print(f"{'n steps':&gt;8}" + "".join(f"{'p='+str(p):&gt;9}" for p in (0.99, 0.97, 0.95)))
+for n in (2, 4, 8, 12):
+    print(f"{n:&gt;8}" + "".join(f"{p**n:&gt;9.1%}" for p in (0.99, 0.97, 0.95)))
+
+# Same-model control: workflow with Sonnet 5.5 on both calls, so the gap is not a model-choice artefact
+w_same = usd("sonnet-5.5", tok_in=EMAIL, tok_out=150) + usd("sonnet-5.5", tok_in=2000, tok_out=350)
+print()
+print(f"control, workflow with Sonnet 5.5 on both calls: ${w_same:.5f}/run; 6-turn agent is {u6/w_same:.1f}x that")
+c6, _ = agent_cost(6, cached=True)
+print(f"6-turn agent with prompt caching: ${c6:.5f}/run = {c6/w:.1f}x the mixed-model workflow, {c6/w_same:.1f}x the same-model workflow")
+
+# --- Scorecard: five yes/no questions -&gt; architecture
+QUESTIONS = [
+    "steps_known_upfront",     # could you write the steps before seeing the input?
+    "bounded_inputs",          # do inputs fall into a few known shapes?
+    "needs_audit_replay",      # must a reviewer reproduce why it did X?
+    "action_irreversible",     # does a wrong action cost money or trust you cannot undo?
+    "cost_sensitive_volume",   # is volume high enough that per-run cost shows up on a P&amp;L?
+]
+def recommend(a):
+    det = sum([a["steps_known_upfront"], a["bounded_inputs"], a["needs_audit_replay"],
+               a["action_irreversible"], a["cost_sensitive_volume"]])
+    if det == 5: return "deterministic workflow, add an LLM step only where a rule cannot do the job"
+    if det &gt;= 3: return "workflow with LLM steps (chaining/routing), no autonomy"
+    if a["action_irreversible"]: return "bounded agent inside a workflow, human approval before any write"
+    return "agent in a sandbox, with evals and a cost cap"
+
+TASKS = {
+    "extract fields from supplier invoices": dict(steps_known_upfront=1, bounded_inputs=1, needs_audit_replay=1, action_irreversible=1, cost_sensitive_volume=1),
+    "triage inbound support email":          dict(steps_known_upfront=1, bounded_inputs=0, needs_audit_replay=1, action_irreversible=0, cost_sensitive_volume=1),
+    "research a prospect before a call":     dict(steps_known_upfront=0, bounded_inputs=0, needs_audit_replay=0, action_irreversible=0, cost_sensitive_volume=0),
+    "change code across a large repository": dict(steps_known_upfront=0, bounded_inputs=0, needs_audit_replay=0, action_irreversible=1, cost_sensitive_volume=0),
+}
+print()
+for name, ans in TASKS.items():
+    print(f"{name:40s} -&gt; {recommend(ans)}")</code></pre>
+<p>And its output:</p>
+<pre><code>workflow: $0.00769/run, 2 sequential LLM calls
+
+agent, Sonnet 5.5 loop (history re-sent each turn):
+turns  uncached $/run  cached $/run  x workflow (uncached)
+    4         0.04644       0.02173                   6.0x
+    6         0.07770       0.03015                  10.1x
+   10         0.15630       0.04781                  20.3x
+   15         0.28470       0.07138                  37.0x
+
+monthly spend gap (6-turn agent, uncached, vs workflow):
+      1,000 runs/month: workflow $     7.69  agent $     77.70  gap $     70.01
+     10,000 runs/month: workflow $    76.95  agent $    777.00  gap $    700.05
+    100,000 runs/month: workflow $   769.50  agent $  7,770.00  gap $  7,000.50
+  1,000,000 runs/month: workflow $ 7,695.00  agent $ 77,700.00  gap $ 70,005.00
+
+end-to-end success if every step succeeds independently with probability p (p^n):
+ n steps   p=0.99   p=0.97   p=0.95
+       2    98.0%    94.1%    90.2%
+       4    96.1%    88.5%    81.5%
+       8    92.3%    78.4%    66.3%
+      12    88.6%    69.4%    54.0%
+
+control, workflow with Sonnet 5.5 on both calls: $0.01140/run; 6-turn agent is 6.8x that
+6-turn agent with prompt caching: $0.03015/run = 3.9x the mixed-model workflow, 2.6x the same-model workflow
+
+extract fields from supplier invoices    -&gt; deterministic workflow, add an LLM step only where a rule cannot do the job
+triage inbound support email             -&gt; workflow with LLM steps (chaining/routing), no autonomy
+research a prospect before a call        -&gt; agent in a sandbox, with evals and a cost cap
+change code across a large repository    -&gt; bounded agent inside a workflow, human approval before any write</code></pre>
+
+<h3>Reading the output</h3>
+<p><strong>The gap grows with turns, not just with price per token.</strong> A tool loop re-sends the system prompt, the tool definitions and every earlier turn on each call. At 4 turns the agent costs 6.0 times the workflow in this model. At 15 turns it costs 37.0 times. The relationship is worse than linear because each turn carries more history than the last.</p>
+<p><strong>I checked the obvious objection.</strong> My first run gave the workflow a cheap model for classification and gave the agent only the expensive one, which flatters the workflow. The control line prices the workflow with the expensive model on both calls. The 6-turn agent is still 6.8 times that, so the gap is not a model-choice artefact.</p>
+<p><strong>Prompt caching narrows the gap but does not close it.</strong> With cached history billed at the cache-read rate, the 6-turn agent comes down to $0.0302 per run, which is 3.9 times the mixed-model workflow and 2.6 times the same-model workflow. My caching line is generous to the agent: it ignores the cache-write premium on the first turn and assumes every later turn hits the cache. Treat 2.6 times as a floor for this task shape.</p>
+<p><strong>The dollar gap is small at low volume.</strong> At 1,000 runs a month the 6-turn agent costs about $70 more than the workflow. At 100,000 runs it is about $7,000 more, and at a million it is about $70,000. If you process a few hundred items a month, cost is not your argument for a workflow. Reliability, latency and audit are. The number of sequential model calls is a count, not an estimate: 2 for the workflow, 6 or more for the agent, and each one adds waiting time.</p>
+<p><strong>What this does not show.</strong> It does not show which design gets more tasks right. A workflow that misclassifies one email in ten is cheaper and worse. I have no success-rate data for this task, and I am not going to invent any. The next section covers why the structure still matters.</p>
+
+<h2>6. Reliability: why step count and checkpoints matter</h2>
+<p>The table in the output is plain arithmetic: if each of n steps succeeds independently with probability p, the whole chain succeeds with probability p to the power n. At p = 0.95 an 8-step chain succeeds 66.3% of the time. At p = 0.99 a 12-step chain succeeds 88.6% of the time. Real failures are not independent, because one bad retrieval poisons the next five steps, so treat the table as a way to see the shape, not as a forecast for your system.</p>
+<p>Anthropic's own caution points the same way: "The autonomous nature of agents means higher costs, and the potential for compounding errors. We recommend extensive testing in sandboxed environments, along with the appropriate guardrails."</p>
+<p>The structural point is the one I would keep. A workflow has a fixed number of steps and named boundaries between them, so you can put a schema check, a retry or a human review at each boundary and measure each step's own failure rate. An agent has a variable number of steps per run and the boundaries are whatever the model decides they are. You can still add checks, but you are adding them around a path you did not write. My <a href="/blog/ai-agent-evals-builders.html">post on evaluating an agent before deployment</a> covers the release gate you need once you accept that.</p>
+
+<h2>7. Security, audit and compliance</h2>
+<p>Three questions matter more than any single regulation name. Can a reviewer reproduce why the system did what it did? Can a wrong action be undone? Does any single step combine untrusted input with write access? A workflow answers the first by construction: the same input takes the same path, and the model calls are recorded steps. An agent answers it only through its logs, and two runs on the same input can take different paths.</p>
+<p>I did not research jurisdiction-specific AI regulation for this post, and I am not giving legal advice. If your task falls under sector rules, ask your counsel which of them require reproducibility or human review. If they do, that requirement alone often decides the question for you, before any cost math.</p>
+
+<h2>8. Operational complexity</h2>
+<p>After launch, a workflow costs you maintenance when an upstream API or a model version changes. An agent costs you that and also ongoing review: reading traces, tuning the tool descriptions, and re-running evals after each change, because a small wording change can alter which tools the model picks. Put a hard turn cap and a per-run spend cap in front of every agent. Without them, one confused run is your most expensive run.</p>
+
+<h2>9. Scale: where the answer flips</h2>
+<p>Three things move the recommendation as you grow. <strong>Volume:</strong> at a few hundred runs a month the cost gap is noise; at hundreds of thousands it is a line item, as the monthly table above shows. <strong>Input variety:</strong> if your inputs start falling outside the shapes your workflow handles, the share of runs that end in "other" rises, and that residue is the legitimate place for an agent. <strong>Error cost:</strong> as an agent gains write access, the approval gate and the audit trail stop being optional.</p>
+
+<h2>10. Decision matrix and scorecard</h2>
+<p>I rated the four options on six dimensions. The reasons come first, so the table is not a bare list of opinions. Cost per run follows the model above: more model calls and a growing history mean more tokens. Reproducibility follows from whether the path is fixed in code. "Handles unseen inputs" is the one dimension where agents win outright, because a model can improvise where a rule cannot. Build effort counts the harness around the model (tool layer, caps, evals), which is why option C and D rate higher than B even though B has more rules to write. Every rating is my judgment (<strong>Recommendation</strong>), not a measurement.</p>
+<div style="overflow-x:auto"><table class="comparison-table">
+<thead><tr><th>Dimension</th><th>A. Deterministic</th><th>B. Workflow with model steps</th><th>C. Bounded agent in workflow</th><th>D. Open agent</th></tr></thead>
+<tbody>
+<tr><td>Cost per run</td><td>Lowest</td><td>Low</td><td>Medium to high</td><td>High, and variable</td></tr>
+<tr><td>Sequential model calls</td><td>0</td><td>Fixed, small</td><td>Fixed outside the loop, variable inside</td><td>Variable</td></tr>
+<tr><td>Reproducible and auditable</td><td>High</td><td>High</td><td>Medium</td><td>Low</td></tr>
+<tr><td>Handles unseen inputs</td><td>Low</td><td>Medium</td><td>Medium to high</td><td>High</td></tr>
+<tr><td>Build and harness effort</td><td>Medium (many rules)</td><td>Medium</td><td>High</td><td>Highest</td></tr>
+<tr><td>Worst-case failure</td><td>Rule gap, visible</td><td>Bad classification, caught by validators</td><td>Wasted loop, capped</td><td>Wrong action taken, needs a sandbox</td></tr>
+</tbody>
+</table></div>
+
+<p>To make the matrix usable, I wrote it as five yes or no questions. This is the scorecard from the same script. It is a rule of thumb I wrote, not a validated instrument, and the four example tasks are generic illustrations, not client work.</p>
+<ol>
+<li>Could you write the steps before seeing the input?</li>
+<li>Do inputs fall into a few known shapes?</li>
+<li>Must a reviewer be able to reproduce why it acted?</li>
+<li>Would a wrong action cost money or trust you cannot undo?</li>
+<li>Is volume high enough that per-run cost shows up on a budget line?</li>
+</ol>
+<p>Five yes answers point to option A. Three or four point to option B. Fewer than three point to an agent, bounded inside a workflow with human approval if the action is irreversible (question 4), and open in a sandbox otherwise. The same logic as a flow:</p>
+<pre><code>Can you write the steps before seeing the input?
+  yes -&gt; Is a rule enough for every step?
+          yes -&gt; A. deterministic workflow
+          no  -&gt; B. workflow, model only in the steps that need language
+  no  -&gt; Is the action irreversible?
+          yes -&gt; C. bounded agent inside a workflow, human approval before writes
+          no  -&gt; D. agent in a sandbox, with evals and a spend cap</code></pre>
+<p>One caution on the scorecard: it routes irreversible actions toward more structure, not less, on purpose. Reversibility is the factor I would weigh above cost.</p>
+
+<h2>11. Recommendation by scenario</h2>
+<ul>
+<li><strong>High-volume document or form processing with stable formats:</strong> option A, with a model step only for fields a rule cannot read. What flips it: a new document layout every week.</li>
+<li><strong>Customer messages that need a classification and a drafted reply:</strong> option B. Keep the lookup and the write in code and put a person or a validator between the draft and the send. What flips it: more than a small share of messages end up in "other".</li>
+<li><strong>Internal research or investigation tasks where the path depends on what you find:</strong> option C or D, read-only first. What flips it: a requirement to reproduce the exact path later.</li>
+<li><strong>Code or data changes across many files:</strong> option D in a sandbox, with a human merge step. What flips it: a deterministic codemod that already covers the change.</li>
+</ul>
+
+<h2>12. Migration path</h2>
+<ol>
+<li>Write the workflow version first, even if you expect to replace it. It becomes your baseline for cost, latency and accuracy.</li>
+<li>Build an eval set of real inputs with reviewed expected outputs before you add autonomy. Without it you cannot tell an improvement from a regression.</li>
+<li>Find the residue: the inputs the workflow gets wrong or sends to "other". Count them.</li>
+<li>Give an agent only that residue, with a turn cap, a spend cap, scoped credentials and read-only tools. Compare it with the baseline on the same eval set.</li>
+<li>Widen its permissions only when its measured error rate on the residue beats the cost of the review it would replace. Run the numbers with the <a href="/roi-calculator.html">ROI calculator</a>, and use the <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> to see which of your processes are stable enough for step one.</li>
+</ol>
+<p>If you want a second opinion on a specific task, I do this kind of architecture review as part of my <a href="/consulting.html">consulting work</a>, and the <a href="/ai-agents.html">AI agents page</a> describes what I build.</p>
+
+<h2>13. What I did not measure</h2>
+<ul>
+<li>I did not run a live agent or workflow, so I have no task success rates, latencies or real token counts.</li>
+<li>The token sizes and turn counts are assumptions. Real tool results can be much larger than 450 tokens, which would widen the gap.</li>
+<li>The caching line ignores cache-write cost, so it understates the agent's cost.</li>
+<li>The reliability table assumes independent steps. Real failures are correlated.</li>
+<li>The scorecard is a heuristic I wrote. I tested it only on four illustrative tasks, all chosen by me.</li>
+<li>Prices are a 12 November 2026 snapshot of one provider's list prices.</li>
+</ul>
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>When should I use an AI agent instead of a workflow?</h3>
+                <p>Use an agent when you cannot write the steps down before seeing the input, and the cost of a wrong action is low or reversible. If the steps are known, a workflow with model calls in named steps is cheaper, easier to audit and easier to test. Anthropic's guidance is the same: add multi-step agentic systems only when simpler solutions fall short.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How much more does an AI agent cost than a workflow?</h3>
+                <p>In my estimate for one email-triage task, a 6-turn tool-using agent cost $0.0777 per run against $0.0077 for a 2-call workflow, about 10 times more, at Anthropic's list prices on 12 November 2026. With prompt caching the agent was 2.6 to 3.9 times the workflow. These are modelled figures with stated assumptions, not a production bill.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Why does an agent cost grow faster than the number of turns?</h3>
+                <p>A tool-calling loop re-sends the system prompt, tool definitions and all earlier turns on every call, so each turn carries more tokens than the one before. In my model, 4 turns cost 6.0 times the workflow and 15 turns cost 37.0 times.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is a workflow with LLM steps an AI agent?</h3>
+                <p>No. Anthropic defines workflows as systems where LLMs and tools are orchestrated through predefined code paths, and agents as systems where LLMs dynamically direct their own processes and tool usage. A fixed path in code with model calls inside it is a workflow, even if the vendor calls it an agent.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I put an agent inside a workflow?</h3>
+                <p>Yes, and it is often the safest way to start. Give the agent one bounded step, such as a read-only investigation, with a turn cap, a spend cap and scoped credentials, and keep writes behind an approval node that the workflow runs every time.</p>
+            </div>
+
+        </div>
+
+        <!-- CTA in article -->
+        <h2>Ready to Get Started?</h2>
+        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
+        <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/ai-agent-approval-gate-placement.html" class="related-card">
+                <h3 class="related-card-title">AI Agent Approval Gate: Where It Must Live (Tested)</h3>
+                <p class="related-card-excerpt">Where the human approval step has to sit once you give an agent write access.</p>
+            </a>
+            <a href="/blog/ai-agent-evals-builders.html" class="related-card">
+                <h3 class="related-card-title">How to Evaluate an AI Agent Before Deployment: 5 Metrics</h3>
+                <p class="related-card-excerpt">The release gate you need before an agent replaces a workflow step.</p>
+            </a>
+            <a href="/blog/agentic-ai-enterprise-2027.html" class="related-card">
+                <h3 class="related-card-title">Agentic AI in the Enterprise: A Grounded 2027 Outlook</h3>
+                <p class="related-card-excerpt">What the adoption data supports and what it does not.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify.html" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a></p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
