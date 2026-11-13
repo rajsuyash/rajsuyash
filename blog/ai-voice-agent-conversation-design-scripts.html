@@ -7,7 +7,7 @@
     <!-- Primary SEO Meta Tags -->
     <title>How to Design Voice AI Conversation Scripts: 5 Core Flows</title>
     <meta name="description" content="How to design conversation scripts for voice AI: script anatomy, the five core call flows, patterns that lose callers, and how to test before launch.">
-    <meta name="keywords" content="ai voice agent script, voice agent conversation design, ai phone agent script, how to write ai voice agent script, best AI automation agency for small businesses">
+    <meta name="keywords" content="ai voice agent script, voice agent conversation design, ai phone agent script, how to write ai voice agent script">
     <meta name="author" content="Suyash Raj">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://rajsuyash.com/blog/ai-voice-agent-conversation-design-scripts.html">
@@ -41,7 +41,7 @@
         {
             "@context": "https://schema.org",
             "@type": "Article",
-            "headline": "AI Voice Agent Scripts That Sound Like Real Conversation",
+            "headline": "How to Design Voice AI Conversation Scripts: 5 Core Flows",
             "description": "How to design conversation scripts for voice AI: script anatomy, the five core call flows, patterns that lose callers, and how to test before launch.",
             "author": {
                 "@type": "Person",
@@ -55,7 +55,7 @@
                 "name": "Suyash Raj"
             },
             "datePublished": "2026-07-29",
-            "dateModified": "2026-07-29",
+            "dateModified": "2026-11-13",
             "mainEntityOfPage": {
                 "@type": "WebPage",
                 "@id": "https://rajsuyash.com/blog/ai-voice-agent-conversation-design-scripts.html"
@@ -72,42 +72,42 @@
             "mainEntity": [
                 {
                     "@type": "Question",
+                    "name": "How should conversation scripts be designed for voice AI?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Write the script as five steps, not a menu tree: an opener that names the business and says it is an AI, open intent capture, only the fields needed to act, a read-back before any booking, and a clean finish or a handoff that passes a summary. Keep each agent turn to one or two sentences with one question."
+                    }
+                },
+                {
+                    "@type": "Question",
                     "name": "How long should an AI voice agent greeting be?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Keep greetings under 10 seconds. State the business name, confirm you can help, and ask a single open or focused question. Anything longer causes callers to interrupt or hang up. A good rule: if you would not say it in a real conversation, cut it from the script."
+                        "text": "I aim for about 20 words or fewer: the business name, an AI disclosure and one open question. The greeting in the lint example below is 15 words, about 6 seconds at an assumed 150 words a minute. That is my rule of thumb, not a measured threshold, and I have no data on caller drop-off by greeting length."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "Should an AI voice agent identify itself as AI?",
+                    "name": "Should an AI voice agent say it is an AI?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Yes. Disclosing that the caller is speaking with an AI assistant is both a legal requirement in many jurisdictions and a trust builder. Callers who know upfront that it is AI and still have a good experience rate the interaction higher than callers who feel deceived. Transparency does not hurt conversion; deception does."
+                        "text": "I put the disclosure in the first sentence by default. In the EU, Article 50(1) of the AI Act requires AI systems that interact directly with people to be designed so those people are informed they are talking to an AI, unless that is obvious from the context. I did not verify US federal or state rules for this update, so check the rules for every country you call."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "How many conversation flows do I need to build before going live?",
+                    "name": "How many conversation flows do I need before going live?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Start with the five core flows: greeting and intent capture, appointment booking, hours and location inquiries, pricing inquiries, and escalation to a human. These cover roughly 80 to 90 percent of inbound call volume for most SMBs. Add more flows after go-live based on what callers actually ask, using call transcripts to prioritize."
+                        "text": "Start with the flows your own call logs show. The five on this page (booking, hours and general information, pricing, rescheduling and cancellation, escalation to a human) are a starting set. I have no source for what share of calls they cover, so count your own calls before you trust any percentage."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "What is the biggest mistake businesses make when writing AI voice agent scripts?",
+                    "name": "How do I test voice agent scripts before going live?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Over-scripting. Businesses try to anticipate every possible caller path and build rigid menu trees. Modern AI voice agents handle natural language dynamically, so long deterministic scripts actually make conversations worse. Write clear intents and responses, not exhaustive decision trees. Let the AI handle variations; your job is to define the goal of each conversation and the information needed to reach it."
-                    }
-                },
-                {
-                    "@type": "Question",
-                    "name": "How do I test my AI voice agent scripts before going live?",
-                    "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "Call it yourself using ten realistic scenarios drawn from actual customer calls. Include off-topic questions, interruptions, and confused callers. Then have three to five people unfamiliar with the system call it cold. Listen for moments where the agent sounds robotic, repeats itself, or fails to redirect gracefully. Refine those paths before launch, then review call transcripts weekly for the first month."
+                        "text": "Test against a set of scenarios, not single calls: Vapi's prompting guide says to validate changes against a representative test set because regressions only show up across many runs. My starting point is ten scripted scenarios plus five callers who have never heard the script, then weekly transcript review for the first month."
                     }
                 }
             ]
@@ -276,6 +276,29 @@
             line-height: 1.8;
             color: var(--color-ink);
             margin-bottom: 0;
+        }
+
+        .article-body pre {
+            background: var(--color-paper-warm);
+            border-left: 3px solid var(--color-accent);
+            padding: var(--space-md);
+            overflow-x: auto;
+            margin: var(--space-md) 0;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .article-body code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.875em;
+            background: rgba(13, 13, 13, 0.07);
+            padding: 0.1em 0.35em;
+        }
+
+        .article-body pre code {
+            background: none;
+            padding: 0;
+            font-size: inherit;
         }
 
         /* Comparison Table */
@@ -461,8 +484,8 @@
         <div class="article-hero-content">
             <div class="article-meta reveal" style="--delay: 0">
                 <span class="article-category">AI Voice Agents</span>
-                <span class="article-date">July 29, 2026</span>
-                <span class="article-read-time">10 min read</span>
+                <span class="article-date">July 29, 2026 (updated November 13, 2026)</span>
+                <span class="article-read-time">11 min read</span>
             </div>
             <h1 class="article-title reveal" style="--delay: 1">AI Voice Agent Conversation Design: How to Write Scripts That Sound Natural and Convert</h1>
             <p class="article-subtitle reveal" style="--delay: 2">The difference between an AI voice agent that builds trust and one that frustrates callers comes down to conversation design. Here is how to get it right from the start.</p>
@@ -471,83 +494,131 @@
 
     <!-- Article Body -->
     <article class="article-body">
+        <div class="definition-block">
+            <p><strong>Design a voice AI script as five steps, not a menu tree:</strong> a short greeting that names the business and says it is an AI, one open question for intent, only the fields needed to act, a read-back before booking, and a clean finish or a handoff with a summary. Keep each turn to one or two sentences.</p>
+        </div>
 
-        <p>Most businesses that deploy AI voice agents focus their energy on the technology: which platform to use, how to integrate it with their CRM, whether to host it in the cloud. These are legitimate questions. But the businesses that see strong results from day one share something else in common: they spent serious time on conversation design before the first call ever came in.</p>
+        <p><em>Updated November 2026.</em> I re-read the Vapi and Retell prompting guides on 13 November 2026, and I ran a small script linter on two synthetic scripts (results below). I did not place any live voice calls for this update, so nothing here is a measured caller result.</p>
 
-        <p>A voice agent with a poorly written script will frustrate callers, generate complaints, and ultimately get turned off within weeks. A voice agent with well-crafted conversations can handle 80 to 90 percent of inbound calls autonomously, fill your appointment book overnight, and free your team from the phone without a single caller feeling shortchanged. The technology is largely commoditized. The script is where the real work is.</p>
-
-        <p>This guide covers what conversation design actually means for AI voice agents, how to structure the five core flows every business needs, the mistakes that kill caller trust, and how to test and refine before launch. If you are evaluating whether an <a href="https://voxdonna.com/ai-voice-agents.html">AI voice agent</a> is right for your business, the <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> is a good place to start.</p>
+        <p>Most businesses that deploy an AI voice agent spend their energy on the platform: which vendor, which CRM integration, where to host it. Those are fair questions. The script is the part you control completely, and it is where a deployment is most likely to go wrong. A badly written script frustrates callers whichever platform runs it. If you are still deciding whether a voice agent fits your business, start with the <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a>. If you want the buying view instead of the design view, <a href="https://voxdonna.com/ai-voice-agents.html">this overview of AI voice agent services</a> covers it.</p>
 
         <h2>What Conversation Design Means for AI Voice Agents</h2>
 
-        <p>Conversation design is the practice of structuring what an AI agent says, when it says it, how it responds to different caller inputs, and how it recovers when a call goes sideways. It is part copywriting, part information architecture, and part UX design, all applied to spoken dialogue.</p>
+        <p>Conversation design is the practice of deciding what an AI agent says, when it says it, how it reacts to different caller inputs, and how it recovers when a call goes sideways. It is part copywriting, part information architecture and part UX design, applied to spoken dialogue.</p>
 
-        <div class="definition-block">
-            <p><strong>Conversation design is not scripting a phone tree.</strong> Legacy IVR systems used rigid menus: "Press 1 for appointments, press 2 for billing." Modern AI voice agents understand natural language. A caller can say "I need to reschedule my appointment from Thursday" and the agent understands intent without any button presses. Your job in conversation design is to define goals, intents, and responses, not to map every possible button combination.</p>
-        </div>
+        <p><strong>It is not scripting a phone tree.</strong> Legacy IVR systems used rigid menus: "Press 1 for appointments, press 2 for billing." An LLM-based voice agent understands natural language, so a caller can say "I need to move my appointment from Thursday" and no button is pressed. Your job is to define the goal of each type of call, the information the agent needs, and what the end of the call looks like, not to map every possible path.</p>
 
-        <p>The distinction matters because it changes how you approach the work. You are not writing a decision tree. You are defining what the agent needs to accomplish in each type of call, what information it needs to collect, and what the handoff looks like when the call is complete or needs a human.</p>
+        <h2>The Anatomy of an Effective Voice Agent Script</h2>
 
-        <h2>The Anatomy of an Effective AI Voice Agent Script</h2>
-
-        <p>Every successful AI voice agent conversation has the same basic structure, regardless of industry or call type:</p>
+        <p>Every working call I have seen described in vendor docs follows the same shape, whatever the business:</p>
 
         <ol>
-            <li><strong>Greeting and identity disclosure</strong> -- State the business name, identify as an AI assistant, invite the caller to share their need.</li>
-            <li><strong>Intent capture</strong> -- Understand what the caller wants, either from a direct statement or a clarifying question.</li>
-            <li><strong>Information gathering</strong> -- Collect only the fields required to complete the task. No unnecessary questions.</li>
-            <li><strong>Confirmation</strong> -- Repeat key details back to the caller before completing any action, especially bookings.</li>
-            <li><strong>Completion or handoff</strong> -- Either fulfill the request and close the call cleanly, or transfer to a human with a brief summary of what was discussed.</li>
+            <li><strong>Greeting and identity disclosure:</strong> state the business name, say it is an AI assistant, invite the caller to speak.</li>
+            <li><strong>Intent capture:</strong> understand what the caller wants, from a direct statement or one clarifying question.</li>
+            <li><strong>Information gathering:</strong> collect only the fields needed to complete the task.</li>
+            <li><strong>Confirmation:</strong> repeat the key details back before taking any action, especially a booking.</li>
+            <li><strong>Completion or handoff:</strong> finish the request and close cleanly, or transfer to a person with a short summary.</li>
         </ol>
 
-        <p>The failure points in most scripts are at steps one and two. Greetings are too long and callers interrupt before the agent finishes. Intent capture is too narrow and callers who phrase their request differently get dead ends. Fix these two steps and most of the other problems follow.</p>
+        <p>In my reading, the first two steps are where scripts most often break: greetings that run long so callers talk over them, and intent capture that only recognises one phrasing. That is a judgement from the documentation and from the patterns in the table below, not a measured failure rate.</p>
 
-        <h3>Writing Greetings That Work</h3>
+        <h3>Writing greetings that work</h3>
 
-        <p>Your greeting has one job: acknowledge the caller and invite them to speak. Everything else is noise. A greeting like "Thank you for calling Greenfield Physical Therapy. You are speaking with an AI assistant. How can I help you today?" does the job in under five seconds. A greeting that runs for 20 seconds describing services, hours, and website addresses will lose the caller before the conversation begins.</p>
-
-        <p>The three elements of a working greeting:</p>
+        <p>A greeting has one job: tell the caller who they reached and invite them to speak. An example: "Thanks for calling Greenfield Services, I'm an AI assistant. How can I help you today?" That is 15 words, about 6 seconds at an assumed 150 words a minute. A greeting that recites services, hours and a web address buries the invitation. I use three elements:</p>
         <ul>
-            <li>Business name (so callers confirm they reached the right place)</li>
-            <li>AI disclosure (required in most jurisdictions, and trust-building when done well)</li>
-            <li>Open-ended invite ("How can I help you today?" not "Press 1 for...")</li>
+            <li>The business name, so callers know they reached the right place.</li>
+            <li>An AI disclosure in the first sentence.</li>
+            <li>One open question ("How can I help you today?"), not a list of options.</li>
         </ul>
 
-        <h3>Handling Intent Without a Menu</h3>
+        <h3>Disclosure: what I verified and what I did not</h3>
 
-        <p>Because modern voice agents understand natural language, you do not need to list options. Train your agent to recognize intents -- appointment booking, location inquiry, pricing, complaints, general questions -- and route to the right flow automatically. If a caller says "I want to book for next Tuesday" or "Can I come in this week?" or "I need an appointment," all three should trigger the same booking flow.</p>
+        <p>Article 50(1) of the EU AI Act says providers must ensure AI systems intended to interact directly with natural persons are designed so those persons are informed they are interacting with an AI system, unless that is obvious to a reasonably well-informed, observant and circumspect person given the circumstances. I read the article text on artificialintelligenceact.eu on 13 November 2026, which gives 2 August 2026 as the date Article 50 applies under Article 113. Check the current consolidated text before you rely on that date. I did not verify US federal or state rules for this update, and I am not giving legal advice: confirm the rules for every country you call.</p>
 
-        <p>Write at least five to ten example phrases for each intent during setup. This is called utterance training and it dramatically improves how reliably the agent catches what callers mean rather than what they literally say.</p>
+        <h3>Handling intent without a menu</h3>
 
-        <h2>The Five Core Conversation Flows Every Business Needs</h2>
+        <p>With an LLM-based agent you do not train a classifier on utterances. You describe each intent and the action it triggers in the prompt, and you add a few example exchanges. Vapi's prompting guide lists "provide few-shot examples" as its own step, and Retell's example prompt writes the call as a numbered flow with one step per phase. If a caller says "I want to book for next Tuesday", "Can I come in this week?" or "I need an appointment", all three should land in the same booking step. The way to find out whether they do is to test them, which is the next section.</p>
 
-        <p>These five flows cover 80 to 90 percent of inbound calls for most SMBs. Build and test these before adding anything else.</p>
+        <h2>What Two Platform Guides Recommend</h2>
 
-        <h3>1. Appointment Booking</h3>
+        <p>I read the public prompting guides from Vapi and Retell on 13 November 2026. They are vendor documents, so treat them as one input, but they are specific enough to compare. Neither page shows a last-updated date.</p>
 
-        <p>The highest-value flow for most businesses. The agent should collect: service type (if applicable), preferred date and time, caller name, and a phone number or email for confirmation. It checks real availability in your scheduling system and books in real time. Keep the information gathering tight -- do not ask for address, date of birth, or insurance details unless they are genuinely required to hold the appointment.</p>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Topic</th>
+                    <th>Vapi prompting guide</th>
+                    <th>Retell prompt guide</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Prompt structure</strong></td>
+                    <td>Identity and personality, response guidelines, guardrails, runtime context, task breakdown, few-shot examples</td>
+                    <td>Its worked example uses a role, a numbered call flow and one step per phase</td>
+                </tr>
+                <tr>
+                    <td><strong>Turn length</strong></td>
+                    <td>"Keep responses to one or two sentences maximum"; "Ask only one question at a time"</td>
+                    <td>"A longer prompt is not a better prompt"; example prompt says "Give short answers without unnecessary explanation"</td>
+                </tr>
+                <tr>
+                    <td><strong>Confirmation</strong></td>
+                    <td>Batch confirmation at the end of collected fields; skip read-backs in intake and qualification flows</td>
+                    <td>Worked example reads the details back ("That's [party size] guests on [date] at [time]...") and asks if they are correct before the next step</td>
+                </tr>
+                <tr>
+                    <td><strong>Unclear input</strong></td>
+                    <td>Ask the caller to repeat; if still unclear after two attempts, offer a transfer</td>
+                    <td>Not covered as a rule on the page I read</td>
+                </tr>
+                <tr>
+                    <td><strong>Silence</strong></td>
+                    <td>Wait 10 to 15 seconds, check in once, end the call only if there is no response</td>
+                    <td>Not covered on the page I read</td>
+                </tr>
+                <tr>
+                    <td><strong>Transfer</strong></td>
+                    <td>Silent transfer: call the transfer tool without sending a text reply</td>
+                    <td>Worked example calls a transfer tool from a named branch of the flow</td>
+                </tr>
+                <tr>
+                    <td><strong>Testing</strong></td>
+                    <td>Validate changes against a representative test set, not single calls</td>
+                    <td>Not covered on the page I read (it may sit on another page)</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <h3>2. Hours, Location, and General Information</h3>
+        <p>Two things to take from it. The vendors agree on short turns and one question at a time. And they differ on details I had written as fixed rules: Vapi tolerates two failed attempts before a transfer where I default to one re-prompt, and its guide tells the model to stay silent when it calls the transfer tool, which means the spoken handoff line comes from platform configuration. I did not test either platform's transfer behaviour, so check how yours splits the two.</p>
 
-        <p>These calls are short and should be handled in under 60 seconds. State the information, confirm the caller has what they need, and offer to help with anything else. Callers asking for hours are rarely interested in a sales pitch -- give them the information and let them go.</p>
+        <h2>Five Conversation Flows to Start From</h2>
 
-        <h3>3. Pricing and Services</h3>
+        <p>I cannot give you a figure for how much of your call volume these five cover, and I removed the percentage this page used to state because it had no source. Count your own calls first, then build the flows your logs justify. These five are a starting set.</p>
 
-        <p>This flow requires more nuance. If your pricing is fixed and publicly listed, the agent should state it directly. If pricing varies by scope, the agent should capture enough context to give a useful range or route to a team member for a custom quote. Callers asking about price are often close to a decision -- do not bury them in caveats. Give a clear answer or offer a booking to discuss further.</p>
+        <h3>1. Appointment booking</h3>
 
-        <h3>4. Rescheduling and Cancellations</h3>
+        <p>Collect the service type (if there is more than one), the preferred day and time, the caller's name, and a phone number or email for the confirmation. Check availability in the scheduling system and book in the same call. Do not ask for an address, date of birth or insurance details unless the appointment cannot be held without them.</p>
 
-        <p>Callers cancelling an appointment are not always lost -- many want to reschedule and will do it on the spot if you make it easy. Build your cancellation flow to confirm the cancellation, then immediately offer the next available slot. This single design choice recovers a meaningful percentage of potential revenue that would otherwise walk out the door.</p>
+        <h3>2. Hours, location and general information</h3>
 
-        <h3>5. Escalation to a Human</h3>
+        <p>Short calls. State the answer, check the caller has what they need, offer further help and let them go.</p>
 
-        <p>This is not a fallback -- it is a feature. Design escalation to feel like a smooth handoff, not a failure. The agent should say something like "Let me connect you with a team member who can help with this. I will share a summary of our conversation so you will not need to repeat yourself." Then actually pass the context. A caller who gets transferred with context arrives warm, not frustrated.</p>
+        <h3>3. Pricing and services</h3>
 
-        <p>Configure escalation triggers thoughtfully. Escalate for: complex complaints, high-value client requests you have defined in advance, anything requiring clinical or legal judgment, and any caller who explicitly asks for a human. Do not escalate for anything the agent can handle -- it adds friction without benefit.</p>
+        <p>If pricing is fixed and public, state it. If it depends on scope, collect enough context to give a range or route to a person for a quote. Give a clear answer or offer a booking; do not bury the caller in caveats.</p>
 
-        <h2>Script Patterns: What Works vs. What Loses Callers</h2>
+        <h3>4. Rescheduling and cancellations</h3>
 
-        <p>The table below shows the patterns that separate effective voice agent conversations from ones that frustrate callers and drive up escalation rates.</p>
+        <p>A caller who cancels may be ready to reschedule. Confirm the cancellation, then offer the next available slot in the same turn. It costs one sentence.</p>
+
+        <h3>5. Escalation to a human</h3>
+
+        <p>Treat it as a designed path, not a failure. A handoff line such as "Let me connect you with a team member. I'll pass on what we've covered so you don't repeat yourself" only works if the context really is passed along. Define the triggers in advance: complaints you cannot resolve, requests that need a person's judgement, and any caller who asks for a human. Do not escalate what the agent can handle; it adds friction.</p>
+
+        <h2>Script Patterns: What Works and What Loses Callers</h2>
+
+        <p>The table below is my own working checklist. The thresholds are rules of thumb, apart from the two I attribute to Vapi in the lint section.</p>
 
         <table class="comparison-table">
             <thead>
@@ -560,130 +631,166 @@
             <tbody>
                 <tr>
                     <td><strong>Greeting length</strong></td>
-                    <td>15+ seconds describing services, hours, and website</td>
-                    <td>Under 8 seconds: name, AI disclosure, open invite</td>
+                    <td>Recites services, hours and a website</td>
+                    <td>About 20 words or fewer: name, AI disclosure, open question</td>
                 </tr>
                 <tr>
                     <td><strong>Intent capture</strong></td>
                     <td>"Please say one of the following: appointment, billing, directions, or general inquiry"</td>
-                    <td>"How can I help you today?" -- agent routes from natural response</td>
+                    <td>"How can I help you today?" and route from the natural reply</td>
                 </tr>
                 <tr>
                     <td><strong>Information gathering</strong></td>
                     <td>Asking for 8 fields before confirming any availability</td>
-                    <td>2 to 3 fields max before confirming the appointment is bookable</td>
+                    <td>2 to 3 fields before confirming the slot is bookable</td>
                 </tr>
                 <tr>
                     <td><strong>Confirmation</strong></td>
                     <td>Booking without reading back details</td>
-                    <td>"I have you down for Thursday, July 31st at 10am. Does that work?"</td>
+                    <td>"I have you down for Thursday, July 31st at 10 am. Does that work?"</td>
                 </tr>
                 <tr>
-                    <td><strong>Handling silence</strong></td>
-                    <td>Repeating the same prompt three times then disconnecting</td>
-                    <td>One re-prompt, then offer escalation or callback</td>
+                    <td><strong>Silence</strong></td>
+                    <td>Repeating the same prompt three times, then disconnecting</td>
+                    <td>One check-in, then offer a callback or a person</td>
                 </tr>
                 <tr>
                     <td><strong>Unknown intent</strong></td>
                     <td>"I did not understand that. Please try again."</td>
-                    <td>"I want to make sure I get you to the right place. Are you calling to book an appointment, or is there something else I can help with?"</td>
+                    <td>"I want to make sure I get you to the right place. Are you calling to book an appointment, or is it something else?"</td>
                 </tr>
                 <tr>
                     <td><strong>Cancellations</strong></td>
-                    <td>Confirming cancellation and ending the call</td>
-                    <td>Confirming cancellation and immediately offering the next available slot</td>
+                    <td>Confirming the cancellation and ending the call</td>
+                    <td>Confirming it, then offering the next open slot</td>
                 </tr>
                 <tr>
                     <td><strong>Escalation handoff</strong></td>
-                    <td>Transferring with no context, caller must start over</td>
-                    <td>Transferring with a spoken summary of the call intent and what was captured</td>
+                    <td>Transferring with no context, so the caller starts over</td>
+                    <td>Transferring with a short summary of intent and what was captured</td>
                 </tr>
             </tbody>
         </table>
 
-        <h2>The Mistakes That Kill Caller Trust</h2>
+        <h2>I Turned the Table into a Linter</h2>
 
-        <p>You can design a technically correct conversation flow that still frustrates callers. These are the mistakes that do it most reliably.</p>
+        <p>A checklist is easy to nod along to and easy to ignore. So I wrote the table as code: a 12-check linter that reads a script spec (the agent's turns plus a few flow settings) and fails any rule it breaks. I ran it on two synthetic scripts for a made-up business, one written in the legacy IVR style from the table's left column and one in the right column's style. Python 3.12.3, standard library only, no voice platform involved.</p>
+
+        <p>The thresholds sit at the top of the file. Two come from the Vapi guide (turn length, one question per turn) and one from its unclear-input example (at most two attempts). The rest, including the 20-word greeting and the 150 words a minute used to turn words into seconds, are my assumptions.</p>
+
+        <pre><code>MAX_GREETING_WORDS = 20      # about 8 s at the ASSUMED 150 words/min
+MAX_SENTENCES_PER_TURN = 2   # Vapi guide: &quot;one or two sentences maximum&quot;
+MAX_QUESTIONS_PER_TURN = 1   # Vapi guide: &quot;Ask only one question at a time&quot;
+MAX_FIELDS_BEFORE_AVAILABILITY = 3
+MAX_REPROMPTS = 2
+
+def sentences(text):
+    return [s for s in re.split(r&quot;(?&lt;=[.!?])\s+&quot;, text.strip()) if s]
+
+# inside lint(spec):
+long_turns = [k for k, v in turns.items() if len(sentences(v)) &gt; MAX_SENTENCES_PER_TURN]
+chk(&quot;C5 every turn at most 2 sentences&quot;, not long_turns, ...)</code></pre>
+
+        <p>Run output:</p>
+
+        <pre><code>== legacy-ivr-style (synthetic): 1/12 checks pass
+  PASS  C1 greeting names the business  [Greenfield Services]
+  FAIL  C2 greeting discloses AI  [disclosure wording]
+  FAIL  C3 greeting length  [44 words, about 17.6 s at 150 wpm (assumed)]
+  FAIL  C4 greeting asks one question  [0 questions]
+  FAIL  C5 every turn at most 2 sentences  [over: [&#x27;greeting&#x27;, &#x27;collect&#x27;]]
+  FAIL  C6 every turn at most 1 question  [over: [&#x27;collect&#x27;]]
+  FAIL  C7 fields asked before availability  [8 fields]
+  FAIL  C8 read-back before booking  []
+  FAIL  C9 unknown-intent loop ends in a human or callback  [3 re-prompts then disconnect]
+  FAIL  C10 silence loop ends in a human or callback  [3 re-prompts then disconnect]
+  FAIL  C11 handoff passes a summary  []
+  FAIL  C12 cancellation offers a new slot  []
+== revised (synthetic): 12/12 checks pass
+  PASS  C1 greeting names the business  [Greenfield Services]
+  PASS  C2 greeting discloses AI  [disclosure wording]
+  PASS  C3 greeting length  [15 words, about 6.0 s at 150 wpm (assumed)]
+  PASS  C4 greeting asks one question  [1 questions]
+  PASS  C5 every turn at most 2 sentences  [all turns ok]
+  PASS  C6 every turn at most 1 question  [all turns ok]
+  PASS  C7 fields asked before availability  [2 fields]
+  PASS  C8 read-back before booking  []
+  PASS  C9 unknown-intent loop ends in a human or callback  [1 re-prompts then escalate]
+  PASS  C10 silence loop ends in a human or callback  [1 re-prompts then callback]
+  PASS  C11 handoff passes a summary  []
+  PASS  C12 cancellation offers a new slot  []</code></pre>
+
+        <p>It earned its place on the first run. My first draft of the revised greeting was three sentences ("Thanks for calling Greenfield Services. I'm an AI assistant. How can I help you today?"), and check C5 failed it against the two-sentence rule. I merged the first two sentences and the revised script went from 11 of 12 to 12 of 12. Five unit tests also pass (5 tests, in 0.001s, OK), including three where I planted a defect in the passing script (no AI disclosure, two questions in one turn, a silence loop that ends in a disconnect) and confirmed that exactly that check, and no other, fails.</p>
+
+        <p>What this shows and what it does not. The legacy script scoring 1 of 12 and the revised one 12 of 12 is by construction, since I wrote each to match its column. It proves the rules are checkable, not that the rules improve outcomes. It reads text; it cannot hear pacing, interruptions or a bad transcription. And it knows nothing about caller completion or satisfaction, which I did not measure.</p>
+
+        <h2>The Mistakes That Cost Caller Trust</h2>
 
         <h3>Over-scripting edge cases</h3>
 
-        <p>Businesses that have run phone operations for years often want to script every possible caller scenario: the caller who wants to dispute a charge from three months ago, the caller who is simultaneously angry and crying, the caller who asks about a service you discontinued in 2024. The instinct is understandable but the result is brittle. Modern LLM-powered voice agents handle ambiguity well when you give them clear goals and context. Rigid over-scripting works against this strength. Write for the 90 percent and let the agent handle variation, with a clean escalation path for anything it cannot resolve.</p>
+        <p>People who have run a phone line for years want to script every case: the disputed charge from three months ago, the caller who is upset, the question about a service discontinued last year. The result is a long prompt. Retell's guide is blunt that a longer prompt is not a better prompt: it says every extra instruction makes an agent a little worse at following the rest, and it tells you to cut repetition. Write the common paths well, give the agent a clear fallback for what it does not know, and route the rest to a person.</p>
 
         <h3>Robotic affirmations</h3>
 
-        <p>Phrases like "Great!", "Absolutely!", and "Of course!" feel natural in human conversations but sound artificial when repeated after every response. One well-placed acknowledgment is fine. A script that peppers every agent turn with enthusiasm becomes grating within 30 seconds. Read your script out loud. If it sounds like a motivational poster, rewrite it.</p>
+        <p>"Great!", "Absolutely!" and "Of course!" after every reply sound artificial by the third repetition. Read the script aloud. If it sounds like a motivational poster, rewrite it.</p>
 
         <h3>Asking for information you do not need</h3>
 
-        <p>Every field you require before completing a task creates a chance for the caller to hang up. Ask for what you genuinely need, when you need it. A caller booking a first appointment does not need to provide their date of birth before you confirm availability. Collect what is essential to hold the slot, then gather the rest during intake at the actual appointment.</p>
+        <p>Each required field is one more thing the caller must know and say. Collect what is needed to hold the slot and gather the rest at the appointment.</p>
 
-        <h3>Ignoring the post-call experience</h3>
+        <h3>Ignoring what happens after the call</h3>
 
-        <p>The conversation design work does not end when the call ends. What does the caller receive after? A confirmation text with the appointment details, address, and a reminder of your cancellation policy creates a better experience than even a perfect call. Design the full loop, not just the dialogue.</p>
+        <p>A confirmation text with the time, address and cancellation terms is part of the design. Design the whole loop, not only the dialogue.</p>
 
         <h2>Testing Before You Go Live</h2>
 
-        <p>No script survives contact with real callers without refinement. The goal of pre-launch testing is to find the failure points before real customers do. Here is a practical approach:</p>
+        <p>Static checks like the linter catch structural problems. They do not tell you how callers actually phrase things. Vapi's guide says to validate prompt changes against a representative test set, not single calls, because probabilistic regressions only show up across many runs. My own starting point, which is a habit and not a researched benchmark:</p>
 
         <ol>
-            <li><strong>Call it yourself, ten times, using realistic scenarios</strong> -- Include easy calls (booking a straightforward appointment), hard calls (wanting to reschedule something not in the system), and unusual calls (asking about something you do not offer). Note every moment that felt awkward, robotic, or confusing.</li>
-            <li><strong>Have five people unfamiliar with the system call it cold</strong> -- Give them a scenario, nothing else. Watch where they get stuck, what they say that the agent fails to catch, and where they abandon the call.</li>
-            <li><strong>Test your escalation flow explicitly</strong> -- Confirm that callers who ask for a human reach one, that the context is passed correctly, and that the team member on the receiving end knows what to do with the transferred call.</li>
-            <li><strong>Review transcripts weekly for the first month</strong> -- Almost every deployment reveals patterns in the first few weeks that were impossible to anticipate in testing. New intents, unusual phrasing, questions you did not know callers would ask. Build those into the system quickly.</li>
+            <li><strong>Call it yourself with about ten scripted scenarios:</strong> easy bookings, a reschedule the system cannot find, a question outside what you offer. Note every awkward or robotic moment.</li>
+            <li><strong>Have about five people who have never heard the script call it cold.</strong> Give each a scenario and nothing else. Watch where they get stuck.</li>
+            <li><strong>Test escalation on purpose:</strong> a caller who asks for a person reaches one, the context arrives, and the person receiving the call knows what to do with it.</li>
+            <li><strong>Review transcripts every week for the first month.</strong> New phrasings and unexpected questions show up in real traffic, and each one is a script change.</li>
         </ol>
 
-        <p>The businesses that see the strongest results from AI voice agents treat the first 30 days as an active tuning period, not a set-and-forget deployment. After that month, most systems stabilize and require only occasional updates when services, hours, or pricing change.</p>
+        <h2>Where This Fits</h2>
 
-        <h2>What Good Conversation Design Looks Like in Practice</h2>
-
-        <p>One client example that illustrates this well: a premium consumer brand we worked with was missing a significant portion of inbound calls during peak season, when call volume tripled and the small team could not keep up. They had tried a basic IVR before, but callers hated it and the abandonment rate was high enough that they turned it off within a month.</p>
-
-        <p>When we rebuilt the voice agent, we started with conversation design before touching any platform settings. We mapped their five most common call types from six months of call logs. We wrote greetings that were under seven seconds. We designed booking confirmations that repeated back the exact appointment details in a way the caller could write down without replaying the call. We built an escalation flow that transferred with context so callers who needed to speak to someone did not have to restart. The result was an <strong>AI handling rate of 98 percent</strong> with a measurable improvement in caller satisfaction compared to the old live-answer experience. You can read the full details in the <a href="https://voxdonna.com/case-studies/le-marquier.html">Le Marquier case study</a>, which covers an 80 percent cost reduction alongside the handling rate numbers.</p>
-
-        <p>The technology was the same platform we use for many clients. The conversation design was where the outcome was determined.</p>
-
-        <h2>Linking Conversation Design to Business Results</h2>
-
-        <p>Good conversation design has a direct line to revenue. Every caller who gets their question answered without hanging up is a potential customer retained. Every booking completed autonomously after hours is revenue that would not have existed without the agent. Every cancellation that converts to a reschedule on the same call is a slot filled that would have been empty.</p>
-
-        <p>If you are wondering what the financial impact might look like for your business specifically, the <a href="/roi-calculator.html">ROI calculator</a> lets you input your call volume, average ticket size, and current answer rate to estimate what AI voice handling would mean in real numbers. Most SMBs with 30 or more inbound calls per day see a positive return within the first month of deployment.</p>
-
-        <p>For a broader look at what AI voice agents can handle across different business types, the <a href="/blog/ai-voice-agent-use-cases.html">AI voice agent use cases guide</a> covers the landscape in detail. If you are closer to implementation, the <a href="/blog/ai-voice-agent-implementation-guide.html">implementation guide</a> walks through the setup process from integration to go-live. And if you are weighing whether to build this yourself or use a service, <a href="/blog/how-to-train-ai-voice-agent.html">how to train an AI voice agent</a> explains the effort involved in a production-grade deployment.</p>
+        <p>Script design sits inside a larger build. For the build itself, the <a href="/blog/ai-voice-agent-implementation-guide.html">implementation guide</a> covers setup through go-live, and <a href="/blog/how-to-train-ai-voice-agent.html">how to train an AI voice agent</a> covers tuning. The <a href="/blog/ai-voice-agent-inbound-sales.html">inbound sales qualification post</a> applies the same ideas to qualifying callers, with a routing layer I ran and tested. For the platform decision, see the <a href="/blog/ai-voice-agent-platform-comparison-2026.html">Vapi vs Retell comparison</a>, and for agent builds more broadly the <a href="/ai-agents.html">AI agents page</a>. To see what other jobs voice agents are given, there is the <a href="/blog/ai-voice-agent-use-cases.html">use cases guide</a>. For a worked example of a multilingual support agent, <a href="/blog/building-le-marquier-french-voice-agent.html">the Le Marquier builder notes</a> cover language detection and a single knowledge base. If you want a rough cost picture for your own call volume, the <a href="/roi-calculator.html">ROI calculator</a> takes your inputs; it is an estimator, not a result.</p>
 
         <!-- FAQ Section -->
         <div class="article-faq">
             <h2>Frequently Asked Questions</h2>
 
             <div class="faq-item">
+                <h3>How should conversation scripts be designed for voice AI?</h3>
+                <p>Write the script as five steps, not a menu tree: an opener that names the business and says it is an AI, open intent capture, only the fields needed to act, a read-back before any booking, and a clean finish or a handoff that passes a summary. Keep each agent turn to one or two sentences with one question.</p>
+            </div>
+
+            <div class="faq-item">
                 <h3>How long should an AI voice agent greeting be?</h3>
-                <p>Keep greetings under 10 seconds. State the business name, confirm you can help, and ask a single open or focused question. Anything longer causes callers to interrupt or hang up. A good rule: if you would not say it in a real conversation, cut it from the script.</p>
+                <p>I aim for about 20 words or fewer: the business name, an AI disclosure and one open question. The greeting in the lint example below is 15 words, about 6 seconds at an assumed 150 words a minute. That is my rule of thumb, not a measured threshold, and I have no data on caller drop-off by greeting length.</p>
             </div>
 
             <div class="faq-item">
-                <h3>Should an AI voice agent identify itself as AI?</h3>
-                <p>Yes. Disclosing that the caller is speaking with an AI assistant is both a legal requirement in many jurisdictions and a trust builder. Callers who know upfront that it is AI and still have a good experience rate the interaction higher than callers who feel deceived. Transparency does not hurt conversion; deception does.</p>
+                <h3>Should an AI voice agent say it is an AI?</h3>
+                <p>I put the disclosure in the first sentence by default. In the EU, Article 50(1) of the AI Act requires AI systems that interact directly with people to be designed so those people are informed they are talking to an AI, unless that is obvious from the context. I did not verify US federal or state rules for this update, so check the rules for every country you call.</p>
             </div>
 
             <div class="faq-item">
-                <h3>How many conversation flows do I need to build before going live?</h3>
-                <p>Start with the five core flows: greeting and intent capture, appointment booking, hours and location inquiries, pricing inquiries, and escalation to a human. These cover roughly 80 to 90 percent of inbound call volume for most SMBs. Add more flows after go-live based on what callers actually ask, using call transcripts to prioritize.</p>
+                <h3>How many conversation flows do I need before going live?</h3>
+                <p>Start with the flows your own call logs show. The five on this page (booking, hours and general information, pricing, rescheduling and cancellation, escalation to a human) are a starting set. I have no source for what share of calls they cover, so count your own calls before you trust any percentage.</p>
             </div>
 
             <div class="faq-item">
-                <h3>What is the biggest mistake businesses make when writing AI voice agent scripts?</h3>
-                <p>Over-scripting. Businesses try to anticipate every possible caller path and build rigid menu trees. Modern AI voice agents handle natural language dynamically, so long deterministic scripts actually make conversations worse. Write clear intents and responses, not exhaustive decision trees. Let the AI handle variations; your job is to define the goal of each conversation and the information needed to reach it.</p>
-            </div>
-
-            <div class="faq-item">
-                <h3>How do I test my AI voice agent scripts before going live?</h3>
-                <p>Call it yourself using ten realistic scenarios drawn from actual customer calls. Include off-topic questions, interruptions, and confused callers. Then have three to five people unfamiliar with the system call it cold. Listen for moments where the agent sounds robotic, repeats itself, or fails to redirect gracefully. Refine those paths before launch, then review call transcripts weekly for the first month.</p>
+                <h3>How do I test voice agent scripts before going live?</h3>
+                <p>Test against a set of scenarios, not single calls: Vapi's prompting guide says to validate changes against a representative test set because regressions only show up across many runs. My starting point is ten scripted scenarios plus five callers who have never heard the script, then weekly transcript review for the first month.</p>
             </div>
         </div>
 
         <!-- CTA in article -->
-        <h2>Ready to Get Started?</h2>
-        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
-        <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+        <h2>Want a Second Pair of Eyes on Your Script?</h2>
+        <p>If you are writing or reviewing a voice agent script and want it checked against the rules above, book a scoping call and bring the script.</p>
+        <p><a href="/consulting.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Scoping Call</a></p>
 
         <!-- Author Byline -->
         <div class="article-author">
@@ -702,7 +809,7 @@
         <div class="related-grid">
             <a href="/blog/ai-voice-agent-use-cases.html" class="related-card">
                 <h3 class="related-card-title">AI Voice Agent Use Cases: 12 Ways Businesses Are Using Them Right Now</h3>
-                <p class="related-card-excerpt">The full landscape of what AI voice agents handle today, from appointment booking to after-hours sales, with real numbers from live deployments.</p>
+                <p class="related-card-excerpt">What AI voice agents handle today, from appointment booking to after-hours sales, with the use cases laid out side by side.</p>
             </a>
             <a href="/blog/ai-voice-agent-implementation-guide.html" class="related-card">
                 <h3 class="related-card-title">AI Voice Agent Implementation Guide: From Setup to Go-Live</h3>
