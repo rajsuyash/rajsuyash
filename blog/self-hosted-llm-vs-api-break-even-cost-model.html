@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>Self-Hosted LLM vs API: A Break-Even Cost Model for CTOs</title>
+    <meta name="description" content="When does self-hosting an LLM beat an API? A rerunnable model: one H100 beats a $4/M API near 0.7-1.2B tokens a month, never a cheap 70B API.">
+    <meta name="keywords" content="self-hosted llm vs api, self host llm break even, private llm deployment, llm api vs self hosting cost, llm cost calculator, h100 llm cost per million tokens">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/self-hosted-llm-vs-api-break-even-cost-model.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/self-hosted-llm-vs-api-break-even-cost-model.html">
+    <meta property="og:title" content="Self-Hosted LLM vs API: A Break-Even Cost Model for CTOs">
+    <meta property="og:description" content="When does self-hosting an LLM beat an API? A rerunnable model: one H100 beats a $4/M API near 0.7-1.2B tokens a month, never a cheap 70B API.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj">
+    <meta property="article:published_time" content="2026-11-16">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Self-Hosted LLM vs API: A Break-Even Cost Model for CTOs">
+    <meta name="twitter:description" content="When does self-hosting an LLM beat an API? A rerunnable model: one H100 beats a $4/M API near 0.7-1.2B tokens a month, never a cheap 70B API.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260216b">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Self-Hosted LLM vs API: A Break-Even Cost Model for CTOs",
+        "description": "When does self-hosting an LLM beat an API? A rerunnable model: one H100 beats a $4/M API near 0.7-1.2B tokens a month, never a cheap 70B API.",
+        "author": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com/about.html"
+        },
+        "publisher": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj"
+        },
+        "datePublished": "2026-11-16",
+        "dateModified": "2026-11-16",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/self-hosted-llm-vs-api-break-even-cost-model.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "When does self-hosting an LLM become cheaper than an API?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Against a frontier API priced near $4 per million blended tokens, one rented H100 breaks even at roughly 0.7 to 1.2 billion tokens a month in my model, which is 19 to 31 percent of the GPU's benchmarked capacity. Against a hosted open-weight 70B API near $0.155 per million tokens, a rented H100 never breaks even. The prices are a 16 November 2026 snapshot."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How much does it cost to run Llama 3.3 70B on one H100?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "At a list price of $3.99 per GPU-hour, one H100 running 24 hours a day costs about $2,913 a month before any ops cost. At a benchmarked 1,496 tokens per second that is $0.741 per million tokens if the GPU is busy all the time, and $14.82 per million tokens at 5 percent busy. The throughput figure is a third-party benchmark, not my measurement."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is 5 percent GPU utilization normal?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Cast AI's 2026 report puts average GPU utilization at 5 percent across the Kubernetes clusters it analysed, before optimization, with a best case of 49 percent on a 136-GPU H200 fleet. That is a vendor study of all GPU workloads on Kubernetes, not a measure of LLM inference servers, so treat it as a warning rather than a forecast."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is the difference between self-hosted, private-network and air-gapped?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Self-hosted says who runs the model server. Private network says where the traffic flows. Air-gapped says nothing can leave the network. Self-hosting is a cost and control choice. Air-gapping is a compliance tier that adds offline updates on top of owned or on-premises GPUs."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Should I self-host for data privacy or for cost?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Decide the data boundary first. If prompts cannot leave your network or tenancy, you need rented, owned or air-gapped GPUs whatever the cost model says, and the model gives you the fixed floor to budget, about $5,825 a month for two list-price GPUs before ops cost. If there is no such constraint, test a cheaper hosted model against your evals before buying GPUs."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://rajsuyash.com/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Blog",
+                "item": "https://rajsuyash.com/blog/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Self-Hosted LLM vs API",
+                "item": "https://rajsuyash.com/blog/self-hosted-llm-vs-api-break-even-cost-model.html"
+            }
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Code Block */
+        .article-body pre {
+            background: var(--color-paper-warm);
+            border-left: 3px solid var(--color-accent);
+            padding: var(--space-md);
+            overflow-x: auto;
+            margin: var(--space-md) 0;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .article-body code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.875em;
+            background: rgba(13, 13, 13, 0.07);
+            padding: 0.1em 0.35em;
+        }
+
+        .article-body pre code {
+            background: none;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/about.html" class="nav-link">About</a>
+                <a href="/qualify.html" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">AI Infrastructure</span>
+                <span class="article-date">November 16, 2026</span>
+                <span class="article-read-time">17 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">Self-Hosted LLM vs API: A Break-Even Cost Model for CTOs</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">A cost model you can rerun, priced on 16 November 2026. Self-hosting beats a frontier API only under steady load, and never beats a cheap hosted 70B model.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+<div class="definition-block">
+<p><strong>Short answer:</strong> a rented H100 beats a frontier-priced API (about $4 per million tokens blended) only when the GPU stays busy. On my model that point is roughly 0.7 to 1.2 billion tokens a month on one GPU, which is 19 to 31 percent of the GPU's benchmarked capacity. Against a hosted open-weight 70B API at about $0.155 per million tokens, a rented H100 never breaks even at any volume. If your reason to self-host is cost, first test whether a cheaper hosted model passes your evals. If your reason is that prompts cannot leave your network, price it as a boundary, not as a saving.</p>
+</div>
+
+<p><strong>Updated November 2026.</strong> I read every price on this page on 16 November 2026 and ran the model the same day with Python 3.12.3 on Ubuntu 24.04. I did not rent a GPU, so I measured no throughput and no latency. The throughput figures come from a published benchmark and are labelled as such. Everything I computed is labelled as an estimate, and the script is below so you can change every assumption.</p>
+
+<h2>1. The decision</h2>
+<p>The question a CTO actually asks is: "Should we run our own model server for this workload, or keep paying a provider per token?" The CTO owns the architecture and the CFO owns the budget line, so it is a joint decision. Three things usually force it. A monthly API bill that nobody expected. A security or contract review that says prompts may not go to a third party. Or a provider changing a price or retiring a model.</p>
+<p>"Self-hosting" covers several different arrangements, and most of the confusion in this debate comes from mixing them. I use five terms in this guide: a frontier API, a hosted open-weight API, rented GPUs in your own cloud account, owned or on-premises GPUs, and an air-gapped deployment. Section 3 separates them.</p>
+
+<h2>2. Why this is contested, not settled</h2>
+<p>Cost arguments for self-hosting usually quote the price of a GPU hour or the cost per token at full load. Neither number tells you what you will pay, because the bill is mostly fixed: you pay for the GPU whether or not anyone sends a request.</p>
+<p>The best public evidence on how busy GPUs actually are comes from Cast AI's 2026 State of Kubernetes Optimization report. Cast AI reports that average GPU utilization was 5 percent across the clusters it analysed, measured before any optimization, and 49 percent in the best case it found, a fleet of 136 H200 GPUs (<a href="https://cast.ai/blog/2026-state-of-kubernetes-resource-optimization-cpu-at-8-memory-at-20-and-getting-worse" target="_blank" rel="noopener">Cast AI blog</a>, <a href="https://cast.ai/press-release/2026-state-of-kubernetes-optimization-report" target="_blank" rel="noopener">press release</a>).</p>
+<p>Read that figure with its limits. It is a vendor study of clusters that use Cast AI's product. It measures GPU utilization on Kubernetes across all workloads, not LLM inference specifically. It does not say what an inference server would score. I use 5 percent below only as a stress point on a curve, never as a forecast for your system.</p>
+<p>GPU prices are also moving. Cast AI reports that AWS raised H200 Capacity Block prices by 15 percent in January 2026. A model with a stated price date and a one-line change is more useful than a number in a slide.</p>
+
+<h2>3. The options</h2>
+<p>These are the real choices, including the one that costs nothing to pick today.</p>
+<div style="overflow-x:auto"><table class="comparison-table">
+<thead><tr><th>Option</th><th>Where prompts go</th><th>What it commits you to</th></tr></thead>
+<tbody>
+<tr><td>A. Frontier API</td><td>The model provider</td><td>Per-token bills at list price, no servers, exposure to the provider's price and model-retirement decisions.</td></tr>
+<tr><td>B. Hosted open-weight API</td><td>A hosting provider (a different company from the model's author)</td><td>Per-token bills at a much lower list price, still no servers, and a second vendor to review for data handling.</td></tr>
+<tr><td>C. Rented GPUs in your cloud account</td><td>Your own cloud tenancy</td><td>A fixed monthly GPU bill, a serving engine you run, and capacity planning.</td></tr>
+<tr><td>D. Owned or on-premises GPUs</td><td>Your own network</td><td>Capital cost, hardware lifecycle, power and cooling, and the same serving work as C.</td></tr>
+<tr><td>E. Air-gapped</td><td>A network with no outbound path</td><td>Option D plus offline model and software updates. This is a compliance tier, not a cost tier.</td></tr>
+<tr><td>F. Hybrid or defer</td><td>Split by workload</td><td>Two cost models and a routing layer, or staying on A or B until a volume trigger fires.</td></tr>
+</tbody></table></div>
+<p>Self-hosted, private-network and air-gapped are different postures. Self-hosting says who runs the server. Private network says where the traffic flows. Air-gapped says nothing can leave. A deployment can be self-hosted and still call out to a public package index at startup, so ask which of the three a requirement actually means before you price anything.</p>
+
+<h2>4. Architecture implications</h2>
+<p>Options C to E need a model server. In the benchmarks I use below that is vLLM serving Llama 3.3 70B in FP8, which keeps the weights at about 70 GB and fits on a single 80 GB H100 "with careful tuning", according to <a href="https://www.spheron.network/blog/vllm-vs-tensorrt-llm-vs-sglang-benchmarks" target="_blank" rel="noopener">Spheron's benchmark write-up</a>. Fitting is not the same as comfortable: the memory left for the KV cache limits how many requests the GPU can hold at once, so a production setup often uses two GPUs for spare capacity even when one would carry the average load.</p>
+<p>Spheron also reports that vLLM took about 62 seconds to cold start in its test, and TensorRT-LLM about 28 minutes to build its first engine. If your plan includes scaling to zero overnight, those start-up times decide whether that plan works.</p>
+<p>Moving from an API to a self-hosted model is also a model change. Nobody should do it without re-running their own evals on the new model. I cover the evaluation side in <a href="/blog/ai-agent-evals-builders.html">How to Evaluate an AI Agent Before Deployment</a>. A token-price comparison between two models of different capability is only a price comparison, and I say so again in the cost section.</p>
+
+<h2>5. Cost: the model, the assumptions and the output</h2>
+<p><strong>Prices, all read on 16 November 2026 (vendor-reported):</strong></p>
+<div style="overflow-x:auto"><table class="comparison-table">
+<thead><tr><th>Item</th><th>Price</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>Claude Sonnet 5.5, input / output</td><td>$2 / $10 per million tokens</td><td><a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Anthropic pricing</a></td></tr>
+<tr><td>Claude Haiku 5.5, input / output</td><td>$0.10 / $0.50 per million tokens (prompts up to 100,000 tokens)</td><td>Anthropic pricing</td></tr>
+<tr><td>Llama 3.3 70B Instruct Turbo, input / output</td><td>$0.10 / $0.32 per million tokens</td><td><a href="https://deepinfra.com/pricing" target="_blank" rel="noopener">DeepInfra pricing</a></td></tr>
+<tr><td>DeepSeek V4 Flash, input / output</td><td>$0.09 / $0.18 per million tokens</td><td>DeepInfra pricing</td></tr>
+<tr><td>H100 SXM rental</td><td>$3.99 to $4.29 per GPU-hour (Lambda, by instance size); $3.99 (RunPod Secure Cloud), from $2.69 (RunPod Community Cloud)</td><td><a href="https://lambda.ai/pricing" target="_blank" rel="noopener">Lambda</a>, <a href="https://www.runpod.io/pricing" target="_blank" rel="noopener">RunPod</a></td></tr>
+<tr><td>H100 at two other price points</td><td>$2.00 "retail" and $1.17 "owning at large hyperscaler volume" per GPU-hour</td><td>SemiAnalysis, via InferenceX (below)</td></tr>
+</tbody></table></div>
+<p><strong>Throughput anchor (third-party benchmark, not mine):</strong> <a href="https://inferencex.semianalysis.com/run/llama-3-3-70b-on-h100" target="_blank" rel="noopener">SemiAnalysis's InferenceX</a> reports Llama 3.3 70B in FP8 on vLLM and one H100 at 2,056 tokens per second per GPU when each user gets 30 tokens per second, 1,496 at 50, and 923 at 75. The workload was 8,000 input tokens and 1,000 output tokens per request, and the runs are dated 29 October 2025. I use 1,496 as the base case, 2,056 as the high case, and 460 as a stress case. The 460 comes from <a href="https://cerebrium.ai/resources/4-bit-llm-inference-on-h100" target="_blank" rel="noopener">an undated Cerebrium page</a> reporting 460 tokens per second for Llama 3.1 70B FP8 on one H100 at batch size 64. It is a different model version on a different workload, so I treat it as "a quarter of the base case, if your prompts hurt", not as a measurement.</p>
+<p>Two other published numbers do not fit the same column, and I do not convert them. Spheron reports 1,850 output tokens per second for vLLM at 50 concurrent requests on prompts averaging 512 input and 256 output tokens. That counts output tokens only on short prompts. InferenceX counts total tokens on long prompts. Different workloads give different numbers on the same GPU, which is the main reason to measure your own.</p>
+<p><strong>My assumptions (estimates, change them):</strong> a 75 percent input and 25 percent output token mix; a GPU rented 24 hours a day for 730 hours a month; one GPU as the minimum fleet, and two as the case with a spare; and, where I say "with ops", $2,000 a month for engineering time, which is 20 hours at $100 an hour. That last number is my guess, not a measurement. Replace it with your own.</p>
+<p>The InferenceX workload is 89 percent input tokens, heavier on input than my 75 percent mix. Input tokens are cheaper for a GPU to process than output tokens, so the base case may flatter an output-heavy workload. That is why I keep the stress case.</p>
+
+<pre><code>"""Self-host vs API break-even model. Prices read 2026-11-16; every assumption is a constant below."""
+import math
+
+HOURS = 730                      # hours per month, GPU rented 24x7
+MIX_IN = 0.75                    # assumed share of input tokens in the traffic
+
+# API list prices, $ per 1M tokens (input, output)
+API = {
+    "Claude Sonnet 5.5":            (2.00, 10.00),   # platform.claude.com pricing
+    "Claude Haiku 5.5":             (0.10, 0.50),    # prompts up to 100k tokens
+    "Llama 3.3 70B (DeepInfra)":    (0.10, 0.32),    # deepinfra.com/pricing
+    "DeepSeek V4 Flash (DeepInfra)": (0.09, 0.18),
+}
+def blended(p): return MIX_IN * p[0] + (1 - MIX_IN) * p[1]
+
+# GPU price, $/GPU/hr, and throughput, total tokens/s per GPU (Llama 3.3 70B, FP8, vLLM, H100)
+GPU_PRICE = {"list on-demand": 3.99, "retail (SemiAnalysis)": 2.00, "owned at hyperscaler volume": 1.17}
+TPS = {"stress (assumed)": 460, "base (InferenceX, 50 tok/s/user)": 1496, "high (InferenceX, 30 tok/s/user)": 2056}
+OPS_FIXED = 2000.0               # my assumption: 20 h/month of engineer time at $100/h
+
+def cap_per_gpu_m(tps):  return tps * 3600 * HOURS / 1e6       # M tokens/month at 100% busy
+def full_util_cost(price, tps): return price / (tps * 3600 / 1e6)  # $/M tokens at 100% busy
+
+def selfhost_month(volume_m, price, tps, min_gpus=1, ops=0.0):
+    gpus = max(min_gpus, math.ceil(volume_m / cap_per_gpu_m(tps)))
+    return gpus, gpus * price * HOURS + ops, volume_m / (gpus * cap_per_gpu_m(tps))
+
+if __name__ == "__main__":
+    print("1) Blended API price at %d%% input / %d%% output ($/M tokens)" % (MIX_IN*100, (1-MIX_IN)*100))
+    for n, p in API.items(): print(f"   {n:32s} {blended(p):7.4f}")
+
+    print("\n2) Self-host $/M tokens when the GPU is busy 100% of the time")
+    for pn, pr in GPU_PRICE.items():
+        print("   " + f"{pn:28s} ${pr:.2f}/hr  " + "  ".join(f"{tn.split(' (')[0]}={full_util_cost(pr, t):.3f}" for tn, t in TPS.items()))
+
+    print("\n3) Self-host $/M tokens vs utilisation (list $3.99/hr, base throughput)")
+    base = full_util_cost(3.99, 1496)
+    for u in (0.05, 0.10, 0.20, 0.30, 0.50, 0.80, 1.00): print(f"   {u*100:4.0f}% busy -&gt; ${base/u:8.3f}/M")
+
+    print("\n4) Monthly cost at 1M / 10M / 100M tokens per day (30-day month), 1 GPU minimum, list $3.99/hr, base throughput")
+    print(f"   {'tokens/day':&gt;11s} {'GPUs':&gt;4s} {'util':&gt;6s} {'self-host':&gt;11s} {'+ops':&gt;10s} " + " ".join(f"{n.split(' (')[0][:14]:&gt;14s}" for n in API))
+    for per_day in (1, 10, 100):
+        v = per_day * 30
+        g, c, u = selfhost_month(v, 3.99, 1496)
+        _, co, _ = selfhost_month(v, 3.99, 1496, ops=OPS_FIXED)
+        print(f"   {per_day:&gt;9d}M {g:4d} {u*100:5.1f}% {c:11,.0f} {co:10,.0f} " + " ".join(f"{v*blended(p):14,.0f}" for p in API.values()))
+
+    print("\n4b) Same volumes with 2 GPUs minimum (one spare), list $3.99/hr, base throughput")
+    for per_day in (1, 10, 100):
+        g, c, u = selfhost_month(per_day * 30, 3.99, 1496, min_gpus=2)
+        print(f"   {per_day:&gt;9d}M tokens/day: {g} GPUs, {u*100:4.1f}% busy, ${c:,.0f}/month")
+
+    print("\n5) Break-even volume, M tokens/month, one GPU 24x7. 'x%' = share of one GPU's capacity that volume needs.")
+    print("   '&gt;1 GPU' = break-even exceeds one GPU, so the one-GPU premise fails. 'never' = $/M at 100% busy &gt;= API price.")
+    def be_txt(fixed, price, tps, api):
+        if full_util_cost(price, tps) &gt;= api: return "never"
+        be = fixed / api; cap = cap_per_gpu_m(tps)
+        return f"{be:,.0f} ({be/cap*100:.0f}%)" if be &lt;= cap else "&gt;1 GPU"
+    sonnet, haiku = blended(API["Claude Sonnet 5.5"]), blended(API["Claude Haiku 5.5"])
+    llama, flash = blended(API["Llama 3.3 70B (DeepInfra)"]), blended(API["DeepSeek V4 Flash (DeepInfra)"])
+    print(f"   {'GPU price':26s} {'throughput':9s} | {'Sonnet':&gt;14s} {'Sonnet+ops':&gt;14s} | {'Haiku':&gt;14s} {'Haiku+ops':&gt;10s} | {'Llama70B':&gt;8s} {'Flash':&gt;6s}")
+    for pn, pr in GPU_PRICE.items():
+        for tn, t in TPS.items():
+            f0, f1 = pr * HOURS, pr * HOURS + OPS_FIXED
+            print(f"   {pn:26s} {tn.split(' (')[0]:9s} | {be_txt(f0,pr,t,sonnet):&gt;14s} {be_txt(f1,pr,t,sonnet):&gt;14s} | {be_txt(f0,pr,t,haiku):&gt;14s} {be_txt(f1,pr,t,haiku):&gt;10s} | {be_txt(f0,pr,t,llama):&gt;8s} {be_txt(f0,pr,t,flash):&gt;6s}")</code></pre>
+
+<p>Output of that script, run on 16 November 2026:</p>
+<pre><code>1) Blended API price at 75% input / 25% output ($/M tokens)
+   Claude Sonnet 5.5                 4.0000
+   Claude Haiku 5.5                  0.2000
+   Llama 3.3 70B (DeepInfra)         0.1550
+   DeepSeek V4 Flash (DeepInfra)     0.1125
+
+2) Self-host $/M tokens when the GPU is busy 100% of the time
+   list on-demand               $3.99/hr  stress=2.409  base=0.741  high=0.539
+   retail (SemiAnalysis)        $2.00/hr  stress=1.208  base=0.371  high=0.270
+   owned at hyperscaler volume  $1.17/hr  stress=0.707  base=0.217  high=0.158
+
+3) Self-host $/M tokens vs utilisation (list $3.99/hr, base throughput)
+      5% busy -&gt; $  14.817/M
+     10% busy -&gt; $   7.409/M
+     20% busy -&gt; $   3.704/M
+     30% busy -&gt; $   2.470/M
+     50% busy -&gt; $   1.482/M
+     80% busy -&gt; $   0.926/M
+    100% busy -&gt; $   0.741/M
+
+4) Monthly cost at 1M / 10M / 100M tokens per day (30-day month), 1 GPU minimum, list $3.99/hr, base throughput
+    tokens/day GPUs   util   self-host       +ops Claude Sonnet  Claude Haiku 5  Llama 3.3 70B DeepSeek V4 Fl
+           1M    1   0.8%       2,913      4,913            120              6              5              3
+          10M    1   7.6%       2,913      4,913          1,200             60             47             34
+         100M    1  76.3%       2,913      4,913         12,000            600            465            338
+
+4b) Same volumes with 2 GPUs minimum (one spare), list $3.99/hr, base throughput
+           1M tokens/day: 2 GPUs,  0.4% busy, $5,825/month
+          10M tokens/day: 2 GPUs,  3.8% busy, $5,825/month
+         100M tokens/day: 2 GPUs, 38.2% busy, $5,825/month
+
+5) Break-even volume, M tokens/month, one GPU 24x7. 'x%' = share of one GPU's capacity that volume needs.
+   '&gt;1 GPU' = break-even exceeds one GPU, so the one-GPU premise fails. 'never' = $/M at 100% busy &gt;= API price.
+   GPU price                  throughput |         Sonnet     Sonnet+ops |          Haiku  Haiku+ops | Llama70B  Flash
+   list on-demand             stress    |      728 (60%)         &gt;1 GPU |          never      never |    never  never
+   list on-demand             base      |      728 (19%)    1,228 (31%) |          never      never |    never  never
+   list on-demand             high      |      728 (13%)    1,228 (23%) |          never      never |    never  never
+   retail (SemiAnalysis)      stress    |      365 (30%)      865 (72%) |          never      never |    never  never
+   retail (SemiAnalysis)      base      |       365 (9%)      865 (22%) |          never      never |    never  never
+   retail (SemiAnalysis)      high      |       365 (7%)      865 (16%) |          never      never |    never  never
+   owned at hyperscaler volume stress    |      214 (18%)      714 (59%) |          never      never |    never  never
+   owned at hyperscaler volume base      |       214 (5%)      714 (18%) |          never      never |    never  never
+   owned at hyperscaler volume high      |       214 (4%)      714 (13%) |    4,270 (79%)     &gt;1 GPU |    never  never</code></pre>
+
+<h3>Reading the output</h3>
+<p><strong>The fixed bill dominates.</strong> One list-price H100 costs $2,913 a month before anyone sends a request. At 1 million tokens a day, Claude Sonnet 5.5 costs $120 a month by this model and the hosted Llama 3.3 70B API costs $5, so the GPU costs about 24 times Sonnet and more than 500 times the hosted Llama API. At 10 million tokens a day the GPU is still 2.4 times Sonnet and 60 times the hosted Llama API.</p>
+<p><strong>Against a frontier price, the break-even exists but needs sustained load.</strong> At 100 million tokens a day the model puts one GPU at 76 percent busy, costing $2,913 against $12,000 for Sonnet. I would not plan on 76 percent. The benchmark throughput is at a latency target, and a real traffic curve with peaks and quiet hours will not fill a GPU that evenly. The honest range is the section 5 break-even table: 728 million tokens a month without ops cost and 1,228 million with it, at list price and base throughput.</p>
+<p><strong>Against a cheap hosted model, it never breaks even.</strong> A list-price H100 at 100 percent busy costs $0.741 per million tokens in the base case. The hosted Llama 3.3 70B API blends to $0.155. The only cell in the whole grid where a self-hosted GPU beats a cheaper API is owned hardware at hyperscaler-volume pricing, high throughput, and 79 percent busy, against Haiku 5.5. Even there it does not beat the hosted 70B API.</p>
+<p><strong>Utilization is the lever.</strong> The base case costs $14.82 per million tokens at 5 percent busy, which is 3.7 times Sonnet's blended price. It reaches Sonnet's price near 20 percent busy ($3.70). At 50 percent busy it is $1.48. This is the arithmetic behind the Cast AI warning in section 2. My "busy" is the share of benchmarked throughput you actually serve. Cast AI's 5 percent is a GPU compute measure on Kubernetes. They are related, but they are not the same number.</p>
+<p><strong>Redundancy doubles the floor.</strong> With a spare GPU the monthly floor is $5,825. At 100 million tokens a day two GPUs would be 38 percent busy.</p>
+<p><strong>What the API side leaves out.</strong> Anthropic's page also lists batch prices of $1 and $5 per million tokens for Sonnet 5.5, half the standard rate, and cache hits at $0.10 per million. Workloads that can batch or reuse long prompts get cheaper than the $4.00 I use, which pushes every break-even above to the right. I did not model either.</p>
+
+<h2>6. Security, compliance and the data boundary</h2>
+<p>For some workloads the cost model does not decide anything. If prompts contain data that your contracts or your regulator say cannot go to a third party, the choice is among options C, D and E, and the cost table tells you what to budget: about $5,825 a month for two rented GPUs before ops cost, at the prices above. That is the price of the boundary.</p>
+<p>Option B does not satisfy a rule that data must stay with one vendor or inside your tenancy. A hosted open-weight API means a second company handles your prompts. Check each provider's data-handling and retention terms in the contract, not in a feature table. I am not a lawyer and I have not reviewed any provider's contract for this guide.</p>
+<p>An installation that works is not a security review. Self-hosting moves responsibility for patching, access control, logging and prompt-injection defences onto your team. If the model server will drive tools, see my test of <a href="/blog/ai-agent-approval-gate-placement.html">where an approval gate must live</a>.</p>
+
+<h2>7. Operational complexity</h2>
+<p>An API gives you a status page. A model server gives you an on-call rotation. Self-hosting adds GPU capacity planning, serving-engine upgrades and their open issues, quantization checks, model-version pinning, and a plan for a node that fails at 2 a.m. The $2,000 "ops" line in my model is a placeholder for that work. If you have no one who has run a GPU service before, expect the first month to cost more than the model says.</p>
+<p>My <a href="/blog/openclaw-self-hosting-deployment-guide.html">OpenClaw self-hosting guide</a> covers running an agent runtime on your own server. It does not cover the model server this guide prices. They are separate layers.</p>
+
+<h2>8. Scale: where the answer flips</h2>
+<p>Under about 300 million tokens a month, every API in the table is cheaper than one list-price GPU. Between roughly 700 million and 1.2 billion tokens a month, self-hosting starts to beat a $4-per-million frontier API, but only if a 70B-class model is good enough for the job, and only if the load is steady. Above several billion tokens a month, a steady high-load fleet gets cheaper per token than the $4 API, though it still does not undercut a cheap hosted open-weight API at list GPU prices.</p>
+<p>Volume is not the only variable. A workload that sends the same long prefix every time can lean on provider caching. A workload with a daily peak and a long quiet period leaves you paying for idle GPUs. A workload that grows 10 times in a quarter makes any fixed capacity plan wrong.</p>
+
+<h2>9. Decision matrix and scorecard</h2>
+<p>I scored each option from 1 to 5, where 5 is best for the buyer. The scores are my judgment, and the reasoning follows each dimension, because a bare matrix is a listicle.</p>
+<p><strong>Cost at under 300M tokens a month:</strong> APIs win because there is no fixed bill. <strong>Cost at several billion tokens a month with steady load:</strong> C and D win against frontier prices, but not against cheap hosted models. <strong>Data boundary:</strong> only C, D and E keep prompts in your control. <strong>Operational burden:</strong> A and B have none, C and D carry the serving work, E adds offline updates. <strong>Time to value:</strong> an API works today, a model server takes weeks. <strong>Price and lock-in risk:</strong> self-hosting removes per-token price risk and adds GPU price risk.</p>
+<div style="overflow-x:auto"><table class="comparison-table">
+<thead><tr><th>Dimension</th><th>A. Frontier API</th><th>B. Hosted open-weight API</th><th>C. Rented GPUs</th><th>D. Owned GPUs</th><th>E. Air-gapped</th></tr></thead>
+<tbody>
+<tr><td>Cost under 300M tokens/month</td><td>4</td><td>5</td><td>1</td><td>1</td><td>1</td></tr>
+<tr><td>Cost at billions of tokens, steady load</td><td>2</td><td>4</td><td>3</td><td>4</td><td>3</td></tr>
+<tr><td>Data boundary</td><td>1</td><td>2</td><td>4</td><td>5</td><td>5</td></tr>
+<tr><td>Operational burden (5 = none)</td><td>5</td><td>5</td><td>2</td><td>1</td><td>1</td></tr>
+<tr><td>Time to value</td><td>5</td><td>5</td><td>2</td><td>1</td><td>1</td></tr>
+<tr><td>Price and lock-in risk</td><td>2</td><td>3</td><td>3</td><td>4</td><td>4</td></tr>
+</tbody></table></div>
+<p>A short scorecard to apply before opening the script. Answer yes or no.</p>
+<pre><code>1. Must prompts stay inside your own network or cloud tenancy?
+   yes -&gt; options C, D or E. Budget the fixed floor (section 5, 4b). Stop here.
+2. Does a hosted open-weight model pass YOUR evals?
+   no  -&gt; stay on a frontier API (A). The token price comparison is moot.
+   yes -&gt; price option B first. It is the cheapest option at every volume in this model.
+3. Is your volume above ~700M tokens/month AND steady AND still above the
+   price of a cheap hosted model?
+   no  -&gt; stay on B (or A). Revisit with 30 days of measured traffic.
+   yes -&gt; pilot C on one stable workload with hourly billing, and measure real tokens/s.</code></pre>
+
+<h2>10. Recommendation by scenario</h2>
+<p>There is no universal answer. These are five scenarios and what I would do in each, with the one factor that would flip it.</p>
+<ul>
+<li><strong>Product team, under 300M tokens a month, no data constraint.</strong> Use an API. If a frontier model is required, pay for it; if a 70B-class model passes your evals, use option B. Flip factor: a data-handling requirement appears.</li>
+<li><strong>About 1B tokens a month on a frontier model, stable load, no data constraint.</strong> Before buying GPUs, test whether a cheaper model passes your evals. At 1B tokens a month the model prices Sonnet at $4,000, a hosted Llama 3.3 70B API at $155, and one list-price GPU at $2,913 to $4,913. Flip factor: the cheaper model fails the evals, which puts you in the narrow zone where self-hosting a model of similar capability could save money.</li>
+<li><strong>Regulated data that cannot leave your network.</strong> Option C, D or E regardless of the cost math. Budget the floor, plan for two GPUs, and put the engineering time in the plan. Flip factor: the regulator's rule turns out to allow a provider that offers a dedicated, region-pinned deployment, which is a different offer that I did not price.</li>
+<li><strong>Steady multi-billion token workload and an ops team that has run GPUs before.</strong> Pilot option C, then consider D. Expect roughly a 2.7 to 4 times saving against a $4-per-million API at 50 to 76 percent busy, and expect no saving against a cheap hosted open-weight API. Flip factor: measured utilization under 20 percent.</li>
+<li><strong>Bursty or unknown demand.</strong> Stay on an API and instrument it. Flip factor: 30 days of traffic data that show a steady floor of load.</li>
+</ul>
+
+<h2>11. Migration path</h2>
+<ol>
+<li><strong>Measure first.</strong> For 30 days, log tokens in and out per feature per day, plus peak concurrent requests. Without those four numbers every figure in this guide is a guess about your system.</li>
+<li><strong>Run your evals on a cheaper model.</strong> This is the step that changes the answer most often, and it costs a few dollars on option B.</li>
+<li><strong>Rerun the script with your numbers.</strong> Change the token mix, the GPU price, the throughput and the ops line.</li>
+<li><strong>Pilot on one stable workload</strong> on an hourly-billed rented GPU. Measure tokens per second with your own prompt lengths. That is the number my model cannot give you.</li>
+<li><strong>Re-price before any commitment.</strong> Every price here is a 16 November 2026 snapshot, and Cast AI reports that AWS raised H200 Capacity Block prices in January 2026.</li>
+</ol>
+<p>If you want a second opinion on a specific workload, I do this kind of architecture review in my <a href="/consulting.html">consulting work</a>, and the <a href="/ai-agents.html">AI agents page</a> describes what I build. For the spend side, the <a href="/roi-calculator.html">ROI calculator</a> and the <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> are the quick versions. If your token volume comes from agent loops, my <a href="/blog/ai-agents-vs-workflows-decision-guide.html">agents vs workflows cost model</a> shows why a tool-calling agent can use several times the tokens of a fixed workflow, which moves your volume number.</p>
+
+<h2>12. What I did not measure</h2>
+<ul>
+<li>I did not rent a GPU, so I measured no throughput, latency or reliability. All throughput figures are third-party benchmarks with different workloads and dates.</li>
+<li>The InferenceX runs are from 29 October 2025. Engine and model versions have moved since.</li>
+<li>I did not compare model quality. A Llama 3.3 70B token and a Claude Sonnet 5.5 token are not equivalent, and the break-even tells you nothing about whether the cheaper model is good enough.</li>
+<li>The $2,000 ops line is my assumption, not a measurement.</li>
+<li>I did not model reserved or committed GPU pricing, spot capacity, storage, networking, egress, or the staff cost of an on-call rotation beyond that one line.</li>
+<li>I did not model batch pricing or prompt caching on the API side, which would lower the API costs shown.</li>
+<li>Cast AI's 5 percent is a vendor figure on Kubernetes GPUs in general and is not an inference-server measurement. I did not verify it independently.</li>
+<li>Prices are a single-day snapshot taken on 16 November 2026, and I did not read the providers' contract terms.</li>
+</ul>
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>When does self-hosting an LLM become cheaper than an API?</h3>
+                <p>Against a frontier API priced near $4 per million blended tokens, one rented H100 breaks even at roughly 0.7 to 1.2 billion tokens a month in my model, which is 19 to 31 percent of the GPU's benchmarked capacity. Against a hosted open-weight 70B API near $0.155 per million tokens, a rented H100 never breaks even. The prices are a 16 November 2026 snapshot.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How much does it cost to run Llama 3.3 70B on one H100?</h3>
+                <p>At a list price of $3.99 per GPU-hour, one H100 running 24 hours a day costs about $2,913 a month before any ops cost. At a benchmarked 1,496 tokens per second that is $0.741 per million tokens if the GPU is busy all the time, and $14.82 per million tokens at 5 percent busy. The throughput figure is a third-party benchmark, not my measurement.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is 5 percent GPU utilization normal?</h3>
+                <p>Cast AI's 2026 report puts average GPU utilization at 5 percent across the Kubernetes clusters it analysed, before optimization, with a best case of 49 percent on a 136-GPU H200 fleet. That is a vendor study of all GPU workloads on Kubernetes, not a measure of LLM inference servers, so treat it as a warning rather than a forecast.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What is the difference between self-hosted, private-network and air-gapped?</h3>
+                <p>Self-hosted says who runs the model server. Private network says where the traffic flows. Air-gapped says nothing can leave the network. Self-hosting is a cost and control choice. Air-gapping is a compliance tier that adds offline updates on top of owned or on-premises GPUs.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Should I self-host for data privacy or for cost?</h3>
+                <p>Decide the data boundary first. If prompts cannot leave your network or tenancy, you need rented, owned or air-gapped GPUs whatever the cost model says, and the model gives you the fixed floor to budget, about $5,825 a month for two list-price GPUs before ops cost. If there is no such constraint, test a cheaper hosted model against your evals before buying GPUs.</p>
+            </div>
+
+        </div>
+
+        <!-- CTA in article -->
+        <h2>Ready to Get Started?</h2>
+        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
+        <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/ai-agents-vs-workflows-decision-guide.html" class="related-card">
+                <h3 class="related-card-title">AI Agents vs Workflows: A Decision Guide for CTOs</h3>
+                <p class="related-card-excerpt">A rerunnable cost model for why an agent loop uses more tokens than a fixed workflow.</p>
+            </a>
+            <a href="/blog/ai-agent-evals-builders.html" class="related-card">
+                <h3 class="related-card-title">How to Evaluate an AI Agent Before Deployment: 5 Metrics</h3>
+                <p class="related-card-excerpt">The eval gate to pass before you swap a frontier model for a cheaper one.</p>
+            </a>
+            <a href="/blog/openclaw-self-hosting-deployment-guide.html" class="related-card">
+                <h3 class="related-card-title">OpenClaw Self-Hosting Guide: Tested on 2026.10.5</h3>
+                <p class="related-card-excerpt">Hosting the agent runtime on your own server, the layer above the model.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify.html" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a></p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
