@@ -10,9 +10,9 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  HOST: 92.112.189.106
+  HOST: 82.112.232.36
   PORT: "65002"
-  USER: u649993053
+  USER: u755945241
   TARGET: domains/rajsuyash.com/public_html/
   # Set to "--dry-run" to see what rsync WOULD change/delete without touching the host.
   RSYNC_DRY_RUN: ""
