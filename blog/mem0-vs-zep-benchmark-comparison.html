@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>Mem0 vs Zep Benchmarks: Why the Scores Disagree</title>
+    <meta name="description" content="Mem0 and Zep each post scores above 90, yet the quoted gap is 40 points. I traced 18 scores to their sources: no pair is comparable. Here is why.">
+    <meta name="keywords" content="mem0 vs zep, mem0 vs zep benchmark, agent memory benchmark, locomo benchmark, longmemeval, zep graphiti, ai agent memory, long-term memory for ai agents">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/mem0-vs-zep-benchmark-comparison.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/mem0-vs-zep-benchmark-comparison.html">
+    <meta property="og:title" content="Mem0 vs Zep Benchmarks: Why the Scores Disagree">
+    <meta property="og:description" content="Mem0 and Zep each post scores above 90, yet the quoted gap is 40 points. I traced 18 scores to their sources: no pair is comparable. Here is why.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj">
+    <meta property="article:published_time" content="2026-11-23">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mem0 vs Zep Benchmarks: Why the Scores Disagree">
+    <meta name="twitter:description" content="Mem0 and Zep each post scores above 90, yet the quoted gap is 40 points. I traced 18 scores to their sources: no pair is comparable. Here is why.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta name="twitter:creator" content="@suyash_raj">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20260216b">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Mem0 vs Zep Benchmarks: Why the Scores Disagree",
+        "description": "Mem0 and Zep each post scores above 90, yet the quoted gap is 40 points. I traced 18 scores to their sources: no pair is comparable. Here is why.",
+        "author": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com/about.html"
+        },
+        "publisher": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj"
+        },
+        "datePublished": "2026-11-23",
+        "dateModified": "2026-11-23",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/mem0-vs-zep-benchmark-comparison.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Is Mem0 or Zep more accurate?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Neither can be shown from the published scores. On 23 November 2026 Mem0's pages report 92.5 on LoCoMo and 94.4 on LongMemEval, and Zep's page reports 94.7 and 90.2. Those come from different harnesses, and in a ledger of 18 published scores I found no pair that shares the same runner, benchmark variant, answer model and judge model. Test both on your own transcripts."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Why does Mem0 score 49 in one place and 94.4 in another?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "They are different measurements. The 49.0 is in arXiv:2603.04814, a March 2026 cost study that ran the Mem0 framework with GPT-5-nano for extraction and GPT-5-mini as the reader, and long-context GPT-5-mini scored 82.4 on the same LongMemEval questions. The 94.4 is Mem0's own April 2026 algorithm, self-reported, with models the page does not state."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What happened with Zep's 84 percent LoCoMo claim?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Zep's 2025 post claimed about 84 percent. Mem0's CTO pointed out that the calculation counted correct category-5 answers in the numerator while excluding that category from the denominator. Zep agreed and corrected its score to 75.14 percent, plus or minus 0.17 over 10 runs. Mem0's own re-run of Zep gave 58.44 percent, which Zep disputed, and the thread closed without a reconciled figure."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is LoCoMo reliable enough to choose a memory layer?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Treat it as a rough screen. A Penfield Labs audit, one team's non-peer-reviewed work, reports 99 wrong answers in the 1,540-question key, which caps a strict score at 93.57 percent, and a judge that accepted 62.81 percent of deliberately wrong but on-topic answers. A difference of a few points between two LoCoMo scores sits inside that noise."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Do I need a memory layer, or is long context enough?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "For short per-user histories, long context or a searchable file is a fair starting point. In a 2026 cost study, long-context GPT-5-mini scored higher than the Mem0 pipeline on both benchmarks, and the memory system became cheaper after about ten turns at 100k tokens of context. Measure both on your own data before committing."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "Mem0 vs Zep Benchmarks: Why the Scores Disagree", "item": "https://rajsuyash.com/blog/mem0-vs-zep-benchmark-comparison.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/about.html" class="nav-link">About</a>
+                <a href="/qualify.html" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">AI Agents</span>
+                <span class="article-date">November 23, 2026</span>
+                <span class="article-read-time">16 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">Mem0 vs Zep Benchmarks: Why the Scores Disagree</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">The 40-point gap between Mem0 and Zep is not one disagreement. It is three different measurements, a corrected calculation and a benchmark with a scoring ceiling.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <!-- CONTENT GOES HERE -->
+        <div class="definition-block">
+<p><strong>Short answer:</strong> there is no measured 40-point gap between Mem0 and Zep. On 23 November 2026 each vendor's own page puts both systems above 90 on LongMemEval (Mem0 at 94.4 or 93.4, Zep at 90.2), and those numbers put Zep a little ahead on LoCoMo and Mem0 a little ahead on LongMemEval. The widely quoted spread comes from setting Zep's January 2025 paper score (71.2, gpt-4o) beside Mem0's April 2026 self-report, and beside a 49.0 that a separate study measured for a different Mem0 pipeline on different models. I traced 18 published scores to their sources and found no pair that shares every control I could check. Choose a memory layer by testing it on your own transcripts, not by a leaderboard.</p>
+</div>
+
+<p><strong>Updated November 2026.</strong> I read every source on this page on 23 November 2026: five arXiv papers (the two benchmark papers only at abstract level), the vendors' own benchmark and comparison pages, a public GitHub dispute, one third-party audit and the LoCoMo dataset itself. I did not install or call Mem0 or Zep, so nothing here says which one answers your questions better. This page is about whether the published numbers can carry that decision. They cannot yet, and the reasons are specific.</p>
+
+<h2>1. The decision, and who this is for</h2>
+<p>An agent that talks to the same person across many sessions needs somewhere to keep what it learned: preferences, facts that changed, things the user said three weeks ago. Two names come up often, Mem0 and Zep (whose open-source graph engine is Graphiti). A third option is often skipped: no memory layer at all, just a long context window or a plain file the agent can search.</p>
+<p>This guide is for an architect or technical founder choosing between them. It supports the work I describe on my <a href="/ai-agents.html">AI agents page</a>, where I help teams pick and build agent systems. If you want to see what a self-hosted agent's memory looks like in practice, my post on <a href="/blog/hermes-agent-memory-skills-deployment.html">Hermes Agent memory and skills</a> covers a different, file-based design.</p>
+<p>I started from the claim that circulates in comparison articles: that the two vendors' self-reported benchmark scores disagree by 40 points or more. I wanted to find out which two measurements produce that number, and whether anyone has run both systems under one set of conditions.</p>
+
+<h2>2. What I did, and what went wrong</h2>
+<p>I built a ledger of 18 published scores. For each one I recorded the system, the benchmark and variant, the model that wrote the answers, the model that graded them, who ran it, and the source page or paper. Then I wrote four checks: whether a published percentage matches its own k-out-of-n, whether a headline equals the sum of its category rows, the highest score a benchmark's answer key allows, and whether two scores are comparable. I also downloaded the LoCoMo dataset from its GitHub repository and counted the questions myself.</p>
+<p>Four things did not go to plan, and each changed the page.</p>
+<ul>
+<li><strong>My GitHub token was rejected.</strong> The <code>gh</code> command returned "Bad credentials" (HTTP 401), so I read the public dispute thread through the unauthenticated GitHub API instead. That worked because the repository is public.</li>
+<li><strong>Secondary pages disagreed about who produced the 49.0.</strong> One page credited a vendor study, one a company I could not verify, one called it an "independent production result". The number is real, and it is in Table 3 of arXiv:2603.04814, a cost study of the Mem0 framework against long-context models. That paper does not mention Zep. I relabelled the entry to "authors of arXiv:2603.04814" and did not check their affiliations.</li>
+<li><strong>I could not find the judge model in most sources.</strong> I searched the Mem0 paper's text for the model that grades answers and found a grading prompt but no model name. A blank in my ledger means I did not find it in the page or paper I read. It does not mean the vendor never recorded it.</li>
+<li><strong>I first suspected a scraping error on Zep's page.</strong> A search tool's summary showed category rows that did not add up to the headline. I downloaded the raw page and parsed it myself. The numbers are on the page as shown in section 5.</li>
+</ul>
+
+<h2>3. The 40-point gap, taken apart</h2>
+<p>Here are the numbers that get set against each other, with the context that the comparison tables leave out.</p>
+<div style="overflow-x:auto"><table class="comparison-table">
+<thead><tr><th>Score</th><th>What was measured</th><th>Who ran it</th><th>When</th><th>Models</th></tr></thead>
+<tbody>
+<tr><td>93.4 or 94.4</td><td>Mem0's April 2026 algorithm on LongMemEval, self-reported</td><td>Mem0</td><td>Pages updated 3 Sep and 10 Oct 2026</td><td>Not stated on the pages I read</td></tr>
+<tr><td>71.2</td><td>Zep on LongMemEval_s (about 115k-token histories); full-context baseline 60.2 in the same table</td><td>Zep</td><td>arXiv:2501.13956, January 2025</td><td>gpt-4o</td></tr>
+<tr><td>49.0</td><td>The Mem0 framework as one pipeline in a cost study; long-context GPT-5-mini scored 82.4 on the same questions</td><td>Authors of arXiv:2603.04814</td><td>5 March 2026</td><td>GPT-5-nano extraction, GPT-5-mini reader, top-k 20</td></tr>
+<tr><td>90.2</td><td>Zep on LongMemEval, 451 of 500 correct</td><td>Zep</td><td>Page retrieved 23 Nov 2026 (no date found)</td><td>gpt-5.4 reader, gpt-5.4 judge</td></tr>
+<tr><td>90.4</td><td>Mem0 on LongMemEval at top_50, as quoted on Zep's comparison page</td><td>Mem0's repository numbers, relayed by Zep</td><td>Page retrieved 23 Nov 2026</td><td>Not stated</td></tr>
+</tbody></table></div>
+<p>Mem0's own comparison page reports a gap of 22.2 points: 93.4 against 71.2. That subtracts a Zep result from January 2025 on gpt-4o from a Mem0 result from April 2026 whose models the page does not state. The roughly 44-point figure, 93.4 against 49.0, compares Mem0's current algorithm with a different pipeline and a different reader, from a paper submitted on 5 March 2026, before Mem0 says it released the April 2026 algorithm. Neither number compares two systems under one harness.</p>
+<p>The same page also labels 63.8% as the "Full-context baseline (same run)". In Table 2 of Zep's paper, 63.8% is Zep's own score with gpt-4o-mini. The full-context baselines are 55.4% (gpt-4o-mini) and 60.2% (gpt-4o). I read both pages on 23 November 2026. I cannot tell whether the Mem0 wording is a slip.</p>
+
+<h3>What each vendor's page says today</h3>
+<div style="overflow-x:auto"><table class="comparison-table">
+<thead><tr><th>Benchmark</th><th>Mem0's own pages</th><th>Zep's own page</th><th>Mem0 as quoted by Zep</th><th>Zep as quoted by Mem0</th></tr></thead>
+<tbody>
+<tr><td>LoCoMo (1,540 questions)</td><td>92.5 (research page, blog) or 91.6 (comparison page)</td><td>94.7 (1,459 of 1,540)</td><td>91.6</td><td>80.32 to 83</td></tr>
+<tr><td>LongMemEval (500 questions)</td><td>94.4 (blog) or 93.4 (comparison page)</td><td>90.2 (451 of 500)</td><td>90.4 at top_50</td><td>71.2 (the 2025 paper)</td></tr>
+</tbody></table></div>
+<p>Two things stand out. First, on their own current numbers the vendors are within a few points of each other on both benchmarks, and each leads on one: Zep on LoCoMo (94.7 against 92.5), Mem0 on LongMemEval (94.4 against 90.2). Second, Mem0's page quotes Zep 12 to 14 points below Zep's own LoCoMo figure and 19 points below Zep's own LongMemEval figure, while Zep's page quotes Mem0 within about 4 points of Mem0's own. Mem0's comparison page carries an update date of 3 September 2026, and I found no date on Zep's page, so I cannot say which figure is newer. What I can say is that the 71.2 that anchors the "22-point gap" is a January 2025 number that Zep has since superseded on its own site.</p>
+
+<h2>4. The 2025 LoCoMo dispute, as arithmetic</h2>
+<p>The only direct head-to-head between the two systems was run by Mem0 in 2025 and then disputed. The sequence is on public record.</p>
+<ul>
+<li>In April 2025 Mem0's paper (arXiv:2504.19413) scored Zep at 65.99 on LoCoMo, against 66.88 for Mem0, 68.44 for Mem0 with a graph, and 72.90 for putting the whole conversation in the prompt.</li>
+<li>In May 2025 Zep published a post claiming a "correct implementation" of itself scored about 84 percent (the post's original figure, as copied on Reddit, was 84.61).</li>
+<li>On 8 May 2025 Mem0's CTO opened issue 5 on Zep's papers repository, titled "Revisiting Zep's 84% LoCoMo Claim: Corrected Evaluation &amp; 58.44% Accuracy". It said Zep's calculation used a denominator that excluded the adversarial category (category 5) while counting correct category-5 answers in the numerator.</li>
+<li>On 12 May 2025 Zep's CEO replied in the same thread that the arithmetic point was right, that the corrected score was 75.14 plus or minus 0.17 over 10 runs, and that Zep still beat Mem0 by about 10 percent. Zep disputed the other points, including Mem0's 58.44. The thread was closed for inactivity on 19 May 2025.</li>
+</ul>
+<p>I checked the arithmetic against the dataset. The LoCoMo file has 1,986 questions in five categories, and category 5 has 446 of them. Mem0's paper says it excluded that category "because ground truth answers were unavailable". That leaves 1,540 scored questions, the number every later page uses.</p>
+<div style="overflow-x:auto"><table class="comparison-table">
+<thead><tr><th>Figure</th><th>Value</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>Zep's original claim</td><td>84.61</td><td>Conceded as a miscalculation by Zep</td></tr>
+<tr><td>Zep's corrected score</td><td>75.14</td><td>Zep's own harness, 10 runs</td></tr>
+<tr><td>Mem0's score for Zep in its paper</td><td>65.99</td><td>Mem0's harness</td></tr>
+<tr><td>Mem0's later re-run of Zep</td><td>58.44</td><td>Disputed by Zep, never reconciled in the thread</td></tr>
+<tr><td>Arithmetic part of the gap (84.61 to 75.14)</td><td>9.47 points</td><td>Conceded</td></tr>
+<tr><td>Remaining gap (75.14 to 58.44)</td><td>16.70 points</td><td>Unreconciled</td></tr>
+</tbody></table></div>
+<p>Mem0's issue quotes a 25.56-point inflation, which is 84 minus 58.44. I split it using Zep's own two figures. Of the roughly 26 points, about 9.5 are the miscounted numerator that Zep conceded. The other 16.7 are a disagreement about how to run Zep, and I found no resolution. As a back-calculation from the two published numbers (not something either vendor published), a 9.47-point drop on 1,540 questions implies about 146 category-5 answers were counted, roughly a third of that category. The 25.56 headline blends a fixed error with an open dispute.</p>
+
+<h2>5. The benchmark has a ceiling and a lenient judge</h2>
+<p>A separate team, Penfield Labs, audited LoCoMo's answer key and published the result in April 2026 on DEV Community, with the code on GitHub. This is one team's audit and it is not peer reviewed, and I did not re-run it. Its two headline findings are:</p>
+<ul>
+<li>99 of the 1,540 scored questions (6.4 percent) have a wrong or unsupported answer in the key. If the key is wrong for those, the highest score a strict grader can award is (1,540 minus 99) over 1,540, which is <strong>93.57 percent</strong>. That arithmetic needs only the two audit numbers, and I reproduced it.</li>
+<li>The standard judge (gpt-4o-mini with a "be generous" instruction) accepted 62.81 percent of deliberately wrong answers that stayed on the right topic. It caught specific wrong facts, such as a wrong name or date, about 89 percent of the time.</li>
+</ul>
+<p>Now apply that to the two current LoCoMo claims. Mem0's 92.5 is about 1,425 correct answers, a little under the ceiling count of 1,441. Zep's 94.7 is 1,459 correct, which is 18 above it. That does not show Zep's number is wrong. Zep's page says it used gpt-5.4 with chain-of-thought grading, not the gpt-4o-mini judge Penfield tested, and a judge that accepts some answers the key marks wrong can exceed the ceiling. A corrected answer key would also change the ceiling. I cannot tell which applies, and the page does not say.</p>
+<p>I found two further oddities on Zep's page, both from reading the raw page on 23 November 2026. Its four LoCoMo category rows (646 of 670, 311 of 325, 304 of 323, 175 of 221) sum to 1,436 of 1,539, which is 93.31 percent, not the headline 1,459 of 1,540. And its four category sizes (670, 325, 323, 221) match none of the four category sizes in the public dataset (282, 321, 96, 841), in any order. There may be an ordinary explanation, such as a re-labelled or corrected split, but the page does not give one. I did not contact Zep.</p>
+<p>The practical consequence is about noise, not blame. With a ceiling near 93.6 and a judge that passes most vague answers, a 2 to 4 point difference between two LoCoMo scores sits inside the benchmark's own uncertainty.</p>
+
+<h2>6. What the baselines say</h2>
+<p>Comparison tables rank memory systems against each other. The more useful comparison for a buyer is against doing nothing special. Four sources report that baseline.</p>
+<div style="overflow-x:auto"><table class="comparison-table">
+<thead><tr><th>Source</th><th>Benchmark and models</th><th>Memory layer</th><th>Baseline</th><th>What it shows</th></tr></thead>
+<tbody>
+<tr><td>Mem0 paper, 2025</td><td>LoCoMo, gpt-4o-mini</td><td>Mem0 66.88, Mem0 with graph 68.44</td><td>Full context 72.90</td><td>Full context scored higher; Mem0's p95 total latency was 1.44 s against 17.12 s</td></tr>
+<tr><td>Zep paper, 2025</td><td>LongMemEval_s, gpt-4o</td><td>Zep 71.2</td><td>Full context 60.2</td><td>Zep scored higher; latency 2.58 s against 28.9 s, context 1.6k against 115k tokens</td></tr>
+<tr><td>Letta, 2025</td><td>LoCoMo, gpt-4o-mini</td><td>Mem0 with graph 68.5 (as cited by Letta)</td><td>Filesystem agent with search tools 74.0</td><td>A plain file beat the memory layer, in Letta's own run</td></tr>
+<tr><td>arXiv:2603.04814, 2026</td><td>LoCoMo and LongMemEval, GPT-5-nano and GPT-5-mini</td><td>Mem0 pipeline 57.68 and 49.00</td><td>Long-context GPT-5-mini 92.85 and 82.40</td><td>Long context scored higher; the memory system became cheaper after about ten turns at 100k tokens of context</td></tr>
+</tbody></table></div>
+<p>The evidence for an accuracy gain over full context is mixed. Zep's paper reports one on LongMemEval. Mem0's own paper and the 2026 cost study report a loss on the benchmarks they used. The evidence for a latency and cost gain is consistent across all three papers, and that is the part of the case I would take seriously. The 2026 cost study put numbers on it for 500 LongMemEval conversations at a mean of 101,601 tokens: fact extraction with GPT-5-nano cost $21.76 in total ($0.0435 per conversation), and answering from retrieved facts cost $0.65 for all 500 questions. Write cost grows with how much you ingest, and read cost stays roughly flat.</p>
+<p>Two cautions on that table. Letta's 74.0 is a vendor's own run, and Letta says Mem0 did not respond to its questions about how Mem0 ran MemGPT. And I did not check the 2026 paper's authors' affiliations, so I cannot call it independent of both vendors. I can say it is not a Mem0-versus-Zep test.</p>
+
+<h2>7. Can any two of these scores be compared?</h2>
+<p>I wrote a strict rule. Two scores are comparable only if the same party ran both, and the benchmark, variant, answer model and judge model are all known and equal. A blank never counts as a match, because a blank is a missing control. Here is the output on my 18-score ledger.</p>
+<pre><code>== 5. Comparability: which published numbers can be set side by side
+   LoCoMo: 10 claims, 45 pairs, 0 comparable under the strict rule
+   LongMemEval: 8 claims, 28 pairs, 0 comparable under the strict rule
+   blank control fields across 18 claims: {'judge': 16, 'answerer': 7, 'variant': 7}</code></pre>
+<p>Zero of 73 pairs pass. The judge field is blank on 16 of 18 scores in the sources I read. Even Mem0's own 2025 paper, where Mem0 ran Mem0, Zep and the full-context baseline in one harness, fails the rule because I found no judge model named in it. That is the useful finding. A reader choosing between these products today cannot reconstruct the conditions of most published scores from the places the scores appear.</p>
+
+<h2>8. How I would choose</h2>
+<p>This section is my recommendation, not a measured result.</p>
+<ol>
+<li><strong>Check whether you need a memory layer.</strong> If each user's history fits in your model's context, start with the whole history in the prompt or a file the agent can search, and measure it. The 2026 cost study's break-even was about ten turns at 100k tokens of context, with prompt caching modelled. Below that, long context was the cheaper option in that study.</li>
+<li><strong>Build a test from your own transcripts.</strong> Write 50 to 100 questions with answers you checked by hand. Cover the five abilities LongMemEval lists: information extraction, multi-session reasoning, temporal reasoning, knowledge updates and abstention (the agent should say it does not know). Weight the ones your product depends on.</li>
+<li><strong>Test your judge before trusting it.</strong> Write deliberately wrong but on-topic answers for your questions and see how many the judge passes. Penfield's method is the template. If the judge passes more than a few percent, it cannot separate two systems.</li>
+<li><strong>Record seven fields next to every score you keep:</strong> system and version, benchmark and variant, answer model, judge model and prompt, question count as k out of n, retrieval depth or token budget, and who ran it. If any field is blank, treat the score as a rumour.</li>
+<li><strong>Price the write path.</strong> Extraction runs an LLM over everything you ingest. Use the study's $0.0435 per 100k-token conversation as an order of magnitude with a small model, then rerun it with your model and volume. My <a href="/roi-calculator.html">ROI calculator</a> is a starting point for the surrounding business case.</li>
+</ol>
+<div style="overflow-x:auto"><table class="comparison-table">
+<thead><tr><th>Your situation</th><th>Start with</th><th>Why, and what is not yet tested</th></tr></thead>
+<tbody>
+<tr><td>Short per-user histories that fit in context</td><td>Long context or a searchable file</td><td>Letta's filesystem run and the 2026 cost study both beat a memory layer on accuracy. Both are single runs.</td></tr>
+<tr><td>Facts change and you must answer "as of" a date</td><td>Test Zep with Graphiti and Mem0 side by side on knowledge-update questions</td><td>Zep describes a temporal knowledge graph in which facts carry validity timestamps; Mem0's research page describes add-only extraction with temporal re-ranking. These are vendor descriptions. I did not test either.</td></tr>
+<tr><td>Very long histories and tight latency</td><td>A memory layer, then your own cost model</td><td>The latency and cost case holds across the Mem0, Zep and 2026 papers. The accuracy case does not.</td></tr>
+</tbody></table></div>
+<p>If you are weighing this for a real build and want the evaluation run on your own transcripts, that is part of the <a href="/consulting.html">consulting work</a> I do. My guide to <a href="/blog/ai-agent-evals-builders.html">evaluating an AI agent before deployment</a> covers the harness side of step 2, and my <a href="/blog/best-ai-agent-framework-2026-scorecard.html">agent framework scorecard</a> shows the same habit of stating the rubric before the results.</p>
+
+<h2>9. Rerun it</h2>
+<p>This script downloads the LoCoMo file and reproduces the counts, the ceiling and the consistency checks in sections 4 and 5. It needs Python 3 and a network connection, and nothing else. The Zep category rows are typed in from the page I read on 23 November 2026, so recheck them against the live page before relying on them.</p>
+<pre><code>import collections, json, urllib.request
+
+URL = "https://raw.githubusercontent.com/snap-research/locomo/main/data/locomo10.json"
+data = json.load(urllib.request.urlopen(URL, timeout=60))
+counts = collections.Counter(q["category"] for conv in data for q in conv["qa"])
+scored = sum(v for k, v in counts.items() if k != 5)
+print("questions by category:", dict(sorted(counts.items())), "| scored (1-4):", scored)
+
+# 1. Zep's 2025 correction: what extra numerator does 84.61 -&gt; 75.14 imply?
+extra = (84.61 - 75.14) / 100 * scored
+print(f"implied extra 'correct' answers: {extra:.0f} of {counts[5]} category-5 questions")
+
+# 2. Ceiling if 99 of the 1,540 answer keys are wrong (Penfield Labs audit)
+ceiling = 100 * (scored - 99) / scored
+print(f"ceiling: {ceiling:.2f}% = {scored - 99}/{scored}")
+
+# 3. Does a published headline equal the sum of its own category rows?
+rows = [(646, 670), (311, 325), (304, 323), (175, 221)]   # Zep page, 23 Nov 2026
+k, n = sum(r[0] for r in rows), sum(r[1] for r in rows)
+print(f"headline 1459/1540 = {100*1459/1540:.2f}% | rows sum {k}/{n} = {100*k/n:.2f}%")
+print("page category sizes match dataset sizes:",
+      bool(set(r[1] for r in rows) &amp; set(counts[c] for c in (1, 2, 3, 4))))</code></pre>
+<p>Output on 23 November 2026, Python 3.12.3:</p>
+<pre><code>questions by category: {1: 282, 2: 321, 3: 96, 4: 841, 5: 446} | scored (1-4): 1540
+implied extra 'correct' answers: 146 of 446 category-5 questions
+ceiling: 93.57% = 1441/1540
+headline 1459/1540 = 94.74% | rows sum 1436/1539 = 93.31%
+page category sizes match dataset sizes: False</code></pre>
+<p>The comparability rule is five lines. Unknown never equals unknown:</p>
+<pre><code>FIELDS = ("benchmark", "variant", "answerer", "judge")
+
+def comparable(a, b):
+    if a["runner"] != b["runner"]:
+        return False
+    return all(a.get(f) is not None and a.get(f) == b.get(f) for f in FIELDS)</code></pre>
+<p>I ran ten unit tests against these checks, including planted defects: a percentage that does not match its k out of n, a breakdown that does not sum, and two claims with a blank judge that must not count as equal. All ten pass. I would rerun the page's source reads quarterly, because both vendors update these pages and the numbers move.</p>
+
+<h2>10. What I did not measure</h2>
+<ul>
+<li>I did not install, run or call Mem0 or Zep. I cannot say which answers your questions better.</li>
+<li>I did not re-run the Penfield audit. The 93.57 percent ceiling is arithmetic on its two published numbers, and the audit is not peer reviewed.</li>
+<li>I could not read either vendor's benchmark harness outputs. Zep's page lists a reader, a judge and retrieval depths. Mem0's pages and its 2025 paper do not name a judge model, in the text I read.</li>
+<li>I did not open Mem0's benchmark repository, which Zep's page cites for its Mem0 figure, so the 90.4 is as quoted.</li>
+<li>I did not check the LongMemEval variant or the retrieval depth behind Mem0's 94.4 and 93.4. A third-party page says the 94.4 is at top-200, and I did not verify that.</li>
+<li>I did not contact either vendor about the category-row mismatch on Zep's page or the label on Mem0's comparison page.</li>
+<li>I did not check the affiliations of the authors of arXiv:2603.04814, or whether its LongMemEval variant matches the one Zep's paper used.</li>
+<li>Everything is a snapshot of pages read on 23 November 2026, and both vendors update these pages.</li>
+</ul>
+
+<h2>Sources</h2>
+<ul>
+<li><a href="https://arxiv.org/abs/2501.13956" rel="noopener">Zep: A Temporal Knowledge Graph Architecture for Agent Memory</a> (arXiv:2501.13956, Tables 2 and 3)</li>
+<li><a href="https://arxiv.org/abs/2504.19413" rel="noopener">Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory</a> (arXiv:2504.19413)</li>
+<li><a href="https://arxiv.org/abs/2603.04814" rel="noopener">Beyond the Context Window: A Cost-Performance Analysis of Fact-Based Memory vs. Long-Context LLMs</a> (arXiv:2603.04814, Table 3)</li>
+<li><a href="https://arxiv.org/abs/2410.10813" rel="noopener">LongMemEval</a> (arXiv:2410.10813) and <a href="https://arxiv.org/abs/2402.17753" rel="noopener">LoCoMo</a> (arXiv:2402.17753); dataset file at <a href="https://github.com/snap-research/locomo" rel="noopener">snap-research/locomo</a></li>
+<li><a href="https://github.com/getzep/zep-papers/issues/5" rel="noopener">getzep/zep-papers issue 5</a>, the May 2025 LoCoMo dispute thread, and <a href="https://www.getzep.com/blog/lies-damn-lies-statistics-is-mem0-really-sota-in-agent-memory" rel="noopener">Zep's post</a></li>
+<li><a href="https://www.getzep.com/research/memory-benchmarks" rel="noopener">Zep's benchmark page</a> and <a href="https://www.getzep.com/mem0-alternative" rel="noopener">Zep's Mem0 comparison page</a>, read 23 November 2026</li>
+<li><a href="https://mem0.ai/research" rel="noopener">Mem0's research page</a>, <a href="https://mem0.ai/blog/state-of-ai-agent-memory-2026" rel="noopener">state of agent memory post</a> (updated 10 October 2026) and <a href="https://mem0.ai/library/agent-memory/zep-vs-mem0-which-ai-memory-layer-should-you-choose" rel="noopener">Zep vs Mem0 comparison</a> (updated 3 September 2026)</li>
+<li><a href="https://dev.to/penfieldlabs/we-audited-locomo-64-of-the-answer-key-is-wrong-and-the-judge-accepts-up-to-63-of-intentionally-33lg" rel="noopener">Penfield Labs, We audited LoCoMo</a> (8 April 2026) and its <a href="https://github.com/dial481/locomo-audit" rel="noopener">audit repository</a></li>
+<li><a href="https://www.letta.com/blog/benchmarking-ai-agent-memory" rel="noopener">Letta, Benchmarking AI Agent Memory: Is a Filesystem All You Need?</a></li>
+</ul>
+
+
+        <!-- FAQ Section -->
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+<div class="faq-item">
+                <h3>Is Mem0 or Zep more accurate?</h3>
+                <p>Neither can be shown from the published scores. On 23 November 2026 Mem0's pages report 92.5 on LoCoMo and 94.4 on LongMemEval, and Zep's page reports 94.7 and 90.2. Those come from different harnesses, and in a ledger of 18 published scores I found no pair that shares the same runner, benchmark variant, answer model and judge model. Test both on your own transcripts.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Why does Mem0 score 49 in one place and 94.4 in another?</h3>
+                <p>They are different measurements. The 49.0 is in arXiv:2603.04814, a March 2026 cost study that ran the Mem0 framework with GPT-5-nano for extraction and GPT-5-mini as the reader, and long-context GPT-5-mini scored 82.4 on the same LongMemEval questions. The 94.4 is Mem0's own April 2026 algorithm, self-reported, with models the page does not state.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What happened with Zep's 84 percent LoCoMo claim?</h3>
+                <p>Zep's 2025 post claimed about 84 percent. Mem0's CTO pointed out that the calculation counted correct category-5 answers in the numerator while excluding that category from the denominator. Zep agreed and corrected its score to 75.14 percent, plus or minus 0.17 over 10 runs. Mem0's own re-run of Zep gave 58.44 percent, which Zep disputed, and the thread closed without a reconciled figure.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is LoCoMo reliable enough to choose a memory layer?</h3>
+                <p>Treat it as a rough screen. A Penfield Labs audit, one team's non-peer-reviewed work, reports 99 wrong answers in the 1,540-question key, which caps a strict score at 93.57 percent, and a judge that accepted 62.81 percent of deliberately wrong but on-topic answers. A difference of a few points between two LoCoMo scores sits inside that noise.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Do I need a memory layer, or is long context enough?</h3>
+                <p>For short per-user histories, long context or a searchable file is a fair starting point. In a 2026 cost study, long-context GPT-5-mini scored higher than the Mem0 pipeline on both benchmarks, and the memory system became cheaper after about ten turns at 100k tokens of context. Measure both on your own data before committing.</p>
+            </div>
+        </div>
+
+        <!-- CTA in article -->
+        <h2>Ready to Get Started?</h2>
+        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
+        <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/Photo.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/hermes-agent-memory-skills-deployment.html" class="related-card">
+                <h3 class="related-card-title">Hermes Agent Memory and Skills: Tested Limits (v0.22.5)</h3>
+                <p class="related-card-excerpt">A file-based agent memory design, with its limits tested.</p>
+            </a>
+            <a href="/blog/ai-agent-evals-builders.html" class="related-card">
+                <h3 class="related-card-title">How to Evaluate an AI Agent Before Deployment: 5 Metrics</h3>
+                <p class="related-card-excerpt">Build the test set and judge check that step 2 and 3 of this page need.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify.html" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a></p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="https://www.linkedin.com/in/suyashraj/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://x.com/suyash_raj/" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
