@@ -7,7 +7,7 @@
     <!-- Primary SEO Meta Tags -->
     <title>How to Train an AI Voice Agent: How Much Data You Need</title>
     <meta name="description" content="How much data does an AI voice agent need? A 2-page FAQ is enough to start. Then 7 steps: call audit, knowledge base, prompt, flows and shadow tests.">
-    <meta name="keywords" content="how to train ai voice agent, ai voice agent training, customize ai voice agent, ai voice agent setup, ai phone agent training, best AI automation agency for small businesses">
+    <meta name="keywords" content="how to train ai voice agent, ai voice agent training, customize ai voice agent, ai voice agent setup, ai phone agent training">
     <meta name="author" content="Suyash Raj">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://rajsuyash.com/blog/how-to-train-ai-voice-agent.html">
@@ -41,7 +41,7 @@
         {
             "@context": "https://schema.org",
             "@type": "Article",
-            "headline": "How to Train an AI Voice Agent on Your Business Data (2026 Guide)",
+            "headline": "How to Train an AI Voice Agent: How Much Data You Need",
             "description": "How much data does an AI voice agent need? A 2-page FAQ is enough to start. Then 7 steps: call audit, knowledge base, prompt, flows and shadow tests.",
             "author": {
                 "@type": "Person",
@@ -55,7 +55,7 @@
                 "name": "Suyash Raj"
             },
             "datePublished": "2026-04-15T00:00:00Z",
-            "dateModified": "2026-04-15T00:00:00Z",
+            "dateModified": "2026-11-24T00:00:00Z",
             "mainEntityOfPage": {
                 "@type": "WebPage",
                 "@id": "https://rajsuyash.com/blog/how-to-train-ai-voice-agent.html"
@@ -72,26 +72,50 @@
             "mainEntity": [
                 {
                     "@type": "Question",
-                    "name": "How long does it take to train an AI voice agent on business data?",
+                    "name": "How much data does an AI voice agent need to learn from?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "A basic AI voice agent can be live in 3–5 business days once you provide your business data (FAQs, pricing, services, hours). A more complex agent with CRM integration, custom call flows, and multi-department routing typically takes 2–4 weeks to fully configure and test."
+                        "text": "Less than most people expect. A voice agent built on a language model is not trained on a dataset. It reads a knowledge base, a system prompt and call flows. A 16-entry knowledge base of about 1,000 words (roughly two pages) used under 2% of ElevenLabs' stated full-context limit of about 300,000 characters. Size is rarely the constraint. Coverage is: write answers for the questions your callers actually ask, then add more from real failed calls."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "What data does an AI voice agent need to learn from?",
+                    "name": "Do I need to train a model on my call recordings?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "At minimum: your business FAQ document, a service/pricing list, your hours and location, and example call transcripts if available. The more specific and structured your inputs, the better the agent performs. You do not need a large dataset — even a well-written 2-page FAQ document is enough to get started."
+                        "text": "Not to set up a knowledge base. The Retell, Vapi and ElevenLabs knowledge-base pages I read on 24 November 2026 describe uploading documents, URLs or text, and none of them asks you to train a model. Call recordings are still useful as a source of caller questions and wording, which is what Step 1 uses them for."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "Can I update my AI voice agent after it's trained?",
+                    "name": "Should the knowledge base go in the prompt or be retrieved?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Yes. AI voice agents are not static. You can update pricing, add new services, change call flows, and refine responses at any time. Most platforms allow edits through a dashboard without requiring a developer. For complex workflow changes, a short re-deployment cycle is needed."
+                        "text": "It depends on size and platform. ElevenLabs documents two modes: full context puts the whole document in the system prompt on every turn (up to roughly 300,000 characters), and RAG retrieves only the relevant passages, which it says adds around 250 ms. Retell always retrieves chunks and says the impact is generally under 100 ms. Both figures are vendor-reported. Short, stable policies suit the prompt or full context. Large or changing material suits retrieval."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I check that the agent is using the knowledge base correctly?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Test with the wording real callers use, not the wording of your entries, and check which entry was matched. Retell lets you open the retrieved chunks for each agent turn in the call transcript. In my synthetic test, one missed question was fixed by adding a single phrase to an entry's variations. Out-of-scope questions need an escalation rule, not more entries."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can I update my AI voice agent after it is trained?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. Retell documents auto-refresh for URL, Google Drive, OneDrive and Notion sources, and says exported files do not stay in sync, so you re-upload them after the source changes. Behaviour changes (tone, limits, escalation) are edits to the system prompt or call flow, which you re-test with the same shadow-test calls."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How long does it take to train an AI voice agent?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "I do not have a measured timeline to publish, and I removed the day and week estimates this page used to carry because I could not source them. The platforms ingest documents quickly. Elapsed time is mostly how long your team needs to write accurate answers, agree escalation rules and connect your calendar or CRM."
                     }
                 }
             ]
@@ -445,38 +469,69 @@
         <div class="article-hero-content">
             <div class="article-meta reveal" style="--delay: 0">
                 <span class="article-category">AI Voice Agents</span>
-                <span class="article-date">April 15, 2026</span>
-                <span class="article-read-time">11 min read</span>
+                <span class="article-date">April 15, 2026 (updated November 24, 2026)</span>
+                <span class="article-read-time">10 min read</span>
             </div>
             <h1 class="article-title reveal" style="--delay: 1">How to Train an AI Voice Agent on Your Business Data</h1>
-            <p class="article-subtitle reveal" style="--delay: 2">A practical, step-by-step guide to feeding your AI phone agent the knowledge it needs — so it answers like a trained employee, not a generic bot.</p>
+            <p class="article-subtitle reveal" style="--delay: 2">A practical, step-by-step guide to feeding your AI phone agent the knowledge it needs, so it answers from your facts and not from a generic script.</p>
         </div>
     </section>
 
     <!-- Article Body -->
     <article class="article-body">
 
-        <p>Most businesses that try an AI voice agent and give up within 60 days share one root cause: they deployed a generic agent and expected it to perform like a trained employee.</p>
+        <div class="definition-block">
+            <p><strong>How much data does an AI voice agent need?</strong> Not a dataset in the machine-learning sense. You give it a knowledge base, a system prompt and call flows. My 16-entry sample knowledge base, about 1,000 words or two pages, used under 2% of ElevenLabs' roughly 300,000-character full-context limit. Start there, shadow test it, then add entries from real failed calls.</p>
+        </div>
 
-        <p>It doesn't work that way.</p>
+        <p><em>Updated November 2026.</em> I read the Retell, Vapi and ElevenLabs knowledge-base documentation on 24 November 2026 and ran a small script on a synthetic knowledge base (results below). I did not place any live voice calls or train any model for this update, so nothing here is a measured caller result.</p>
 
-        <p>An AI voice agent is not magic. It is a system — and like any system, it performs exactly as well as the inputs you give it. If you feed it vague, incomplete, or poorly structured business data, it will give vague, incomplete, and poorly structured answers. If you give it detailed, specific, well-organized information about your services, pricing, policies, and tone, it will sound like the best receptionist you've ever had.</p>
-
-        <p>This guide walks you through how to train an AI voice agent on your business data from scratch — what data you need, how to structure it, and how to iterate after launch so the agent keeps getting better.</p>
+        <p>An AI voice agent is a system, and it performs as well as the inputs you give it. If the knowledge base is vague or incomplete, the answers will be vague or incomplete. If it is specific about your services, prices, policies and escalation rules, the agent can answer from facts you checked. This guide walks through what data you need, how to structure it, and how to improve it after launch. If you are still choosing a platform, read the <a href="/blog/ai-voice-agent-platform-comparison-2026.html">Vapi vs Retell vs Pipecat comparison</a> first, and for the wider picture see the <a href="/ai-agents.html">AI agents hub</a>.</p>
 
         <div class="definition-block">
-            <p><strong>What "training" actually means for a voice agent:</strong> Unlike a machine learning model that needs thousands of examples, modern AI voice agents are trained through a combination of a knowledge base (structured business information), a system prompt (instructions for behavior and tone), and call flow logic (what happens at each decision point in the conversation). You are building a system, not feeding a neural network.</p>
+            <p><strong>What "training" means for a voice agent:</strong> a modern agent is configured, not trained. You supply a knowledge base (structured business information), a system prompt (instructions for behaviour and tone) and call flow logic (what happens at each decision point). You are building a system, not feeding a neural network.</p>
         </div>
+
+        <h2>How Much Data Does a Voice Agent Need?</h2>
+
+        <p>Size is almost never the limit. These are the limits the three platforms document, read on 24 November 2026:</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Platform</th>
+                    <th>How the knowledge base is used</th>
+                    <th>Documented limit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Retell</td>
+                    <td>Sources are chunked, embedded and stored in a vector database. Before each reply it retrieves 1 to 10 chunks (default 3, similarity threshold default 0.6).</td>
+                    <td>Per knowledge base: 500 URLs, 50 text snippets, 25 uploaded documents. Each document up to 50 MB.</td>
+                </tr>
+                <tr>
+                    <td>Vapi</td>
+                    <td>Files are uploaded and attached to a query tool the assistant calls during the conversation.</td>
+                    <td>Guidance, not a hard cap: keep individual files under 300 KB. Formats include .txt, .pdf, .docx, .md and .csv.</td>
+                </tr>
+                <tr>
+                    <td>ElevenLabs</td>
+                    <td>Full context (whole document in the system prompt on every turn) or RAG (only relevant passages retrieved).</td>
+                    <td>Up to 20 MB per uploaded file. Full context only up to roughly 300,000 characters. RAG totals by tier: Free 1 MB, Starter 2 MB, Creator 20 MB, Pro 100 MB, Scale 500 MB.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>My sample knowledge base in the next section has 16 entries, 997 words and 5,554 characters. At a rough 4 characters per token that is about 1,400 tokens (an estimate, not a tokenizer count). That is under 2% of the 300,000-character full-context figure and under 2% of Vapi's 300 KB guidance. So a two-page FAQ is not a size problem on any of the three. Whether it is enough is a coverage question, and coverage depends on your callers.</p>
 
         <h2>Step 1: Audit What Your Callers Actually Ask</h2>
 
-        <p>Before you write a single line of knowledge base content, spend two hours on this: listen to your last 50 inbound calls (or read the transcripts if you have them). Write down every question a caller asked.</p>
+        <p>Before you write any knowledge base content, listen to a batch of your recent inbound calls, or read the transcripts if you have them. Write down every question a caller asked, in their words. If you have no recordings, ask your front desk: "What are the ten questions you answer every day?" and write them down verbatim.</p>
 
-        <p>You will find that 80% of your call volume clusters around 8–12 questions. These are the questions your AI voice agent needs to answer with precision. Everything else is edge-case territory that you can handle with a transfer to a human.</p>
+        <p>Then count and rank them. The top of that list is what you write first. I do not have a published figure for how concentrated calls are in a few questions, and it varies by business, so measure yours rather than assuming a number.</p>
 
-        <p>If you don't have call recordings, run this exercise with your front desk staff or customer service team. Ask them: "What are the ten questions you answer every single day?" Write them down verbatim.</p>
-
-        <p>Common question categories for most SMBs:</p>
+        <p>Common question categories:</p>
 
         <ul>
             <li>Hours and location ("Are you open on Sundays?", "What's your address?")</li>
@@ -488,35 +543,67 @@
             <li>Returns and cancellations ("What's your cancellation policy?", "Can I get a refund?")</li>
         </ul>
 
-        <p>This list becomes the backbone of your knowledge base.</p>
-
         <h2>Step 2: Build Your Knowledge Base Document</h2>
 
-        <p>A knowledge base for an AI voice agent is not a marketing brochure. It is a structured reference document written to help the agent answer questions — factually, completely, and without ambiguity.</p>
+        <p>A knowledge base for a voice agent is not a marketing brochure. It is a structured reference written so the agent can answer factually, completely and without ambiguity. Retell's documentation recommends well-structured Markdown, short paragraphs and lists, and keeping related information in the same section so each chunk stays cohesive.</p>
 
-        <p>Format it as a simple Q&A document. Here is what each entry should contain:</p>
+        <p>Format it as Q&amp;A. Each entry should contain:</p>
 
         <ul>
-            <li><strong>Question:</strong> The exact phrasing a caller might use</li>
-            <li><strong>Answer:</strong> The complete, accurate answer — not a summary</li>
-            <li><strong>Variations:</strong> Other ways the caller might ask the same question</li>
-            <li><strong>Escalation trigger:</strong> When should the agent transfer to a human instead of answering directly?</li>
+            <li><strong>Question:</strong> The phrasing a caller might use</li>
+            <li><strong>Answer:</strong> The complete, accurate answer, not a summary</li>
+            <li><strong>Variations:</strong> Other ways the caller might ask the same thing</li>
+            <li><strong>Escalation trigger:</strong> When the agent should transfer to a human instead of answering</li>
         </ul>
 
-        <p>Example entry for a plumbing company:</p>
+        <p>An invented example entry (the prices are made up):</p>
 
         <div class="definition-block">
             <p><strong>Q: How much does an emergency call-out cost?</strong><br>
-            A: Emergency call-outs are priced at $150 for the first hour, plus parts. After the first hour, the rate is $95/hour. There are no hidden fees. We give a firm quote before starting any work.<br>
+            A: Emergency call-outs are $150 for the first hour, plus parts. After the first hour the rate is $95/hour. We give a firm quote before starting any work.<br>
             <strong>Variations:</strong> "What's your emergency rate?", "Do you charge extra for after-hours?", "How much is a same-day visit?"<br>
-            <strong>Escalation trigger:</strong> If the caller asks for a custom quote for a large job (e.g., full pipe replacement, water damage), transfer to a senior technician.</p>
+            <strong>Escalation trigger:</strong> If the caller asks for a custom quote for a large job, transfer to a senior technician.</p>
         </div>
 
-        <p>Build this document for every question on your list. Aim for 15–25 well-crafted entries before launch. This is enough to handle the vast majority of real calls.</p>
+        <p>Write an entry for every question on your ranked list, most frequent first. Avoid entries like "our pricing varies". Give the real number and the real condition, or tell the agent to escalate.</p>
+
+        <h2>Check Coverage Before You Build More</h2>
+
+        <p>Before spending time on integrations, check what your knowledge base actually answers. I wrote a small standard-library Python script for this and ran it on synthetic data on 24 November 2026. The setup:</p>
+
+        <ol>
+            <li>A 16-entry knowledge base for an invented bike repair shop (997 words), in the Question, Answer, Variations, Escalation format above.</li>
+            <li>15 invented caller sentences, deliberately worded differently from the entries: 12 the knowledge base should answer and 3 it should not (a lock recommendation, a cracked carbon fork, a refund complaint).</li>
+            <li>A retrieval stand-in: TF-IDF cosine similarity over each entry's question, variations and answer, with a minimum score of 0.2. This is <em>not</em> Retell's or ElevenLabs' embedding search, so absolute numbers will differ on a real platform.</li>
+            <li>A linter that flags a missing field, vague phrases ("varies", "contact us"), a price question with no number in the answer, and near-duplicate questions.</li>
+        </ol>
+
+        <p>Output, with entries added in the order a front desk would rank them:</p>
+
+        <pre><code>SIZE {"entries": 16, "words": 997, "chars": 5554, "est_tokens": 1388}
+LINT clean
+N= 3 entries: top1 2/12  top3 2/12  out-of-scope escalated 2/3
+N= 6 entries: top1 4/12  top3 4/12  out-of-scope escalated 2/3
+N= 9 entries: top1 7/12  top3 7/12  out-of-scope escalated 2/3
+N=12 entries: top1 10/12  top3 10/12  out-of-scope escalated 2/3
+N=16 entries: top1 11/12  top3 11/12  out-of-scope escalated 2/3
+MISS (10, 'where are you located', 'expected address, got nothing above threshold')
+MISS (15, 'I dropped a bike off last week nobody called me and I want a refund',
+      'out-of-scope matched turnaround at 0.24')
+AFTER adding one Variations phrase to 'address': top1 12/12  out-of-scope escalated 2/3</code></pre>
+
+        <p>Two failures, and both are useful:</p>
+
+        <ul>
+            <li><strong>"Where are you located" found nothing.</strong> The entry said "Where is the shop?" and never used the word "located". Adding one phrase to that entry's Variations took in-scope coverage from 11/12 to 12/12. Embedding search handles synonyms better than my word-matching stand-in, but it is still worth testing your entries against real caller wording.</li>
+            <li><strong>The refund complaint matched the turnaround entry</strong> because of the words "dropped off". More entries would not fix that. In my judgement it needs a prompt rule that sends complaints and refund requests to a person.</li>
+        </ul>
+
+        <p>Three limits on this result. The data is synthetic and the questions are mine, so the rising curve describes these 12 questions and nothing about your business. The retriever is a stand-in. And I did not test answer quality or spoken delivery. What transfers is the method: put your own transcript questions in the test file, run it, and read the misses. Seven unit tests pass, including planted-defect tests that confirm the linter catches a missing escalation line, a vague answer, a price question with no number and a duplicate question. On a live Retell agent, the call transcript shows which chunks were retrieved on each turn, which gives you the same check on the real platform.</p>
 
         <h2>Step 3: Write Your System Prompt (Tone and Persona)</h2>
 
-        <p>The system prompt is the set of instructions that governs how your AI voice agent behaves — its name, its personality, its limits, and its decision-making logic.</p>
+        <p>The system prompt governs how the agent behaves: its name, personality, limits and decision logic. Keep behaviour rules in the prompt and facts in the knowledge base. On Retell, retrieval searches on the conversation so far and the prompt is not included in that search, so a fact that lives only in the prompt cannot be found by retrieval.</p>
 
         <p>A well-written system prompt answers four questions:</p>
 
@@ -527,203 +614,185 @@
             <li><strong>What should it never do?</strong> (Make up prices, promise things outside its knowledge, argue)</li>
         </ol>
 
-        <p>Here is a starting template you can adapt:</p>
+        <p>A starting template to adapt:</p>
 
         <div class="definition-block">
-            <p><em>"You are Alex, the virtual receptionist for [Business Name]. Your job is to help callers get quick, accurate answers and to book appointments when requested. You speak in a friendly, professional tone — warm but efficient. You always answer from the knowledge base provided. If a caller asks something you don't have a confident answer to, you say: 'Let me connect you with someone who can help.' You never guess at pricing, availability, or policies. You never argue or apologize excessively. Your goal is to resolve each call in under 90 seconds whenever possible."</em></p>
+            <p><em>"You are Alex, the virtual receptionist for [Business Name]. Your job is to help callers get quick, accurate answers and to book appointments when requested. You speak in a friendly, professional tone, warm but efficient. You always answer from the knowledge base provided. If a caller asks something you don't have a confident answer to, you say: 'Let me connect you with someone who can help.' You never guess at pricing, availability, or policies. Complaints and refund requests always go to a person."</em></p>
         </div>
 
-        <p>Adjust the tone to match your brand. A law firm's AI agent should sound very different from a pet grooming salon's.</p>
+        <p>Adjust the tone to your brand. A law firm's agent should sound different from a pet groomer's.</p>
 
         <h2>Step 4: Define Your Call Flows</h2>
 
-        <p>A call flow is a decision tree that defines what the agent does at each step of a conversation. Even simple businesses need a basic call flow before going live.</p>
-
-        <p>At minimum, map out:</p>
+        <p>A call flow is the decision tree for what the agent does at each step of a conversation. Even simple businesses need a basic one before going live. At minimum, map out:</p>
 
         <ul>
-            <li><strong>Greeting:</strong> How does the agent open the call? (Include business name, agent name, and a simple prompt)</li>
-            <li><strong>Intent detection:</strong> What does the agent ask to understand why the caller is calling?</li>
-            <li><strong>FAQ handling:</strong> How does it access and deliver knowledge base answers?</li>
-            <li><strong>Booking path:</strong> If the caller wants an appointment, what information does the agent collect?</li>
-            <li><strong>Escalation path:</strong> Under what conditions does the agent transfer to a human or leave a voicemail?</li>
-            <li><strong>Close:</strong> How does the agent end the call? (Confirm next steps, summarize what was agreed)</li>
+            <li><strong>Greeting:</strong> How the agent opens the call (business name, agent name, a simple prompt)</li>
+            <li><strong>Intent detection:</strong> What it asks to understand why the caller is calling</li>
+            <li><strong>FAQ handling:</strong> How it accesses and delivers knowledge base answers</li>
+            <li><strong>Booking path:</strong> What information it collects if the caller wants an appointment</li>
+            <li><strong>Escalation path:</strong> When it transfers to a human or takes a message</li>
+            <li><strong>Close:</strong> How it ends the call (confirm next steps, summarise what was agreed)</li>
         </ul>
 
-        <p>You don't need software to map this — a simple flowchart on paper or in a Google Doc is enough before implementation begins. The clearer your call flow, the faster and cheaper deployment will be.</p>
+        <p>A flowchart on paper or in a document is enough before implementation. For how to write the spoken lines inside each flow, see <a href="/blog/ai-voice-agent-conversation-design-scripts.html">conversation design for voice AI scripts</a>.</p>
 
         <h2>Step 5: Integrate Your Business Systems</h2>
 
-        <p>An AI voice agent that can't access your real-time data is limited. The best agents are connected to the systems you already use so they can give accurate, live answers.</p>
+        <p>An agent that cannot reach your live data is limited to what you wrote down. Connecting the systems you already use lets it give current answers. The effort column below is my judgement, not a measurement.</p>
 
         <table class="comparison-table">
             <thead>
                 <tr>
                     <th>Business System</th>
                     <th>What the Agent Can Do</th>
-                    <th>Integration Complexity</th>
+                    <th>Integration effort (my judgement)</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>Booking/calendar system (Calendly, Acuity)</td>
                     <td>Check real availability, book appointments live</td>
-                    <td>Low — API or webhook</td>
+                    <td>Lower: API or webhook</td>
                 </tr>
                 <tr>
                     <td>CRM (HubSpot, Pipedrive)</td>
                     <td>Look up existing customers, log call notes, create leads</td>
-                    <td>Medium — depends on CRM</td>
+                    <td>Medium: depends on the CRM</td>
                 </tr>
                 <tr>
                     <td>E-commerce (Shopify)</td>
                     <td>Check order status, answer product questions</td>
-                    <td>Medium — Shopify API</td>
+                    <td>Medium: Shopify API</td>
                 </tr>
                 <tr>
                     <td>Service management (Jobber, ServiceTitan)</td>
                     <td>Check job status, schedule service calls</td>
-                    <td>Medium to High</td>
+                    <td>Medium to higher</td>
                 </tr>
                 <tr>
                     <td>Phone system (Twilio, RingCentral)</td>
                     <td>Call routing, recording, transfer</td>
-                    <td>Low — standard integration</td>
+                    <td>Lower: standard integration</td>
                 </tr>
             </tbody>
         </table>
 
-        <p>Start with one integration. Booking calendar + CRM is usually the highest-value combination for most SMBs. You can expand from there once the agent is live and stable.</p>
-
-        <p>Our clients at <a href="https://voxdonna.com/ai-voice-agents.html">Smaartbotics</a> consistently find that the booking-to-CRM integration alone eliminates 3–5 hours of manual admin work per week from the first month of deployment.</p>
+        <p>Start with one integration. I would begin with the booking calendar and then the CRM, because the agent can then act on what it learns on the call. I have no measured time saving to quote for that pairing.</p>
 
         <h2>Step 6: Run Shadow Tests Before Going Live</h2>
 
-        <p>Never launch an AI voice agent without testing it yourself first. Shadow testing means you or your team call the agent and try to break it — ask edge-case questions, change your mind mid-call, speak quickly, mumble, use slang.</p>
-
-        <p>Run at least 20 test calls across these categories:</p>
+        <p>Never launch without testing it yourself first. Shadow testing means you or your team call the agent and try to break it: edge-case questions, changing your mind mid-call, speaking quickly, mumbling, slang. My minimum is 20 test calls across these categories:</p>
 
         <ul>
             <li><strong>Happy path:</strong> A caller asks a standard question and gets a clean answer</li>
-            <li><strong>Ambiguous question:</strong> The caller phrases things unclearly — does the agent ask for clarification or guess?</li>
-            <li><strong>Out-of-scope question:</strong> The caller asks something not in the knowledge base — does the agent escalate gracefully or make something up?</li>
-            <li><strong>Frustrated caller:</strong> The caller is impatient or rude — does the agent stay calm and efficient?</li>
-            <li><strong>Booking flow:</strong> Walk through the full appointment booking experience end-to-end</li>
+            <li><strong>Ambiguous question:</strong> The caller is unclear. Does the agent ask for clarification or guess?</li>
+            <li><strong>Out-of-scope question:</strong> Not in the knowledge base. Does it escalate or make something up?</li>
+            <li><strong>Frustrated caller:</strong> The caller is impatient or rude. Does the agent stay calm and efficient?</li>
+            <li><strong>Booking flow:</strong> Walk through the full appointment booking end to end</li>
         </ul>
 
-        <p>Document every failure. For each one, trace it back to a gap in your knowledge base, system prompt, or call flow — then fix the source, not just the symptom.</p>
+        <p>Document every failure and trace it to a gap in the knowledge base, prompt or call flow. Fix the source, not just the symptom. To score these calls consistently over time, the approach in <a href="/blog/ai-agent-evals-builders.html">how to evaluate an AI agent before deployment</a> applies here too.</p>
 
         <h2>Step 7: Launch, Measure, and Iterate</h2>
 
-        <p>Launch does not mean you're finished. The first 30 days of live operation are your most valuable training period.</p>
-
-        <p>Review call transcripts weekly. Look for:</p>
+        <p>Launch is not the finish. The agent does not improve by itself, so review transcripts regularly and look for:</p>
 
         <ul>
-            <li>Questions the agent couldn't answer (add to knowledge base)</li>
-            <li>Calls that escalated when they didn't need to (tighten escalation rules)</li>
-            <li>Calls where the agent gave a correct answer but the caller still seemed confused (rewrite the answer to be clearer)</li>
+            <li>Questions the agent could not answer (add them to the knowledge base)</li>
+            <li>Calls that escalated when they did not need to (tighten escalation rules)</li>
+            <li>Calls where the answer was correct but the caller still seemed confused (rewrite it more clearly)</li>
             <li>Calls where the agent spoke too long or too short (adjust response length instructions)</li>
         </ul>
 
-        <p>Most agents reach a steady state — where transcript review reveals no new issues — within 60–90 days. After that, you only need to update the agent when your business information changes (new pricing, new services, seasonal hours).</p>
+        <p>I do not have a measured figure for how long it takes before transcript review stops finding new issues. Treat each review as the source of your next knowledge base edits, and keep going while it keeps finding them.</p>
 
-        <p>This is exactly the improvement curve we saw with <a href="https://voxdonna.com/case-studies/le-marquier.html">Le Marquier</a>, where a structured training and iteration process led to a 98% call handling rate within the first quarter — reducing costs by over 80% compared to their previous staffing model.</p>
+        <h2>What Makes Training Fail</h2>
 
-        <h2>What Makes Training Fail (And How to Avoid It)</h2>
-
-        <p>The most common reasons AI voice agent training fails:</p>
+        <p>The failure modes I would check first:</p>
 
         <ul>
             <li><strong>Vague knowledge base entries:</strong> "Our pricing varies" is not an answer. Give real numbers and real conditions.</li>
             <li><strong>No escalation logic:</strong> An agent that tries to answer everything will get things wrong. Define hard limits.</li>
-            <li><strong>Skipping shadow testing:</strong> Issues that seem minor in testing become embarrassing at scale.</li>
-            <li><strong>No post-launch review:</strong> The agent doesn't self-improve. You have to drive iteration.</li>
-            <li><strong>Mismatched tone:</strong> A casual, jokey agent for a professional services firm destroys trust fast. Match the persona to your brand.</li>
+            <li><strong>Skipping shadow testing:</strong> Issues that look minor in testing are worse at scale.</li>
+            <li><strong>No post-launch review:</strong> Someone has to drive the iteration.</li>
+            <li><strong>Mismatched tone:</strong> A casual, jokey agent for a professional services firm costs trust. Match the persona to your brand.</li>
         </ul>
 
-        <p>If you want to calculate the ROI of a properly trained agent before you commit, use the <a href="/roi-calculator.html">AI automation ROI calculator</a> to model your specific call volume and conversion scenarios.</p>
+        <p>To model the cost side before you commit, use the <a href="/roi-calculator.html">AI automation ROI calculator</a>, and for a quick self-check of where to start, the <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a>.</p>
 
-        <h2>How Long Does Training Take?</h2>
+        <h2>How Long Does It Take?</h2>
 
-        <p>Here is a realistic timeline for a typical SMB deployment:</p>
+        <p>I removed the phase-by-phase day and week table this page used to carry, because I could not source it. The timing figures I can source are vendor-reported latency, not setup time:</p>
 
         <table class="comparison-table">
             <thead>
                 <tr>
-                    <th>Phase</th>
-                    <th>Activity</th>
-                    <th>Time Required</th>
+                    <th>Platform</th>
+                    <th>What the documentation says</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Discovery</td>
-                    <td>Audit calls, identify top questions, document business data</td>
-                    <td>2–4 hours (your team)</td>
+                    <td>Retell</td>
+                    <td>Knowledge base retrieval should generally be under 100 ms of latency impact.</td>
                 </tr>
                 <tr>
-                    <td>Build</td>
-                    <td>Knowledge base, system prompt, call flow design</td>
-                    <td>3–5 business days</td>
-                </tr>
-                <tr>
-                    <td>Integration</td>
-                    <td>Connect calendar, CRM, phone system</td>
-                    <td>1–2 weeks</td>
-                </tr>
-                <tr>
-                    <td>Shadow testing</td>
-                    <td>Internal test calls, bug fixes</td>
-                    <td>3–5 days</td>
-                </tr>
-                <tr>
-                    <td>Soft launch</td>
-                    <td>Live with monitoring, daily transcript review</td>
-                    <td>2 weeks</td>
-                </tr>
-                <tr>
-                    <td>Steady state</td>
-                    <td>Weekly review, monthly knowledge base updates</td>
-                    <td>Ongoing (1 hr/week)</td>
+                    <td>ElevenLabs</td>
+                    <td>RAG adds slight latency, around 250 ms. Full context keeps the whole document in the prompt instead.</td>
                 </tr>
             </tbody>
         </table>
 
-        <p>Total time to a fully functional, production-ready agent: 4–6 weeks. The ongoing maintenance is minimal — most clients spend less than an hour per week managing their agent once it reaches steady state.</p>
+        <p>Elapsed time for your project will mostly be how long your team needs to write accurate answers, agree escalation rules and connect your calendar or CRM. Scope those honestly for your business before promising a date.</p>
 
-        <h2>DIY vs. Done-For-You Training</h2>
+        <h2>DIY or Get Help</h2>
 
-        <p>You can absolutely train an AI voice agent yourself using platforms like Bland AI, Retell, or VAPI. The tools are accessible and well-documented. What takes time is the upfront work: auditing your calls, writing the knowledge base, designing the call flows, and running rigorous shadow tests.</p>
-
-        <p>Most SMBs find that the biggest ROI comes from having someone who has done this before build the foundation — then handing off ongoing maintenance in-house.</p>
-
-        <p>If you'd rather skip the learning curve and get a production-ready agent in 4 weeks, <a href="/qualify.html">book a free discovery call</a> and we'll scope your build. We handle everything from knowledge base construction to CRM integration to post-launch iteration — you provide the business information, we handle the rest.</p>
+        <p>You can do all of this yourself on Retell, Vapi or ElevenLabs. The documentation is public and the setup is a few uploads. What takes effort is the upfront work: auditing calls, writing the knowledge base, designing call flows and running disciplined shadow tests. If you want a second opinion on scope, the <a href="/consulting.html">consulting page</a> explains how I work with teams on this.</p>
 
         <!-- FAQ Section -->
         <div class="article-faq">
             <h2>Frequently Asked Questions</h2>
 
             <div class="faq-item">
-                <h3>How long does it take to train an AI voice agent on business data?</h3>
-                <p>A basic AI voice agent can be live in 3–5 business days once you provide your business data (FAQs, pricing, services, hours). A more complex agent with CRM integration, custom call flows, and multi-department routing typically takes 2–4 weeks to fully configure and test.</p>
+                <h3>How much data does an AI voice agent need to learn from?</h3>
+                <p>Less than most people expect. A voice agent built on a language model is not trained on a dataset. It reads a knowledge base, a system prompt and call flows. A 16-entry knowledge base of about 1,000 words (roughly two pages) used under 2% of ElevenLabs&#x27; stated full-context limit of about 300,000 characters. Size is rarely the constraint. Coverage is: write answers for the questions your callers actually ask, then add more from real failed calls.</p>
             </div>
 
             <div class="faq-item">
-                <h3>What data does an AI voice agent need to learn from?</h3>
-                <p>At minimum: your business FAQ document, a service/pricing list, your hours and location, and example call transcripts if available. The more specific and structured your inputs, the better the agent performs. You do not need a large dataset — even a well-written 2-page FAQ document is enough to get started.</p>
+                <h3>Do I need to train a model on my call recordings?</h3>
+                <p>Not to set up a knowledge base. The Retell, Vapi and ElevenLabs knowledge-base pages I read on 24 November 2026 describe uploading documents, URLs or text, and none of them asks you to train a model. Call recordings are still useful as a source of caller questions and wording, which is what Step 1 uses them for.</p>
             </div>
 
             <div class="faq-item">
-                <h3>Can I update my AI voice agent after it's trained?</h3>
-                <p>Yes. AI voice agents are not static. You can update pricing, add new services, change call flows, and refine responses at any time. Most platforms allow edits through a dashboard without requiring a developer. For complex workflow changes, a short re-deployment cycle is needed.</p>
+                <h3>Should the knowledge base go in the prompt or be retrieved?</h3>
+                <p>It depends on size and platform. ElevenLabs documents two modes: full context puts the whole document in the system prompt on every turn (up to roughly 300,000 characters), and RAG retrieves only the relevant passages, which it says adds around 250 ms. Retell always retrieves chunks and says the impact is generally under 100 ms. Both figures are vendor-reported. Short, stable policies suit the prompt or full context. Large or changing material suits retrieval.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I check that the agent is using the knowledge base correctly?</h3>
+                <p>Test with the wording real callers use, not the wording of your entries, and check which entry was matched. Retell lets you open the retrieved chunks for each agent turn in the call transcript. In my synthetic test, one missed question was fixed by adding a single phrase to an entry&#x27;s variations. Out-of-scope questions need an escalation rule, not more entries.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I update my AI voice agent after it is trained?</h3>
+                <p>Yes. Retell documents auto-refresh for URL, Google Drive, OneDrive and Notion sources, and says exported files do not stay in sync, so you re-upload them after the source changes. Behaviour changes (tone, limits, escalation) are edits to the system prompt or call flow, which you re-test with the same shadow-test calls.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How long does it take to train an AI voice agent?</h3>
+                <p>I do not have a measured timeline to publish, and I removed the day and week estimates this page used to carry because I could not source them. The platforms ingest documents quickly. Elapsed time is mostly how long your team needs to write accurate answers, agree escalation rules and connect your calendar or CRM.</p>
             </div>
         </div>
 
-        <!-- CTA in article -->
-        <h2>Ready to Get Started?</h2>
-        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
-        <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+        <h2>Sources</h2>
+
+        <ul>
+            <li>Retell, Knowledge base setup and retrieval tuning: <a href="https://docs.retellai.com/build/knowledge-base">docs.retellai.com/build/knowledge-base</a> (read 24 November 2026; storage limits, retrieval defaults, latency, refresh behaviour)</li>
+            <li>Vapi, Knowledge bases: <a href="https://docs.vapi.ai/knowledge-base">docs.vapi.ai/knowledge-base</a> and <a href="https://docs.vapi.ai/knowledge-base/using-query-tool">Query tool</a> (read 24 November 2026; file formats, 300 KB guidance)</li>
+            <li>ElevenLabs, Knowledge base: <a href="https://elevenlabs.io/docs/agents-platform/customization/knowledge-base">elevenlabs.io/docs/agents-platform/customization/knowledge-base</a> and <a href="https://elevenlabs.io/docs/agents-platform/customization/knowledge-base/rag">RAG</a> (read 24 November 2026; full context vs RAG, size limits, tier limits, latency)</li>
+            <li>Coverage test: my own script and synthetic data, run 24 November 2026 with Python 3.12.3 and the standard library only. Not a benchmark, and the retriever is a stand-in for the platforms' embedding search.</li>
+        </ul>
 
         <!-- Author Byline -->
         <div class="article-author">
@@ -740,17 +809,17 @@
     <section class="related-posts">
         <h2>Related Posts</h2>
         <div class="related-grid">
-            <a href="/blog/ai-voice-agent-use-cases.html" class="related-card">
-                <h3 class="related-card-title">AI Voice Agent Use Cases: What Businesses Are Actually Automating</h3>
-                <p class="related-card-excerpt">A practical look at how SMBs are deploying AI voice agents across industries — and what's working in 2026.</p>
+            <a href="/blog/ai-voice-agent-conversation-design-scripts.html" class="related-card">
+                <h3 class="related-card-title">How to Design Voice AI Conversation Scripts: 5 Core Flows</h3>
+                <p class="related-card-excerpt">Script anatomy, the five core call flows, patterns that lose callers, and how to test before launch.</p>
             </a>
-            <a href="/blog/ai-voice-agent-implementation-guide.html" class="related-card">
-                <h3 class="related-card-title">AI Voice Agent Implementation Guide: What to Expect Week by Week</h3>
-                <p class="related-card-excerpt">A realistic timeline and checklist for deploying your first AI voice agent without surprises.</p>
+            <a href="/blog/ai-voice-agent-platform-comparison-2026.html" class="related-card">
+                <h3 class="related-card-title">Vapi vs Retell vs Pipecat: Voice AI Build or Buy 2026</h3>
+                <p class="related-card-excerpt">Prices checked against vendor pages, a break-even model and a decision matrix for choosing a voice platform.</p>
             </a>
-            <a href="/blog/how-to-choose-ai-voice-agent.html" class="related-card">
-                <h3 class="related-card-title">How to Choose the Right AI Voice Agent for Your Business</h3>
-                <p class="related-card-excerpt">Compare platforms, features, and pricing to find the AI voice agent that fits your workflow and budget.</p>
+            <a href="/blog/ai-agent-evals-builders.html" class="related-card">
+                <h3 class="related-card-title">How to Evaluate an AI Agent Before Deployment</h3>
+                <p class="related-card-excerpt">A small test harness, regression runs and failure traces you can reuse before an agent goes live.</p>
             </a>
         </div>
     </section>
