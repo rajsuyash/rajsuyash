@@ -991,6 +991,7 @@ strong {
 
 .footer-social {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--space-sm);
     justify-content: flex-end;
     margin-top: 0.5rem;
