@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>Mem0 Memory Quality Audit: What 97.8% Junk Really Shows</title>
+    <meta name="description" content="A team found 97.8% of 10,134 mem0 entries were junk. I rechecked the math and ran mem0 2.2.1 to see what holds, and how to audit your own store.">
+    <meta name="keywords" content="mem0 memory quality audit, mem0 junk entries, agent memory quality, mem0 97.8% junk, ai agent memory audit, mem0 deduplication, agent memory extraction">
+    <meta name="author" content="Suyash Raj">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rajsuyash.com/blog/mem0-memory-quality-audit.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://rajsuyash.com/blog/mem0-memory-quality-audit.html">
+    <meta property="og:title" content="Mem0 Memory Quality Audit: What 97.8% Junk Really Shows">
+    <meta property="og:description" content="A team found 97.8% of 10,134 mem0 entries were junk. I rechecked the math and ran mem0 2.2.1 to see what holds, and how to audit your own store.">
+    <meta property="og:image" content="https://rajsuyash.com/og-image.jpg">
+    <meta property="og:site_name" content="Suyash Raj">
+    <meta property="article:published_time" content="2026-11-26">
+    <meta property="article:author" content="Suyash Raj">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mem0 Memory Quality Audit: What 97.8% Junk Really Shows">
+    <meta name="twitter:description" content="A team found 97.8% of 10,134 mem0 entries were junk. I rechecked the math and ran mem0 2.2.1 to see what holds, and how to audit your own store.">
+    <meta name="twitter:image" content="https://rajsuyash.com/og-image.jpg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles.css?v=20261125a">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Mem0 Memory Quality Audit: What 97.8% Junk Really Shows",
+        "description": "A team found 97.8% of 10,134 mem0 entries were junk. I rechecked the math and ran mem0 2.2.1 to see what holds, and how to audit your own store.",
+        "author": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj",
+            "url": "https://rajsuyash.com/about.html"
+        },
+        "publisher": {
+            "@type": "Person",
+            "@id": "https://rajsuyash.com/about.html#person",
+            "name": "Suyash Raj"
+        },
+        "datePublished": "2026-11-26",
+        "dateModified": "2026-11-26",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://rajsuyash.com/blog/mem0-memory-quality-audit.html"
+        },
+        "image": "https://rajsuyash.com/og-image.jpg"
+    }
+    </script>
+
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Is 97.8% the junk rate of mem0?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. It is one team's hand audit of one agent over 32 days in March 2026, on a forked build with a default prompt, using gemma2:2b and then Claude Sonnet 4.6. The arithmetic checks out (224 survivors of 10,134 is 97.79%), but 4,040 of the entries were removed by scripts and the other 6,264 were read by one reviewer. It shows what can happen when boot files, cron output and recalled memories reach the extractor, not what your own store contains."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Did switching to a better extraction model fix the junk?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Only partly, on the issue's own table. The junk rate fell from 97.4% on gemma2:2b to 89.6% in the Sonnet-only batch, entries per day fell about 85 percent, and keeps per day fell from 6.8 to 4.0. The last batch also includes the team's message filter for four days, and the issue does not publish daily message volume, so the model effect cannot be isolated."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How many memories do I need to review to audit my own store?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "About 385 randomly sampled entries gives a 95 percent interval of plus or minus 5 points in the worst case, and about 200 gives plus or minus 7. Sample at random, not from the newest entries, label with one reviewer and report a Wilson interval. For example, 80 junk entries in a sample of 200 is 40 percent, with an interval of 33.5 to 46.9 percent."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Does mem0 2.2.1 deduplicate repeated memories?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "It checks an exact MD5 hash, but only against the 10 nearest existing memories retrieved for the current conversation. In my test with a scripted extractor and a toy embedder, six boot-file sentences repeated word for word were stored 141 times across 30 sessions at the default depth, and 6 times at depth 100. Your embedder will behave differently, so replay a duplicate test on your own store."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://rajsuyash.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://rajsuyash.com/blog/"},
+            {"@type": "ListItem", "position": 3, "name": "Mem0 Memory Quality Audit: What 97.8% Junk Really Shows", "item": "https://rajsuyash.com/blog/mem0-memory-quality-audit.html"}
+        ]
+    }
+    </script>
+
+    <style>
+        /* Blog Article Styles */
+        .article-hero {
+            padding: calc(var(--space-xl) + 4rem) var(--gutter) var(--space-lg);
+            text-align: center;
+        }
+
+        .article-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-paper);
+            background-color: var(--color-accent);
+            padding: 0.25rem 0.625rem;
+        }
+
+        .article-date {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-read-time {
+            font-size: 0.8125rem;
+            color: var(--color-muted);
+        }
+
+        .article-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-ink-soft);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Article Body */
+        .article-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-xl);
+        }
+
+        .article-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--color-ink);
+        }
+
+        .article-body h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            color: var(--color-ink);
+        }
+
+        .article-body p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: var(--space-sm);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin-bottom: var(--space-sm);
+            padding-left: 1.5rem;
+        }
+
+        .article-body li {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color var(--duration-fast);
+        }
+
+        .article-body a:hover {
+            color: var(--color-accent-soft);
+        }
+
+        .article-body strong {
+            color: var(--color-ink);
+            font-weight: 600;
+        }
+
+        /* Definition Block */
+        .definition-block {
+            background: var(--color-paper-warm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .definition-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--color-ink);
+            margin-bottom: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            font-size: 0.9375rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--color-ink);
+            background: var(--color-paper-warm);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--color-ink-soft);
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-paper-warm);
+        }
+
+        /* FAQ Section */
+        .article-faq {
+            margin-top: var(--space-lg);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+            padding: var(--space-sm) 0;
+        }
+
+        .faq-item h3 {
+            margin-top: 0 !important;
+            color: var(--color-ink);
+        }
+
+        .faq-item p {
+            color: var(--color-ink-soft);
+        }
+
+        /* Author Byline */
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+            margin-top: var(--space-lg);
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-ink);
+        }
+
+        .author-bio {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        /* Related Posts */
+        .related-posts {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--gutter) var(--space-lg);
+        }
+
+        .related-posts h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .related-card {
+            background: var(--color-paper-warm);
+            padding: var(--space-sm) var(--space-md);
+            display: block;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .related-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--color-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .comparison-table {
+                font-size: 0.8125rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.625rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+<body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="wordmark">Suyash<span class="wordmark-accent">.</span></a>
+
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/consulting.html" class="nav-link">Consulting</a>
+                <a href="/ai-agents.html" class="nav-link">AI Agents</a>
+                <a href="/n8n-automation.html" class="nav-link">N8N</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/about.html" class="nav-link">About</a>
+                <a href="/qualify.html" class="btn-outline">Let's Talk</a>
+            </div>
+
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="article-hero-content">
+            <div class="article-meta reveal" style="--delay: 0">
+                <span class="article-category">AI Agents</span>
+                <span class="article-date">November 26, 2026</span>
+                <span class="article-read-time">15 min read</span>
+            </div>
+            <h1 class="article-title reveal" style="--delay: 1">Mem0 Memory Quality Audit: What 97.8% Junk Really Shows</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">One team's audit of 10,134 mem0 entries has been quoted as a single number. I recomputed its tables, read mem0 2.2.1 and ran its add path to see what the number does and does not show.</p>
+        </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+
+        <!-- CONTENT GOES HERE -->
+        <div class="definition-block">
+<p><strong>Short answer:</strong> the 97.8% figure is correct arithmetic on one agent's data, not a mem0 junk rate. It covers one agent, one user and 32 days, with a default extraction prompt fed boot files and cron output. The issue's tables do not fully reconcile, and the mem0 2.2.1 code I ran still lets duplicates pile up once a store grows. Audit your own store before trusting any number.</p>
+</div>
+
+<p><strong>Updated November 2026.</strong> I read the GitHub issue body and its comments on 26 November 2026: the original post in full, the maintainer's closing comment and three later comments in full, and the long fork write-ups more quickly. I then recomputed every number in the issue's tables, downloaded mem0 2.2.1 from PyPI, read its default extraction prompt and add path, and ran that add path against a scripted extractor. Everything labelled "observed" below happened on this machine on that date. Everything labelled "reported" is somebody else's claim that I did not reproduce.</p>
+
+<h2>1. What the audit measured, and why it matters</h2>
+<p>Agent memory layers promise that an agent will remember the right things across sessions. The fear every builder has is the opposite: the store fills with noise, retrieval gets worse, and nobody notices because no error is thrown. In March 2026 one team published the most detailed public look at that failure. Their post, <a href="https://github.com/mem0ai/mem0/issues/4573">issue #4573 on the mem0 repository</a>, is titled "What we found after auditing 10,134 mem0 entries: 97.8% were junk."</p>
+<p>The post has been cited widely since, usually as a single number. I wanted to know what the number stands for, because the decision behind it is a real one: adopt a memory vendor as it ships, or put a quality gate in front of it. If you are building an agent that has to remember things for months, that choice shapes your architecture. It is also the kind of choice I help teams make on my <a href="/ai-agents.html">AI agents page</a>.</p>
+
+<table class="comparison-table">
+<thead><tr><th>Item</th><th>What the issue reports (March 2026)</th></tr></thead>
+<tbody>
+<tr><td>Deployment</td><td>One AI agent, one human, daily conversations, Qdrant backend</td></tr>
+<tr><td>Window</td><td>32 days, 23 February to 26 March 2026</td></tr>
+<tr><td>Extraction models</td><td>gemma2:2b for the first 20 days, Claude Sonnet 4.6 for the last 12, "default prompts"</td></tr>
+<tr><td>Change late in the window</td><td>On day 29 the team merged PR #4302 into its fork (a message filter, an isolation module and default custom instructions)</td></tr>
+<tr><td>Collection size</td><td>10,134 entries</td></tr>
+<tr><td>Triage by script</td><td>2,468 removed as hash duplicates, hallucinated clusters and one feedback-loop hallucination</td></tr>
+<tr><td>Near-duplicate pass</td><td>2,943 flagged by cosine similarity</td></tr>
+<tr><td>Read one by one</td><td>6,264 entries in eight batches</td></tr>
+<tr><td>Survivors</td><td>224 of 10,134, of which 186 were rewritten and 38 kept as they were</td></tr>
+</tbody>
+</table>
+<p>The author labelled the entries by hand. There was one reviewer and no second rater, so "junk" here means one person's judgment, applied consistently by the look of the batch tables. I treat the work as careful community research, not an audit by an independent party. The source of this table is the issue itself, and the label for every number in it is "reported".</p>
+
+<h2>2. Re-deriving the numbers</h2>
+<p>I typed the issue's tables into a small ledger script and checked every ratio and every sum. The script has ten unit tests and they pass. Here is what I found.</p>
+
+<table class="comparison-table">
+<thead><tr><th>Check</th><th>Stated</th><th>I computed</th><th>Result</th></tr></thead>
+<tbody>
+<tr><td>Headline: (10,134 - 224) / 10,134</td><td>97.8%</td><td>97.79%</td><td>Matches</td></tr>
+<tr><td>Batch table: 195 keeps out of 6,264</td><td>96.9%</td><td>96.9%</td><td>Matches</td></tr>
+<tr><td>224 survivors = 186 rewritten + 38 clean</td><td>224</td><td>224</td><td>Matches</td></tr>
+<tr><td>2,943 near-duplicates as a share of what remained after triage (7,666)</td><td>37.6%</td><td>38.4%</td><td>0.8 points apart</td></tr>
+<tr><td>10,134 - 2,468 - 1,572 = entries read</td><td>6,264</td><td>6,094</td><td>170 short</td></tr>
+<tr><td>Phase 2 deleted (6,070) + keeps (195)</td><td>6,264</td><td>6,265</td><td>Off by one</td></tr>
+<tr><td>Keeps in batch table vs final survivors</td><td>224</td><td>195</td><td>29 not explained</td></tr>
+<tr><td>Category counts sum to phase 2 deletions</td><td>6,070</td><td>5,770</td><td>300 short</td></tr>
+<tr><td>"% of junk" column sums to 100</td><td>100%</td><td>95.0%</td><td>5 points unassigned</td></tr>
+<tr><td>Boot-file share: 3,200 / 6,070</td><td>52.7%</td><td>52.7%</td><td>Matches</td></tr>
+<tr><td>Boot-file share: 3,200 / category total (5,770)</td><td>n/a</td><td>55.5%</td><td>Different denominator</td></tr>
+</tbody>
+</table>
+
+<p>None of these gaps changes the story. The headline checks out, and the largest category is still about half or more of the junk however you divide. What the gaps tell me is how to read the number. The "% of junk" column uses the 6,070 entries deleted in the final reading phase as its denominator, not the 5,770 in the category table, and about 5 percent of those deletions have no category. The 29-entry difference between the batch table's keeps and the final survivors may be entries rescued in the cluster review or rewrites, but the post does not say. The author states in the issue that the full dataset (six correction files, about 100KB) is available. I have not seen it, so I cannot reconcile these differences myself.</p>
+
+<p>There is a more useful way to split the 97.8%. Of the 10,134 entries, 4,040 (2,468 plus 1,572, about 40 percent of the collection) were removed by scripts: exact hashes, cosine clusters and keyword sweeps. The other 6,264 were read by a person, and 96.9% of those were judged junk. These are two different claims. The first says a large share of what mem0 stored in that deployment was mechanically detectable duplication. The second says that after removing that, almost everything left was still not worth keeping. Quoting 97.8% as one number blends them.</p>
+
+<h2>3. Did the better model fix it?</h2>
+<p>The issue says it did not: after the switch to Sonnet "the junk rate barely moved," and "the extraction prompt is the bottleneck, not the model." The batch table has more in it than that sentence. I grouped the batches by model and computed volume per day, because a rate hides how many entries were produced.</p>
+
+<table class="comparison-table">
+<thead><tr><th>Period</th><th>Model</th><th>Days</th><th>Entries</th><th>Entries per day</th><th>Keeps</th><th>Junk rate</th><th>Junk entries per day</th></tr></thead>
+<tbody>
+<tr><td>23 Feb to 13 Mar</td><td>gemma2:2b</td><td>19</td><td>5,021</td><td>264</td><td>129</td><td>97.4%</td><td>257</td></tr>
+<tr><td>14 to 15 Mar</td><td>mixed</td><td>2</td><td>820</td><td>410</td><td>22</td><td>97.3%</td><td>399</td></tr>
+<tr><td>16 to 26 Mar</td><td>Sonnet 4.6</td><td>11</td><td>423</td><td>38</td><td>44</td><td>89.6%</td><td>34</td></tr>
+</tbody>
+</table>
+
+<p>I read three things in this table. First, the junk rate did move, by about 8 points, though it stayed near 90 percent. Second, entries per day fell by about 85 percent, and junk entries per day fell by about 87 percent, while keeps per day went from 6.8 to 4.0. So the model change cut the noise written far more than the signal (junk per day fell about 87 percent, keeps per day about 41 percent), which is not what "barely moved" suggests. Third, the Sonnet period also contains PR #4302's filter for its last four days (day 29 is 23 March), so the last batch has two changes in it. The issue does not publish how many messages the agent handled per day, so I cannot separate "the model extracts less" from "the agent was quieter." I flag this because the usual lesson drawn from the issue, that a better model does not help, is stronger than the table supports. What the table supports is narrower: a rate near 90 percent is still a problem, and the permissive prompt kept storing system architecture and task state, which the author describes as accurate but not memory.</p>
+
+<h2>4. What the maintainers say they fixed, and what they did not</h2>
+<p>A mem0 contributor closed the issue on 5 June 2026 with <a href="https://github.com/mem0ai/mem0/issues/4573#issuecomment-4631344261">a comment</a> listing shipped work: a single-pass ADD-only extraction algorithm (April 2026), hierarchical retrieval with entity linking and deduplication, temporal metadata (June 2026) and recency-weighted ranking (May 2026). Those are vendor-reported. I fetched the <a href="https://mem0.ai/blog/mem0-the-token-efficient-memory-algorithm">token-efficient algorithm post</a> on 26 November 2026. It says the new approach "collapses extraction into a single LLM call that only adds" and lists deduplication as a step after extraction. The page I read did not describe a noise filter or give details of how deduplication works.</p>
+<p>The same comment says the thread raised "extraction prompt permissiveness, feedback loop prevention, and identity-aware extraction" as "ongoing areas of improvement." Those three are the issue's top categories: boot-file restating, re-extraction of recalled memories, and an extractor that does not know whether the user is a human or an agent. So the maintainers did not claim to have fixed them when they closed the issue. That is worth knowing, since the issue is closed and a closed issue reads as a fixed one.</p>
+
+<h2>5. What I read in mem0 2.2.1</h2>
+<p>The audit describes a March 2026 deployment on a forked build. The current release is different, so I downloaded <code>mem0ai==2.2.1</code>, the latest on PyPI on 26 November 2026 (uploaded 25 September 2026), and read the default extraction path. The wheel's SHA-256 starts <code>fe91bb91ac89</code>. These are observations about the code, not about how a live model behaves with it.</p>
+<ul>
+<li><strong>The default prompt is long and permissive by design.</strong> The additive extraction prompt is about 5,000 words. It tells the model that "Every piece of memorable information must be captured" and to extract from both user and assistant messages.</li>
+<li><strong>It does have exclusions, but they are narrow.</strong> It says not to extract greetings and filler, vague assistant characterisations, generic acknowledgments, assistant meta-commentary about its own capabilities, and assistant messages that only echo what the user said. It also says not to infer attributes such as gender or age.</li>
+<li><strong>It names none of the issue's big categories.</strong> I searched the prompt for heartbeat, cron, boot, system prompt, tool output, transient, credential, secret and password. None of those appear as an exclusion rule. Custom instructions exist and are described as the highest priority, so the gap is fillable, but you have to fill it.</li>
+<li><strong>Nothing marks recalled memories.</strong> The prompt receives "Existing Memories" for deduplication and is told not to extract from them. If your application injects recalled memories into the conversation text, the extractor sees them as ordinary message content. I found no recall marker anywhere in the package.</li>
+<li><strong>Deduplication depends on retrieval depth.</strong> Before extraction, the add path fetches the 10 nearest existing memories for the new messages. After extraction, an MD5 hash check runs against those same 10 only.</li>
+</ul>
+<p>The last point is the one that matters most, so here is the relevant part of the code (<code>mem0/memory/main.py</code>, 2.2.1, trimmed):</p>
+<pre><code>existing_results = self.vector_store.search(
+    query=parsed_messages, vectors=query_embedding, top_k=10, filters=search_filters)
+...
+existing_hashes = set()
+for mem in existing_results:
+    h = mem.payload.get("hash")
+    if h: existing_hashes.add(h)
+...
+mem_hash = hashlib.md5(text.encode()).hexdigest()
+if mem_hash in existing_hashes or mem_hash in seen_hashes:
+    continue   # skipped as a duplicate</code></pre>
+<p>A memory that already exists in the store is only recognised as a duplicate if it is among the 10 results returned for the current conversation. The query is the whole conversation text, not each extracted sentence. As the store grows, an old fact can fall out of the top 10 for a long, noisy conversation, and its exact copy is then stored again.</p>
+
+<h2>6. The lab: real add() path, scripted extractor</h2>
+<p>To test that, I ran the real <code>Memory.add()</code> and <code>Memory.search()</code> code from 2.2.1 with two parts replaced: the LLM and the embedder. The stub LLM is a permissive extractor. It returns every sentence of three or more words from the messages it is shown, which is what the issue describes a faithful model doing with a permissive prompt. The stub embedder is a hashed bag of words. Everything else, including retrieval, the hash check, the Qdrant insert and the SQLite history, is mem0's own code. Python 3.12.3, local Qdrant, telemetry off. spaCy and fastembed were not installed, so mem0's keyword search and entity linking were disabled and retrieval was vector-only.</p>
+<p>The simulated agent runs 30 sessions. In each, the user states one new, distinct fact. The assistant's message restates six boot-file sentences ("The agent uses she/her pronouns," "The operator prefers Telegram for alerts" and so on) and one cron heartbeat line with a unique timestamp. In the baseline, the application also injects the five best search results as a recalled-memories block, which is the common pattern the issue calls the feedback loop. Each cell is the mean of three seeds.</p>
+
+<table class="comparison-table">
+<thead><tr><th>What the extractor is shown</th><th>Stored</th><th>Real facts</th><th>Boot-file copies (6 distinct)</th><th>Heartbeats</th><th>Redundant copies</th></tr></thead>
+<tbody>
+<tr><td>User + assistant + recall block (baseline)</td><td>201</td><td>30</td><td>141</td><td>30</td><td>135</td></tr>
+<tr><td>User + assistant, recall block stripped</td><td>139</td><td>30</td><td>79</td><td>30</td><td>73</td></tr>
+<tr><td>User messages only</td><td>30</td><td>30</td><td>0</td><td>0</td><td>0</td></tr>
+</tbody>
+</table>
+
+<p>Read this table with care. The user-only row is clean by construction, because in my scenario all the junk arrives in assistant messages. It shows that dropping the assistant role removes that source, and it costs you any real fact the assistant contributes, which my scenario does not include. The other two rows are the result. The extractor was shown the same six sentences word for word in every session, and mem0 still stored 141 copies of them in the baseline, not 6. Removing the recall block cut that to 79, so the feedback loop made it worse but was not the only cause. Heartbeats were never deduplicated, since each has a unique timestamp, which matches the issue's observation that cron noise needs a filter before extraction and not a hash check after it.</p>
+
+<p>So why do verbatim repeats get through? I ran one change. During <code>add()</code> only, I wrapped the vector store's search so the retrieval depth was 100 instead of 10, and left everything else the same:</p>
+<pre><code>orig_search = m.vector_store.search
+def widened(*a, **kw):
+    if flag["on"]:          # set only around m.add()
+        kw["top_k"] = 100
+    return orig_search(*a, **kw)
+m.vector_store.search = widened</code></pre>
+
+<table class="comparison-table">
+<thead><tr><th>Condition (seed 1, 30 sessions)</th><th>Dedup retrieval depth</th><th>Stored</th><th>Boot-file copies</th></tr></thead>
+<tbody>
+<tr><td>Baseline</td><td>10 (mem0 default)</td><td>201</td><td>141</td></tr>
+<tr><td>Baseline</td><td>100</td><td>66</td><td>6</td></tr>
+<tr><td>Recall block stripped</td><td>10</td><td>139</td><td>79</td></tr>
+<tr><td>Recall block stripped</td><td>100</td><td>66</td><td>6</td></tr>
+</tbody>
+</table>
+
+<p>With a depth of 100 the store held 66 entries: 30 real facts, 30 heartbeats and exactly 6 boot sentences. The leak started between session 5 and session 8. After session 5 the store had 16 entries and 6 boot copies. After session 8 it had 28 entries and 12 boot copies, and by session 30 it had 201 entries and 141 copies. Once duplicates exist they crowd the top 10 themselves, so the hole widens.</p>
+<p>Now the limits, because they are real. My embedder is a toy, and the leak depends on how the query embedding of a whole conversation ranks against single stored sentences. A production embedder will rank differently, and I do not know how much of this you would see. The extractor is a stub that restates everything, not a measurement of what Claude or GPT does with this prompt. The depth-100 run only reached 66 entries, so it does not show that depth 100 scales. What the lab does establish is narrower and checkable: in mem0 2.2.1, duplicate detection is a property of the retrieval depth, so it should be tested on your own embedder and your own store size. If you want a duplicate guarantee, do it with a lookup of the hash against the whole store before insert, not against the top 10.</p>
+<p>I also reran the grid with the stub rewording 50 percent of repeated sentences with small variations ("Noted: ...", "... (confirmed)"). Without LLM-style deduplication, the baseline stored 272 entries, 72 of them for the 30 real facts. When I made the stub skip anything it could see among the 10 neighbours, the result went back to 201, the same as the verbatim run. That is the same pattern: an LLM that is shown the neighbour can avoid the duplicate, and one that is not shown it cannot.</p>
+
+<h2>7. How to audit your own store</h2>
+<p>The audit in the issue took a person reading thousands of entries. You do not need that to find out whether you have the problem. This is the procedure I would use, in order.</p>
+<ol>
+<li><strong>Dump the whole store with its source.</strong> Export every memory with its creation date, its user or agent id and, if you can, the message that produced it. Without sources you cannot tell an extraction error from an ambiguous conversation.</li>
+<li><strong>Draw a random sample, not the newest entries.</strong> The newest are the most likely to be recalled-and-reextracted copies. For a rate within 5 points at 95 percent confidence you need about 385 entries; for 7 points, about 200.</li>
+<li><strong>Label with the issue's ten categories.</strong> Boot-file restating, heartbeat or cron noise, system dumps, transient task state, hallucinated profiles, identity confusion, leaked secrets or paths, wrong locations, fabricated lifestyle, other. Keep one reviewer for consistency and have a second one label 50 to measure agreement.</li>
+<li><strong>Report an interval, not a point.</strong> If 80 of 200 sampled entries are junk, the Wilson 95% interval is 33.5% to 46.9%, so say "about 40%, between a third and a half."</li>
+<li><strong>Run cheap pre-flags on the full store.</strong> Pattern flags catch heartbeat markers, IP addresses and paths, "by Friday" task state and very long entries. Boot-file restating needs the boot files themselves: compare each entry with them by token overlap.</li>
+<li><strong>Replay a duplicate test.</strong> Send the same three sentences through your add path 30 times, with realistic other traffic in between, and count copies. That tells you whether your dedup holds at your store size.</li>
+</ol>
+<p>The two helpers I used, so you can check them yourself:</p>
+<pre><code>def wilson(k, n, z=1.96):
+    p = k / n
+    d = 1 + z * z / n
+    centre = (p + z * z / (2 * n)) / d
+    half = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d
+    return centre - half, centre + half
+
+def boot_overlap(entry, boot_lines, threshold=0.8):
+    return any(jaccard(entry, b) &gt;= threshold for b in boot_lines)</code></pre>
+<p>Pre-flags are not labels. A regex for "cron" will flag a legitimate fact about a user's cron job, and a boot-file overlap check will not catch a paraphrase. I use them to order the sample for human review and to size the problem, and I would not publish a junk rate from them.</p>
+
+<h2>8. What others have measured</h2>
+<p>I found three other sources that touch the same question. I label each by how the number was produced, because they are not interchangeable.</p>
+<table class="comparison-table">
+<thead><tr><th>Source</th><th>What it reports</th><th>Label</th></tr></thead>
+<tbody>
+<tr><td><a href="https://www.bigiron.cc/guides/auditing-an-agent-memory-store-for-junk">Big Iron guide</a>, reviewed 24 November 2026</td><td>Mem0 2.2.1 on 36 scripted agent turns with 12 real facts: 35 stored and 22 flagged as junk by default (62.9%); 13 stored and none flagged with custom instructions</td><td>Reported; synthetic corpus, small, by a third party</td></tr>
+<tr><td><a href="https://github.com/alibaizhanov/mengram/tree/main/experiments">Comment by a memory-API vendor</a> in the same issue, 16 September 2026</td><td>A write-time gate cut stored junk by 45% at 30 days with no recall loss over 18 runs, and separately reports that extraction lost identifiers on customer-support dialogue (a loyalty number became "has a loyalty number")</td><td>Reported by a vendor of a competing product, on simulated dialogue</td></tr>
+<tr><td><a href="https://avchauzov.github.io/blog/2026/agent-memory-write-path/">Write-path post</a>, 28 May 2026</td><td>Cites 97.8% low-utility entries in a 3.2-million-entry system</td><td>Reported; I did not trace the source and do not rely on it</td></tr>
+</tbody>
+</table>
+<p>The Big Iron result is the closest to mine, since it also used 2.2.1, and it agrees on direction: with defaults on a synthetic stream, more than half of what was stored was flagged, and instructions helped a lot. It also differs from mine in method, since it used an actual model and I used a stub. Its corpus is 36 turns, so it is a smoke test and not a rate. The vendor comment is a useful warning from the other side: extraction can drop the identifiers that make a memory useful, and what survives at 90 days is true facts nobody asks about, which a write-time filter should not touch. Junk rate is only half the measurement. You also need to check that the facts you need are still retrievable.</p>
+
+<h2>9. Build a gate or adopt as shipped?</h2>
+<p>This is my reading, labelled as judgment. If your agent's messages contain only user speech and short assistant replies, mem0's defaults in 2.2.1 are worth a trial, and the lab's user-only row shows that the message role is the first thing to control. I have not tested that case with a live model. If your agent runs on a host that feeds it boot files, heartbeats, cron output, tool results or a recall block, I would not adopt the defaults unmodified. In that case the work is upstream of the memory layer:</p>
+<ul>
+<li>Strip recalled-memory blocks, system prompts and cron output before the add call, in your own code, as two commenters in the thread describe doing.</li>
+<li>Pass an explicit exclusion list through custom instructions, drawn from your own audit categories.</li>
+<li>Check duplicates against the whole store by hash, not against the top 10 neighbours.</li>
+<li>Keep sources with every memory so audits take hours, not weeks.</li>
+</ul>
+<p>If you are comparing memory vendors, my post on <a href="/blog/mem0-vs-zep-benchmark-comparison.html">why the Mem0 and Zep benchmark scores disagree</a> covers the published accuracy claims, and <a href="/blog/hermes-agent-memory-skills-deployment.html">my test of Hermes Agent's file-based memory</a> shows a design with no extraction step at all. To test an agent before you let it write to a store, see <a href="/blog/ai-agent-evals-builders.html">how to evaluate an AI agent before deployment</a>. If you are weighing the cost of building this properly, the <a href="/roi-calculator.html">ROI calculator</a> and the <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> are the quick way to put numbers on it. If you want a second opinion on a memory design, the booking page is <a href="/consulting.html">here</a>.</p>
+
+<h2>10. What I did not do</h2>
+<ul>
+<li>I did not run mem0 with a live LLM. The stub extractor is an assumption, drawn from the issue's description, about what a permissive prompt produces.</li>
+<li>I did not see the audit's dataset, so I cannot say which of the table gaps are typos and which are real.</li>
+<li>I did not test other memory layers. Zep, Letta and others may behave differently, and I make no claim about them.</li>
+<li>My lab is one scenario with one embedder. It shows a mechanism, not a rate. Do not read 141 of 201 as a number about your system.</li>
+<li>I did not verify the maintainers' list of shipped features beyond fetching one of their pages.</li>
+</ul>
+
+        <div class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>Is 97.8% the junk rate of mem0?</h3>
+                <p>No. It is one team's hand audit of one agent over 32 days in March 2026, on a forked build with a default prompt, using gemma2:2b and then Claude Sonnet 4.6. The arithmetic checks out (224 survivors of 10,134 is 97.79%), but 4,040 of the entries were removed by scripts and the other 6,264 were read by one reviewer. It shows what can happen when boot files, cron output and recalled memories reach the extractor, not what your own store contains.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Did switching to a better extraction model fix the junk?</h3>
+                <p>Only partly, on the issue's own table. The junk rate fell from 97.4% on gemma2:2b to 89.6% in the Sonnet-only batch, entries per day fell about 85 percent, and keeps per day fell from 6.8 to 4.0. The last batch also includes the team's message filter for four days, and the issue does not publish daily message volume, so the model effect cannot be isolated.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How many memories do I need to review to audit my own store?</h3>
+                <p>About 385 randomly sampled entries gives a 95 percent interval of plus or minus 5 points in the worst case, and about 200 gives plus or minus 7. Sample at random, not from the newest entries, label with one reviewer and report a Wilson interval. For example, 80 junk entries in a sample of 200 is 40 percent, with an interval of 33.5 to 46.9 percent.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Does mem0 2.2.1 deduplicate repeated memories?</h3>
+                <p>It checks an exact MD5 hash, but only against the 10 nearest existing memories retrieved for the current conversation. In my test with a scripted extractor and a toy embedder, six boot-file sentences repeated word for word were stored 141 times across 30 sessions at the default depth, and 6 times at depth 100. Your embedder will behave differently, so replay a duplicate test on your own store.</p>
+            </div>
+        </div>
+
+        <!-- CTA in article -->
+        <h2>Ready to Get Started?</h2>
+        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
+        <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+
+        <!-- Author Byline -->
+        <div class="article-author">
+            <img src="/avatar.png" alt="Suyash Raj" class="author-avatar" width="56" height="56">
+            <div class="author-info">
+                <span class="author-name"><a href="/about.html">Suyash Raj</a></span>
+                <span class="author-bio">Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a>. Writes here about n8n, AI agents, and voice automation.</span>
+            </div>
+        </div>
+
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <h2>Related Posts</h2>
+        <div class="related-grid">
+            <a href="/blog/mem0-vs-zep-benchmark-comparison.html" class="related-card">
+                <h3 class="related-card-title">Mem0 vs Zep Benchmarks: Why the Scores Disagree</h3>
+                <p class="related-card-excerpt">Why published memory scores cannot be compared, traced to their sources.</p>
+            </a>
+            <a href="/blog/hermes-agent-memory-skills-deployment.html" class="related-card">
+                <h3 class="related-card-title">Hermes Agent Memory and Skills: Tested Limits (v0.22.5)</h3>
+                <p class="related-card-excerpt">A file-based agent memory design, with its limits tested.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="book" class="section-cta">
+        <div class="cta-content">
+            <h2 class="cta-headline reveal">
+                <span class="line">Ready to</span>
+                <span class="line">automate?</span>
+            </h2>
+            <p class="cta-description reveal" style="--delay: 1">
+                Book a free 30-minute discovery call. We'll identify your biggest time drains
+                and show you exactly what AI automation can do for your business.
+            </p>
+            <div class="cta-actions reveal" style="--delay: 2">
+                <a href="/qualify.html" class="btn-primary btn-large">Book Your Call</a>
+            </div>
+            <p class="cta-note reveal" style="--delay: 3">Free. No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="wordmark">Suyash<span class="wordmark-accent">.</span></span>
+                <p>Founder, <a href="https://voxdonna.com">Voxdonna AI</a> and <a href="https://aisewak.com">AiSewak</a></p>
+            </div>
+
+            <div class="footer-contact">
+                <a href="mailto:grow@rajsuyash.com">grow@rajsuyash.com</a>
+                <div class="footer-social">
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="https://www.instagram.com/vox.donna/" target="_blank" rel="noopener">Instagram (Voxdonna)</a>
+                    <a href="https://www.instagram.com/aisewak/" target="_blank" rel="noopener">Instagram (AiSewak)</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Suyash Raj. Designed with conviction.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
