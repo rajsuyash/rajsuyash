@@ -1,12 +1,12 @@
 {
   "name": "A1-03 HTTP Request - rate limits and back-off",
   "meta": {
-    "description": "How to survive a 429. Spaces requests out with batching, retries on failure, and - the part most workflows get wrong - tells a retryable error apart from a permanent one instead of retrying both.",
+    "description": "How to survive a 429. Spaces requests out with batching, turns the status code into data with Never Error, and tells a retryable error apart from a permanent one. Retry on Fail is deliberately off on the HTTP node here: it only fires when the node throws, and Never Error stops the node throwing.",
     "builtFor": "n8n HTTP Request node typeVersion 4.2",
     "author": "Suyash Raj - https://rajsuyash.com/blog/n8n-error-handling-best-practices.html",
     "setup": "None. httpbin.org returns whatever status code you ask it for, so the failure is reproducible on demand.",
-    "expectedOutput": "'Call a rate-limited API' runs once per input item with a 1s gap every 5 items. 'Classify the failure' outputs one row per item with retryable: true for 429/500/502/503/504 and false for 400/401/403/404/422.",
-    "failureCases": "Change the status code in the Set node to 401 and watch 'Classify the failure' mark it permanent. That is the case where retrying is not resilience - it is three identical rejections and a three-times-longer outage before anyone is told."
+    "expectedOutput": "'Call a rate-limited API' runs once per input item with a 1s gap every 5 items. 'Classify the failure' outputs one row per item with retryable: true for 408/425/429/500/502/503/504 and false for 200 and the other 4xx codes, with Retry-After honoured when the server sends it.",
+    "failureCases": "Change a status code in the 'Synthetic input' Code node to 401 and watch 'Classify the failure' mark it permanent. To see Retry on Fail work, turn Never Error off on 'Call a rate-limited API' and switch Retry on Fail on in Settings: the 429 then fails the node and n8n retries it (2 to 5 tries, at most 5000 ms apart). With Never Error on, a 429 is data, the node never fails, and Retry on Fail does nothing."
   },
   "nodes": [
     {
@@ -52,12 +52,9 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [220, 300],
-      "retryOnFail": true,
-      "maxTries": 3,
-      "waitBetweenTries": 2000,
       "onError": "continueRegularOutput",
       "alwaysOutputData": true,
-      "notes": "Three settings do three different jobs. batching spaces requests so you are less likely to be rate-limited at all. retryOnFail/maxTries/waitBetweenTries handle it when you are anyway. neverError + fullResponse stop the node throwing on a non-2xx, so the status code reaches the next node as data and you can decide what it means - which you cannot do if the node has already failed the execution."
+      "notes": "Three settings do three different jobs. batching spaces requests so you are less likely to be rate-limited at all. Retry on Fail is off here on purpose: n8n retries a node only when it throws, and neverError stops it throwing. neverError + fullResponse put the status code in the output so the next node can decide what it means. Pick one approach per node: let it fail and use Retry on Fail, or let it succeed and branch on the status code."
     },
     {
       "parameters": {

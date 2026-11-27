@@ -7,7 +7,7 @@
     <!-- Primary SEO Meta Tags -->
     <title>N8N HTTP Request Node: Auth, JSON Body, Pagination (2026)</title>
     <meta name="description" content="Connect any API with the n8n HTTP Request node in 6 steps: auth, JSON body, pagination and 429 retries. Includes 4 importable example workflows.">
-    <meta name="keywords" content="n8n http request node, n8n connect api, n8n api integration, n8n rest api, n8n http node tutorial, best AI automation agency for small businesses">
+    <meta name="keywords" content="n8n http request node, n8n connect api, n8n api integration, n8n rest api, n8n http node tutorial">
     <meta name="author" content="Suyash Raj">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://rajsuyash.com/blog/n8n-http-request-node-tutorial.html">
@@ -54,7 +54,7 @@
                 "name": "Suyash Raj"
             },
             "datePublished": "2026-04-16",
-            "dateModified": "2026-09-22",
+            "dateModified": "2026-11-27",
             "mainEntityOfPage": {
                 "@type": "WebPage",
                 "@id": "https://rajsuyash.com/blog/n8n-http-request-node-tutorial.html"
@@ -74,7 +74,7 @@
                     "name": "What is the N8N HTTP Request node used for?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "The N8N HTTP Request node lets you connect to any REST API that N8N does not have a built-in node for. You configure the URL, HTTP method, headers, authentication, and request body directly in the node. It handles GET, POST, PUT, PATCH, and DELETE requests, making it the universal connector for any third-party service with an API."
+                        "text": "It sends an HTTP request (DELETE, GET, HEAD, OPTIONS, PATCH, POST or PUT) to any URL and returns the response as workflow data. You set the URL, method, authentication, headers, query parameters and body in the node. Use it for services that have no dedicated n8n node, for endpoints a built-in node does not expose, and for internal APIs."
                     }
                 },
                 {
@@ -82,7 +82,7 @@
                     "name": "How do I add authentication to the N8N HTTP Request node?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "N8N supports several authentication methods natively in the HTTP Request node: API Key (header or query string), Bearer Token, Basic Auth (username/password), OAuth2, and Digest Auth. You create a credential object in N8N's credential store, then select it from the Authentication dropdown in the node. This keeps your API keys out of the workflow JSON."
+                        "text": "Open the Authentication dropdown. Choose Predefined Credential Type when n8n already has a credential for the service. Otherwise choose Generic Credential Type and pick Basic, Bearer, Custom, Digest, Header, OAuth1, OAuth2, Query or Simplified Custom Auth (Simplified Custom Auth needs n8n 2.35.0 or later). Credentials are stored outside the workflow, so an exported workflow does not contain the secret."
                     }
                 },
                 {
@@ -90,23 +90,31 @@
                     "name": "Can the N8N HTTP Request node handle paginated API responses?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Yes. N8N has built-in pagination support in the HTTP Request node. Under Options, you can configure pagination using cursor-based, offset-based, or page-based strategies. N8N will automatically loop through pages and merge results into a single output array, so you do not need to build manual looping logic."
+                        "text": "Yes. Under Options, add Pagination and choose Update a Parameter in Each Request or Response Contains Next URL. Then set when pagination is complete: Response Is Empty, Receive Specific Status Code(s), or Other with an expression. Set Limit Pages Fetched so a wrong condition cannot loop forever."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "What is the difference between using the HTTP Request node and a built-in N8N integration?",
+                    "name": "Why does a paginated HTTP Request node return one item per page instead of one item per record?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Built-in N8N integrations (like the Google Sheets node or Slack node) are pre-configured with field mappings and OAuth flows. They are faster to set up for common operations. The HTTP Request node gives you full access to every API endpoint, including custom or less common ones that built-in nodes do not expose. Use built-in nodes for standard operations, and the HTTP Request node for advanced API calls or services without a dedicated N8N integration."
+                        "text": "When the API wraps its list in an object, such as {\"products\": [...]}, each page becomes one item. The node only splits into one item per element when the response body is a top-level JSON array. Add a Split Out node after the HTTP Request node and name the list field to get one item per record."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "How do I parse a JSON API response in N8N after using the HTTP Request node?",
+                    "name": "How do I handle a 429 Too Many Requests error in the HTTP Request node?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "When the HTTP Request node returns JSON, N8N automatically parses it. You can access fields using expressions in subsequent nodes: {{ $json.fieldName }} for top-level fields, or {{ $json.nested.field }} for nested objects. Enable 'JSON/RAW Parameters' mode if you need to pass the raw response to another node. Use the Set node to reshape the data before passing it downstream."
+                        "text": "Use the Batching option (Items per Batch and Batch Interval) to space requests out, turn on Retry On Fail in the node Settings (at most 5 tries, at most 5 seconds apart), or combine Loop Over Items with a Wait node for longer delays. Retry On Fail only fires when the node fails, so leave Never Error off on a node you want retried."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "When should I use the HTTP Request node instead of a built-in n8n integration?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Use a built-in node for common operations on a service it covers, because it handles field mapping and the sign-in flow. Use the HTTP Request node when no node exists for the service, when the node does not expose the endpoint you need, or when you are calling your own API. You can reuse a built-in node's credential in the HTTP Request node with Predefined Credential Type."
                     }
                 }
             ]
@@ -260,6 +268,16 @@
         .article-body strong {
             color: var(--color-ink);
             font-weight: 600;
+        }
+
+        .article-body pre {
+            background: var(--color-paper-warm);
+            padding: 1rem;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            border-left: 3px solid var(--color-accent);
+            margin-bottom: var(--space-sm);
         }
 
         /* Definition Block */
@@ -460,228 +478,303 @@
         <div class="article-hero-content">
             <div class="article-meta reveal" style="--delay: 0">
                 <span class="article-category">N8N Automation</span>
-                <span class="article-date">April 16, 2026</span>
-                <span class="article-read-time">10 min read</span>
+                <span class="article-date">April 16, 2026 | Updated November 27, 2026</span>
+                <span class="article-read-time">19 min read</span>
             </div>
-            <h1 class="article-title reveal" style="--delay: 1">N8N HTTP Request Node Tutorial: Connect Any API Without Code (2026)</h1>
-            <p class="article-subtitle reveal" style="--delay: 2">The HTTP Request node is N8N's universal connector. If a service has an API, you can reach it. This tutorial shows you exactly how.</p>
+            <h1 class="article-title reveal" style="--delay: 1">N8N HTTP Request Node Tutorial: Connect Any API (2026)</h1>
+            <p class="article-subtitle reveal" style="--delay: 2">The HTTP Request node is n8n's universal connector. If a service has an API, you can reach it. This tutorial covers the settings, and the two places people get caught: what pagination returns and what retries actually retry.</p>
         </div>
     </section>
 
     <!-- Article Body -->
     <article class="article-body">
 
-        <p>The <strong>N8N HTTP Request node</strong> sends HTTP requests to any REST API endpoint you specify. It supports all standard methods (GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS), every common authentication type (API Key, Bearer, Basic Auth, OAuth1, OAuth2, Digest), built-in pagination, and automatic JSON parsing. If a service has an API, this node can reach it — no built-in N8N integration required.</p>
-
-        <p><em>Updated September 2026.</em> This tutorial covers six steps: making your first GET request, adding authentication, sending a JSON POST body, handling paginated responses, parsing the output, and five real business workflows you can build today.</p>
-
-        <p>If you are still getting started with N8N, read <a href="/blog/build-first-n8n-workflow.html">how to build your first N8N workflow</a> first. If you are looking to connect N8N to Google Sheets specifically, that is covered in <a href="/blog/n8n-google-sheets-integration.html">the Google Sheets integration guide</a>.</p>
-
-        <h2>What Is the HTTP Request Node?</h2>
-
         <div class="definition-block">
-            <p>The N8N HTTP Request node sends HTTP requests to any URL you specify. You control the method (GET, POST, PUT, PATCH, DELETE), headers, query parameters, request body, and authentication. It returns the API response as structured data that flows into the next node in your workflow.</p>
+            <p>The <strong>n8n HTTP Request node</strong> sends a request to any URL and returns the response as workflow data. Set the method and URL, choose an authentication credential, add headers, query parameters or a body, and turn on Pagination when the API returns results in pages. Use it when n8n has no dedicated node for the service.</p>
         </div>
 
-        <p>Think of it as a programmable web browser that makes API calls on your behalf and hands the results to the rest of your workflow. Every API that accepts HTTP requests works with this node. That covers thousands of tools: internal company APIs, government data sources, niche SaaS tools, payment processors, shipping carriers, and more.</p>
+        <p><em>Updated November 27, 2026.</em> I checked every setting named on this page against the current n8n documentation and the node source at release n8n@2.49.8, which was published this morning, and I ran the pagination and retry logic in a local lab. I did not run a live n8n instance. The lab re-implements the logic I read in the source, so treat it as a check on my reading, not as n8n itself. This update corrected the description of what pagination returns, the retry advice, the authentication list, and two of the four example downloads. Sources and the lab output are in <a href="#how-i-checked">How I checked this update</a>.</p>
+
+        <p>The six steps below are: a first GET request, authentication, a JSON POST body, pagination, parsing the output, and error handling. If you are still getting started with n8n, read <a href="/blog/build-first-n8n-workflow.html">how to build your first n8n workflow</a> first. For Google Sheets specifically, use <a href="/blog/n8n-google-sheets-integration.html">the Google Sheets integration guide</a>, because a dedicated node is less work than hand-built requests.</p>
 
         <h2>Step 1: Add the HTTP Request Node to Your Workflow</h2>
 
-        <p>In the N8N canvas, click the plus button to add a new node. Search for "HTTP Request" and select it. You will see a configuration panel on the right side with these main sections:</p>
+        <p>In the n8n canvas, click the plus button, search for "HTTP Request" and select it. The panel has these main parameters:</p>
 
         <ul>
-            <li><strong>Method</strong> - GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS</li>
-            <li><strong>URL</strong> - The full API endpoint URL</li>
-            <li><strong>Authentication</strong> - How to authenticate with the API</li>
-            <li><strong>Send Headers</strong> - Custom request headers</li>
-            <li><strong>Send Query Parameters</strong> - URL query string parameters</li>
-            <li><strong>Send Body</strong> - Request body for POST/PUT/PATCH</li>
-            <li><strong>Options</strong> - Advanced settings including pagination, timeouts, SSL, and response handling</li>
+            <li><strong>Method</strong>: DELETE, GET, HEAD, OPTIONS, PATCH, POST or PUT (plus PROPFIND, MKCOL, MOVE, COPY and REPORT once you turn on Enable WebDAV Methods in Options)</li>
+            <li><strong>URL</strong>: the full endpoint URL</li>
+            <li><strong>Authentication</strong>: a predefined credential type, or a generic one (Step 3)</li>
+            <li><strong>Send Query Parameters</strong>: the URL query string, as name/value fields or as JSON</li>
+            <li><strong>Send Headers</strong>: custom request headers, as name/value fields or as JSON</li>
+            <li><strong>Send Body</strong>: the request body for POST, PUT and PATCH (Step 4)</li>
+            <li><strong>Options</strong> (Add Option): Array Format in Query Parameters, Batching, Ignore SSL Issues, Lowercase Headers, Redirects, Response, Pagination, Proxy, Timeout and Enable WebDAV Methods</li>
         </ul>
 
-        <p>Start with the simplest case: a GET request that requires no authentication.</p>
+        <p>Retry settings are not in Options. They are on the node's <strong>Settings</strong> tab (Step 6).</p>
 
-        <p><strong>Tip:</strong> Most API documentation includes example curl commands. N8N has a built-in curl import feature — paste a curl command into the import field at the top of the HTTP Request node and N8N will auto-populate the method, URL, headers, and body. This is the fastest way to configure requests from any API docs page.</p>
+        <p><strong>Tip:</strong> most API documentation shows a curl command. In the node's Parameters tab, select <strong>Import cURL</strong>, paste the command and select Import. n8n fills in the method, URL, headers and body, and overwrites whatever was configured before. The import always brings values in as strings, so if an API needs numbers or booleans, switch <strong>Using Fields Below</strong> to <strong>Using JSON</strong> and paste a JSON object instead.</p>
 
         <h2>Step 2: Make Your First GET Request</h2>
 
-        <p>For this example, we will use the Open Exchange Rates API to fetch current currency data. This is a real-world pattern: fetching data from an external source on a schedule, then routing it into a spreadsheet or database.</p>
+        <p>This example reads exchange rates from a public endpoint that needs no key. The pattern is common: fetch data from an external source on a schedule, then route it into a spreadsheet or database.</p>
 
         <ol>
             <li>Set <strong>Method</strong> to GET</li>
-            <li>Set <strong>URL</strong> to the API endpoint (for example: <code>https://open.er-api.com/v6/latest/USD</code>)</li>
-            <li>Leave Authentication as "None" for public endpoints</li>
-            <li>Click "Execute node" to test</li>
+            <li>Set <strong>URL</strong> to <code>https://open.er-api.com/v6/latest/USD</code></li>
+            <li>Leave Authentication as "None"</li>
+            <li>Select "Execute node"</li>
         </ol>
 
-        <p>N8N will display the full JSON response in the output panel. You can see the data structure and start referencing fields in downstream nodes using N8N's expression syntax: <code>{{ $json.rates.EUR }}</code> would pull the EUR exchange rate from that response.</p>
+        <p>The output panel shows the parsed JSON. In later nodes, <code>{{ $json.rates.EUR }}</code> reads the euro rate. I made the same request with curl on 27 November 2026: it returned <code>result: success</code>, <code>base_code: USD</code>, a last-update time of Fri, 27 Nov 2026 00:02:31 +0000, and <code>rates.EUR</code> of 0.911313. Your number will differ because the rate changes daily.</p>
 
         <h2>Step 3: Add Authentication</h2>
 
-        <p>Most production APIs require authentication. N8N supports all common methods. Here is how each one works in the HTTP Request node:</p>
+        <p>Most production APIs need credentials. n8n recommends <strong>Predefined Credential Type</strong> whenever n8n has a credential for the service, because it is the easiest to set up and manage. It also lets the HTTP Request node reuse the credential you created for a built-in node, so you can call an endpoint that node does not expose. For everything else, choose <strong>Generic Credential Type</strong>:</p>
 
         <table class="comparison-table">
             <thead>
                 <tr>
-                    <th>Auth Method</th>
-                    <th>When to Use</th>
-                    <th>How to Configure in N8N</th>
+                    <th>Generic auth type</th>
+                    <th>When to use</th>
+                    <th>How to configure in n8n</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td><strong>API Key (Header)</strong></td>
-                    <td>Most common. APIs like SendGrid, OpenAI, Stripe</td>
-                    <td>Create "Header Auth" credential. Set header name (e.g. X-API-Key) and value (your key)</td>
+                    <td><strong>Header Auth</strong></td>
+                    <td>An API key or token sent in a custom header, such as <code>X-API-Key</code></td>
+                    <td>Create a Header Auth credential. Set the header Name and its Value.</td>
                 </tr>
                 <tr>
-                    <td><strong>Bearer Token</strong></td>
-                    <td>JWTs and OAuth access tokens</td>
-                    <td>Create "Header Auth" credential. Set header to Authorization, value to "Bearer your-token"</td>
-                </tr>
-                <tr>
-                    <td><strong>OAuth1</strong></td>
-                    <td>Older APIs (Twitter v1, some payment gateways)</td>
-                    <td>Create "OAuth1 API" credential. Enter consumer key, consumer secret, and token URLs</td>
+                    <td><strong>Bearer Auth</strong></td>
+                    <td>APIs that expect <code>Authorization: Bearer &lt;token&gt;</code></td>
+                    <td>Create a Bearer Auth credential and paste the token only. The node adds the <code>Bearer </code> prefix itself.</td>
                 </tr>
                 <tr>
                     <td><strong>Basic Auth</strong></td>
-                    <td>Legacy APIs, WordPress REST API, some internal tools</td>
-                    <td>Create "Basic Auth" credential. Enter username and password</td>
+                    <td>APIs that take a username and password, or an application password</td>
+                    <td>Create a Basic Auth credential with the username and password.</td>
                 </tr>
                 <tr>
-                    <td><strong>OAuth2</strong></td>
-                    <td>Google APIs, Salesforce, modern SaaS platforms</td>
-                    <td>Create OAuth2 credential. Enter client ID, secret, and token URLs from the provider</td>
+                    <td><strong>Digest Auth</strong></td>
+                    <td>APIs that require HTTP digest authentication</td>
+                    <td>Create a Digest Auth credential with the username and password.</td>
                 </tr>
                 <tr>
-                    <td><strong>API Key (Query Param)</strong></td>
-                    <td>Older APIs that put the key in the URL</td>
-                    <td>Add query parameter named "api_key" (or whatever the API expects) with your key as the value</td>
+                    <td><strong>Query Auth</strong></td>
+                    <td>One key passed as a query parameter</td>
+                    <td>Create a Query Auth credential with the parameter name and value.</td>
+                </tr>
+                <tr>
+                    <td><strong>Custom Auth</strong></td>
+                    <td>Several headers, query parameters or body fields at once</td>
+                    <td>Create a Custom Auth credential holding JSON with <code>headers</code>, <code>qs</code>, <code>body</code> or a mix.</td>
+                </tr>
+                <tr>
+                    <td><strong>Simplified Custom Auth</strong></td>
+                    <td>The same as Custom Auth, with the secrets kept out of the template (n8n 2.35.0 and later)</td>
+                    <td>Write a JSON template with <code>{{placeholder}}</code> markers. The form then shows one field per placeholder.</td>
+                </tr>
+                <tr>
+                    <td><strong>OAuth1 API</strong></td>
+                    <td>APIs that still require OAuth1 signing</td>
+                    <td>Enter the authorization, access token and request token URLs, the consumer key and secret, and a signature method.</td>
+                </tr>
+                <tr>
+                    <td><strong>OAuth2 API</strong></td>
+                    <td>Google APIs, Salesforce and most modern SaaS platforms</td>
+                    <td>Choose a grant type (Authorization Code, Client Credentials or PKCE), then enter the URLs, client ID and secret the provider gave you.</td>
                 </tr>
             </tbody>
         </table>
 
-        <p>To add a credential: click "Authentication" in the node panel, select the method, then click "Create new credential." N8N stores the credential encrypted and separate from your workflow JSON. This means you can share or export workflow templates without exposing API keys. For APIs with unusual auth schemes, N8N also offers a "Simplified Custom Auth" option where you define the auth logic directly in the credential.</p>
+        <p>To add one, pick the method under Authentication, then select "Create new credential". The credential lives apart from the workflow. The example 01 download below references its credential by name only and contains no token. The expensive mistake is the reverse: pasting the token into a header parameter works identically, so n8n shows no warning, and the secret then sits in every export and backup. Example 01, node C, shows exactly that.</p>
 
-        <h3>Practical Example: OpenAI API Call</h3>
+        <h3>A Bearer Token Call You Can Reproduce</h3>
 
-        <p>Here is the exact configuration to call the OpenAI Chat Completions API from an N8N workflow:</p>
-
-        <ul>
-            <li><strong>Method:</strong> POST</li>
-            <li><strong>URL:</strong> <code>https://api.openai.com/v1/chat/completions</code></li>
-            <li><strong>Authentication:</strong> Header Auth with header name <code>Authorization</code> and value <code>Bearer sk-your-key-here</code></li>
-            <li><strong>Content-Type header:</strong> <code>application/json</code></li>
-            <li><strong>Body (JSON):</strong>
-                <pre><code>{
-  "model": "gpt-4o",
-  "messages": [{"role": "user", "content": "{{ $json.prompt }}"}],
-  "max_tokens": 500
-}</code></pre>
-            </li>
-        </ul>
-
-        <p>Notice the <code>{{ $json.prompt }}</code> expression. That pulls the prompt text from whatever node fed data into the HTTP Request node. This is how you build dynamic API calls where the request body changes based on workflow data.</p>
+        <p>Set Authentication to Generic Credential Type, choose Bearer Auth, create a credential with the token <code>demo-token-value</code>, and set the URL to <code>https://httpbin.org/bearer</code>. httpbin echoes what it received. I made the same call with curl on 27 November 2026 and got <code>{"authenticated": true, "token": "demo-token-value"}</code>. Remove the credential and the call returns 401, which is the quickest way to learn what a failed auth looks like in the output.</p>
 
         <h2>Step 4: Send a POST Request with a JSON Body</h2>
 
-        <p>POST requests send data to an API, typically to create or update a record. The configuration differs from GET in one key area: you need to define the request body.</p>
-
-        <p>In the HTTP Request node:</p>
+        <p>POST requests send data to an API, usually to create or update a record. In the HTTP Request node:</p>
 
         <ol>
             <li>Set <strong>Method</strong> to POST</li>
-            <li>Enable <strong>Send Body</strong></li>
-            <li>Set <strong>Body Content Type</strong> to JSON</li>
-            <li>Enter your JSON in the body field, using N8N expressions to inject dynamic values</li>
+            <li>Turn on <strong>Send Body</strong></li>
+            <li>Choose a <strong>Body Content Type</strong>: Form URLencoded, Form-Data, JSON, n8n Binary File or Raw</li>
+            <li>For JSON, either enter name/value pairs (<strong>Using Fields Below</strong>) or a whole object (<strong>Using JSON</strong>)</li>
         </ol>
 
-        <p>For form-based APIs that expect <code>application/x-www-form-urlencoded</code>, switch the Body Content Type to "Form" and add key-value pairs instead. For file uploads, use "Form-Data" and attach the file from a previous node.</p>
+        <p>If you put an expression inside the JSON field, wrap the entire object in double curly brackets, for example:</p>
+
+        <pre><code>{{ { "orderId": $json.orderId, "amountCents": $json.amountCents } }}</code></pre>
+
+        <p>Without the outer brackets n8n reports "JSON parameter needs to be valid JSON". Use <strong>Form URLencoded</strong> for APIs that expect <code>application/x-www-form-urlencoded</code>. For file uploads use <strong>Form-Data</strong> and set the parameter type to n8n Binary File. The <strong>n8n Binary File</strong> body type sends the file as the whole request body with no multipart wrapper, so an API that only accepts multipart answers 415 Unsupported Media Type.</p>
+
+        <p>I posted <code>{"orderId": "ORD-10042", "amountCents": 4900}</code> to <code>https://httpbin.org/post</code> with curl on 27 November 2026. The echo showed the JSON body unchanged and a <code>Content-Type</code> of <code>application/json</code>, which is what a correctly configured JSON body should send.</p>
 
         <h2>Step 5: Handle Pagination</h2>
 
-        <p>Many APIs return results in pages. Without pagination handling, your workflow only gets the first page and silently misses everything else. N8N has built-in pagination support that handles this automatically.</p>
+        <p>Many APIs return results in pages. Without pagination, your workflow gets the first page and silently misses the rest. In the HTTP Request node, select <strong>Add Option</strong> and then <strong>Pagination</strong>. There are three decisions to make.</p>
 
-        <p>In the HTTP Request node, scroll down to <strong>Options</strong> and enable <strong>Pagination</strong>. N8N supports two modes — check your API's documentation to see which pattern it uses:</p>
+        <h3>1. How does the next request differ?</h3>
 
         <table class="comparison-table">
             <thead>
                 <tr>
-                    <th>Mode</th>
-                    <th>When to Use</th>
-                    <th>How It Works</th>
+                    <th>Pagination mode</th>
+                    <th>When to use</th>
+                    <th>How it works</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td><strong>Update a Parameter in Each Request</strong></td>
-                    <td>APIs that accept a page number, offset, or cursor in a query parameter or body</td>
-                    <td>N8N increments or updates the parameter on each request. You define the parameter name, starting value, and the completion condition. Works for offset-based, page-number-based, and cursor-based APIs where you update the parameter yourself.</td>
+                    <td>The API takes a page number, offset or cursor that you can compute</td>
+                    <td>Add one or more parameters, each with a Type (Query, Header or Body), a Name and a Value expression. Every Name and Value must be filled in: the node refuses to run with an empty value, because that would loop forever.</td>
                 </tr>
                 <tr>
                     <td><strong>Response Contains Next URL</strong></td>
-                    <td>APIs that return a "next page" URL inside the response body or headers</td>
-                    <td>N8N reads the next-page URL from each response and follows it automatically. You specify the JSON path or header where the URL lives (e.g. <code>body.meta.next</code>). N8N stops when the field is empty or missing.</td>
+                    <td>The API returns the full URL of the next page</td>
+                    <td>Set Next URL to an expression such as <code>{{ $response.body.next }}</code>. The node requests that URL on each loop.</td>
                 </tr>
             </tbody>
         </table>
 
-        <p>N8N merges all pages into a single output array, so downstream nodes see the complete dataset as if it came from one request. Use the built-in variable <code>$pageCount</code> inside completion conditions to add a safety cap on the number of pages fetched.</p>
+        <p>Three built-in variables are available in these expressions: <code>$pageCount</code> (how many pages have been fetched, starting at 0), <code>$request</code>, and <code>$response</code> with <code>.body</code>, <code>.headers</code> and <code>.statusCode</code>. Because <code>$pageCount</code> starts at zero, a one-based <code>page</code> parameter uses <code>{{ $pageCount + 1 }}</code> and an offset of 50 per page uses <code>{{ $pageCount * 50 }}</code>.</p>
+
+        <h3>2. When is pagination complete?</h3>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Pagination Complete When</th>
+                    <th>Stops when</th>
+                    <th>Watch out for</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Response Is Empty</strong> (default)</td>
+                    <td>The response body is an empty array or has no body</td>
+                    <td>It never fires on a JSON object. A last page of <code>{"items": []}</code> is an object, so the node keeps requesting.</td>
+                </tr>
+                <tr>
+                    <td><strong>Receive Specific Status Code(s)</strong></td>
+                    <td>The response status is in your comma-separated list, such as 404</td>
+                    <td>Only useful for APIs that signal the end with a status code.</td>
+                </tr>
+                <tr>
+                    <td><strong>Other</strong></td>
+                    <td>Your expression evaluates to true, such as <code>{{ $response.body.next === null }}</code></td>
+                    <td>The expression reads the current response, not the next one. In this mode a non-2xx response raises an error unless Never Error is on.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>3. How do you stop a runaway loop?</h3>
+
+        <p>Turn on <strong>Limit Pages Fetched</strong> and set <strong>Max Pages</strong>, and use <strong>Interval Between Requests (ms)</strong> to space the calls. If the completion condition is wrong, the node also has a backstop: after the response repeats identically, it stops with "The returned response was identical 5x, so requests got stopped". Do not rely on the backstop. Set the cap.</p>
+
+        <h3>What the node returns</h3>
+
+        <p>This is the part the older version of this page got wrong. A paginating node does not merge the pages into one array. The node emits one item per page when the API wraps its list in an object, and one item per element only when the response body is a top-level JSON array. Most APIs wrap their lists. Add a <strong>Split Out</strong> node after the HTTP Request node, put the list field name in Fields To Split Out, and you get one item per record.</p>
+
+        <p>I ran the parameters from example 02 against both public APIs on 27 November 2026, using a re-implementation of the pagination loop:</p>
+
+        <pre><code>dummyjson: requests=3 output_items=3 products_in_items=150 skips=0,50,100 total=194
+pokeapi:   requests=3 output_items=3 results_in_items=60 count=1351
+
+Local server, last page is {"items": []}, Complete When = Response Is Empty:
+requests before the node gave up = 6
+error: The returned response was identical 5x, so requests got stopped</code></pre>
+
+        <p>Three requests gave three items, with 150 and 60 records inside them. Example 02 below now reports pages and records separately.</p>
 
         <h2>Step 6: Parse and Use the Response Data</h2>
 
-        <p>When the HTTP Request node returns data, N8N automatically parses JSON responses. You access fields using expressions in any downstream node.</p>
-
-        <p>Common patterns:</p>
+        <p>When the response is JSON, n8n parses it for you (the Response option defaults to Autodetect). Reference fields with expressions in any later node:</p>
 
         <ul>
-            <li><code>{{ $json.id }}</code> - top-level field named "id"</li>
-            <li><code>{{ $json.customer.email }}</code> - nested field</li>
-            <li><code>{{ $json.items[0].name }}</code> - first item in an array</li>
-            <li><code>{{ $json.items.length }}</code> - count of items in array</li>
+            <li><code>{{ $json.id }}</code>: a top-level field named "id"</li>
+            <li><code>{{ $json.customer.email }}</code>: a nested field</li>
+            <li><code>{{ $json.items[0].name }}</code>: the first element of an array</li>
+            <li><code>{{ $json.items.length }}</code>: the number of elements in an array</li>
         </ul>
 
-        <p>If the API returns an array at the top level (not wrapped in an object), use the <strong>Split In Batches</strong> node or the <strong>Item Lists</strong> node to loop through each item and process them individually.</p>
+        <p>If the list sits inside an object, use <strong>Split Out</strong> to turn it into one item per record. To process items in groups, or to pause between groups, use <strong>Loop Over Items</strong> (named Split in Batches in older tutorials). Older tutorials also mention the Item Lists node, which is hidden from the node picker in n8n@2.49.8. To rename fields or build new ones, use <strong>Edit Fields (Set)</strong>.</p>
 
-        <p>For complex response reshaping, add a <strong>Set</strong> node after the HTTP Request node to rename fields, extract nested values, or calculate derived fields before they reach your database or next API call.</p>
+        <p>The <strong>Response</strong> option changes what the node outputs:</p>
 
-        <h2>Five Real Business Workflows Using the HTTP Request Node</h2>
+        <ul>
+            <li><strong>Include Response Headers and Status</strong>: returns the status code and headers next to the body. Needed when your logic depends on the status.</li>
+            <li><strong>Never Error</strong>: treats every status code as success, so a 429 or 500 arrives as data instead of failing the node.</li>
+            <li><strong>Response Format</strong>: Autodetect (default), File, JSON or Text.</li>
+        </ul>
 
-        <h3>1. Enrich CRM Contacts with Company Data</h3>
-        <p>Trigger: New contact added in HubSpot (HubSpot native node). Action: POST to Clearbit's Enrichment API with the contact's email address. Use the HTTP Request node to call <code>https://person.clearbit.com/v2/combined/find?email={{ $json.email }}</code>. Map the returned company name, industry, and employee count back into HubSpot fields using another HubSpot node. This workflow alone saves 15 minutes of manual research per lead.</p>
+        <h2>Five Workflow Patterns Built on the HTTP Request Node</h2>
 
-        <h3>2. Post to Any Social Network</h3>
-        <p>Most social networks have official N8N nodes, but smaller platforms often do not. Use the HTTP Request node to POST to LinkedIn's API, Mastodon instances, Discord webhooks, or Telegram bots. Trigger from an RSS feed node or a Google Sheets row to schedule content across platforms without a separate social media tool.</p>
+        <p>These are design sketches. I did not run these five, and I give no time-saving figures for them. Each one names the node settings that matter.</p>
 
-        <h3>3. Sync Orders Between Shopify and a 3PL</h3>
-        <p>When a new Shopify order triggers your workflow, use the HTTP Request node to POST the order details to your third-party logistics provider's API. The body pulls order data from Shopify's trigger output: customer name, shipping address, line items, and quantities. The 3PL confirms with an order ID, which you write back to a Google Sheet for tracking. This replaces a full middleware subscription.</p>
+        <h3>1. Enrich a CRM contact</h3>
+        <p>Trigger on a new contact with the CRM's own node. Call an enrichment API with a GET, passing the email through <strong>Send Query Parameters</strong> rather than building the URL by hand, so special characters are encoded for you. Write the returned fields back with the CRM node. Check the provider's current docs first: enrichment products change owners and endpoints.</p>
 
-        <h3>4. Monitor a Competitor's Pricing</h3>
-        <p>Schedule a workflow to run every morning. Use the HTTP Request node to call a price monitoring API or scraping service. Compare the returned prices against a baseline stored in Airtable (using <a href="/blog/n8n-airtable-integration.html">the N8N Airtable integration</a>). If prices drop below a threshold, trigger a Slack alert. If they rise above yours, trigger an email summary. This keeps your team informed without any manual checking.</p>
+        <h3>2. Post to a service with no node</h3>
+        <p>For a Discord webhook or a Mastodon instance, send a POST with a JSON body. Trigger it from an RSS feed or a spreadsheet row. Keep the token in a credential, not in the header parameters.</p>
 
-        <h3>5. Generate and Send AI-Written Reports</h3>
-        <p>Pull weekly data from your analytics platform using its API and the HTTP Request node. Format the data into a prompt. Use a second HTTP Request node to call OpenAI's API. Take the AI-generated summary and send it via a third HTTP Request node to your email API (SendGrid, Postmark, etc.). One workflow, no subscriptions beyond the APIs you already use.</p>
+        <h3>3. Hand an order to a logistics API</h3>
+        <p>On a new order, POST the order details as JSON and store the ID the logistics provider returns. Because a retried POST can create the order twice, send an idempotency key derived from the order, not from the attempt. Example 04 below shows the difference, and the <a href="/blog/n8n-error-handling-best-practices.html">error handling guide</a> goes further.</p>
 
-        <p>Want to see what this looks like in production? The <a href="https://voxdonna.com/case-studies/le-marquier.html">Le Marquier case study</a> shows how multi-API N8N workflows cut operational costs by 80% for a real SMB. The same HTTP Request node patterns you are learning here are the building blocks.</p>
+        <h3>4. Watch a price or status endpoint</h3>
+        <p>Run a <a href="/blog/n8n-scheduled-triggers-tutorial.html">Schedule Trigger</a>, GET the endpoint, compare the value with a stored baseline (for example in Airtable, using <a href="/blog/n8n-airtable-integration.html">the n8n Airtable integration</a>) and send an alert on a change. Check the site's terms before scraping anything that is not an API.</p>
 
-        <h2>Using the HTTP Request Node with N8N AI Agents</h2>
+        <h3>5. Fetch, summarize and send a report</h3>
+        <p>Pull data from an analytics API, send it to a model API with a second HTTP Request node, and email the result through a mail API. Watch two things: pagination on the first call (Step 5) and rate limits on the second (the 429 section below).</p>
 
-        <p>When you attach the HTTP Request node as a tool to an N8N AI agent, N8N automatically optimizes the response format to reduce token usage. Instead of passing raw HTML or oversized JSON back to the model, N8N strips it down to the relevant content. You can also configure the response type (JSON, HTML, or Text) explicitly in the node to control what the agent receives.</p>
+        <h2>Using the HTTP Request Node as an AI Agent Tool</h2>
 
-        <p>This makes the HTTP Request node the standard way to give N8N AI agents access to external APIs — for example, letting an agent query a knowledge base API, look up customer records, or fetch live pricing data mid-conversation.</p>
+        <p>You can attach the HTTP Request node to an n8n AI agent as a tool. When it is attached as a tool, an <strong>Optimize Response</strong> option appears. It is off until you turn it on. It trims the response before the model sees it, which can reduce token cost and help the model ignore unimportant detail. You choose the expected response type:</p>
+
+        <ul>
+            <li><strong>JSON</strong>: name the field that holds the data, then include all fields, selected fields or all but some fields</li>
+            <li><strong>HTML</strong>: pick a CSS selector, optionally strip tags and omit elements, and optionally truncate</li>
+            <li><strong>Text</strong>: optionally truncate</li>
+        </ul>
+
+        <p>The truncation limit for HTML and Text defaults to 1,000 characters, so check it before you trust a long page to arrive whole. For the wider picture of agent builds, see the <a href="/ai-agents.html">AI agents page</a>.</p>
 
         <h2>Common Errors and How to Fix Them</h2>
 
-        <p>Pairing this guide with the <a href="/blog/n8n-error-handling-best-practices.html">N8N error handling best practices</a> will make your HTTP Request workflows production-ready. But here are the most common issues specific to this node:</p>
+        <p>Most of these are in the n8n documentation for the node. Pair this section with the <a href="/blog/n8n-error-handling-best-practices.html">n8n error handling guide</a> before you run anything in production.</p>
 
         <ul>
-            <li><strong>401 Unauthorized:</strong> Authentication is wrong. Double-check the credential configuration, header name, and whether the API expects "Bearer" prefix on the token.</li>
-            <li><strong>403 Forbidden:</strong> You are authenticated, but the API key or account does not have permission for this endpoint. Check the API's permission/scope settings.</li>
-            <li><strong>400 Bad Request:</strong> The request body is malformed. Check that the Content-Type header matches the body format. Validate your JSON syntax.</li>
-            <li><strong>429 Too Many Requests:</strong> Rate limit hit. Enable the "Retry on Fail" option in the HTTP Request node and add a Wait node before it to throttle requests.</li>
-            <li><strong>SSL Certificate Error:</strong> The API's certificate is not trusted. This happens with some internal or self-hosted APIs. Enable "Ignore SSL Issues" in Options, but only for trusted internal services.</li>
+            <li><strong>400 Bad Request:</strong> a query parameter has an invalid name or value, or an array in a query parameter is formatted the wrong way. Try the <strong>Array Format in Query Parameters</strong> option (No Brackets, Brackets Only, or Brackets with Indices) and check the API's docs.</li>
+            <li><strong>401 or 403:</strong> authentication or permissions. Check the credential, the header name, and whether the key has the scope for this endpoint. n8n words the 403 as "Forbidden - perhaps check your credentials".</li>
+            <li><strong>404, "The resource you are requesting could not be found":</strong> the URL is wrong or the API version is deprecated.</li>
+            <li><strong>JSON parameter needs to be valid JSON:</strong> a missing quote or comma, or an expression whose JSON is not wrapped in double curly brackets.</li>
+            <li><strong>ECONNREFUSED on a local service:</strong> inside a Docker container, <code>localhost</code> is the container itself. Use <code>host.docker.internal</code> (on Linux, add <code>--add-host=host.docker.internal:host-gateway</code>) or the Compose service name. On Node.js 17 and later, <code>localhost</code> can resolve to IPv6 first, so use <code>127.0.0.1</code>.</li>
+            <li><strong>SSL certificate error:</strong> turn on <strong>Ignore SSL Issues</strong> in Options, only for services you trust.</li>
+            <li><strong>Uploaded file arrives with the wrong name:</strong> with Form-Data, the file name comes from the binary data, not from the Name field. Set it in the Convert to File node or a Code node first.</li>
         </ul>
+
+        <h3>429 Too Many Requests</h3>
+
+        <p>n8n gives you three tools, and they do different jobs:</p>
+
+        <ul>
+            <li><strong>Batching</strong> (Add Option, then Batching): set Items per Batch and a Batch Interval in milliseconds. Each input item is its own request, so this spaces them out. It is the cheapest way to avoid the 429 in the first place.</li>
+            <li><strong>Retry On Fail</strong> (node Settings tab): set Max Tries (at most 5) and Wait Between Tries (at most 5,000 ms). The HTTP Request node does not read the API's <code>Retry-After</code> header.</li>
+            <li><strong>Loop Over Items plus Wait</strong>: for rate limits that need longer pauses than 5 seconds.</li>
+        </ul>
+
+        <p>Retry On Fail has one rule that catches people. n8n retries a node when the node fails, or when the first output item carries an <code>error</code> property. With <strong>Never Error</strong> on, a 429 is not a failure: it is data. The node succeeds and nothing is retried. I ran that against a local server that answers 429, 429, then 200:</p>
+
+        <pre><code>Never Error on  + Retry On Fail (max 3): server hits=1, item statusCode=429
+Never Error off + Retry On Fail (max 3): server hits=3, final item={"ok":true}
+Error only in the 2nd output item:       node ran 1 time (only the first item is checked)</code></pre>
+
+        <p>So pick one approach per node. Either let the node fail and use Retry On Fail, or turn Never Error on and branch on the status code yourself. Example 03 below does the second. The <a href="/blog/n8n-retries-rate-limits-queue-mode.html">retries, rate limits and queue mode guide</a> covers the first in more depth.</p>
 
         <h2>When to Use the HTTP Request Node vs. a Built-In Integration</h2>
 
@@ -695,43 +788,43 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Common CRUD operations (create, read, update)</td>
+                    <td>Common create, read and update operations</td>
                     <td>Yes, faster setup</td>
                     <td>Not needed</td>
                 </tr>
                 <tr>
-                    <td>Advanced endpoints the built-in node does not expose</td>
+                    <td>An endpoint the built-in node does not expose</td>
+                    <td>No</td>
+                    <td>Yes, with Predefined Credential Type to reuse the node's credential</td>
+                </tr>
+                <tr>
+                    <td>A service with no n8n integration at all</td>
                     <td>No</td>
                     <td>Yes</td>
                 </tr>
                 <tr>
-                    <td>Service with no N8N integration at all</td>
+                    <td>Your own internal API</td>
                     <td>No</td>
                     <td>Yes</td>
                 </tr>
                 <tr>
-                    <td>Internal company API</td>
-                    <td>No</td>
-                    <td>Yes</td>
+                    <td>First-time OAuth2 sign-in</td>
+                    <td>Yes, the built-in node handles the flow</td>
+                    <td>More setup: you supply the URLs and client details</td>
                 </tr>
                 <tr>
-                    <td>OAuth2 flow setup (first time)</td>
-                    <td>Yes, built-in handles the flow</td>
-                    <td>More complex</td>
-                </tr>
-                <tr>
-                    <td>Bulk data fetch with pagination</td>
-                    <td>Depends on the node</td>
-                    <td>Yes, reliable pagination built in</td>
+                    <td>Fetching many records</td>
+                    <td>Check the node for a Return All option first</td>
+                    <td>Yes, when you need control over the paging scheme (Step 5)</td>
                 </tr>
             </tbody>
         </table>
 
-        <h2>Download: Four Tested-by-You HTTP Request Examples</h2>
+        <h2>Download: Four HTTP Request Examples</h2>
 
-        <p>Everything above describes what the node does. These four workflows let you watch it do it. Each one is a complete n8n workflow JSON — import it, press Test workflow, and read the output. They point at public APIs that need no key, so the only setup is one credential in the first example.</p>
+        <p>Everything above describes what the node does. These four workflows let you watch it do it. Each is a complete n8n workflow JSON: import it, press Test workflow, and read the output. They call public APIs that need no key, so the only setup is one credential in the first example.</p>
 
-        <p>They are built for <strong>HTTP Request node typeVersion 4.2</strong>. They contain no credentials and no secrets; the auth example references an n8n credential by name, which is the whole point it is making.</p>
+        <p>They were written for <strong>HTTP Request node typeVersion 4.2</strong>. The default in n8n@2.49.8 is 4.5, and 4.2 is still a supported version. They contain no credentials and no secrets; the auth example references an n8n credential by name.</p>
 
         <table class="comparison-table">
             <thead>
@@ -743,43 +836,50 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><a href="/downloads/n8n/01-http-request-auth-patterns.json" download>01 — Authentication patterns</a></td>
+                    <td><a href="/downloads/n8n/01-http-request-auth-patterns.json" download>01 - Authentication patterns</a></td>
                     <td>Header auth via a credential, query auth, and the same token pasted straight into the node</td>
                     <td>All three authenticate. That is the lesson: nothing in n8n warns you about the third, and the cost only arrives at rotation time.</td>
                 </tr>
                 <tr>
-                    <td><a href="/downloads/n8n/02-http-request-pagination.json" download>02 — Pagination, both modes</a></td>
+                    <td><a href="/downloads/n8n/02-http-request-pagination.json" download>02 - Pagination, both modes</a></td>
                     <td><em>Update a parameter in each request</em> against an offset API, and <em>Response contains next URL</em> against a cursor API</td>
-                    <td>150 products and 60 Pokémon, from three requests each, merged into one output array.</td>
+                    <td>Three requests and three items per node (one per page). The Code node reports 150 products and 60 Pokémon inside those pages.</td>
                 </tr>
                 <tr>
-                    <td><a href="/downloads/n8n/03-http-request-rate-limits.json" download>03 — Rate limits and back-off</a></td>
-                    <td>Request batching, retry settings, and separating a retryable 429 from a permanent 401</td>
-                    <td>Each simulated status classified <code>retryable: true/false</code>, with <code>Retry-After</code> honoured when the server sends it.</td>
+                    <td><a href="/downloads/n8n/03-http-request-rate-limits.json" download>03 - Rate limits and back-off</a></td>
+                    <td>Request batching, Never Error, and separating a retryable 429 from a permanent 401</td>
+                    <td>Each simulated status classified <code>retryable: true/false</code>, with <code>Retry-After</code> read when the server sends it. Retry On Fail is off on purpose.</td>
                 </tr>
                 <tr>
-                    <td><a href="/downloads/n8n/04-http-request-safe-retries.json" download>04 — Safe retries and idempotency</a></td>
+                    <td><a href="/downloads/n8n/04-http-request-safe-retries.json" download>04 - Safe retries and idempotency</a></td>
                     <td>An idempotency key derived from the order, next to one generated per attempt</td>
-                    <td>The stable key is identical across runs. The per-attempt key is not — which is why it deduplicates nothing.</td>
+                    <td>The stable key is identical across runs. The per-attempt key is not, which is why it deduplicates nothing.</td>
                 </tr>
             </tbody>
         </table>
 
-        <p><strong>How to import one:</strong> download the file, open n8n, choose <strong>Workflows → Import from File</strong>, and select it. Every node carries a note explaining what it is doing and why; open the node and read the Notes panel rather than only running it.</p>
+        <p><strong>How to import one:</strong> download the file, open n8n, choose <strong>Workflows, then Import from File</strong>, and select it. Every node carries a note explaining what it does and why. Each file's <code>meta</code> block records the n8n version, the setup, the expected output and the failure cases worth triggering on purpose.</p>
 
-        <p>Each file's <code>meta</code> block records the n8n version it was written for, the setup required, the expected output, and the failure cases worth triggering on purpose. Two of the four exist specifically to show a plausible pattern failing: example 01's third node and example 04's second node both work, pass review, and are wrong. Run them and watch what the server actually receives.</p>
+        <p><strong>Corrected on 27 November 2026:</strong> the Code node and expected-output text in example 02 said n8n merges pages into one output array, which it does not, and example 03 had Retry On Fail on beside Never Error, which cannot retry. I fixed both and ran the JavaScript in both Code nodes and the node parameters in the lab. I did not re-import the files into n8n. Examples 01 and 04 are unchanged. The <a href="/blog/n8n-error-handling-best-practices.html">n8n error handling guide</a> carries two more downloadable workflows, for replay-safe error handling and recovery.</p>
 
-        <p>The examples cover the request. The thing that breaks in production is the recovery — what happens on the retry, and whether re-running is safe. That is the subject of the <a href="/blog/n8n-error-handling-best-practices.html">n8n error handling guide</a>, which carries two more downloadable workflows: an error workflow that tells you whether a failed run is safe to replay, and a recovery workflow that will not do the same work twice.</p>
+        <h2 id="how-i-checked">How I Checked This Update</h2>
 
-        <h2>Taking This Further: N8N Automation for Your Business</h2>
+        <p>Everything below is dated 27 November 2026 and refers to release n8n@2.49.8.</p>
 
-        <p>The HTTP Request node is the foundation for connecting N8N to the systems your business already uses. Once you see how it works, you stop looking for dedicated integrations and start seeing APIs everywhere.</p>
+        <ul>
+            <li><strong>Documentation read:</strong> the <a href="https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.httprequest/">HTTP Request node</a>, its <a href="https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.httprequest/common-issues/">common issues</a>, the <a href="https://docs.n8n.io/integrations/builtin/credentials/httprequest/">HTTP Request credentials</a>, <a href="https://docs.n8n.io/integrations/builtin/handle-rate-limits/">handling API rate limits</a> and the <a href="https://docs.n8n.io/build/code-in-n8n/cookbook/http-request-node/pagination/">pagination cookbook</a>. I read the raw markdown, not a summary.</li>
+            <li><strong>Source read:</strong> <a href="https://github.com/n8n-io/n8n/blob/n8n@2.49.8/packages/nodes-base/nodes/HttpRequest/V3/HttpRequestV3.node.ts">HttpRequestV3.node.ts</a> (item output, Never Error, pagination options), <a href="https://github.com/n8n-io/n8n/blob/n8n@2.49.8/packages/core/src/execution-engine/node-execution-context/utils/request-helpers/pagination.ts">pagination.ts</a> (the loop, <code>$pageCount</code>, the identical-response stop) and <a href="https://github.com/n8n-io/n8n/blob/n8n@2.49.8/packages/core/src/execution-engine/workflow-execute.ts">workflow-execute.ts</a> (the retry rule and its limits).</li>
+            <li><strong>Lab:</strong> a Node.js re-implementation of those three behaviours, driven by the parameters in the downloadable workflows, run against local servers and against the live dummyjson and PokeAPI endpoints. 11 tests pass. The lab treats an expression error on the first pagination request as "no value" and keeps the node's own URL, which is how I read the helper.</li>
+            <li><strong>Live calls by curl:</strong> the exchange-rate GET, the httpbin Bearer GET and the httpbin JSON POST above.</li>
+        </ul>
 
-        <p>Two nodes pair with it constantly. When the service does have a first-party node, use it: the <a href="/blog/n8n-gmail-integration.html">n8n Gmail integration</a> walks through the OAuth2 credential setup and every operation the Gmail node exposes, which is less work than hand-rolling the same calls through HTTP Request. And when the job is a poll rather than a reaction, the <a href="/blog/n8n-scheduled-triggers-tutorial.html">n8n Schedule Trigger guide</a> covers the cron syntax and the timezone chain that decides when your API call actually fires.</p>
+        <p>What this does not show: how the n8n editor labels things on screen, expression-engine edge cases, and anything that changes after n8n@2.49.8. Some figures, such as the PokeAPI total, are live data and will drift. The other claims in this tutorial rest on the sources above, not on a run inside n8n.</p>
 
-        <p>The question for most SMBs is not whether to automate. It is where to start and what to prioritize. Use our <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a> to identify which workflows in your business are the best candidates for automation right now. And use the <a href="/roi-calculator.html">ROI calculator</a> to put numbers on the time and cost savings before you build anything.</p>
+        <h2>Taking This Further</h2>
 
-        <p>If you want someone to build and maintain these N8N workflows for you, that is exactly what we do at <a href="/n8n-automation.html">our N8N automation service</a>. We have built integrations with dozens of APIs for clients across industries, including the <a href="https://voxdonna.com/case-studies/le-marquier.html">Le Marquier project</a> where N8N workflows now handle 98% of customer interactions automatically.</p>
+        <p>The HTTP Request node is the base layer for connecting n8n to the systems a business already runs. When a service does have a first-party node, use it. The <a href="/blog/n8n-gmail-integration.html">n8n Gmail integration</a> covers OAuth2 setup and every operation the Gmail node exposes, which is less work than hand-built requests. When the job is a poll rather than a reaction, the <a href="/blog/n8n-scheduled-triggers-tutorial.html">Schedule Trigger guide</a> covers cron syntax and the timezone rules that decide when your call fires. For key storage and rotation, see <a href="/blog/n8n-credentials-secrets-management.html">n8n credentials and secrets</a>.</p>
+
+        <p>To find which workflows in your business are worth automating, use the <a href="/tools/ai-readiness-assessment.html">AI readiness assessment</a>, and use the <a href="/roi-calculator.html">ROI calculator</a> to put numbers on a build before you start. If you want help building or maintaining n8n integrations, <a href="/n8n-automation.html">my n8n automation page</a> describes what I do.</p>
 
         <!-- FAQ Section -->
         <div class="article-faq">
@@ -787,34 +887,40 @@
 
             <div class="faq-item">
                 <h3>What is the N8N HTTP Request node used for?</h3>
-                <p>The N8N HTTP Request node lets you connect to any REST API that N8N does not have a built-in node for. You configure the URL, HTTP method, headers, authentication, and request body directly in the node. It handles GET, POST, PUT, PATCH, and DELETE requests, making it the universal connector for any third-party service with an API.</p>
+                <p>It sends an HTTP request (DELETE, GET, HEAD, OPTIONS, PATCH, POST or PUT) to any URL and returns the response as workflow data. You set the URL, method, authentication, headers, query parameters and body in the node. Use it for services that have no dedicated n8n node, for endpoints a built-in node does not expose, and for internal APIs.</p>
             </div>
 
             <div class="faq-item">
                 <h3>How do I add authentication to the N8N HTTP Request node?</h3>
-                <p>N8N supports several authentication methods natively in the HTTP Request node: API Key (header or query string), Bearer Token, Basic Auth (username and password), OAuth2, and Digest Auth. You create a credential object in N8N's credential store, then select it from the Authentication dropdown in the node. This keeps your API keys out of the workflow JSON.</p>
+                <p>Open the Authentication dropdown. Choose Predefined Credential Type when n8n already has a credential for the service. Otherwise choose Generic Credential Type and pick Basic, Bearer, Custom, Digest, Header, OAuth1, OAuth2, Query or Simplified Custom Auth (Simplified Custom Auth needs n8n 2.35.0 or later). Credentials are stored outside the workflow, so an exported workflow does not contain the secret.</p>
             </div>
 
             <div class="faq-item">
                 <h3>Can the N8N HTTP Request node handle paginated API responses?</h3>
-                <p>Yes. N8N has built-in pagination support in the HTTP Request node. Under Options, you can configure pagination using cursor-based, offset-based, or page-based strategies. N8N will automatically loop through pages and merge results into a single output array, so you do not need to build manual looping logic.</p>
+                <p>Yes. Under Options, add Pagination and choose Update a Parameter in Each Request or Response Contains Next URL. Then set when pagination is complete: Response Is Empty, Receive Specific Status Code(s), or Other with an expression. Set Limit Pages Fetched so a wrong condition cannot loop forever.</p>
             </div>
 
             <div class="faq-item">
-                <h3>What is the difference between using the HTTP Request node and a built-in N8N integration?</h3>
-                <p>Built-in N8N integrations are pre-configured with field mappings and OAuth flows. They are faster to set up for common operations. The HTTP Request node gives you full access to every API endpoint, including custom or less common ones that built-in nodes do not expose. Use built-in nodes for standard operations, and the HTTP Request node for advanced API calls or services without a dedicated N8N integration.</p>
+                <h3>Why does a paginated HTTP Request node return one item per page instead of one item per record?</h3>
+                <p>When the API wraps its list in an object, such as {"products": [...]}, each page becomes one item. The node only splits into one item per element when the response body is a top-level JSON array. Add a Split Out node after the HTTP Request node and name the list field to get one item per record.</p>
             </div>
 
             <div class="faq-item">
-                <h3>How do I parse a JSON API response in N8N after using the HTTP Request node?</h3>
-                <p>When the HTTP Request node returns JSON, N8N automatically parses it. You can access fields using expressions in subsequent nodes: <code>{{ $json.fieldName }}</code> for top-level fields, or <code>{{ $json.nested.field }}</code> for nested objects. Use the Set node to reshape the data before passing it downstream.</p>
+                <h3>How do I handle a 429 Too Many Requests error in the HTTP Request node?</h3>
+                <p>Use the Batching option (Items per Batch and Batch Interval) to space requests out, turn on Retry On Fail in the node Settings (at most 5 tries, at most 5 seconds apart), or combine Loop Over Items with a Wait node for longer delays. Retry On Fail only fires when the node fails, so leave Never Error off on a node you want retried.</p>
             </div>
+
+            <div class="faq-item">
+                <h3>When should I use the HTTP Request node instead of a built-in n8n integration?</h3>
+                <p>Use a built-in node for common operations on a service it covers, because it handles field mapping and the sign-in flow. Use the HTTP Request node when no node exists for the service, when the node does not expose the endpoint you need, or when you are calling your own API. You can reuse a built-in node's credential in the HTTP Request node with Predefined Credential Type.</p>
+            </div>
+
         </div>
 
         <!-- CTA in article -->
-        <h2>Ready to Get Started?</h2>
-        <p>Book a free 30-minute discovery call. We'll identify your biggest opportunities and show you exactly what AI automation can do for your business.</p>
-        <p><a href="/qualify.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">Book a Free Discovery Call</a></p>
+        <h2>Need Help With an n8n Integration?</h2>
+        <p>The consulting page explains how I work and how to book a call to scope an integration or an automation.</p>
+        <p><a href="/consulting.html" class="btn-primary" style="display: inline-block; margin-top: var(--space-xs);">See Consulting and Book a Call</a></p>
 
         <!-- Author Byline -->
         <div class="article-author">
@@ -833,15 +939,15 @@
         <div class="related-grid">
             <a href="/blog/n8n-webhook-tutorial.html" class="related-card">
                 <h3 class="related-card-title">N8N Webhook Tutorial: Trigger Workflows from Any App</h3>
-                <p class="related-card-excerpt">Learn how webhooks work in N8N and how to trigger automations from external apps in real time.</p>
+                <p class="related-card-excerpt">Learn how to use N8N webhooks to trigger workflows from any app. Step-by-step examples: form submissions, payment events, CRM updates, and more.</p>
+            </a>
+            <a href="/blog/n8n-retries-rate-limits-queue-mode.html" class="related-card">
+                <h3 class="related-card-title">n8n Retries, Rate Limits and Queue Mode</h3>
+                <p class="related-card-excerpt">How n8n's Retry On Fail, Batching, and queue mode actually work, with a validated workflow JSON for a rate-limited API.</p>
             </a>
             <a href="/blog/n8n-error-handling-best-practices.html" class="related-card">
                 <h3 class="related-card-title">N8N Error Handling Best Practices: Build Bulletproof Workflows</h3>
-                <p class="related-card-excerpt">Error triggers, retry logic, and alerting patterns to keep your N8N automations running reliably in production.</p>
-            </a>
-            <a href="/blog/build-first-n8n-workflow.html" class="related-card">
-                <h3 class="related-card-title">How to Build Your First N8N Workflow</h3>
-                <p class="related-card-excerpt">Start here if you are new to N8N. A practical step-by-step guide to building your first automation.</p>
+                <p class="related-card-excerpt">Node-level retry and continue-on-error settings, a central Error Trigger workflow, idempotent retries, error logging and alerts for production n8n.</p>
             </a>
         </div>
     </section>

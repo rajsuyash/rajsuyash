@@ -5,7 +5,7 @@
     "builtFor": "n8n HTTP Request node typeVersion 4.2",
     "author": "Suyash Raj - https://rajsuyash.com/blog/n8n-http-request-node-tutorial.html",
     "setup": "None. Both APIs are public and unauthenticated.",
-    "expectedOutput": "'Offset pagination' returns 150 products from dummyjson.com (3 requests of 50). 'Next-URL pagination' returns 60 Pokemon from pokeapi.co (3 requests of 20). The Code node prints the item count and the number of requests each made.",
+    "expectedOutput": "Each paginating node makes 3 requests and emits 3 items, one per page, because both APIs wrap their list in an object. The Code node reports products {pagesReceived: 3, recordsInside: 150} and pokemon {pagesReceived: 3, recordsInside: 60}. To get one item per record, add a Split Out node on the list field ('products' or 'results').",
     "failureCases": "Delete the completeExpression on either node and the node paginates until maxRequests stops it - which is why maxRequests is set. Set limitPagesFetched to false with a wrong completion condition and the node will keep requesting until the workflow times out."
   },
   "nodes": [
@@ -53,7 +53,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [60, 180],
-      "notes": "$pageCount is 0 on the first request, so skip is 0, 50, 100. The completion condition reads the CURRENT response, not the next one: it stops when a page comes back empty. requestInterval spaces the calls so a burst of pages does not trip a rate limit."
+      "notes": "$pageCount is 0 on the first request, so skip is 0, 50, 100. The completion condition reads the CURRENT response, not the next one: it stops when a page comes back empty. requestInterval spaces the calls so a burst of pages does not trip a rate limit. The output is one item per page, each holding a products array."
     },
     {
       "parameters": {
@@ -82,7 +82,7 @@
     {
       "parameters": {
         "mode": "runOnceForAllItems",
-        "jsCode": "// n8n merges every page into one output array, so a paginated node looks\n// like a single request downstream. Count what actually arrived.\nconst items = $input.all();\nreturn [{ json: { itemsReturned: items.length, firstItem: items[0]?.json ?? null } }];"
+        "jsCode": "// The HTTP Request node emits one item per page when the API wraps its list in an\n// object, and one item per element only when the body is a top-level array.\n// Count pages and the records inside them separately.\nconst pages = $input.all();\nconst summarise = (key) => {\n  const own = pages.filter((p) => Array.isArray(p.json[key]));\n  return { pagesReceived: own.length, recordsInside: own.reduce((n, p) => n + p.json[key].length, 0) };\n};\nreturn [{ json: { products: summarise('products'), pokemon: summarise('results') } }];"
       },
       "id": "a1-02-count",
       "name": "Count what came back",
